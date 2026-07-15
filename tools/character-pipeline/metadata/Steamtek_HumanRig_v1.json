@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0.0",
+  "rig_id": "Steamtek_HumanRig_v1",
+  "status": "approved",
+  "generator": "Blender 4.5 LTS bundled Rigify human metarig",
+  "source_rig_found": false,
+  "source_rig_policy": "Replace or recalibrate from an authoritative C001/source rig if one becomes available.",
+  "rest_bounds_meters": {
+    "width": 1.5784,
+    "depth": 0.285,
+    "height": 1.9796,
+    "ground_z": 0.0
+  },
+  "orientation": {
+    "forward_axis": "-Y",
+    "up_axis": "+Z",
+    "ground_contact": [0.0, 0.0, 0.0]
+  },
+  "integration": {
+    "production_object_name": "Armature",
+    "metarig_object_name": "Steamtek_HumanRig_v1_Metarig",
+    "parent": "ROOT_CharacterFacing",
+    "south_facing_yaw_offset_degrees": -45.0,
+    "master_file": "Steamtek_Character_Master.blend",
+    "library_file": "Steamtek_HumanRig_v1.blend"
+  },
+  "approval": {
+    "date": "2026-07-14",
+    "golden_reference": "Steamtek_C001",
+    "godot_comparison": "passed",
+    "runtime_vertical_bounds": {
+      "Steamtek_C001": [143, 461],
+      "STK_CalibrationDummy_v1": [143, 461]
+    },
+    "direction_result": "south faces camera; clockwise Godot screen-direction order verified",
+    "ground_contact_result": "boot baseline and shared footprint aligned"
+  },
+  "approval_requirements": [
+    "Install a representative humanoid mesh and verify deformation.",
+    "Create and validate STK_IDLE and STK_WALK actions.",
+    "Render all eight genuine directions on the locked 1254 x 1254 canvas.",
+    "Compare framing, ground contact, scale, and silhouette against Steamtek_C001 in Godot.",
+    "Set Armature custom property steamtek_rig_status to approved only after the Godot test passes."
+  ]
+}

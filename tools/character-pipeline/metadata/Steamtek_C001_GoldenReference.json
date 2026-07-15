@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0.0",
+  "character_id": "Steamtek_C001",
+  "role": "immutable_golden_reference",
+  "source_status": "sprite_and_godot_assets_found; original_blend_and_humanoid_rig_not_found",
+  "locked_observations": {
+    "conversation_source_canvas": [1254, 1254],
+    "conversation_visible_character_area_approx": [443, 1117],
+    "godot_visual_scale": [0.73, 0.73],
+    "godot_visual_offset": [0.0, -110.0],
+    "collision_footprint": [28.0, 18.0]
+  },
+  "discovered_files": [
+    {
+      "relative_path": "animations/walk/production/Steamtek_C001_Walk_8dir_4f_256.png",
+      "sha256": "6E6549AD4C0867238591E14E0596494ACA9BFF6E7D50253D3D8551B59590F68C",
+      "dimensions": [1024, 2048]
+    },
+    {
+      "relative_path": "animations/walk/source/Steamtek_C001_Walk_8dir_4f_alpha_raw.png",
+      "sha256": "D96759C20E51FFC5633C0D6C79AC841388BBC358D9F250855E177E08270D0E87",
+      "dimensions": [1536, 1024]
+    },
+    {
+      "relative_path": "animations/walk/source/Steamtek_C001_Walk_8dir_4f_chroma.png",
+      "sha256": "2B4BC3BDF2209C782FA15048FDF215355D72253052D9E0DD098E1ED9139D4846",
+      "dimensions": [1536, 1024]
+    }
+  ],
+  "policy": {
+    "modify_reference": false,
+    "overwrite_reference": false,
+    "derive_master_by_editing_reference": false,
+    "verify_hashes_before_comparison": true
+  }
+}
+

@@ -1,0 +1,86 @@
+[gd_scene format=3 uid="uid://dlq5vguxc4jlr"]
+
+[sub_resource type="Gradient" id="Gradient_q51wl"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(0.84313726, 0.90588236, 0.9372549, 0.6, 0.7490196, 0.8666667, 0.91764706, 0.33333334, 0.6862745, 0.80784315, 0.8666667, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_cfp46"]
+gradient = SubResource("Gradient_q51wl")
+width = 1
+height = 3
+fill_from = Vector2(0.5, 0)
+fill_to = Vector2(0.5, 1)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_q51wl"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(300, 8, 1)
+direction = Vector3(-0.06, -1, 0)
+spread = 55.0
+flatness = 1.0
+initial_velocity_min = 18.0
+initial_velocity_max = 40.0
+gravity = Vector3(-10, 180, 0)
+scale_min = 0.59999996
+scale_max = 0.9
+
+[sub_resource type="Gradient" id="Gradient_ih4n0"]
+offsets = PackedFloat32Array(0, 0.68, 0.82, 1)
+colors = PackedColorArray(0.7882353, 0.8980392, 0.9372549, 0, 0.8509804, 0.94509804, 0.9411765, 0.5019608, 0.7882353, 0.8980392, 0.9372549, 0, 0.7490196, 0.8666667, 0.9098039, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_q51wl"]
+gradient = SubResource("Gradient_ih4n0")
+width = 24
+height = 12
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_iufk2"]
+offsets = PackedFloat32Array(0, 0.08, 0.65, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0.4392157, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_q51wl"]
+gradient = SubResource("Gradient_iufk2")
+
+[sub_resource type="Curve" id="Curve_iufk2"]
+_data = [Vector2(0, 0.24719107), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_q51wl"]
+curve = SubResource("Curve_iufk2")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ih4n0"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(300, 8, 1)
+direction = Vector3(0, 0, 0)
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.35
+scale_max = 0.35
+scale_curve = SubResource("CurveTexture_q51wl")
+color_ramp = SubResource("GradientTexture1D_q51wl")
+
+[node name="FX002_RainSplash" type="Node2D" unique_id=972680456]
+
+[node name="SplashDrops" type="GPUParticles2D" parent="." unique_id=2024385445]
+z_index = 5
+texture_filter = 2
+amount = 35
+texture = SubResource("GradientTexture2D_cfp46")
+lifetime = 0.22
+preprocess = 0.22
+randomness = 0.55
+visibility_rect = Rect2(-500, -100, 1000, 250)
+process_material = SubResource("ParticleProcessMaterial_q51wl")
+
+[node name="SplashRipples" type="GPUParticles2D" parent="." unique_id=218532099]
+z_index = 4
+texture_filter = 2
+amount = 24
+texture = SubResource("GradientTexture2D_q51wl")
+lifetime = 0.45
+preprocess = 0.45
+randomness = 0.45
+process_material = SubResource("ParticleProcessMaterial_ih4n0")

@@ -1,0 +1,95 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scenes/characters/validation/Steamtek_C002_AnimationReview.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/characters/npc/Steamtek_C002_NPC.tscn" id="2_npc"]
+
+[node name="Steamtek_C002_AnimationReview" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="."]
+offset_left = -576.0
+offset_top = -324.0
+offset_right = 576.0
+offset_bottom = 324.0
+color = Color(0.018, 0.027, 0.035, 1)
+mouse_filter = 2
+
+[node name="ReviewStage" type="Node2D" parent="."]
+
+[node name="FloorShadow" type="Polygon2D" parent="ReviewStage"]
+polygon = PackedVector2Array(-280, 70, 0, -70, 280, 70, 0, 210)
+color = Color(0.045, 0.075, 0.088, 1)
+z_index = -3
+
+[node name="FloorInset" type="Polygon2D" parent="ReviewStage"]
+polygon = PackedVector2Array(-230, 70, 0, -45, 230, 70, 0, 185)
+color = Color(0.07, 0.105, 0.115, 1)
+z_index = -2
+
+[node name="AxisWestEast" type="Line2D" parent="ReviewStage"]
+points = PackedVector2Array(-230, 70, 0, 185, 230, 70, 0, -45, -230, 70)
+width = 1.0
+default_color = Color(0.12, 0.38, 0.45, 0.7)
+z_index = -1
+
+[node name="GroundContact" type="Polygon2D" parent="ReviewStage"]
+polygon = PackedVector2Array(-14, -9, 14, -9, 14, 9, -14, 9)
+color = Color(0.04, 0.72, 0.92, 0.34)
+position = Vector2(0, 70)
+z_index = -1
+
+[node name="GroundContactCross" type="Line2D" parent="ReviewStage"]
+points = PackedVector2Array(-20, 70, 20, 70)
+width = 1.0
+default_color = Color(0.2, 0.9, 1, 0.8)
+
+[node name="Steamtek_C002_NPC" parent="ReviewStage" instance=ExtResource("2_npc")]
+position = Vector2(0, 70)
+patrol_enabled = false
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, 15)
+zoom = Vector2(2.25, 2.25)
+enabled = true
+
+[node name="ReviewUI" type="CanvasLayer" parent="."]
+
+[node name="Title" type="Label" parent="ReviewUI"]
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 500.0
+offset_bottom = 54.0
+theme_override_colors/font_color = Color(0.22, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "STEAMTEK C002 — CHARACTER PIPELINE REVIEW"
+
+[node name="Panel" type="PanelContainer" parent="ReviewUI"]
+offset_left = 24.0
+offset_top = 72.0
+offset_right = 375.0
+offset_bottom = 190.0
+
+[node name="Margin" type="MarginContainer" parent="ReviewUI/Panel"]
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 10
+
+[node name="VBox" type="VBoxContainer" parent="ReviewUI/Panel/Margin"]
+
+[node name="Status" type="Label" parent="ReviewUI/Panel/Margin/VBox"]
+text = "Animation: idle    Direction: south"
+
+[node name="AutoCycle" type="Label" parent="ReviewUI/Panel/Margin/VBox"]
+text = "Auto-cycle: ON"
+
+[node name="Controls" type="Label" parent="ReviewUI/Panel/Margin/VBox"]
+text = "←/→ or A/D: direction   W/S: north/south\nSPACE: idle/walk   TAB: auto-cycle"
+
+[node name="Contract" type="Label" parent="ReviewUI"]
+offset_left = 24.0
+offset_top = 590.0
+offset_right = 650.0
+offset_bottom = 624.0
+theme_override_colors/font_color = Color(0.55, 0.68, 0.72, 1)
+text = "28×18 footprint  •  visual scale 0.73  •  offset (0, -110)  •  no mirroring"

@@ -1,0 +1,116 @@
+{
+  "schema_version": "1.0.0",
+  "character_id": "Steamtek_C002",
+  "animation": "walk",
+  "action": "STK_WALK",
+  "frame_start": 1,
+  "frame_end": 8,
+  "frames_per_direction": 8,
+  "frame_size": [
+    256,
+    256
+  ],
+  "ground_contact_pixel": [
+    128,
+    217
+  ],
+  "directions": [
+    "south",
+    "south_west",
+    "west",
+    "north_west",
+    "north",
+    "north_east",
+    "east",
+    "south_east"
+  ],
+  "files": {
+    "south": [
+      "south/Steamtek_C002_walk_south_0001.png",
+      "south/Steamtek_C002_walk_south_0002.png",
+      "south/Steamtek_C002_walk_south_0003.png",
+      "south/Steamtek_C002_walk_south_0004.png",
+      "south/Steamtek_C002_walk_south_0005.png",
+      "south/Steamtek_C002_walk_south_0006.png",
+      "south/Steamtek_C002_walk_south_0007.png",
+      "south/Steamtek_C002_walk_south_0008.png"
+    ],
+    "south_west": [
+      "south_west/Steamtek_C002_walk_south_west_0001.png",
+      "south_west/Steamtek_C002_walk_south_west_0002.png",
+      "south_west/Steamtek_C002_walk_south_west_0003.png",
+      "south_west/Steamtek_C002_walk_south_west_0004.png",
+      "south_west/Steamtek_C002_walk_south_west_0005.png",
+      "south_west/Steamtek_C002_walk_south_west_0006.png",
+      "south_west/Steamtek_C002_walk_south_west_0007.png",
+      "south_west/Steamtek_C002_walk_south_west_0008.png"
+    ],
+    "west": [
+      "west/Steamtek_C002_walk_west_0001.png",
+      "west/Steamtek_C002_walk_west_0002.png",
+      "west/Steamtek_C002_walk_west_0003.png",
+      "west/Steamtek_C002_walk_west_0004.png",
+      "west/Steamtek_C002_walk_west_0005.png",
+      "west/Steamtek_C002_walk_west_0006.png",
+      "west/Steamtek_C002_walk_west_0007.png",
+      "west/Steamtek_C002_walk_west_0008.png"
+    ],
+    "north_west": [
+      "north_west/Steamtek_C002_walk_north_west_0001.png",
+      "north_west/Steamtek_C002_walk_north_west_0002.png",
+      "north_west/Steamtek_C002_walk_north_west_0003.png",
+      "north_west/Steamtek_C002_walk_north_west_0004.png",
+      "north_west/Steamtek_C002_walk_north_west_0005.png",
+      "north_west/Steamtek_C002_walk_north_west_0006.png",
+      "north_west/Steamtek_C002_walk_north_west_0007.png",
+      "north_west/Steamtek_C002_walk_north_west_0008.png"
+    ],
+    "north": [
+      "north/Steamtek_C002_walk_north_0001.png",
+      "north/Steamtek_C002_walk_north_0002.png",
+      "north/Steamtek_C002_walk_north_0003.png",
+      "north/Steamtek_C002_walk_north_0004.png",
+      "north/Steamtek_C002_walk_north_0005.png",
+      "north/Steamtek_C002_walk_north_0006.png",
+      "north/Steamtek_C002_walk_north_0007.png",
+      "north/Steamtek_C002_walk_north_0008.png"
+    ],
+    "north_east": [
+      "north_east/Steamtek_C002_walk_north_east_0001.png",
+      "north_east/Steamtek_C002_walk_north_east_0002.png",
+      "north_east/Steamtek_C002_walk_north_east_0003.png",
+      "north_east/Steamtek_C002_walk_north_east_0004.png",
+      "north_east/Steamtek_C002_walk_north_east_0005.png",
+      "north_east/Steamtek_C002_walk_north_east_0006.png",
+      "north_east/Steamtek_C002_walk_north_east_0007.png",
+      "north_east/Steamtek_C002_walk_north_east_0008.png"
+    ],
+    "east": [
+      "east/Steamtek_C002_walk_east_0001.png",
+      "east/Steamtek_C002_walk_east_0002.png",
+      "east/Steamtek_C002_walk_east_0003.png",
+      "east/Steamtek_C002_walk_east_0004.png",
+      "east/Steamtek_C002_walk_east_0005.png",
+      "east/Steamtek_C002_walk_east_0006.png",
+      "east/Steamtek_C002_walk_east_0007.png",
+      "east/Steamtek_C002_walk_east_0008.png"
+    ],
+    "south_east": [
+      "south_east/Steamtek_C002_walk_south_east_0001.png",
+      "south_east/Steamtek_C002_walk_south_east_0002.png",
+      "south_east/Steamtek_C002_walk_south_east_0003.png",
+      "south_east/Steamtek_C002_walk_south_east_0004.png",
+      "south_east/Steamtek_C002_walk_south_east_0005.png",
+      "south_east/Steamtek_C002_walk_south_east_0006.png",
+      "south_east/Steamtek_C002_walk_south_east_0007.png",
+      "south_east/Steamtek_C002_walk_south_east_0008.png"
+    ]
+  },
+  "fixed_canvas": true,
+  "mirrored": false,
+  "source_frame_size": [
+    1254,
+    1254
+  ],
+  "production_resize": "fixed_canvas_lanczos_no_crop"
+}

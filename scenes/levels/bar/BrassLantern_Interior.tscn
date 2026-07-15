@@ -1,0 +1,170 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/characters/C001_PlayerBody.tscn" id="1_player"]
+[ext_resource type="Script" path="res://scenes/modular_v4/scripts/steamtek_zone_door.gd" id="2_door"]
+[ext_resource type="Script" path="res://scenes/modular_v4/scripts/steamtek_v4_bar_interior_visual.gd" id="3_visual"]
+
+[sub_resource type="RectangleShape2D" id="BackWallShape"]
+size = Vector2(1440, 46)
+
+[sub_resource type="RectangleShape2D" id="SideWallShape"]
+size = Vector2(46, 860)
+
+[sub_resource type="RectangleShape2D" id="CounterShape"]
+size = Vector2(870, 78)
+
+[sub_resource type="CircleShape2D" id="TableShape"]
+radius = 70.0
+
+[sub_resource type="RectangleShape2D" id="ExitAreaShape"]
+size = Vector2(210, 120)
+
+[sub_resource type="Gradient" id="LightGradient"]
+offsets = PackedFloat32Array(0, 0.55, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.3, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="LightTexture"]
+gradient = SubResource("LightGradient")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="LabelSettings" id="PromptSettings"]
+font_size = 20
+font_color = Color(0.95, 0.95, 0.91, 1)
+outline_size = 5
+outline_color = Color(0.03, 0.04, 0.05, 0.95)
+
+[node name="BrassLantern_Interior" type="Node2D"]
+editor_description = "Starter Brass Lantern interior. Warm safe-zone lighting, reusable C001 player, solid bar furniture, and return zoning to the complete Lantern Ward surface route."
+metadata/steamtek_contract = "environment_off_axis_60_v4"
+metadata/status = "playable_starter_interior"
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.46, 0.43, 0.39, 1)
+
+[node name="EnvironmentVisual" type="Node2D" parent="."]
+script = ExtResource("3_visual")
+
+[node name="Walls" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 2
+
+[node name="BackCollision" type="CollisionShape2D" parent="Walls"]
+position = Vector2(0, -408)
+shape = SubResource("BackWallShape")
+
+[node name="LeftCollision" type="CollisionShape2D" parent="Walls"]
+position = Vector2(-698, 0)
+shape = SubResource("SideWallShape")
+
+[node name="RightCollision" type="CollisionShape2D" parent="Walls"]
+position = Vector2(698, 0)
+shape = SubResource("SideWallShape")
+
+[node name="YSortLayer" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Counter" type="StaticBody2D" parent="YSortLayer"]
+position = Vector2(-45, -120)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CounterCollision" type="CollisionShape2D" parent="YSortLayer/Counter"]
+rotation = -0.095
+shape = SubResource("CounterShape")
+
+[node name="TableA" type="StaticBody2D" parent="YSortLayer"]
+position = Vector2(-350, 115)
+collision_layer = 1
+collision_mask = 2
+
+[node name="Collision" type="CollisionShape2D" parent="YSortLayer/TableA"]
+shape = SubResource("TableShape")
+
+[node name="TableB" type="StaticBody2D" parent="YSortLayer"]
+position = Vector2(35, 145)
+collision_layer = 1
+collision_mask = 2
+
+[node name="Collision" type="CollisionShape2D" parent="YSortLayer/TableB"]
+shape = SubResource("TableShape")
+
+[node name="TableC" type="StaticBody2D" parent="YSortLayer"]
+position = Vector2(405, 105)
+collision_layer = 1
+collision_mask = 2
+
+[node name="Collision" type="CollisionShape2D" parent="YSortLayer/TableC"]
+shape = SubResource("TableShape")
+
+[node name="Player" parent="YSortLayer" instance=ExtResource("1_player")]
+position = Vector2(0, 285)
+
+[node name="ExitDoor" type="Area2D" parent="."]
+position = Vector2(0, 385)
+collision_layer = 16
+collision_mask = 2
+script = ExtResource("2_door")
+target_scene = "res://scenes/levels/surface/Steamtek_LanternWard_SurfaceRoute.tscn"
+prompt_text = "Return to Lantern Ward"
+
+[node name="InteractionShape" type="CollisionShape2D" parent="ExitDoor"]
+shape = SubResource("ExitAreaShape")
+
+[node name="Prompt" type="Label" parent="ExitDoor"]
+visible = false
+position = Vector2(-132, -92)
+text = "Return to Lantern Ward  [Enter]"
+label_settings = SubResource("PromptSettings")
+
+[node name="Lighting" type="Node2D" parent="."]
+
+[node name="BarAmberLight" type="PointLight2D" parent="Lighting"]
+position = Vector2(-170, -125)
+color = Color(1, 0.48, 0.16, 1)
+energy = 0.86
+texture = SubResource("LightTexture")
+texture_scale = 3.2
+
+[node name="TableAmberLight" type="PointLight2D" parent="Lighting"]
+position = Vector2(315, 100)
+color = Color(1, 0.42, 0.12, 1)
+energy = 0.52
+texture = SubResource("LightTexture")
+texture_scale = 2.1
+
+[node name="CoolServiceLight" type="PointLight2D" parent="Lighting"]
+position = Vector2(420, -270)
+color = Color(0.12, 0.68, 0.86, 1)
+energy = 0.34
+texture = SubResource("LightTexture")
+texture_scale = 1.6
+
+[node name="UI" type="CanvasLayer" parent="."]
+layer = 100
+
+[node name="Title" type="Label" parent="UI"]
+offset_left = 22.0
+offset_top = 18.0
+offset_right = 760.0
+offset_bottom = 56.0
+text = "THE BRASS LANTERN"
+theme_override_colors/font_color = Color(0.96, 0.91, 0.80, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.025, 0.03, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 22
+
+[node name="Instructions" type="Label" parent="UI"]
+offset_left = 22.0
+offset_top = 52.0
+offset_right = 900.0
+offset_bottom = 88.0
+text = "WASD: Move     Enter or R: Return to Lantern Ward"
+theme_override_colors/font_color = Color(0.80, 0.82, 0.78, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.025, 0.03, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 17
+

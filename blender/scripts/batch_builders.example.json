@@ -1,0 +1,16 @@
+{
+  "builders": [
+    {
+      "enabled": false,
+      "script": "build_smv2_w001.py"
+    },
+    {
+      "enabled": false,
+      "script": "build_smv2_w002.py"
+    },
+    {
+      "enabled": false,
+      "script": "build_smv2_w003.py"
+    }
+  ]
+}

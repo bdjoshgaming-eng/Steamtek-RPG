@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/surface/props/intake/P900/candidate/P900_PropIntakeCalibrationCrate.png" id="1_tex"]
+
+[sub_resource type="RectangleShape2D" id="PropFootprint"]
+size = Vector2(32, 16)
+
+[node name="P900_PropIntakeCalibrationCrate" type="StaticBody2D" groups=["steamtek_prop"]]
+editor_description = "Staged external-art prop with exact Steamtek ground contact, gameplay height, and collision footprint."
+
+[node name="Visual" type="Sprite2D" parent="."]
+position = Vector2(0, -128)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("1_tex")
+
+[node name="BodyCollision" type="CollisionShape2D" parent="."]
+position = Vector2(0, -8)
+shape = SubResource("PropFootprint")
+
+[node name="GroundContact" type="Marker2D" parent="."]

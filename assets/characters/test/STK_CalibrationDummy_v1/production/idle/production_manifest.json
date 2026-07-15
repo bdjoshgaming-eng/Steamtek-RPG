@@ -1,0 +1,116 @@
+{
+  "schema_version": "1.0.0",
+  "character_id": "STK_CalibrationDummy_v1",
+  "animation": "idle",
+  "action": "STK_IDLE",
+  "frame_start": 1,
+  "frame_end": 8,
+  "frames_per_direction": 8,
+  "frame_size": [
+    256,
+    256
+  ],
+  "ground_contact_pixel": [
+    128,
+    217
+  ],
+  "directions": [
+    "south",
+    "south_west",
+    "west",
+    "north_west",
+    "north",
+    "north_east",
+    "east",
+    "south_east"
+  ],
+  "files": {
+    "south": [
+      "south/STK_CalibrationDummy_v1_idle_south_0001.png",
+      "south/STK_CalibrationDummy_v1_idle_south_0002.png",
+      "south/STK_CalibrationDummy_v1_idle_south_0003.png",
+      "south/STK_CalibrationDummy_v1_idle_south_0004.png",
+      "south/STK_CalibrationDummy_v1_idle_south_0005.png",
+      "south/STK_CalibrationDummy_v1_idle_south_0006.png",
+      "south/STK_CalibrationDummy_v1_idle_south_0007.png",
+      "south/STK_CalibrationDummy_v1_idle_south_0008.png"
+    ],
+    "south_west": [
+      "south_west/STK_CalibrationDummy_v1_idle_south_west_0001.png",
+      "south_west/STK_CalibrationDummy_v1_idle_south_west_0002.png",
+      "south_west/STK_CalibrationDummy_v1_idle_south_west_0003.png",
+      "south_west/STK_CalibrationDummy_v1_idle_south_west_0004.png",
+      "south_west/STK_CalibrationDummy_v1_idle_south_west_0005.png",
+      "south_west/STK_CalibrationDummy_v1_idle_south_west_0006.png",
+      "south_west/STK_CalibrationDummy_v1_idle_south_west_0007.png",
+      "south_west/STK_CalibrationDummy_v1_idle_south_west_0008.png"
+    ],
+    "west": [
+      "west/STK_CalibrationDummy_v1_idle_west_0001.png",
+      "west/STK_CalibrationDummy_v1_idle_west_0002.png",
+      "west/STK_CalibrationDummy_v1_idle_west_0003.png",
+      "west/STK_CalibrationDummy_v1_idle_west_0004.png",
+      "west/STK_CalibrationDummy_v1_idle_west_0005.png",
+      "west/STK_CalibrationDummy_v1_idle_west_0006.png",
+      "west/STK_CalibrationDummy_v1_idle_west_0007.png",
+      "west/STK_CalibrationDummy_v1_idle_west_0008.png"
+    ],
+    "north_west": [
+      "north_west/STK_CalibrationDummy_v1_idle_north_west_0001.png",
+      "north_west/STK_CalibrationDummy_v1_idle_north_west_0002.png",
+      "north_west/STK_CalibrationDummy_v1_idle_north_west_0003.png",
+      "north_west/STK_CalibrationDummy_v1_idle_north_west_0004.png",
+      "north_west/STK_CalibrationDummy_v1_idle_north_west_0005.png",
+      "north_west/STK_CalibrationDummy_v1_idle_north_west_0006.png",
+      "north_west/STK_CalibrationDummy_v1_idle_north_west_0007.png",
+      "north_west/STK_CalibrationDummy_v1_idle_north_west_0008.png"
+    ],
+    "north": [
+      "north/STK_CalibrationDummy_v1_idle_north_0001.png",
+      "north/STK_CalibrationDummy_v1_idle_north_0002.png",
+      "north/STK_CalibrationDummy_v1_idle_north_0003.png",
+      "north/STK_CalibrationDummy_v1_idle_north_0004.png",
+      "north/STK_CalibrationDummy_v1_idle_north_0005.png",
+      "north/STK_CalibrationDummy_v1_idle_north_0006.png",
+      "north/STK_CalibrationDummy_v1_idle_north_0007.png",
+      "north/STK_CalibrationDummy_v1_idle_north_0008.png"
+    ],
+    "north_east": [
+      "north_east/STK_CalibrationDummy_v1_idle_north_east_0001.png",
+      "north_east/STK_CalibrationDummy_v1_idle_north_east_0002.png",
+      "north_east/STK_CalibrationDummy_v1_idle_north_east_0003.png",
+      "north_east/STK_CalibrationDummy_v1_idle_north_east_0004.png",
+      "north_east/STK_CalibrationDummy_v1_idle_north_east_0005.png",
+      "north_east/STK_CalibrationDummy_v1_idle_north_east_0006.png",
+      "north_east/STK_CalibrationDummy_v1_idle_north_east_0007.png",
+      "north_east/STK_CalibrationDummy_v1_idle_north_east_0008.png"
+    ],
+    "east": [
+      "east/STK_CalibrationDummy_v1_idle_east_0001.png",
+      "east/STK_CalibrationDummy_v1_idle_east_0002.png",
+      "east/STK_CalibrationDummy_v1_idle_east_0003.png",
+      "east/STK_CalibrationDummy_v1_idle_east_0004.png",
+      "east/STK_CalibrationDummy_v1_idle_east_0005.png",
+      "east/STK_CalibrationDummy_v1_idle_east_0006.png",
+      "east/STK_CalibrationDummy_v1_idle_east_0007.png",
+      "east/STK_CalibrationDummy_v1_idle_east_0008.png"
+    ],
+    "south_east": [
+      "south_east/STK_CalibrationDummy_v1_idle_south_east_0001.png",
+      "south_east/STK_CalibrationDummy_v1_idle_south_east_0002.png",
+      "south_east/STK_CalibrationDummy_v1_idle_south_east_0003.png",
+      "south_east/STK_CalibrationDummy_v1_idle_south_east_0004.png",
+      "south_east/STK_CalibrationDummy_v1_idle_south_east_0005.png",
+      "south_east/STK_CalibrationDummy_v1_idle_south_east_0006.png",
+      "south_east/STK_CalibrationDummy_v1_idle_south_east_0007.png",
+      "south_east/STK_CalibrationDummy_v1_idle_south_east_0008.png"
+    ]
+  },
+  "fixed_canvas": true,
+  "mirrored": false,
+  "source_frame_size": [
+    1254,
+    1254
+  ],
+  "production_resize": "fixed_canvas_lanczos_no_crop"
+}

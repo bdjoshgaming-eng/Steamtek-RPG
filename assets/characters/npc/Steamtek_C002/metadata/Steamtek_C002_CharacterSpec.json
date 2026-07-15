@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0.0",
+  "character_id": "Steamtek_C002",
+  "status": "detailed_prototype_v1_2_clockwise_turntable_corrected_and_packaged_for_godot",
+  "role": "maintenance_worker_npc",
+  "archetype": "industrial_pressure_system_technician",
+  "concept": {
+    "file": "concept/Steamtek_C002_Turnaround_v1.png",
+    "version": 1,
+    "approved": true,
+    "approved_date": "2026-07-14",
+    "views": 8
+  },
+  "pipeline": {
+    "master": "Steamtek_Character_Master.blend",
+    "rig": "Steamtek_HumanRig_v1",
+    "rig_status_required": "approved",
+    "source_forward_axis": "-Y",
+    "required_actions": ["STK_IDLE", "STK_WALK"],
+    "direction_order": [
+      "south",
+      "south_west",
+      "west",
+      "north_west",
+      "north",
+      "north_east",
+      "east",
+      "south_east"
+    ],
+    "blockout": {
+      "file": "blender/Steamtek_C002_Blockout_v1.blend",
+      "builder": "blender/Steamtek_Build_C002_Blockout.py",
+      "rig_bound_parts": 58,
+      "actions": ["STK_IDLE", "STK_WALK"],
+      "production_validation": "passed",
+      "eight_direction_idle_preview": "passed"
+    },
+    "detailed_prototype": {
+      "file": "blender/Steamtek_C002_DetailedPrototype_v1_2.blend",
+      "builder": "blender/Steamtek_Build_C002_DetailedPrototype.py",
+      "rig_bound_parts": 74,
+      "actions": ["STK_IDLE", "STK_WALK"],
+      "production_validation": "passed",
+      "raw_render_qa": "passed",
+      "production_render_qa": "passed",
+      "rendered_frames": 128,
+      "direction_contract": "pipeline_v1.6_godot_clockwise_turntable",
+      "godot_sprite_frames": "godot/Steamtek_C002_Frames.tres",
+      "godot_visual_scene": "godot/Steamtek_C002_Visual.tscn"
+    }
+  },
+  "visual_contract": {
+    "silhouette_tier": "production_npc_simpler_than_C001",
+    "primary_colors": ["charcoal", "dark_navy", "worn_steel", "aged_copper"],
+    "accent_colors": ["muted_safety_orange", "restrained_cyan"],
+    "left_side_equipment": ["copper_pressure_tool_gauntlet"],
+    "right_side_equipment": ["diagnostic_unit", "wrench_holster"],
+    "back_equipment": ["compact_regulator_assembly", "short_hoses"],
+    "headgear": "compact_hard_shell_work_cap_and_respirator",
+    "avoid": [
+      "top_hat",
+      "raven_or_bird",
+      "long_trench_coat",
+      "cape",
+      "victorian_clothing",
+      "fantasy_armor",
+      "medieval_weapons"
+    ]
+  },
+  "locked_output": {
+    "source_canvas": [1254, 1254],
+    "production_canvas": [256, 256],
+    "godot_visual_scale": [0.73, 0.73],
+    "godot_visual_offset": [0.0, -110.0],
+    "collision_footprint": [28.0, 18.0]
+  }
+}

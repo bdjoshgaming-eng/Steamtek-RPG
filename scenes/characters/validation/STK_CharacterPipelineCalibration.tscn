@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/characters/player/Steamtek_C001/animations/walk/godot/Steamtek_C001_WalkVisual.tscn" id="1_c001"]
+[ext_resource type="PackedScene" path="res://assets/characters/test/STK_CalibrationDummy_v1/godot/STK_CalibrationDummy_v1_Visual.tscn" id="2_dummy"]
+
+[node name="STK_CharacterPipelineCalibration" type="Node2D"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, -70)
+zoom = Vector2(2, 2)
+enabled = true
+
+[node name="C001_GoldenReference" parent="." instance=ExtResource("1_c001")]
+position = Vector2(-90, 0)
+
+[node name="C001_Footprint" type="Polygon2D" parent="."]
+position = Vector2(-90, 0)
+polygon = PackedVector2Array(-14, -9, 14, -9, 14, 9, -14, 9)
+color = Color(0.08, 0.75, 1, 0.25)
+z_index = -1
+
+[node name="CalibrationDummy" parent="." instance=ExtResource("2_dummy")]
+position = Vector2(90, 0)
+
+[node name="Dummy_Footprint" type="Polygon2D" parent="."]
+position = Vector2(90, 0)
+polygon = PackedVector2Array(-14, -9, 14, -9, 14, 9, -14, 9)
+color = Color(1, 0.45, 0.08, 0.25)
+z_index = -1

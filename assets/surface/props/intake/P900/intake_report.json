@@ -1,0 +1,40 @@
+{
+  "source_size": [
+    360,
+    407
+  ],
+  "source_bbox": [
+    16,
+    19,
+    343,
+    391
+  ],
+  "canonical_size": [
+    1280,
+    1440
+  ],
+  "canonical_bbox": [
+    534,
+    1120,
+    745,
+    1360
+  ],
+  "visible_height_units": 48,
+  "visible_height_pixels": 240,
+  "ground_contact_pixel_y": 1360,
+  "upscale": 0.6452,
+  "mechanical_contract": {
+    "status": "PASS",
+    "canvas_exact": true,
+    "ground_contact_exact": true,
+    "visible_height_exact": true
+  },
+  "warnings": [],
+  "asset_id": "P900",
+  "display_name": "Prop Intake Calibration Crate",
+  "profile": "prop_small",
+  "status": "STAGING_ONLY",
+  "candidate_png": "C:\\My Game\\Steamtek-RPG\\assets\\surface\\props\\intake\\P900\\candidate\\P900_PropIntakeCalibrationCrate.png",
+  "candidate_scene": "C:\\My Game\\Steamtek-RPG\\scenes\\props\\intake\\P900_PropIntakeCalibrationCrate.tscn",
+  "qa_scene": "C:\\My Game\\Steamtek-RPG\\scenes\\props\\validation\\P900_PropIntakeCalibrationCrate_IntakeQATest.tscn"
+}

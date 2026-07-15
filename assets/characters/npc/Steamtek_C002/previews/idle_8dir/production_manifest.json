@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0.0",
+  "character_id": "Steamtek_C002",
+  "animation": "idle",
+  "action": "STK_IDLE",
+  "frame_start": 1,
+  "frame_end": 1,
+  "frames_per_direction": 1,
+  "frame_size": [
+    256,
+    256
+  ],
+  "ground_contact_pixel": [
+    128,
+    217
+  ],
+  "directions": [
+    "south",
+    "south_west",
+    "west",
+    "north_west",
+    "north",
+    "north_east",
+    "east",
+    "south_east"
+  ],
+  "files": {
+    "south": [
+      "south/Steamtek_C002_idle_south_0001.png"
+    ],
+    "south_west": [
+      "south_west/Steamtek_C002_idle_south_west_0001.png"
+    ],
+    "west": [
+      "west/Steamtek_C002_idle_west_0001.png"
+    ],
+    "north_west": [
+      "north_west/Steamtek_C002_idle_north_west_0001.png"
+    ],
+    "north": [
+      "north/Steamtek_C002_idle_north_0001.png"
+    ],
+    "north_east": [
+      "north_east/Steamtek_C002_idle_north_east_0001.png"
+    ],
+    "east": [
+      "east/Steamtek_C002_idle_east_0001.png"
+    ],
+    "south_east": [
+      "south_east/Steamtek_C002_idle_south_east_0001.png"
+    ]
+  },
+  "fixed_canvas": true,
+  "mirrored": false,
+  "source_frame_size": [
+    1254,
+    1254
+  ],
+  "production_resize": "fixed_canvas_lanczos_no_crop"
+}

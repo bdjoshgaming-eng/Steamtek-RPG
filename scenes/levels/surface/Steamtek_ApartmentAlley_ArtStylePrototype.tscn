@@ -1,0 +1,168 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/surface/art_style_prototype/apartment_alley/STK_APT001_ApartmentAlley_Background_v001.png" id="1_background"]
+[ext_resource type="PackedScene" path="res://scenes/characters/C001_PlayerBody.tscn" id="2_player"]
+[ext_resource type="Script" path="res://scenes/modular_v4/scripts/steamtek_zone_door.gd" id="3_door"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/effects/SMV4_FX401_RainOverlay.tscn" id="4_rain"]
+[ext_resource type="Script" path="res://scenes/modular_v4/scripts/steamtek_v4_steam_fx.gd" id="5_steam"]
+
+[sub_resource type="RectangleShape2D" id="FacadeLeftShape"]
+size = Vector2(490, 64)
+
+[sub_resource type="RectangleShape2D" id="FacadeRightShape"]
+size = Vector2(230, 64)
+
+[sub_resource type="RectangleShape2D" id="SideFacadeShape"]
+size = Vector2(470, 68)
+
+[sub_resource type="RectangleShape2D" id="AlleyBuildingShape"]
+size = Vector2(730, 72)
+
+[sub_resource type="RectangleShape2D" id="DoorAreaShape"]
+size = Vector2(210, 150)
+
+[sub_resource type="RectangleShape2D" id="HorizontalBoundary"]
+size = Vector2(1680, 44)
+
+[sub_resource type="RectangleShape2D" id="VerticalBoundary"]
+size = Vector2(44, 1060)
+
+[sub_resource type="LabelSettings" id="PromptSettings"]
+font_size = 20
+font_color = Color(0.95, 0.95, 0.91, 1)
+outline_size = 5
+outline_color = Color(0.02, 0.025, 0.03, 0.96)
+
+[node name="Steamtek_ApartmentAlley_ArtStylePrototype" type="Node2D"]
+editor_description = "Playable 2.5D art-style prototype using the approved hand-painted HD apartment/alley artwork. The environment remains a 2D raster scene with 2D physics and a working apartment door."
+metadata/status = "playable_art_style_prototype"
+metadata/implementation = "2d_raster_environment"
+metadata/visual_reference = "modern_neo_industrial_hand_painted_hd"
+metadata/camera = "fixed_off_axis_surface_view"
+
+[node name="EnvironmentArt" type="Sprite2D" parent="."]
+texture = ExtResource("1_background")
+centered = false
+
+[node name="Atmosphere" type="Node2D" parent="."]
+
+[node name="SteamVentWest" type="Node2D" parent="Atmosphere"]
+position = Vector2(34, 488)
+script = ExtResource("5_steam")
+spread = 20.0
+rise = 92.0
+puff_count = 7
+tint = Color(0.71, 0.75, 0.76, 0.14)
+
+[node name="SteamVentRoof" type="Node2D" parent="Atmosphere"]
+position = Vector2(806, 161)
+script = ExtResource("5_steam")
+spread = 18.0
+rise = 86.0
+puff_count = 7
+tint = Color(0.71, 0.75, 0.76, 0.12)
+
+[node name="SteamVentAlley" type="Node2D" parent="Atmosphere"]
+position = Vector2(1094, 439)
+script = ExtResource("5_steam")
+spread = 22.0
+rise = 105.0
+puff_count = 8
+tint = Color(0.71, 0.75, 0.76, 0.14)
+
+[node name="WorldCollision" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 2
+
+[node name="ApartmentFacadeLeft" type="CollisionShape2D" parent="WorldCollision"]
+position = Vector2(246, 679)
+rotation = -0.045
+shape = SubResource("FacadeLeftShape")
+
+[node name="ApartmentFacadeRight" type="CollisionShape2D" parent="WorldCollision"]
+position = Vector2(847, 657)
+rotation = -0.045
+shape = SubResource("FacadeRightShape")
+
+[node name="ApartmentSide" type="CollisionShape2D" parent="WorldCollision"]
+position = Vector2(970, 430)
+rotation = 1.515
+shape = SubResource("SideFacadeShape")
+
+[node name="OppositeAlleyStructure" type="CollisionShape2D" parent="WorldCollision"]
+position = Vector2(1325, 156)
+rotation = -0.345
+shape = SubResource("AlleyBuildingShape")
+
+[node name="TopBoundary" type="CollisionShape2D" parent="WorldCollision"]
+position = Vector2(802, -18)
+shape = SubResource("HorizontalBoundary")
+
+[node name="BottomBoundary" type="CollisionShape2D" parent="WorldCollision"]
+position = Vector2(802, 1005)
+shape = SubResource("HorizontalBoundary")
+
+[node name="LeftBoundary" type="CollisionShape2D" parent="WorldCollision"]
+position = Vector2(-18, 490)
+shape = SubResource("VerticalBoundary")
+
+[node name="RightBoundary" type="CollisionShape2D" parent="WorldCollision"]
+position = Vector2(1622, 490)
+shape = SubResource("VerticalBoundary")
+
+[node name="YSortLayer" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Player" parent="YSortLayer" instance=ExtResource("2_player")]
+position = Vector2(880, 770)
+
+[node name="ApartmentDoor" type="Area2D" parent="."]
+position = Vector2(621, 694)
+collision_layer = 16
+collision_mask = 2
+script = ExtResource("3_door")
+target_scene = "res://scenes/levels/apartment/Apartment_Interior.tscn"
+prompt_text = "Enter apartment"
+
+[node name="InteractionShape" type="CollisionShape2D" parent="ApartmentDoor"]
+shape = SubResource("DoorAreaShape")
+
+[node name="Prompt" type="Label" parent="ApartmentDoor"]
+visible = false
+position = Vector2(-112, -112)
+text = "Enter apartment  [Enter]"
+label_settings = SubResource("PromptSettings")
+
+[node name="UI" type="CanvasLayer" parent="."]
+layer = 100
+
+[node name="Title" type="Label" parent="UI"]
+offset_left = 22.0
+offset_top = 18.0
+offset_right = 900.0
+offset_bottom = 56.0
+text = "STEAMTEK — APARTMENT & SERVICE ALLEY"
+theme_override_colors/font_color = Color(0.92, 0.92, 0.88, 1)
+theme_override_colors/font_outline_color = Color(0.015, 0.02, 0.025, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 22
+
+[node name="Instructions" type="Label" parent="UI"]
+offset_left = 22.0
+offset_top = 52.0
+offset_right = 950.0
+offset_bottom = 88.0
+text = "WASD: Move     Enter or R: Use apartment door"
+theme_override_colors/font_color = Color(0.78, 0.82, 0.82, 1)
+theme_override_colors/font_outline_color = Color(0.015, 0.02, 0.025, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 17
+
+[node name="RainOverlay" parent="." instance=ExtResource("4_rain")]
+
+[node name="Camera2D" parent="YSortLayer/Player" index="2"]
+zoom = Vector2(1, 1)
+position_smoothing_enabled = true
+position_smoothing_speed = 7.0
+
+[editable path="YSortLayer/Player"]

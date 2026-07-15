@@ -1,0 +1,70 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/modular_v2/apartment_exterior_v3/modules/SMV3_W101_FrontPlain.tscn" id="1_SMV3_W101_FrontPlain"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v2/apartment_exterior_v3/modules/SMV3_W102_FrontWindow.tscn" id="2_SMV3_W102_FrontWindow"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v2/apartment_exterior_v3/modules/SMV3_W103_FrontDoor.tscn" id="3_SMV3_W103_FrontDoor"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v2/apartment_exterior_v3/modules/SMV3_W104_FrontUtility.tscn" id="4_SMV3_W104_FrontUtility"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v2/apartment_exterior_v3/modules/SMV3_W201_SidePlain.tscn" id="5_SMV3_W201_SidePlain"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v2/apartment_exterior_v3/modules/SMV3_W202_SideWindow.tscn" id="6_SMV3_W202_SideWindow"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v2/apartment_exterior_v3/modules/SMV3_F101_ApartmentFoundationMacro.tscn" id="7_foundation"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v2/apartment_exterior_v3/modules/SMV3_R101_ApartmentRoofMacro.tscn" id="8_roof"]
+[ext_resource type="PackedScene" path="res://assets/characters/player/Steamtek_C001/animations/walk/godot/Steamtek_C001_WalkVisual.tscn" id="9_player"]
+
+[node name="SMV3_B101_ApartmentExterior_ModularAssembly" type="Node2D" groups=["steamtek_modular_assembly", "steamtek_apartment_v3"]]
+y_sort_enabled = true
+editor_description = "Construction proof assembled from V3 snap-compatible modules. Open this to inspect, replace, duplicate, and resnap individual bays."
+
+[node name="Foundation" parent="." instance=ExtResource("7_foundation")]
+z_index = -20
+
+[node name="Architecture" type="Node2D" parent="."]
+
+[node name="DoorLower" parent="Architecture" instance=ExtResource("3_SMV3_W103_FrontDoor")]
+position = Vector2(0, 0)
+
+[node name="WindowLowerA" parent="Architecture" instance=ExtResource("2_SMV3_W102_FrontWindow")]
+position = Vector2(256, -128)
+
+[node name="WindowLowerB" parent="Architecture" instance=ExtResource("2_SMV3_W102_FrontWindow")]
+position = Vector2(512, -256)
+
+[node name="UtilityLower" parent="Architecture" instance=ExtResource("4_SMV3_W104_FrontUtility")]
+position = Vector2(768, -384)
+
+[node name="PlainUpperA" parent="Architecture" instance=ExtResource("1_SMV3_W101_FrontPlain")]
+position = Vector2(0, -219)
+
+[node name="WindowUpperA" parent="Architecture" instance=ExtResource("2_SMV3_W102_FrontWindow")]
+position = Vector2(256, -347)
+
+[node name="WindowUpperB" parent="Architecture" instance=ExtResource("2_SMV3_W102_FrontWindow")]
+position = Vector2(512, -475)
+
+[node name="PlainUpperB" parent="Architecture" instance=ExtResource("1_SMV3_W101_FrontPlain")]
+position = Vector2(768, -603)
+
+[node name="SideWindowLower" parent="Architecture" instance=ExtResource("6_SMV3_W202_SideWindow")]
+position = Vector2(1024, -512)
+
+[node name="SidePlainLower" parent="Architecture" instance=ExtResource("5_SMV3_W201_SidePlain")]
+position = Vector2(768, -640)
+
+[node name="SideWindowRear" parent="Architecture" instance=ExtResource("6_SMV3_W202_SideWindow")]
+position = Vector2(512, -768)
+
+[node name="SidePlainUpper" parent="Architecture" instance=ExtResource("5_SMV3_W201_SidePlain")]
+position = Vector2(1024, -731)
+
+[node name="SideWindowUpper" parent="Architecture" instance=ExtResource("6_SMV3_W202_SideWindow")]
+position = Vector2(768, -859)
+
+[node name="SidePlainRear" parent="Architecture" instance=ExtResource("5_SMV3_W201_SidePlain")]
+position = Vector2(512, -987)
+
+[node name="Roof" parent="." instance=ExtResource("8_roof")]
+position = Vector2(0, -478)
+z_index = 5
+
+[node name="ScaleReference_C001" parent="." instance=ExtResource("9_player")]
+position = Vector2(132, -56)
+z_index = 20

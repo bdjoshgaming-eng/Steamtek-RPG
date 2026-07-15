@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://8egn2b7iyirj"]
+
+[ext_resource type="Texture2D" uid="uid://c42vf7asdcf0a" path="res://assets/surface/props/utility_box/production/P008_UtilityBox.png" id="1_6gog4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cfp46"]
+size = Vector2(41, 38)
+
+[node name="P008_UtilityBox" type="StaticBody2D" unique_id=690228967]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1871645047]
+position = Vector2(-0.99999994, -40.999996)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_6gog4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2050945458]
+position = Vector2(-1.5, -30)
+shape = SubResource("RectangleShape2D_cfp46")

@@ -1,0 +1,571 @@
+{
+  "status": "PASS",
+  "checks_total": 110,
+  "checks_passed": 110,
+  "checks": [
+    {
+      "name": "projection",
+      "passed": true,
+      "detail": "true_2_to_1_dimetric"
+    },
+    {
+      "name": "elevation",
+      "passed": true,
+      "detail": "30.0"
+    },
+    {
+      "name": "locked_azimuth",
+      "passed": true,
+      "detail": "south_east_to_north_west"
+    },
+    {
+      "name": "front_step",
+      "passed": true,
+      "detail": "[256, -128]"
+    },
+    {
+      "name": "side_step",
+      "passed": true,
+      "detail": "[-256, -128]"
+    },
+    {
+      "name": "front_slope_2_to_1",
+      "passed": true,
+      "detail": "abs(dy/dx)=0.5"
+    },
+    {
+      "name": "side_slope_2_to_1",
+      "passed": true,
+      "detail": "abs(dy/dx)=0.5"
+    },
+    {
+      "name": "c001_scale",
+      "passed": true,
+      "detail": "[0.73, 0.73]"
+    },
+    {
+      "name": "c001_offset",
+      "passed": true,
+      "detail": "[0, -110]"
+    },
+    {
+      "name": "collision_footprint",
+      "passed": true,
+      "detail": "[28, 18]"
+    },
+    {
+      "name": "exists:ApartmentExterior_CurrentAzimuth.png",
+      "passed": true,
+      "detail": "assets\\modular_v2\\apartment_exterior_v3\\calibration\\ApartmentExterior_CurrentAzimuth.png"
+    },
+    {
+      "name": "rgba:ApartmentExterior_CurrentAzimuth.png",
+      "passed": true,
+      "detail": "RGBA"
+    },
+    {
+      "name": "alpha_content:ApartmentExterior_CurrentAzimuth.png",
+      "passed": true,
+      "detail": "(0, 255)"
+    },
+    {
+      "name": "transparent_margin:ApartmentExterior_CurrentAzimuth.png",
+      "passed": true,
+      "detail": "(0, 255)"
+    },
+    {
+      "name": "nonempty_bbox:ApartmentExterior_CurrentAzimuth.png",
+      "passed": true,
+      "detail": "(21, 0, 3000, 2200)"
+    },
+    {
+      "name": "exists:ApartmentExterior_WestToEastCandidate.png",
+      "passed": true,
+      "detail": "assets\\modular_v2\\apartment_exterior_v3\\calibration\\ApartmentExterior_WestToEastCandidate.png"
+    },
+    {
+      "name": "rgba:ApartmentExterior_WestToEastCandidate.png",
+      "passed": true,
+      "detail": "RGBA"
+    },
+    {
+      "name": "alpha_content:ApartmentExterior_WestToEastCandidate.png",
+      "passed": true,
+      "detail": "(0, 255)"
+    },
+    {
+      "name": "transparent_margin:ApartmentExterior_WestToEastCandidate.png",
+      "passed": true,
+      "detail": "(0, 255)"
+    },
+    {
+      "name": "nonempty_bbox:ApartmentExterior_WestToEastCandidate.png",
+      "passed": true,
+      "detail": "(0, 0, 2979, 2200)"
+    },
+    {
+      "name": "exists:SMV3_B101_ApartmentExterior_Golden.png",
+      "passed": true,
+      "detail": "assets\\modular_v2\\apartment_exterior_v3\\production\\SMV3_B101_ApartmentExterior_Golden.png"
+    },
+    {
+      "name": "rgba:SMV3_B101_ApartmentExterior_Golden.png",
+      "passed": true,
+      "detail": "RGBA"
+    },
+    {
+      "name": "alpha_content:SMV3_B101_ApartmentExterior_Golden.png",
+      "passed": true,
+      "detail": "(0, 255)"
+    },
+    {
+      "name": "transparent_margin:SMV3_B101_ApartmentExterior_Golden.png",
+      "passed": true,
+      "detail": "(0, 255)"
+    },
+    {
+      "name": "nonempty_bbox:SMV3_B101_ApartmentExterior_Golden.png",
+      "passed": true,
+      "detail": "(0, 0, 2979, 2200)"
+    },
+    {
+      "name": "exists:SMV3_FrontDoor.png",
+      "passed": true,
+      "detail": "assets\\modular_v2\\apartment_exterior_v3\\production\\SMV3_FrontDoor.png"
+    },
+    {
+      "name": "rgba:SMV3_FrontDoor.png",
+      "passed": true,
+      "detail": "RGBA"
+    },
+    {
+      "name": "alpha_content:SMV3_FrontDoor.png",
+      "passed": true,
+      "detail": "(0, 255)"
+    },
+    {
+      "name": "transparent_margin:SMV3_FrontDoor.png",
+      "passed": true,
+      "detail": "(0, 255)"
+    },
+    {
+      "name": "nonempty_bbox:SMV3_FrontDoor.png",
+      "passed": true,
+      "detail": "(207, 207, 525, 577)"
+    },
+    {
+      "name": "exists:SMV3_FrontPlain.png",
+      "passed": true,
+      "detail": "assets\\modular_v2\\apartment_exterior_v3\\production\\SMV3_FrontPlain.png"
+    },
+    {
+      "name": "rgba:SMV3_FrontPlain.png",
+      "passed": true,
+      "detail": "RGBA"
+    },
+    {
+      "name": "alpha_content:SMV3_FrontPlain.png",
+      "passed": true,
+      "detail": "(0, 255)"
+    },
+    {
+      "name": "transparent_margin:SMV3_FrontPlain.png",
+      "passed": true,
+      "detail": "(0, 255)"
+    },
+    {
+      "name": "nonempty_bbox:SMV3_FrontPlain.png",
+      "passed": true,
+      "detail": "(207, 207, 525, 577)"
+    },
+    {
+      "name": "exists:SMV3_FrontUtility.png",
+      "passed": true,
+      "detail": "assets\\modular_v2\\apartment_exterior_v3\\production\\SMV3_FrontUtility.png"
+    },
+    {
+      "name": "rgba:SMV3_FrontUtility.png",
+      "passed": true,
+      "detail": "RGBA"
+    },
+    {
+      "name": "alpha_content:SMV3_FrontUtility.png",
+      "passed": true,
+      "detail": "(0, 255)"
+    },
+    {
+      "name": "transparent_margin:SMV3_FrontUtility.png",
+      "passed": true,
+      "detail": "(0, 255)"
+    },
+    {
+      "name": "nonempty_bbox:SMV3_FrontUtility.png",
+      "passed": true,
+      "detail": "(207, 207, 525, 577)"
+    },
+    {
+      "name": "exists:SMV3_FrontWindow.png",
+      "passed": true,
+      "detail": "assets\\modular_v2\\apartment_exterior_v3\\production\\SMV3_FrontWindow.png"
+    },
+    {
+      "name": "rgba:SMV3_FrontWindow.png",
+      "passed": true,
+      "detail": "RGBA"
+    },
+    {
+      "name": "alpha_content:SMV3_FrontWindow.png",
+      "passed": true,
+      "detail": "(0, 255)"
+    },
+    {
+      "name": "transparent_margin:SMV3_FrontWindow.png",
+      "passed": true,
+      "detail": "(0, 255)"
+    },
+    {
+      "name": "nonempty_bbox:SMV3_FrontWindow.png",
+      "passed": true,
+      "detail": "(207, 207, 525, 577)"
+    },
+    {
+      "name": "exists:SMV3_SidePlain.png",
+      "passed": true,
+      "detail": "assets\\modular_v2\\apartment_exterior_v3\\production\\SMV3_SidePlain.png"
+    },
+    {
+      "name": "rgba:SMV3_SidePlain.png",
+      "passed": true,
+      "detail": "RGBA"
+    },
+    {
+      "name": "alpha_content:SMV3_SidePlain.png",
+      "passed": true,
+      "detail": "(0, 255)"
+    },
+    {
+      "name": "transparent_margin:SMV3_SidePlain.png",
+      "passed": true,
+      "detail": "(0, 255)"
+    },
+    {
+      "name": "nonempty_bbox:SMV3_SidePlain.png",
+      "passed": true,
+      "detail": "(207, 195, 525, 568)"
+    },
+    {
+      "name": "exists:SMV3_SideWindow.png",
+      "passed": true,
+      "detail": "assets\\modular_v2\\apartment_exterior_v3\\production\\SMV3_SideWindow.png"
+    },
+    {
+      "name": "rgba:SMV3_SideWindow.png",
+      "passed": true,
+      "detail": "RGBA"
+    },
+    {
+      "name": "alpha_content:SMV3_SideWindow.png",
+      "passed": true,
+      "detail": "(0, 255)"
+    },
+    {
+      "name": "transparent_margin:SMV3_SideWindow.png",
+      "passed": true,
+      "detail": "(0, 255)"
+    },
+    {
+      "name": "nonempty_bbox:SMV3_SideWindow.png",
+      "passed": true,
+      "detail": "(207, 195, 525, 568)"
+    },
+    {
+      "name": "exists:SMV3_RoofMacro.png",
+      "passed": true,
+      "detail": "assets\\modular_v2\\apartment_exterior_v3\\production\\SMV3_RoofMacro.png"
+    },
+    {
+      "name": "rgba:SMV3_RoofMacro.png",
+      "passed": true,
+      "detail": "RGBA"
+    },
+    {
+      "name": "alpha_content:SMV3_RoofMacro.png",
+      "passed": true,
+      "detail": "(0, 255)"
+    },
+    {
+      "name": "transparent_margin:SMV3_RoofMacro.png",
+      "passed": true,
+      "detail": "(0, 255)"
+    },
+    {
+      "name": "nonempty_bbox:SMV3_RoofMacro.png",
+      "passed": true,
+      "detail": "(0, 0, 2200, 1300)"
+    },
+    {
+      "name": "exists:SMV3_FoundationMacro.png",
+      "passed": true,
+      "detail": "assets\\modular_v2\\apartment_exterior_v3\\production\\SMV3_FoundationMacro.png"
+    },
+    {
+      "name": "rgba:SMV3_FoundationMacro.png",
+      "passed": true,
+      "detail": "RGBA"
+    },
+    {
+      "name": "alpha_content:SMV3_FoundationMacro.png",
+      "passed": true,
+      "detail": "(0, 255)"
+    },
+    {
+      "name": "transparent_margin:SMV3_FoundationMacro.png",
+      "passed": true,
+      "detail": "(0, 255)"
+    },
+    {
+      "name": "nonempty_bbox:SMV3_FoundationMacro.png",
+      "passed": true,
+      "detail": "(0, 0, 2200, 1300)"
+    },
+    {
+      "name": "scene_exists:Steamtek_ApartmentExterior_WestEast_CameraGate.tscn",
+      "passed": true,
+      "detail": "scenes\\tests\\surface\\Steamtek_ApartmentExterior_WestEast_CameraGate.tscn"
+    },
+    {
+      "name": "isolated_from_main:Steamtek_ApartmentExterior_WestEast_CameraGate.tscn",
+      "passed": true,
+      "detail": "no main dependency"
+    },
+    {
+      "name": "root_scale_locked:Steamtek_ApartmentExterior_WestEast_CameraGate.tscn",
+      "passed": true,
+      "detail": "root has no scale override"
+    },
+    {
+      "name": "scene_exists:Steamtek_ApartmentExterior_V3_ConstructionGate.tscn",
+      "passed": true,
+      "detail": "scenes\\tests\\surface\\Steamtek_ApartmentExterior_V3_ConstructionGate.tscn"
+    },
+    {
+      "name": "isolated_from_main:Steamtek_ApartmentExterior_V3_ConstructionGate.tscn",
+      "passed": true,
+      "detail": "no main dependency"
+    },
+    {
+      "name": "root_scale_locked:Steamtek_ApartmentExterior_V3_ConstructionGate.tscn",
+      "passed": true,
+      "detail": "root has no scale override"
+    },
+    {
+      "name": "scene_exists:SMV3_B101_ApartmentExterior_ModularAssembly.tscn",
+      "passed": true,
+      "detail": "scenes\\modular_v2\\apartment_exterior_v3\\buildings\\SMV3_B101_ApartmentExterior_ModularAssembly.tscn"
+    },
+    {
+      "name": "isolated_from_main:SMV3_B101_ApartmentExterior_ModularAssembly.tscn",
+      "passed": true,
+      "detail": "no main dependency"
+    },
+    {
+      "name": "root_scale_locked:SMV3_B101_ApartmentExterior_ModularAssembly.tscn",
+      "passed": true,
+      "detail": "root has no scale override"
+    },
+    {
+      "name": "scene_exists:SMV3_B101_ApartmentExterior_Placeable.tscn",
+      "passed": true,
+      "detail": "scenes\\modular_v2\\apartment_exterior_v3\\buildings\\SMV3_B101_ApartmentExterior_Placeable.tscn"
+    },
+    {
+      "name": "isolated_from_main:SMV3_B101_ApartmentExterior_Placeable.tscn",
+      "passed": true,
+      "detail": "no main dependency"
+    },
+    {
+      "name": "root_scale_locked:SMV3_B101_ApartmentExterior_Placeable.tscn",
+      "passed": true,
+      "detail": "root has no scale override"
+    },
+    {
+      "name": "scene_exists:SMV3_F101_ApartmentFoundationMacro.tscn",
+      "passed": true,
+      "detail": "scenes\\modular_v2\\apartment_exterior_v3\\modules\\SMV3_F101_ApartmentFoundationMacro.tscn"
+    },
+    {
+      "name": "isolated_from_main:SMV3_F101_ApartmentFoundationMacro.tscn",
+      "passed": true,
+      "detail": "no main dependency"
+    },
+    {
+      "name": "root_scale_locked:SMV3_F101_ApartmentFoundationMacro.tscn",
+      "passed": true,
+      "detail": "root has no scale override"
+    },
+    {
+      "name": "scene_exists:SMV3_R101_ApartmentRoofMacro.tscn",
+      "passed": true,
+      "detail": "scenes\\modular_v2\\apartment_exterior_v3\\modules\\SMV3_R101_ApartmentRoofMacro.tscn"
+    },
+    {
+      "name": "isolated_from_main:SMV3_R101_ApartmentRoofMacro.tscn",
+      "passed": true,
+      "detail": "no main dependency"
+    },
+    {
+      "name": "root_scale_locked:SMV3_R101_ApartmentRoofMacro.tscn",
+      "passed": true,
+      "detail": "root has no scale override"
+    },
+    {
+      "name": "scene_exists:SMV3_W101_FrontPlain.tscn",
+      "passed": true,
+      "detail": "scenes\\modular_v2\\apartment_exterior_v3\\modules\\SMV3_W101_FrontPlain.tscn"
+    },
+    {
+      "name": "isolated_from_main:SMV3_W101_FrontPlain.tscn",
+      "passed": true,
+      "detail": "no main dependency"
+    },
+    {
+      "name": "root_scale_locked:SMV3_W101_FrontPlain.tscn",
+      "passed": true,
+      "detail": "root has no scale override"
+    },
+    {
+      "name": "scene_exists:SMV3_W102_FrontWindow.tscn",
+      "passed": true,
+      "detail": "scenes\\modular_v2\\apartment_exterior_v3\\modules\\SMV3_W102_FrontWindow.tscn"
+    },
+    {
+      "name": "isolated_from_main:SMV3_W102_FrontWindow.tscn",
+      "passed": true,
+      "detail": "no main dependency"
+    },
+    {
+      "name": "root_scale_locked:SMV3_W102_FrontWindow.tscn",
+      "passed": true,
+      "detail": "root has no scale override"
+    },
+    {
+      "name": "scene_exists:SMV3_W103_FrontDoor.tscn",
+      "passed": true,
+      "detail": "scenes\\modular_v2\\apartment_exterior_v3\\modules\\SMV3_W103_FrontDoor.tscn"
+    },
+    {
+      "name": "isolated_from_main:SMV3_W103_FrontDoor.tscn",
+      "passed": true,
+      "detail": "no main dependency"
+    },
+    {
+      "name": "root_scale_locked:SMV3_W103_FrontDoor.tscn",
+      "passed": true,
+      "detail": "root has no scale override"
+    },
+    {
+      "name": "scene_exists:SMV3_W104_FrontUtility.tscn",
+      "passed": true,
+      "detail": "scenes\\modular_v2\\apartment_exterior_v3\\modules\\SMV3_W104_FrontUtility.tscn"
+    },
+    {
+      "name": "isolated_from_main:SMV3_W104_FrontUtility.tscn",
+      "passed": true,
+      "detail": "no main dependency"
+    },
+    {
+      "name": "root_scale_locked:SMV3_W104_FrontUtility.tscn",
+      "passed": true,
+      "detail": "root has no scale override"
+    },
+    {
+      "name": "scene_exists:SMV3_W201_SidePlain.tscn",
+      "passed": true,
+      "detail": "scenes\\modular_v2\\apartment_exterior_v3\\modules\\SMV3_W201_SidePlain.tscn"
+    },
+    {
+      "name": "isolated_from_main:SMV3_W201_SidePlain.tscn",
+      "passed": true,
+      "detail": "no main dependency"
+    },
+    {
+      "name": "root_scale_locked:SMV3_W201_SidePlain.tscn",
+      "passed": true,
+      "detail": "root has no scale override"
+    },
+    {
+      "name": "scene_exists:SMV3_W202_SideWindow.tscn",
+      "passed": true,
+      "detail": "scenes\\modular_v2\\apartment_exterior_v3\\modules\\SMV3_W202_SideWindow.tscn"
+    },
+    {
+      "name": "isolated_from_main:SMV3_W202_SideWindow.tscn",
+      "passed": true,
+      "detail": "no main dependency"
+    },
+    {
+      "name": "root_scale_locked:SMV3_W202_SideWindow.tscn",
+      "passed": true,
+      "detail": "root has no scale override"
+    },
+    {
+      "name": "placeable_collision",
+      "passed": true,
+      "detail": "footprint collision present"
+    },
+    {
+      "name": "placeable_door",
+      "passed": true,
+      "detail": "door interaction present"
+    },
+    {
+      "name": "placeable_whole_sort",
+      "passed": true,
+      "detail": "single root visual"
+    },
+    {
+      "name": "snap_v3_foundation",
+      "passed": true,
+      "detail": "V3 prefix supported"
+    },
+    {
+      "name": "snap_occupied_socket",
+      "passed": true,
+      "detail": "occupied sockets skipped"
+    },
+    {
+      "name": "snap_metadata_axes",
+      "passed": true,
+      "detail": "per-family axes supported"
+    },
+    {
+      "name": "snap_version",
+      "passed": true,
+      "detail": "2.3.0"
+    },
+    {
+      "name": "master_blend",
+      "passed": true,
+      "detail": "6772421 bytes"
+    },
+    {
+      "name": "rebuild_script",
+      "passed": true,
+      "detail": "blender\\modular_v2\\apartment_exterior_v3\\Steamtek_Build_ApartmentExterior_WestEast.py"
+    }
+  ],
+  "sha256": {
+    "assets/modular_v2/apartment_exterior_v3/calibration/ApartmentExterior_CurrentAzimuth.png": "f20aa2ffdcff9d2f5aab25d9fa79964b519c7f19370430ff61adcdc9fde77bf8",
+    "assets/modular_v2/apartment_exterior_v3/calibration/ApartmentExterior_WestToEastCandidate.png": "4cefd89d8fbde4a44aa0c64f5874bd09eb8d42cd3f931324f16f33e5cc037c1a",
+    "assets/modular_v2/apartment_exterior_v3/production/SMV3_B101_ApartmentExterior_Golden.png": "deaa46dbd1df2f63c8b33e44b5dfe7fa37db731a1051c940fd977df1706bb736",
+    "assets/modular_v2/apartment_exterior_v3/production/SMV3_FrontDoor.png": "e726353a427142b2cb4084fb07c1b842688db5e4464c915ae8c6bf5dc9d3a1cd",
+    "assets/modular_v2/apartment_exterior_v3/production/SMV3_FrontPlain.png": "05a5b1871629d2810d6aec5023698a4ce64a4299ee02e64da8fac08b54418037",
+    "assets/modular_v2/apartment_exterior_v3/production/SMV3_FrontUtility.png": "12d01b9d5a3ab259d3cf6daeed4f986f9045ad20a364211fa8baa6e1b8193de7",
+    "assets/modular_v2/apartment_exterior_v3/production/SMV3_FrontWindow.png": "35c745a727748f9db53da3ad1d2b99a0cc13aea79ce8a8729e46a667802dbd0b",
+    "assets/modular_v2/apartment_exterior_v3/production/SMV3_SidePlain.png": "e9f46bde161ba2471c722a154a1cb4e4b085c61347519ec1d69c5fb31fe52298",
+    "assets/modular_v2/apartment_exterior_v3/production/SMV3_SideWindow.png": "6ac73ee57556eff637e215c8dd289d8b32cd67e6a74ce59ec28f88485900653e",
+    "assets/modular_v2/apartment_exterior_v3/production/SMV3_RoofMacro.png": "9ac78cea5a8fc60aa674500b0bfb562141d1cc7a3fe1d3c12f32d224b80819b3",
+    "assets/modular_v2/apartment_exterior_v3/production/SMV3_FoundationMacro.png": "cf996007ab5f83552e49e3a0753217a1b5ec9d29635ba8abd44d11eccc1e98ed"
+  },
+  "note": "Godot scene launch and clean plugin-load tests are recorded in the handoff document. Full editor scan remains affected by unrelated in-progress SurveyBook.gd/main.gd work and was not modified."
+}

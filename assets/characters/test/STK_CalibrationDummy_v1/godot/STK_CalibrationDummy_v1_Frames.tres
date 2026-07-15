@@ -1,0 +1,597 @@
+[gd_resource type="SpriteFrames" load_steps=129 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/south/STK_CalibrationDummy_v1_idle_south_0001.png" id="Texture_1"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/south/STK_CalibrationDummy_v1_idle_south_0002.png" id="Texture_2"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/south/STK_CalibrationDummy_v1_idle_south_0003.png" id="Texture_3"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/south/STK_CalibrationDummy_v1_idle_south_0004.png" id="Texture_4"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/south/STK_CalibrationDummy_v1_idle_south_0005.png" id="Texture_5"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/south/STK_CalibrationDummy_v1_idle_south_0006.png" id="Texture_6"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/south/STK_CalibrationDummy_v1_idle_south_0007.png" id="Texture_7"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/south/STK_CalibrationDummy_v1_idle_south_0008.png" id="Texture_8"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/south_west/STK_CalibrationDummy_v1_idle_south_west_0001.png" id="Texture_9"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/south_west/STK_CalibrationDummy_v1_idle_south_west_0002.png" id="Texture_10"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/south_west/STK_CalibrationDummy_v1_idle_south_west_0003.png" id="Texture_11"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/south_west/STK_CalibrationDummy_v1_idle_south_west_0004.png" id="Texture_12"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/south_west/STK_CalibrationDummy_v1_idle_south_west_0005.png" id="Texture_13"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/south_west/STK_CalibrationDummy_v1_idle_south_west_0006.png" id="Texture_14"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/south_west/STK_CalibrationDummy_v1_idle_south_west_0007.png" id="Texture_15"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/south_west/STK_CalibrationDummy_v1_idle_south_west_0008.png" id="Texture_16"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/west/STK_CalibrationDummy_v1_idle_west_0001.png" id="Texture_17"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/west/STK_CalibrationDummy_v1_idle_west_0002.png" id="Texture_18"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/west/STK_CalibrationDummy_v1_idle_west_0003.png" id="Texture_19"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/west/STK_CalibrationDummy_v1_idle_west_0004.png" id="Texture_20"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/west/STK_CalibrationDummy_v1_idle_west_0005.png" id="Texture_21"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/west/STK_CalibrationDummy_v1_idle_west_0006.png" id="Texture_22"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/west/STK_CalibrationDummy_v1_idle_west_0007.png" id="Texture_23"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/west/STK_CalibrationDummy_v1_idle_west_0008.png" id="Texture_24"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/north_west/STK_CalibrationDummy_v1_idle_north_west_0001.png" id="Texture_25"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/north_west/STK_CalibrationDummy_v1_idle_north_west_0002.png" id="Texture_26"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/north_west/STK_CalibrationDummy_v1_idle_north_west_0003.png" id="Texture_27"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/north_west/STK_CalibrationDummy_v1_idle_north_west_0004.png" id="Texture_28"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/north_west/STK_CalibrationDummy_v1_idle_north_west_0005.png" id="Texture_29"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/north_west/STK_CalibrationDummy_v1_idle_north_west_0006.png" id="Texture_30"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/north_west/STK_CalibrationDummy_v1_idle_north_west_0007.png" id="Texture_31"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/north_west/STK_CalibrationDummy_v1_idle_north_west_0008.png" id="Texture_32"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/north/STK_CalibrationDummy_v1_idle_north_0001.png" id="Texture_33"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/north/STK_CalibrationDummy_v1_idle_north_0002.png" id="Texture_34"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/north/STK_CalibrationDummy_v1_idle_north_0003.png" id="Texture_35"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/north/STK_CalibrationDummy_v1_idle_north_0004.png" id="Texture_36"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/north/STK_CalibrationDummy_v1_idle_north_0005.png" id="Texture_37"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/north/STK_CalibrationDummy_v1_idle_north_0006.png" id="Texture_38"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/north/STK_CalibrationDummy_v1_idle_north_0007.png" id="Texture_39"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/north/STK_CalibrationDummy_v1_idle_north_0008.png" id="Texture_40"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/north_east/STK_CalibrationDummy_v1_idle_north_east_0001.png" id="Texture_41"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/north_east/STK_CalibrationDummy_v1_idle_north_east_0002.png" id="Texture_42"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/north_east/STK_CalibrationDummy_v1_idle_north_east_0003.png" id="Texture_43"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/north_east/STK_CalibrationDummy_v1_idle_north_east_0004.png" id="Texture_44"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/north_east/STK_CalibrationDummy_v1_idle_north_east_0005.png" id="Texture_45"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/north_east/STK_CalibrationDummy_v1_idle_north_east_0006.png" id="Texture_46"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/north_east/STK_CalibrationDummy_v1_idle_north_east_0007.png" id="Texture_47"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/north_east/STK_CalibrationDummy_v1_idle_north_east_0008.png" id="Texture_48"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/east/STK_CalibrationDummy_v1_idle_east_0001.png" id="Texture_49"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/east/STK_CalibrationDummy_v1_idle_east_0002.png" id="Texture_50"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/east/STK_CalibrationDummy_v1_idle_east_0003.png" id="Texture_51"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/east/STK_CalibrationDummy_v1_idle_east_0004.png" id="Texture_52"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/east/STK_CalibrationDummy_v1_idle_east_0005.png" id="Texture_53"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/east/STK_CalibrationDummy_v1_idle_east_0006.png" id="Texture_54"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/east/STK_CalibrationDummy_v1_idle_east_0007.png" id="Texture_55"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/east/STK_CalibrationDummy_v1_idle_east_0008.png" id="Texture_56"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/south_east/STK_CalibrationDummy_v1_idle_south_east_0001.png" id="Texture_57"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/south_east/STK_CalibrationDummy_v1_idle_south_east_0002.png" id="Texture_58"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/south_east/STK_CalibrationDummy_v1_idle_south_east_0003.png" id="Texture_59"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/south_east/STK_CalibrationDummy_v1_idle_south_east_0004.png" id="Texture_60"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/south_east/STK_CalibrationDummy_v1_idle_south_east_0005.png" id="Texture_61"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/south_east/STK_CalibrationDummy_v1_idle_south_east_0006.png" id="Texture_62"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/south_east/STK_CalibrationDummy_v1_idle_south_east_0007.png" id="Texture_63"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/idle/south_east/STK_CalibrationDummy_v1_idle_south_east_0008.png" id="Texture_64"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/south/STK_CalibrationDummy_v1_walk_south_0001.png" id="Texture_65"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/south/STK_CalibrationDummy_v1_walk_south_0002.png" id="Texture_66"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/south/STK_CalibrationDummy_v1_walk_south_0003.png" id="Texture_67"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/south/STK_CalibrationDummy_v1_walk_south_0004.png" id="Texture_68"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/south/STK_CalibrationDummy_v1_walk_south_0005.png" id="Texture_69"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/south/STK_CalibrationDummy_v1_walk_south_0006.png" id="Texture_70"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/south/STK_CalibrationDummy_v1_walk_south_0007.png" id="Texture_71"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/south/STK_CalibrationDummy_v1_walk_south_0008.png" id="Texture_72"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/south_west/STK_CalibrationDummy_v1_walk_south_west_0001.png" id="Texture_73"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/south_west/STK_CalibrationDummy_v1_walk_south_west_0002.png" id="Texture_74"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/south_west/STK_CalibrationDummy_v1_walk_south_west_0003.png" id="Texture_75"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/south_west/STK_CalibrationDummy_v1_walk_south_west_0004.png" id="Texture_76"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/south_west/STK_CalibrationDummy_v1_walk_south_west_0005.png" id="Texture_77"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/south_west/STK_CalibrationDummy_v1_walk_south_west_0006.png" id="Texture_78"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/south_west/STK_CalibrationDummy_v1_walk_south_west_0007.png" id="Texture_79"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/south_west/STK_CalibrationDummy_v1_walk_south_west_0008.png" id="Texture_80"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/west/STK_CalibrationDummy_v1_walk_west_0001.png" id="Texture_81"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/west/STK_CalibrationDummy_v1_walk_west_0002.png" id="Texture_82"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/west/STK_CalibrationDummy_v1_walk_west_0003.png" id="Texture_83"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/west/STK_CalibrationDummy_v1_walk_west_0004.png" id="Texture_84"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/west/STK_CalibrationDummy_v1_walk_west_0005.png" id="Texture_85"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/west/STK_CalibrationDummy_v1_walk_west_0006.png" id="Texture_86"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/west/STK_CalibrationDummy_v1_walk_west_0007.png" id="Texture_87"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/west/STK_CalibrationDummy_v1_walk_west_0008.png" id="Texture_88"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/north_west/STK_CalibrationDummy_v1_walk_north_west_0001.png" id="Texture_89"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/north_west/STK_CalibrationDummy_v1_walk_north_west_0002.png" id="Texture_90"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/north_west/STK_CalibrationDummy_v1_walk_north_west_0003.png" id="Texture_91"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/north_west/STK_CalibrationDummy_v1_walk_north_west_0004.png" id="Texture_92"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/north_west/STK_CalibrationDummy_v1_walk_north_west_0005.png" id="Texture_93"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/north_west/STK_CalibrationDummy_v1_walk_north_west_0006.png" id="Texture_94"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/north_west/STK_CalibrationDummy_v1_walk_north_west_0007.png" id="Texture_95"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/north_west/STK_CalibrationDummy_v1_walk_north_west_0008.png" id="Texture_96"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/north/STK_CalibrationDummy_v1_walk_north_0001.png" id="Texture_97"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/north/STK_CalibrationDummy_v1_walk_north_0002.png" id="Texture_98"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/north/STK_CalibrationDummy_v1_walk_north_0003.png" id="Texture_99"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/north/STK_CalibrationDummy_v1_walk_north_0004.png" id="Texture_100"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/north/STK_CalibrationDummy_v1_walk_north_0005.png" id="Texture_101"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/north/STK_CalibrationDummy_v1_walk_north_0006.png" id="Texture_102"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/north/STK_CalibrationDummy_v1_walk_north_0007.png" id="Texture_103"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/north/STK_CalibrationDummy_v1_walk_north_0008.png" id="Texture_104"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/north_east/STK_CalibrationDummy_v1_walk_north_east_0001.png" id="Texture_105"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/north_east/STK_CalibrationDummy_v1_walk_north_east_0002.png" id="Texture_106"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/north_east/STK_CalibrationDummy_v1_walk_north_east_0003.png" id="Texture_107"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/north_east/STK_CalibrationDummy_v1_walk_north_east_0004.png" id="Texture_108"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/north_east/STK_CalibrationDummy_v1_walk_north_east_0005.png" id="Texture_109"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/north_east/STK_CalibrationDummy_v1_walk_north_east_0006.png" id="Texture_110"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/north_east/STK_CalibrationDummy_v1_walk_north_east_0007.png" id="Texture_111"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/north_east/STK_CalibrationDummy_v1_walk_north_east_0008.png" id="Texture_112"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/east/STK_CalibrationDummy_v1_walk_east_0001.png" id="Texture_113"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/east/STK_CalibrationDummy_v1_walk_east_0002.png" id="Texture_114"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/east/STK_CalibrationDummy_v1_walk_east_0003.png" id="Texture_115"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/east/STK_CalibrationDummy_v1_walk_east_0004.png" id="Texture_116"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/east/STK_CalibrationDummy_v1_walk_east_0005.png" id="Texture_117"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/east/STK_CalibrationDummy_v1_walk_east_0006.png" id="Texture_118"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/east/STK_CalibrationDummy_v1_walk_east_0007.png" id="Texture_119"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/east/STK_CalibrationDummy_v1_walk_east_0008.png" id="Texture_120"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/south_east/STK_CalibrationDummy_v1_walk_south_east_0001.png" id="Texture_121"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/south_east/STK_CalibrationDummy_v1_walk_south_east_0002.png" id="Texture_122"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/south_east/STK_CalibrationDummy_v1_walk_south_east_0003.png" id="Texture_123"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/south_east/STK_CalibrationDummy_v1_walk_south_east_0004.png" id="Texture_124"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/south_east/STK_CalibrationDummy_v1_walk_south_east_0005.png" id="Texture_125"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/south_east/STK_CalibrationDummy_v1_walk_south_east_0006.png" id="Texture_126"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/south_east/STK_CalibrationDummy_v1_walk_south_east_0007.png" id="Texture_127"]
+[ext_resource type="Texture2D" path="res://assets/characters/test/STK_CalibrationDummy_v1/production/walk/south_east/STK_CalibrationDummy_v1_walk_south_east_0008.png" id="Texture_128"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_8")
+}],
+"loop": true,
+"name": &"idle_south",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_9")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_10")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_11")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_12")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_14")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_15")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_16")
+}],
+"loop": true,
+"name": &"idle_south_west",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_17")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_18")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_19")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_20")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_21")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_22")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_23")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_24")
+}],
+"loop": true,
+"name": &"idle_west",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_25")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_26")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_27")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_28")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_29")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_30")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_31")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_32")
+}],
+"loop": true,
+"name": &"idle_north_west",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_33")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_34")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_35")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_36")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_37")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_38")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_39")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_40")
+}],
+"loop": true,
+"name": &"idle_north",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_41")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_42")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_43")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_44")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_45")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_46")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_47")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_48")
+}],
+"loop": true,
+"name": &"idle_north_east",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_49")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_50")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_51")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_52")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_53")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_54")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_55")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_56")
+}],
+"loop": true,
+"name": &"idle_east",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_57")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_58")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_59")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_60")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_61")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_62")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_63")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_64")
+}],
+"loop": true,
+"name": &"idle_south_east",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_65")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_66")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_67")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_68")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_69")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_70")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_71")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_72")
+}],
+"loop": true,
+"name": &"walk_south",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_73")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_74")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_75")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_76")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_77")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_78")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_79")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_80")
+}],
+"loop": true,
+"name": &"walk_south_west",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_81")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_82")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_83")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_84")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_85")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_86")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_87")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_88")
+}],
+"loop": true,
+"name": &"walk_west",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_89")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_90")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_91")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_92")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_93")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_94")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_95")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_96")
+}],
+"loop": true,
+"name": &"walk_north_west",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_97")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_98")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_99")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_100")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_101")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_102")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_103")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_104")
+}],
+"loop": true,
+"name": &"walk_north",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_105")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_106")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_107")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_108")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_109")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_110")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_111")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_112")
+}],
+"loop": true,
+"name": &"walk_north_east",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_113")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_114")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_115")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_116")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_117")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_118")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_119")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_120")
+}],
+"loop": true,
+"name": &"walk_east",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_121")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_122")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_123")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_124")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_125")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_126")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_127")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_128")
+}],
+"loop": true,
+"name": &"walk_south_east",
+"speed": 8.0
+}]

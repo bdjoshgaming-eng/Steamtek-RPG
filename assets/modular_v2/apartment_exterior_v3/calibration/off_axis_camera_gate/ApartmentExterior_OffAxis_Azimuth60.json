@@ -1,0 +1,34 @@
+{
+  "status": "camera_gate_only_not_locked",
+  "camera_type": "ORTHOGRAPHIC",
+  "elevation_degrees": 30.0,
+  "azimuth_degrees": 60.0,
+  "camera_roll_degrees": 0.0,
+  "render_size": [
+    3000,
+    2200
+  ],
+  "texture": "res://assets/modular_v2/apartment_exterior_v3/calibration/off_axis_camera_gate/ApartmentExterior_OffAxis_Azimuth60.png",
+  "camera_location_vector": [
+    5.656854,
+    -9.797959,
+    6.531973
+  ],
+  "camera_forward": [
+    -0.433013,
+    0.75,
+    -0.5
+  ],
+  "front_bay_step": [
+    427.547,
+    123.422
+  ],
+  "side_bay_step": [
+    246.845,
+    -213.774
+  ],
+  "vertical_unit_step": [
+    0.0,
+    -213.774
+  ]
+}

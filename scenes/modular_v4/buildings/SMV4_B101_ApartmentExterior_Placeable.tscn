@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/buildings/SMV4_B101_ApartmentExterior_ModularAssembly.tscn" id="1_building"]
+
+[node name="SMV4_B101_ApartmentExterior_Placeable" type="Node2D" groups=["steamtek_modular", "steamtek_modular_v4", "steamtek_placeable_building"]]
+metadata/steamtek_contract = "environment_off_axis_60_v4"
+metadata/steamtek_lattice_axis_a = Vector2(313.534, -90.509)
+metadata/steamtek_lattice_axis_b = Vector2(-181.02, -156.768)
+
+[node name="Assembly" parent="." instance=ExtResource("1_building")]

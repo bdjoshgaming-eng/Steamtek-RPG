@@ -1,0 +1,127 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/characters/C001_PlayerBody.tscn" id="1_player"]
+[ext_resource type="Script" path="res://scenes/modular_v4/scripts/steamtek_zone_door.gd" id="2_door"]
+[ext_resource type="Script" path="res://scenes/modular_v4/scripts/steamtek_v4_apartment_interior_visual.gd" id="3_visual"]
+
+[sub_resource type="RectangleShape2D" id="BackWallShape"]
+size = Vector2(1100, 46)
+
+[sub_resource type="RectangleShape2D" id="SideWallShape"]
+size = Vector2(46, 720)
+
+[sub_resource type="RectangleShape2D" id="ExitAreaShape"]
+size = Vector2(170, 120)
+
+[sub_resource type="RectangleShape2D" id="WorkbenchShape"]
+size = Vector2(238, 52)
+
+[sub_resource type="RectangleShape2D" id="BedShape"]
+size = Vector2(205, 58)
+
+[sub_resource type="RectangleShape2D" id="StorageShape"]
+size = Vector2(92, 52)
+
+[sub_resource type="Gradient" id="LightGradient"]
+offsets = PackedFloat32Array(0, 0.55, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.28, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="LightTexture"]
+gradient = SubResource("LightGradient")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="LabelSettings" id="PromptSettings"]
+font_size = 20
+font_color = Color(0.95, 0.95, 0.91, 1)
+outline_size = 5
+outline_color = Color(0.03, 0.04, 0.05, 0.95)
+
+[node name="Apartment_Interior" type="Node2D"]
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.52, 0.54, 0.56, 1)
+
+[node name="EnvironmentVisual" type="Node2D" parent="."]
+script = ExtResource("3_visual")
+
+[node name="Walls" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 2
+
+[node name="BackCollision" type="CollisionShape2D" parent="Walls"]
+position = Vector2(0, -340)
+shape = SubResource("BackWallShape")
+
+[node name="LeftCollision" type="CollisionShape2D" parent="Walls"]
+position = Vector2(-530, 0)
+shape = SubResource("SideWallShape")
+
+[node name="RightCollision" type="CollisionShape2D" parent="Walls"]
+position = Vector2(530, 0)
+shape = SubResource("SideWallShape")
+
+[node name="YSortLayer" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Player" parent="YSortLayer" instance=ExtResource("1_player")]
+position = Vector2(0, 110)
+
+[node name="Workbench" type="StaticBody2D" parent="YSortLayer"]
+position = Vector2(-260, -110)
+collision_layer = 1
+collision_mask = 2
+
+[node name="WorkbenchCollision" type="CollisionShape2D" parent="YSortLayer/Workbench"]
+position = Vector2(0, -8)
+shape = SubResource("WorkbenchShape")
+
+[node name="Bed" type="StaticBody2D" parent="YSortLayer"]
+position = Vector2(-266, 153)
+collision_layer = 1
+collision_mask = 2
+
+[node name="BedCollision" type="CollisionShape2D" parent="YSortLayer/Bed"]
+shape = SubResource("BedShape")
+
+[node name="Storage" type="StaticBody2D" parent="YSortLayer"]
+position = Vector2(410, 198)
+collision_layer = 1
+collision_mask = 2
+
+[node name="StorageCollision" type="CollisionShape2D" parent="YSortLayer/Storage"]
+shape = SubResource("StorageShape")
+
+[node name="ExitDoor" type="Area2D" parent="."]
+position = Vector2(0, 300)
+collision_layer = 16
+collision_mask = 2
+script = ExtResource("2_door")
+target_scene = "res://scenes/levels/surface/Steamtek_ApartmentAlley_ArtStylePrototype.tscn"
+prompt_text = "Return to the apartment exterior"
+
+[node name="InteractionShape" type="CollisionShape2D" parent="ExitDoor"]
+shape = SubResource("ExitAreaShape")
+
+[node name="Prompt" type="Label" parent="ExitDoor"]
+visible = false
+position = Vector2(-105, -95)
+text = "Return to the apartment exterior  [Enter]"
+label_settings = SubResource("PromptSettings")
+
+[node name="WarmInteriorLight" type="PointLight2D" parent="."]
+position = Vector2(-170, -120)
+color = Color(1, 0.54, 0.20, 1)
+energy = 0.85
+texture = SubResource("LightTexture")
+texture_scale = 2.4
+
+[node name="CoolUtilityLight" type="PointLight2D" parent="."]
+position = Vector2(300, -170)
+color = Color(0.12, 0.72, 0.92, 1)
+energy = 0.55
+texture = SubResource("LightTexture")
+texture_scale = 1.7

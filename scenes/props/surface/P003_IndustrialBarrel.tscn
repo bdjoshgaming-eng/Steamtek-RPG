@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://ddqgxljcj1p2k"]
+
+[ext_resource type="Texture2D" uid="uid://dyatxx2u1tpjy" path="res://assets/surface/props/industrial_barrel/production/P003_Industrial_Barrel_Source.png" id="1_dr7v8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_olr8w"]
+size = Vector2(27, 29)
+
+[node name="P003_IndustrialBarrel" type="StaticBody2D" unique_id=1141827200]
+
+[node name="Visual" type="Sprite2D" parent="." unique_id=1268852868]
+position = Vector2(-1, -26)
+scale = Vector2(0.14, 0.14)
+texture = ExtResource("1_dr7v8")
+
+[node name="BaseCollision" type="CollisionShape2D" parent="." unique_id=1597872901]
+position = Vector2(-1, -17)
+shape = SubResource("RectangleShape2D_olr8w")

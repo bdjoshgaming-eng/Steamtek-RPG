@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scenes/modular_v4/scripts/steamtek_v4_alley_prop_visual.gd" id="1_visual"]
+
+[node name="SMV4_P405_PipeRack" type="Node2D" groups=["steamtek_modular", "steamtek_modular_v4", "steamtek_alley_prop"]]
+metadata/steamtek_contract = "environment_off_axis_60_v4"
+
+[node name="Visual" type="Node2D" parent="."]
+script = ExtResource("1_visual")
+prop_kind = 4
+

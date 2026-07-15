@@ -1,0 +1,58 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/characters/npc/Steamtek_C002/godot/Steamtek_C002_Visual.tscn" id="1_visual"]
+[ext_resource type="Script" path="res://scenes/characters/npc/Steamtek_C002_NPC.gd" id="2_controller"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_feet"]
+size = Vector2(28, 18)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_interaction"]
+radius = 22.0
+
+[node name="Steamtek_C002_NPC" type="CharacterBody2D"]
+y_sort_enabled = true
+script = ExtResource("2_controller")
+metadata/_steamtek_character_id = "Steamtek_C002"
+metadata/_steamtek_visual_contract = "Character Pipeline v1.6"
+
+[node name="CharacterVisual" parent="." instance=ExtResource("1_visual")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_feet")
+
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+shape = SubResource("CircleShape2D_interaction")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="Audio" type="AudioStreamPlayer2D" parent="."]
+
+[node name="NameLabel" type="Label" parent="."]
+z_index = 100
+offset_left = -75.0
+offset_top = -235.0
+offset_right = 75.0
+offset_bottom = -210.0
+theme_override_colors/font_color = Color(0.32, 0.88, 0.95, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+text = "Pressure Technician"
+horizontal_alignment = 1
+
+[node name="SpeechLabel" type="Label" parent="."]
+visible = false
+z_index = 101
+offset_left = -120.0
+offset_top = -310.0
+offset_right = 120.0
+offset_bottom = -250.0
+theme_override_colors/font_color = Color(0.88, 0.95, 0.96, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+text = "Line pressure's unstable. Keep clear of the copper mains."
+horizontal_alignment = 1
+autowrap_mode = 2

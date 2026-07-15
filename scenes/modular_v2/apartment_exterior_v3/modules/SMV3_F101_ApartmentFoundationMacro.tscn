@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/modular_v2/apartment_exterior_v3/production/SMV3_FoundationMacro.png" id="1_tex"]
+
+[node name="SMV3_F101_ApartmentFoundationMacro" type="Node2D" groups=["steamtek_modular", "steamtek_apartment_v3"]]
+editor_description = "One-piece apartment footprint and wet sidewalk apron. This replaces checkerboard foundation repetition for complete building exteriors."
+metadata/steamtek_contract = "environment_west_east_v1"
+metadata/steamtek_lattice_axis_a = Vector2(1024, -512)
+metadata/steamtek_lattice_axis_b = Vector2(-768, -384)
+
+[node name="Visual" type="Sprite2D" parent="."]
+position = Vector2(1516.308, 108.307)
+texture = ExtResource("1_tex")
+
+[node name="Attach_WallFront" type="Marker2D" parent="." groups=["steamtek_snap"]]
+
+[node name="Attach_WallSide" type="Marker2D" parent="." groups=["steamtek_snap"]]
+position = Vector2(1024, -512)
+
+[node name="Snap_SW" type="Marker2D" parent="." groups=["steamtek_snap"]]
+
+[node name="Snap_SE" type="Marker2D" parent="." groups=["steamtek_snap"]]
+position = Vector2(1024, -512)
+
+[node name="Snap_NE" type="Marker2D" parent="." groups=["steamtek_snap"]]
+position = Vector2(256, -896)
+
+[node name="Snap_NW" type="Marker2D" parent="." groups=["steamtek_snap"]]
+position = Vector2(-768, -384)

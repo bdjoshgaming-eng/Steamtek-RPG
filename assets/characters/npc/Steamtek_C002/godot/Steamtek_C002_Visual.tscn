@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="SpriteFrames" path="res://assets/characters/npc/Steamtek_C002/godot/Steamtek_C002_Frames.tres" id="1_frames"]
+
+[node name="Steamtek_C002_Visual" type="Node2D"]
+
+[node name="Visual" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+offset = Vector2(0, -110)
+scale = Vector2(0.73, 0.73)
+sprite_frames = ExtResource("1_frames")
+animation = &"idle_south"
+autoplay = "idle_south"

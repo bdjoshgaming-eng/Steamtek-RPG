@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/modular_v2/apartment_exterior_v3/production/SMV3_RoofMacro.png" id="1_tex"]
+
+[node name="SMV3_R101_ApartmentRoofMacro" type="Node2D" groups=["steamtek_modular", "steamtek_apartment_v3"]]
+editor_description = "Continuous one-piece wet roof with perimeter parapet, drainage runs, and rooftop vent. No tiled checkerboard seams."
+metadata/steamtek_contract = "environment_west_east_v1"
+metadata/steamtek_roof_rise = Vector2(0, -478)
+
+[node name="Visual" type="Sprite2D" parent="."]
+position = Vector2(1516.308, 55.248)
+texture = ExtResource("1_tex")
+
+[node name="Snap_Lower" type="Marker2D" parent="." groups=["steamtek_snap"]]
+
+[node name="Snap_SW" type="Marker2D" parent="." groups=["steamtek_snap"]]
+
+[node name="Snap_SE" type="Marker2D" parent="." groups=["steamtek_snap"]]
+position = Vector2(1024, -512)
+
+[node name="Snap_NE" type="Marker2D" parent="." groups=["steamtek_snap"]]
+position = Vector2(256, -896)
+
+[node name="Snap_NW" type="Marker2D" parent="." groups=["steamtek_snap"]]
+position = Vector2(-768, -384)

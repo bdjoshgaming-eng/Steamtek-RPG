@@ -1,0 +1,81 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/modules/walls/SMV4_W101_FrontPlain.tscn" id="1_plain"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/modules/walls/SMV4_W102_FrontWindow.tscn" id="2_window"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/modules/walls/SMV4_W103_FrontDoor.tscn" id="3_door"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/modules/walls/SMV4_W104_FrontUtility.tscn" id="4_utility"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/modules/walls/SMV4_W201_SidePlain.tscn" id="5_side_plain"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/modules/walls/SMV4_W202_SideWindow.tscn" id="6_side_window"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/modules/roofs/SMV4_R101_RoofCell.tscn" id="7_roof"]
+
+[sub_resource type="ConvexPolygonShape2D" id="BuildingFootprint"]
+points = PackedVector2Array(0, 0, 1254.136, -362.036, 892.096, -675.572, -362.04, -313.536)
+
+[node name="SMV4_B101_ApartmentExterior_ModularAssembly" type="Node2D" groups=["steamtek_modular", "steamtek_modular_v4", "steamtek_placeable_building"]]
+metadata/steamtek_contract = "environment_off_axis_60_v4"
+metadata/steamtek_lattice_axis_a = Vector2(313.534, -90.509)
+metadata/steamtek_lattice_axis_b = Vector2(-181.02, -156.768)
+metadata/steamtek_storey_rise = Vector2(0, -219)
+metadata/steamtek_art = "neutral_gritty_godot_lighting"
+
+[node name="Architecture" type="Node2D" parent="."]
+
+[node name="FrontLowerDoor" parent="Architecture" instance=ExtResource("3_door")]
+[node name="FrontLowerWindow" parent="Architecture" instance=ExtResource("2_window")]
+position = Vector2(313.534, -90.509)
+[node name="FrontLowerPlain" parent="Architecture" instance=ExtResource("1_plain")]
+position = Vector2(627.068, -181.018)
+[node name="FrontLowerUtility" parent="Architecture" instance=ExtResource("4_utility")]
+position = Vector2(940.602, -271.527)
+
+[node name="FrontUpperPlain" parent="Architecture" instance=ExtResource("1_plain")]
+position = Vector2(0, -219)
+[node name="FrontUpperWindowA" parent="Architecture" instance=ExtResource("2_window")]
+position = Vector2(313.534, -309.509)
+[node name="FrontUpperWindowB" parent="Architecture" instance=ExtResource("2_window")]
+position = Vector2(627.068, -400.018)
+[node name="FrontUpperPlainB" parent="Architecture" instance=ExtResource("1_plain")]
+position = Vector2(940.602, -490.527)
+
+[node name="SideLowerPlain" parent="Architecture" instance=ExtResource("5_side_plain")]
+position = Vector2(1254.136, -362.036)
+[node name="SideLowerWindow" parent="Architecture" instance=ExtResource("6_side_window")]
+position = Vector2(1073.116, -518.804)
+[node name="SideUpperWindow" parent="Architecture" instance=ExtResource("6_side_window")]
+position = Vector2(1254.136, -581.036)
+[node name="SideUpperPlain" parent="Architecture" instance=ExtResource("5_side_plain")]
+position = Vector2(1073.116, -737.804)
+
+[node name="Roof" type="Node2D" parent="."]
+position = Vector2(0, -438)
+
+[node name="Roof00" parent="Roof" instance=ExtResource("7_roof")]
+[node name="Roof10" parent="Roof" instance=ExtResource("7_roof")]
+position = Vector2(313.534, -90.509)
+[node name="Roof20" parent="Roof" instance=ExtResource("7_roof")]
+position = Vector2(627.068, -181.018)
+[node name="Roof30" parent="Roof" instance=ExtResource("7_roof")]
+position = Vector2(940.602, -271.527)
+[node name="Roof01" parent="Roof" instance=ExtResource("7_roof")]
+position = Vector2(-181.02, -156.768)
+[node name="Roof11" parent="Roof" instance=ExtResource("7_roof")]
+position = Vector2(132.514, -247.277)
+[node name="Roof21" parent="Roof" instance=ExtResource("7_roof")]
+position = Vector2(446.048, -337.786)
+[node name="Roof31" parent="Roof" instance=ExtResource("7_roof")]
+position = Vector2(759.582, -428.295)
+
+[node name="BuildingBody" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 2
+
+[node name="BuildingFootprintCollision" type="CollisionShape2D" parent="BuildingBody"]
+shape = SubResource("BuildingFootprint")
+
+[node name="Snap_SW" type="Marker2D" parent="." groups=["steamtek_snap"]]
+[node name="Snap_SE" type="Marker2D" parent="." groups=["steamtek_snap"]]
+position = Vector2(1254.136, -362.036)
+[node name="Snap_NE" type="Marker2D" parent="." groups=["steamtek_snap"]]
+position = Vector2(892.096, -675.572)
+[node name="Snap_NW" type="Marker2D" parent="." groups=["steamtek_snap"]]
+position = Vector2(-362.04, -313.536)

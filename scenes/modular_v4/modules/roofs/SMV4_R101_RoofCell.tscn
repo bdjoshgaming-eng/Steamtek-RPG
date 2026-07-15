@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scenes/modular_v4/scripts/steamtek_v4_module_visual.gd" id="1_visual"]
+
+[node name="SMV4_R101_RoofCell" type="Node2D" groups=["steamtek_modular", "steamtek_modular_v4"]]
+metadata/steamtek_contract = "environment_off_axis_60_v4"
+metadata/steamtek_lattice_axis_a = Vector2(313.534, -90.509)
+metadata/steamtek_lattice_axis_b = Vector2(-181.02, -156.768)
+
+[node name="Visual" type="Node2D" parent="."]
+script = ExtResource("1_visual")
+module_kind = 4
+
+[node name="Snap_SW" type="Marker2D" parent="." groups=["steamtek_snap"]]
+[node name="Snap_SE" type="Marker2D" parent="." groups=["steamtek_snap"]]
+position = Vector2(313.534, -90.509)
+[node name="Snap_NE" type="Marker2D" parent="." groups=["steamtek_snap"]]
+position = Vector2(132.514, -247.277)
+[node name="Snap_NW" type="Marker2D" parent="." groups=["steamtek_snap"]]
+position = Vector2(-181.02, -156.768)

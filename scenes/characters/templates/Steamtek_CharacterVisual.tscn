@@ -1,0 +1,9 @@
+[gd_scene format=3]
+
+[node name="Steamtek_CharacterVisual" type="Node2D"]
+
+[node name="Visual" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+offset = Vector2(0, -110)
+scale = Vector2(0.73, 0.73)
+

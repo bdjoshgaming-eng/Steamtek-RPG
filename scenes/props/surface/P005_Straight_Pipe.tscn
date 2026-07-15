@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://cq4bogpoixxpu"]
+
+[ext_resource type="Texture2D" uid="uid://c82s0pdll0468" path="res://assets/surface/props/straight_pipe/production/P005_straight_pipe_Source.png" id="1_4yk8y"]
+
+[node name="P005_StraightPipe" type="StaticBody2D" unique_id=219758094]
+
+[node name="Visual" type="Sprite2D" parent="." unique_id=1539972031]
+position = Vector2(40, -30)
+scale = Vector2(0.23, 0.23)
+texture = ExtResource("1_4yk8y")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1898141054]
+position = Vector2(37, -29)
+polygon = PackedVector2Array(-32, 7, -20, 24, 37, -16, 28, -27)

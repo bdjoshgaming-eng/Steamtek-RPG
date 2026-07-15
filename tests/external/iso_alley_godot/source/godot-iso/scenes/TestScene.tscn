@@ -1,0 +1,73 @@
+[gd_scene load_steps=6 format=3 uid="uid://ciso0alley0test"]
+
+[ext_resource type="Texture2D" uid="uid://ciso0alley0bg" path="res://assets/iso-alley-scene.png" id="1_bg"]
+[ext_resource type="Script" path="res://scripts/Player.gd" id="2_player"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
+; Character collision footprint: 28 x 18 world units, centered between the boots.
+size = Vector2(28, 18)
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_walk"]
+; Placeholder walkable region - replace with a real polygon traced over the ground plane.
+vertices = PackedVector2Array(200, 700, 1720, 700, 1720, 940, 200, 940)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(200, 700, 1720, 700, 1720, 940, 200, 940)])
+
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_wallL"]
+; Placeholder collider - trace the actual wall footprint in the editor.
+points = PackedVector2Array(0, 0, 780, 0, 780, 620, 0, 620)
+
+[node name="TestScene" type="Node2D"]
+
+[node name="Background" type="Sprite2D" parent="."]
+texture = ExtResource("1_bg")
+centered = false
+position = Vector2(0, 0)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+; 2:1 iso art is pre-projected, so the camera stays axis-aligned. No rotation.
+position = Vector2(960, 480)
+zoom = Vector2(1, 1)
+anchor_mode = 1
+limit_left = 0
+limit_top = 0
+limit_right = 1920
+limit_bottom = 960
+
+[node name="CollisionLayer" type="Node2D" parent="."]
+; Static world colliders (walls, dumpster, props). Add StaticBody2D children here.
+
+[node name="WallLeft" type="StaticBody2D" parent="CollisionLayer"]
+position = Vector2(0, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionLayer/WallLeft"]
+shape = SubResource("ConvexPolygonShape2D_wallL")
+; Placeholder: trace the true wall silhouette in the editor.
+
+[node name="NavLayer" type="NavigationRegion2D" parent="."]
+navigation_polygon = SubResource("NavigationPolygon_walk")
+
+[node name="SpawnPoint" type="Marker2D" parent="."]
+; Root position of characters - centered between the boots at ground contact.
+position = Vector2(960, 800)
+
+[node name="Player" type="CharacterBody2D" parent="."]
+position = Vector2(960, 800)
+script = ExtResource("2_player")
+collision_layer = 2
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+; 28 x 18 footprint per your standards.
+shape = SubResource("RectangleShape2D_player")
+
+[node name="SpritePlaceholder" type="ColorRect" parent="Player"]
+; Visible sprite area 443x1117 at scale 0.09 -> ~40 x 100.5 world units.
+; Anchored so the bottom-center (boots) sits on the CharacterBody2D root.
+offset_left = -20.0
+offset_top = -100.5
+offset_right = 20.0
+offset_bottom = 0.0
+color = Color(1, 0.35, 0.6, 0.75)

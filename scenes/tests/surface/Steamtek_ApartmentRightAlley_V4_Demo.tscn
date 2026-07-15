@@ -1,0 +1,112 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://scenes/modular_v4/scripts/steamtek_v4_alley_ground.gd" id="1_ground"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/buildings/SMV4_B101_ApartmentExterior_Placeable.tscn" id="2_building"]
+[ext_resource type="PackedScene" path="res://scenes/characters/C001_PlayerBody.tscn" id="3_player"]
+
+[sub_resource type="Gradient" id="LightGradient"]
+offsets = PackedFloat32Array(0, 0.58, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.28, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="LightTexture"]
+gradient = SubResource("LightGradient")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="RectangleShape2D" id="AlleyBoundaryHorizontal"]
+size = Vector2(1050, 38)
+
+[sub_resource type="RectangleShape2D" id="AlleyBoundaryVertical"]
+size = Vector2(38, 760)
+
+[node name="Steamtek_ApartmentRightAlley_V4_Demo" type="Node2D"]
+editor_description = "Playable V4 proof: locked off-axis 60-degree apartment exterior, neutral gritty modules, right-side service alley, C001 movement, collision, Y-sort, Godot lighting, and apartment zoning."
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.46, 0.49, 0.53, 1)
+
+[node name="Ground" type="Node2D" parent="."]
+position = Vector2(350, 700)
+script = ExtResource("1_ground")
+width_cells = 9
+depth_cells = 8
+
+[node name="RightServiceAlley" type="Polygon2D" parent="Ground"]
+polygon = PackedVector2Array(1254.136, -362.036, 892.096, -675.572, 1330, -520, 1692, -206)
+color = Color(0.11, 0.125, 0.13, 1)
+
+[node name="AlleyDrain" type="Line2D" parent="Ground"]
+points = PackedVector2Array(1280, -330, 935, -630)
+width = 15.0
+default_color = Color(0.055, 0.065, 0.068, 1)
+
+[node name="YSortLayer" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="ApartmentExterior" parent="YSortLayer" instance=ExtResource("2_building")]
+position = Vector2(350, 700)
+
+[node name="Player" parent="YSortLayer" instance=ExtResource("3_player")]
+position = Vector2(745, 865)
+
+[node name="AlleyClutter" type="Node2D" parent="YSortLayer"]
+position = Vector2(1670, 435)
+
+[node name="PressureBinA" type="Polygon2D" parent="YSortLayer/AlleyClutter"]
+polygon = PackedVector2Array(-42, 28, 42, 28, 34, -72, -34, -72)
+color = Color(0.18, 0.20, 0.20, 1)
+
+[node name="PressureBinB" type="Polygon2D" parent="YSortLayer/AlleyClutter"]
+position = Vector2(105, -55)
+polygon = PackedVector2Array(-36, 24, 36, 24, 30, -58, -30, -58)
+color = Color(0.16, 0.18, 0.18, 1)
+
+[node name="AlleyBounds" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 2
+
+[node name="FarEdge" type="CollisionShape2D" parent="AlleyBounds"]
+position = Vector2(1770, 250)
+rotation = 0.713724
+shape = SubResource("AlleyBoundaryHorizontal")
+
+[node name="RightEdge" type="CollisionShape2D" parent="AlleyBounds"]
+position = Vector2(1900, 620)
+shape = SubResource("AlleyBoundaryVertical")
+
+[node name="Lighting" type="Node2D" parent="."]
+
+[node name="CyanDoorSpill" type="PointLight2D" parent="Lighting"]
+position = Vector2(595, 550)
+color = Color(0.10, 0.72, 0.94, 1)
+energy = 0.58
+texture = SubResource("LightTexture")
+texture_scale = 2.0
+
+[node name="MagentaAlleySpill" type="PointLight2D" parent="Lighting"]
+position = Vector2(1570, 310)
+color = Color(0.92, 0.08, 0.58, 1)
+energy = 0.48
+texture = SubResource("LightTexture")
+texture_scale = 2.4
+
+[node name="AmberStreetSpill" type="PointLight2D" parent="Lighting"]
+position = Vector2(920, 790)
+color = Color(1, 0.48, 0.16, 1)
+energy = 0.38
+texture = SubResource("LightTexture")
+texture_scale = 2.6
+
+[node name="Instructions" type="Label" parent="."]
+offset_left = 18.0
+offset_top = 18.0
+offset_right = 700.0
+offset_bottom = 62.0
+text = "STEAMTEK V4 • Move with WASD • Approach the apartment door and press Enter"
+theme_override_colors/font_color = Color(0.94, 0.93, 0.87, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.025, 0.03, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 20

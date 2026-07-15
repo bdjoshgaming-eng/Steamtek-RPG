@@ -1,0 +1,40 @@
+{
+  "character_id": "CDEV_Proxy",
+  "animation": "walk",
+  "directions": [
+    "south",
+    "south_west",
+    "west",
+    "north_west",
+    "north",
+    "north_east",
+    "east",
+    "south_east"
+  ],
+  "frames_per_direction": 8,
+  "cell_size": [
+    512,
+    512
+  ],
+  "sheet_size": [
+    4096,
+    4096
+  ],
+  "row_order": {
+    "south": 0,
+    "south_west": 1,
+    "west": 2,
+    "north_west": 3,
+    "north": 4,
+    "north_east": 5,
+    "east": 6,
+    "south_east": 7
+  },
+  "boot_contact": [
+    256,
+    256
+  ],
+  "max_visible_alpha_height": 434,
+  "target_world_height": 100.5,
+  "suggested_godot_visual_scale": 0.231567
+}

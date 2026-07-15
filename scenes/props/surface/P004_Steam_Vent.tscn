@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://cbxdxa0wrqqiw"]
+
+[ext_resource type="Texture2D" uid="uid://bg62p8brjqnyp" path="res://assets/surface/props/steam_vent/production/P004_steam_vent.png" id="1_pmwj8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cfp46"]
+size = Vector2(135, 33.5)
+
+[node name="P004_SteamVent" type="StaticBody2D" unique_id=648006263]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=852380342]
+position = Vector2(-3, -47.000004)
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("1_pmwj8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1803514223]
+position = Vector2(0, -10.75)
+shape = SubResource("RectangleShape2D_cfp46")

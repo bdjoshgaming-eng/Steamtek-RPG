@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/modular_v2/apartment_exterior_v3/buildings/SMV3_B101_ApartmentExterior_ModularAssembly.tscn" id="1_modular"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v2/apartment_exterior_v3/buildings/SMV3_B101_ApartmentExterior_Placeable.tscn" id="2_placeable"]
+[ext_resource type="PackedScene" path="res://assets/characters/player/Steamtek_C001/animations/walk/godot/Steamtek_C001_WalkVisual.tscn" id="3_player"]
+
+[node name="Steamtek_ApartmentExterior_V3_ConstructionGate" type="Node2D"]
+y_sort_enabled = true
+editor_description = "Isolated review scene. Modular proof is left; final placeable golden assembly is right. Exact production C001 references remain unscaled."
+
+[node name="ModularProof" parent="." instance=ExtResource("1_modular")]
+position = Vector2(-1450, 250)
+
+[node name="PlaceableGolden" parent="." instance=ExtResource("2_placeable")]
+position = Vector2(900, 250)
+
+[node name="ScaleGate_C001" parent="." instance=ExtResource("3_player")]
+position = Vector2(1034, 183)
+z_index = 50
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, -250)
+zoom = Vector2(0.55, 0.55)

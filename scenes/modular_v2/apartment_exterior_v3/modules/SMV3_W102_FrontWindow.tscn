@@ -1,0 +1,39 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/modular_v2/apartment_exterior_v3/production/SMV3_FrontWindow.png" id="1_tex"]
+
+[sub_resource type="RectangleShape2D" id="WallShape"]
+size = Vector2(284, 34)
+
+[node name="SMV3_W102_FrontWindow" type="Node2D" groups=["steamtek_modular", "steamtek_apartment_v3"]]
+editor_description = "Apartment front cyan window bay. Locked west-to-east 2:1 module. Root scale remains 1,1; use compatible markers with Steamtek Snap 2.3+."
+metadata/steamtek_contract = "environment_west_east_v1"
+metadata/steamtek_projection = "2_to_1_dimetric"
+metadata/steamtek_bay_step = Vector2(256, -128)
+metadata/steamtek_storey_rise = Vector2(0, -219)
+
+[node name="Visual" type="Sprite2D" parent="."]
+position = Vector2(128.000, -48.873)
+texture = ExtResource("1_tex")
+
+[node name="Body" type="StaticBody2D" parent="."]
+
+[node name="BodyCollision" type="CollisionShape2D" parent="Body"]
+position = Vector2(128, -64)
+rotation = -0.463647609
+shape = SubResource("WallShape")
+
+[node name="Snap_Left" type="Marker2D" parent="." groups=["steamtek_snap"]]
+
+[node name="Snap_Right" type="Marker2D" parent="." groups=["steamtek_snap"]]
+position = Vector2(256, -128)
+
+[node name="Snap_Lower" type="Marker2D" parent="." groups=["steamtek_snap"]]
+
+[node name="Snap_Upper" type="Marker2D" parent="." groups=["steamtek_snap"]]
+position = Vector2(0, -219)
+
+[node name="Attach_FoundationFront" type="Marker2D" parent="." groups=["steamtek_snap"]]
+
+[node name="Attach_Facade" type="Marker2D" parent="." groups=["steamtek_snap"]]
+position = Vector2(128, -182)

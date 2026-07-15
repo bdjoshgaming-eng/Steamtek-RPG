@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0.0",
+  "pipeline_version": "1.6.0",
+  "character_id": "STK_CalibrationDummy_v1",
+  "purpose": "Rig, camera, direction, animation, and Godot packaging calibration fixture",
+  "production_character": false,
+  "source_blend": "STK_CalibrationDummy_v1.blend",
+  "rig": "Steamtek_HumanRig_v1",
+  "rig_status": "approved",
+  "mesh_parts": 34,
+  "actions": {
+    "idle": {"name": "STK_IDLE", "frames": 8, "fps": 8.0},
+    "walk": {"name": "STK_WALK", "frames": 8, "fps": 8.0}
+  },
+  "render_sets": {
+    "raw": {"frame_size": [1254, 1254], "frame_count": 128, "qa": "passed"},
+    "production": {"frame_size": [256, 256], "frame_count": 128, "qa": "passed", "resize": "fixed_canvas_lanczos_no_crop"}
+  },
+  "godot": {
+    "visual_scale": [0.73, 0.73],
+    "visual_offset": [0.0, -110.0],
+    "collision_footprint": [28.0, 18.0],
+    "runtime_validation": "passed",
+    "runtime_vertical_bounds": [143, 461],
+    "reference_vertical_bounds": [143, 461]
+  },
+  "approval_gate": "passed_2026-07-14"
+}

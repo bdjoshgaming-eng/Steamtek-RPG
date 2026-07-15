@@ -1,0 +1,121 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/modules/walls/SMV4_W101_FrontPlain.tscn" id="1_plain"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/modules/walls/SMV4_W102_FrontWindow.tscn" id="2_window"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/modules/walls/SMV4_W105_FrontBarDoor.tscn" id="3_door"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/modules/walls/SMV4_W104_FrontUtility.tscn" id="4_utility"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/modules/walls/SMV4_W201_SidePlain.tscn" id="5_side_plain"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/modules/roofs/SMV4_R101_RoofCell.tscn" id="6_roof"]
+
+[sub_resource type="ConvexPolygonShape2D" id="BuildingFootprint"]
+points = PackedVector2Array(0, 0, 940.602, -271.527, 578.562, -585.063, -362.04, -313.536)
+
+[sub_resource type="Gradient" id="LightGradient"]
+offsets = PackedFloat32Array(0, 0.55, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.30, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="LightTexture"]
+gradient = SubResource("LightGradient")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="LabelSettings" id="SignLabelSettings"]
+font_size = 28
+font_color = Color(1, 0.93, 0.76, 1)
+outline_size = 6
+outline_color = Color(0.05, 0.035, 0.025, 1)
+
+[node name="SMV4_B201_BrassLanternExterior" type="Node2D" groups=["steamtek_modular", "steamtek_modular_v4", "steamtek_placeable_building", "steamtek_landmark"]]
+metadata/steamtek_contract = "environment_off_axis_60_v4"
+metadata/steamtek_lattice_axis_a = Vector2(313.534, -90.509)
+metadata/steamtek_lattice_axis_b = Vector2(-181.02, -156.768)
+metadata/steamtek_storey_rise = Vector2(0, -219)
+metadata/steamtek_art = "neutral_gritty_godot_lighting"
+
+[node name="Architecture" type="Node2D" parent="."]
+
+[node name="LowerPlain" parent="Architecture" instance=ExtResource("1_plain")]
+
+[node name="LowerDoor" parent="Architecture" instance=ExtResource("3_door")]
+position = Vector2(313.534, -90.509)
+
+[node name="LowerUtility" parent="Architecture" instance=ExtResource("4_utility")]
+position = Vector2(627.068, -181.018)
+
+[node name="UpperWindowA" parent="Architecture" instance=ExtResource("2_window")]
+position = Vector2(0, -219)
+
+[node name="UpperWindowB" parent="Architecture" instance=ExtResource("2_window")]
+position = Vector2(313.534, -309.509)
+
+[node name="UpperPlain" parent="Architecture" instance=ExtResource("1_plain")]
+position = Vector2(627.068, -400.018)
+
+[node name="SideLower" parent="Architecture" instance=ExtResource("5_side_plain")]
+position = Vector2(940.602, -271.527)
+
+[node name="SideUpper" parent="Architecture" instance=ExtResource("5_side_plain")]
+position = Vector2(940.602, -490.527)
+
+[node name="Roof" type="Node2D" parent="."]
+position = Vector2(0, -438)
+
+[node name="Roof00" parent="Roof" instance=ExtResource("6_roof")]
+
+[node name="Roof10" parent="Roof" instance=ExtResource("6_roof")]
+position = Vector2(313.534, -90.509)
+
+[node name="Roof20" parent="Roof" instance=ExtResource("6_roof")]
+position = Vector2(627.068, -181.018)
+
+[node name="Roof01" parent="Roof" instance=ExtResource("6_roof")]
+position = Vector2(-181.02, -156.768)
+
+[node name="Roof11" parent="Roof" instance=ExtResource("6_roof")]
+position = Vector2(132.514, -247.277)
+
+[node name="Roof21" parent="Roof" instance=ExtResource("6_roof")]
+position = Vector2(446.048, -337.786)
+
+[node name="SignPanel" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(248, -438, 610, -542, 610, -462, 248, -358)
+color = Color(0.075, 0.065, 0.055, 1)
+
+[node name="SignTrim" type="Line2D" parent="."]
+points = PackedVector2Array(248, -438, 610, -542, 610, -462, 248, -358, 248, -438)
+width = 6.0
+default_color = Color(0.45, 0.30, 0.18, 1)
+
+[node name="SignText" type="Label" parent="."]
+position = Vector2(326, -475)
+rotation = -0.281035
+text = "BRASS LANTERN"
+label_settings = SubResource("SignLabelSettings")
+
+[node name="SignLight" type="PointLight2D" parent="."]
+position = Vector2(432, -445)
+color = Color(1, 0.44, 0.12, 1)
+energy = 0.76
+texture = SubResource("LightTexture")
+texture_scale = 2.6
+
+[node name="BuildingBody" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 2
+
+[node name="BuildingFootprintCollision" type="CollisionShape2D" parent="BuildingBody"]
+shape = SubResource("BuildingFootprint")
+
+[node name="Snap_SW" type="Marker2D" parent="." groups=["steamtek_snap"]]
+
+[node name="Snap_SE" type="Marker2D" parent="." groups=["steamtek_snap"]]
+position = Vector2(940.602, -271.527)
+
+[node name="Snap_NE" type="Marker2D" parent="." groups=["steamtek_snap"]]
+position = Vector2(578.562, -585.063)
+
+[node name="Snap_NW" type="Marker2D" parent="." groups=["steamtek_snap"]]
+position = Vector2(-362.04, -313.536)

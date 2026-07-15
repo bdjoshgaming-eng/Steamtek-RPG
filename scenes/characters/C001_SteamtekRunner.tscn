@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/production/C001_SteamtekRunner.png" id="1_tex"]
+
+[node name="C001_SteamtekRunner" type="Node2D"]
+editor_description = "Steamtek Character Standard v1 test character. Visible height is approximately 100.5 world units at Visual scale 0.09. Root is the ground-contact point between the boots. Keep root transform at 0,0 / rotation 0 / scale 1,1."
+
+[node name="Visual" type="Sprite2D" parent="."]
+position = Vector2(-1.4, -50.5)
+scale = Vector2(0.09, 0.09)
+texture = ExtResource("1_tex")
+
+[node name="GroundContact" type="Marker2D" parent="."]

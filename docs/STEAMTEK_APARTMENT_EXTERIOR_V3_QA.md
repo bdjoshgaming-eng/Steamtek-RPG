@@ -1,0 +1,125 @@
+# Steamtek Apartment Exterior V3 QA
+
+Status: **PASS**
+
+Passed 110 of 110 structural, projection, alpha, scene, snap, and packaging checks.
+
+## Test notes
+
+- All four isolated V3 Godot scenes launched headlessly and exited cleanly.
+- Snap 2.3.0 loaded cleanly in a separate empty Godot editor project.
+- Blender 4.5 LTS rebuilt the master, calibration renders, module renders, golden render, and manifest without errors.
+- The full Steamtek editor scan currently reports Claude's unrelated in-progress `SurveyBook.gd/main.gd` compile error. Those files were deliberately not touched.
+
+## Checks
+
+- PASS — projection: true_2_to_1_dimetric
+- PASS — elevation: 30.0
+- PASS — locked_azimuth: south_east_to_north_west
+- PASS — front_step: [256, -128]
+- PASS — side_step: [-256, -128]
+- PASS — front_slope_2_to_1: abs(dy/dx)=0.5
+- PASS — side_slope_2_to_1: abs(dy/dx)=0.5
+- PASS — c001_scale: [0.73, 0.73]
+- PASS — c001_offset: [0, -110]
+- PASS — collision_footprint: [28, 18]
+- PASS — exists:ApartmentExterior_CurrentAzimuth.png: assets\modular_v2\apartment_exterior_v3\calibration\ApartmentExterior_CurrentAzimuth.png
+- PASS — rgba:ApartmentExterior_CurrentAzimuth.png: RGBA
+- PASS — alpha_content:ApartmentExterior_CurrentAzimuth.png: (0, 255)
+- PASS — transparent_margin:ApartmentExterior_CurrentAzimuth.png: (0, 255)
+- PASS — nonempty_bbox:ApartmentExterior_CurrentAzimuth.png: (21, 0, 3000, 2200)
+- PASS — exists:ApartmentExterior_WestToEastCandidate.png: assets\modular_v2\apartment_exterior_v3\calibration\ApartmentExterior_WestToEastCandidate.png
+- PASS — rgba:ApartmentExterior_WestToEastCandidate.png: RGBA
+- PASS — alpha_content:ApartmentExterior_WestToEastCandidate.png: (0, 255)
+- PASS — transparent_margin:ApartmentExterior_WestToEastCandidate.png: (0, 255)
+- PASS — nonempty_bbox:ApartmentExterior_WestToEastCandidate.png: (0, 0, 2979, 2200)
+- PASS — exists:SMV3_B101_ApartmentExterior_Golden.png: assets\modular_v2\apartment_exterior_v3\production\SMV3_B101_ApartmentExterior_Golden.png
+- PASS — rgba:SMV3_B101_ApartmentExterior_Golden.png: RGBA
+- PASS — alpha_content:SMV3_B101_ApartmentExterior_Golden.png: (0, 255)
+- PASS — transparent_margin:SMV3_B101_ApartmentExterior_Golden.png: (0, 255)
+- PASS — nonempty_bbox:SMV3_B101_ApartmentExterior_Golden.png: (0, 0, 2979, 2200)
+- PASS — exists:SMV3_FrontDoor.png: assets\modular_v2\apartment_exterior_v3\production\SMV3_FrontDoor.png
+- PASS — rgba:SMV3_FrontDoor.png: RGBA
+- PASS — alpha_content:SMV3_FrontDoor.png: (0, 255)
+- PASS — transparent_margin:SMV3_FrontDoor.png: (0, 255)
+- PASS — nonempty_bbox:SMV3_FrontDoor.png: (207, 207, 525, 577)
+- PASS — exists:SMV3_FrontPlain.png: assets\modular_v2\apartment_exterior_v3\production\SMV3_FrontPlain.png
+- PASS — rgba:SMV3_FrontPlain.png: RGBA
+- PASS — alpha_content:SMV3_FrontPlain.png: (0, 255)
+- PASS — transparent_margin:SMV3_FrontPlain.png: (0, 255)
+- PASS — nonempty_bbox:SMV3_FrontPlain.png: (207, 207, 525, 577)
+- PASS — exists:SMV3_FrontUtility.png: assets\modular_v2\apartment_exterior_v3\production\SMV3_FrontUtility.png
+- PASS — rgba:SMV3_FrontUtility.png: RGBA
+- PASS — alpha_content:SMV3_FrontUtility.png: (0, 255)
+- PASS — transparent_margin:SMV3_FrontUtility.png: (0, 255)
+- PASS — nonempty_bbox:SMV3_FrontUtility.png: (207, 207, 525, 577)
+- PASS — exists:SMV3_FrontWindow.png: assets\modular_v2\apartment_exterior_v3\production\SMV3_FrontWindow.png
+- PASS — rgba:SMV3_FrontWindow.png: RGBA
+- PASS — alpha_content:SMV3_FrontWindow.png: (0, 255)
+- PASS — transparent_margin:SMV3_FrontWindow.png: (0, 255)
+- PASS — nonempty_bbox:SMV3_FrontWindow.png: (207, 207, 525, 577)
+- PASS — exists:SMV3_SidePlain.png: assets\modular_v2\apartment_exterior_v3\production\SMV3_SidePlain.png
+- PASS — rgba:SMV3_SidePlain.png: RGBA
+- PASS — alpha_content:SMV3_SidePlain.png: (0, 255)
+- PASS — transparent_margin:SMV3_SidePlain.png: (0, 255)
+- PASS — nonempty_bbox:SMV3_SidePlain.png: (207, 195, 525, 568)
+- PASS — exists:SMV3_SideWindow.png: assets\modular_v2\apartment_exterior_v3\production\SMV3_SideWindow.png
+- PASS — rgba:SMV3_SideWindow.png: RGBA
+- PASS — alpha_content:SMV3_SideWindow.png: (0, 255)
+- PASS — transparent_margin:SMV3_SideWindow.png: (0, 255)
+- PASS — nonempty_bbox:SMV3_SideWindow.png: (207, 195, 525, 568)
+- PASS — exists:SMV3_RoofMacro.png: assets\modular_v2\apartment_exterior_v3\production\SMV3_RoofMacro.png
+- PASS — rgba:SMV3_RoofMacro.png: RGBA
+- PASS — alpha_content:SMV3_RoofMacro.png: (0, 255)
+- PASS — transparent_margin:SMV3_RoofMacro.png: (0, 255)
+- PASS — nonempty_bbox:SMV3_RoofMacro.png: (0, 0, 2200, 1300)
+- PASS — exists:SMV3_FoundationMacro.png: assets\modular_v2\apartment_exterior_v3\production\SMV3_FoundationMacro.png
+- PASS — rgba:SMV3_FoundationMacro.png: RGBA
+- PASS — alpha_content:SMV3_FoundationMacro.png: (0, 255)
+- PASS — transparent_margin:SMV3_FoundationMacro.png: (0, 255)
+- PASS — nonempty_bbox:SMV3_FoundationMacro.png: (0, 0, 2200, 1300)
+- PASS — scene_exists:Steamtek_ApartmentExterior_WestEast_CameraGate.tscn: scenes\tests\surface\Steamtek_ApartmentExterior_WestEast_CameraGate.tscn
+- PASS — isolated_from_main:Steamtek_ApartmentExterior_WestEast_CameraGate.tscn: no main dependency
+- PASS — root_scale_locked:Steamtek_ApartmentExterior_WestEast_CameraGate.tscn: root has no scale override
+- PASS — scene_exists:Steamtek_ApartmentExterior_V3_ConstructionGate.tscn: scenes\tests\surface\Steamtek_ApartmentExterior_V3_ConstructionGate.tscn
+- PASS — isolated_from_main:Steamtek_ApartmentExterior_V3_ConstructionGate.tscn: no main dependency
+- PASS — root_scale_locked:Steamtek_ApartmentExterior_V3_ConstructionGate.tscn: root has no scale override
+- PASS — scene_exists:SMV3_B101_ApartmentExterior_ModularAssembly.tscn: scenes\modular_v2\apartment_exterior_v3\buildings\SMV3_B101_ApartmentExterior_ModularAssembly.tscn
+- PASS — isolated_from_main:SMV3_B101_ApartmentExterior_ModularAssembly.tscn: no main dependency
+- PASS — root_scale_locked:SMV3_B101_ApartmentExterior_ModularAssembly.tscn: root has no scale override
+- PASS — scene_exists:SMV3_B101_ApartmentExterior_Placeable.tscn: scenes\modular_v2\apartment_exterior_v3\buildings\SMV3_B101_ApartmentExterior_Placeable.tscn
+- PASS — isolated_from_main:SMV3_B101_ApartmentExterior_Placeable.tscn: no main dependency
+- PASS — root_scale_locked:SMV3_B101_ApartmentExterior_Placeable.tscn: root has no scale override
+- PASS — scene_exists:SMV3_F101_ApartmentFoundationMacro.tscn: scenes\modular_v2\apartment_exterior_v3\modules\SMV3_F101_ApartmentFoundationMacro.tscn
+- PASS — isolated_from_main:SMV3_F101_ApartmentFoundationMacro.tscn: no main dependency
+- PASS — root_scale_locked:SMV3_F101_ApartmentFoundationMacro.tscn: root has no scale override
+- PASS — scene_exists:SMV3_R101_ApartmentRoofMacro.tscn: scenes\modular_v2\apartment_exterior_v3\modules\SMV3_R101_ApartmentRoofMacro.tscn
+- PASS — isolated_from_main:SMV3_R101_ApartmentRoofMacro.tscn: no main dependency
+- PASS — root_scale_locked:SMV3_R101_ApartmentRoofMacro.tscn: root has no scale override
+- PASS — scene_exists:SMV3_W101_FrontPlain.tscn: scenes\modular_v2\apartment_exterior_v3\modules\SMV3_W101_FrontPlain.tscn
+- PASS — isolated_from_main:SMV3_W101_FrontPlain.tscn: no main dependency
+- PASS — root_scale_locked:SMV3_W101_FrontPlain.tscn: root has no scale override
+- PASS — scene_exists:SMV3_W102_FrontWindow.tscn: scenes\modular_v2\apartment_exterior_v3\modules\SMV3_W102_FrontWindow.tscn
+- PASS — isolated_from_main:SMV3_W102_FrontWindow.tscn: no main dependency
+- PASS — root_scale_locked:SMV3_W102_FrontWindow.tscn: root has no scale override
+- PASS — scene_exists:SMV3_W103_FrontDoor.tscn: scenes\modular_v2\apartment_exterior_v3\modules\SMV3_W103_FrontDoor.tscn
+- PASS — isolated_from_main:SMV3_W103_FrontDoor.tscn: no main dependency
+- PASS — root_scale_locked:SMV3_W103_FrontDoor.tscn: root has no scale override
+- PASS — scene_exists:SMV3_W104_FrontUtility.tscn: scenes\modular_v2\apartment_exterior_v3\modules\SMV3_W104_FrontUtility.tscn
+- PASS — isolated_from_main:SMV3_W104_FrontUtility.tscn: no main dependency
+- PASS — root_scale_locked:SMV3_W104_FrontUtility.tscn: root has no scale override
+- PASS — scene_exists:SMV3_W201_SidePlain.tscn: scenes\modular_v2\apartment_exterior_v3\modules\SMV3_W201_SidePlain.tscn
+- PASS — isolated_from_main:SMV3_W201_SidePlain.tscn: no main dependency
+- PASS — root_scale_locked:SMV3_W201_SidePlain.tscn: root has no scale override
+- PASS — scene_exists:SMV3_W202_SideWindow.tscn: scenes\modular_v2\apartment_exterior_v3\modules\SMV3_W202_SideWindow.tscn
+- PASS — isolated_from_main:SMV3_W202_SideWindow.tscn: no main dependency
+- PASS — root_scale_locked:SMV3_W202_SideWindow.tscn: root has no scale override
+- PASS — placeable_collision: footprint collision present
+- PASS — placeable_door: door interaction present
+- PASS — placeable_whole_sort: single root visual
+- PASS — snap_v3_foundation: V3 prefix supported
+- PASS — snap_occupied_socket: occupied sockets skipped
+- PASS — snap_metadata_axes: per-family axes supported
+- PASS — snap_version: 2.3.0
+- PASS — master_blend: 6772421 bytes
+- PASS — rebuild_script: blender\modular_v2\apartment_exterior_v3\Steamtek_Build_ApartmentExterior_WestEast.py

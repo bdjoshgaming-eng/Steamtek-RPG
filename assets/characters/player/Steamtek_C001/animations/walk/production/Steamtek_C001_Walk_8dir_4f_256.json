@@ -1,0 +1,393 @@
+{
+  "asset_id": "Steamtek_C001",
+  "animation": "walk",
+  "source_layout": {
+    "columns": 8,
+    "rows": 4,
+    "column_order": [
+      "south",
+      "south_west",
+      "west",
+      "north_west",
+      "north",
+      "north_east",
+      "east",
+      "south_east"
+    ],
+    "row_order": [
+      "frame_1",
+      "frame_2",
+      "frame_3",
+      "frame_4"
+    ]
+  },
+  "godot_layout": {
+    "columns": 4,
+    "rows": 8,
+    "row_order": [
+      "south",
+      "south_west",
+      "west",
+      "north_west",
+      "north",
+      "north_east",
+      "east",
+      "south_east"
+    ]
+  },
+  "cell_size": [
+    256,
+    256
+  ],
+  "columns": 4,
+  "rows": 8,
+  "directions": [
+    "south",
+    "south_west",
+    "west",
+    "north_west",
+    "north",
+    "north_east",
+    "east",
+    "south_east"
+  ],
+  "frames_per_direction": 4,
+  "fps": 8.0,
+  "loop": true,
+  "visible_character_height_px": 220,
+  "boot_baseline_y_px": 238,
+  "recommended_godot_sprite_scale": [
+    0.73,
+    0.73
+  ],
+  "godot_root_scale": [
+    1.0,
+    1.0
+  ],
+  "animated_sprite_offset": [
+    0.0,
+    -110.0
+  ],
+  "frame_stats": [
+    {
+      "direction": "south",
+      "frame": 0,
+      "bbox": [
+        74,
+        20,
+        184,
+        238
+      ]
+    },
+    {
+      "direction": "south",
+      "frame": 1,
+      "bbox": [
+        74,
+        20,
+        184,
+        236
+      ]
+    },
+    {
+      "direction": "south",
+      "frame": 2,
+      "bbox": [
+        74,
+        20,
+        183,
+        236
+      ]
+    },
+    {
+      "direction": "south",
+      "frame": 3,
+      "bbox": [
+        71,
+        18,
+        186,
+        236
+      ]
+    },
+    {
+      "direction": "south_west",
+      "frame": 0,
+      "bbox": [
+        71,
+        20,
+        186,
+        238
+      ]
+    },
+    {
+      "direction": "south_west",
+      "frame": 1,
+      "bbox": [
+        70,
+        20,
+        187,
+        236
+      ]
+    },
+    {
+      "direction": "south_west",
+      "frame": 2,
+      "bbox": [
+        69,
+        20,
+        188,
+        236
+      ]
+    },
+    {
+      "direction": "south_west",
+      "frame": 3,
+      "bbox": [
+        78,
+        18,
+        180,
+        236
+      ]
+    },
+    {
+      "direction": "west",
+      "frame": 0,
+      "bbox": [
+        65,
+        20,
+        190,
+        236
+      ]
+    },
+    {
+      "direction": "west",
+      "frame": 1,
+      "bbox": [
+        74,
+        20,
+        182,
+        236
+      ]
+    },
+    {
+      "direction": "west",
+      "frame": 2,
+      "bbox": [
+        71,
+        20,
+        184,
+        236
+      ]
+    },
+    {
+      "direction": "west",
+      "frame": 3,
+      "bbox": [
+        75,
+        18,
+        181,
+        236
+      ]
+    },
+    {
+      "direction": "north_west",
+      "frame": 0,
+      "bbox": [
+        65,
+        20,
+        190,
+        236
+      ]
+    },
+    {
+      "direction": "north_west",
+      "frame": 1,
+      "bbox": [
+        70,
+        20,
+        186,
+        236
+      ]
+    },
+    {
+      "direction": "north_west",
+      "frame": 2,
+      "bbox": [
+        71,
+        20,
+        186,
+        236
+      ]
+    },
+    {
+      "direction": "north_west",
+      "frame": 3,
+      "bbox": [
+        68,
+        18,
+        187,
+        236
+      ]
+    },
+    {
+      "direction": "north",
+      "frame": 0,
+      "bbox": [
+        75,
+        20,
+        180,
+        236
+      ]
+    },
+    {
+      "direction": "north",
+      "frame": 1,
+      "bbox": [
+        74,
+        20,
+        182,
+        236
+      ]
+    },
+    {
+      "direction": "north",
+      "frame": 2,
+      "bbox": [
+        74,
+        20,
+        181,
+        236
+      ]
+    },
+    {
+      "direction": "north",
+      "frame": 3,
+      "bbox": [
+        71,
+        18,
+        185,
+        236
+      ]
+    },
+    {
+      "direction": "north_east",
+      "frame": 0,
+      "bbox": [
+        70,
+        21,
+        186,
+        236
+      ]
+    },
+    {
+      "direction": "north_east",
+      "frame": 1,
+      "bbox": [
+        72,
+        20,
+        184,
+        236
+      ]
+    },
+    {
+      "direction": "north_east",
+      "frame": 2,
+      "bbox": [
+        70,
+        20,
+        186,
+        236
+      ]
+    },
+    {
+      "direction": "north_east",
+      "frame": 3,
+      "bbox": [
+        70,
+        18,
+        184,
+        236
+      ]
+    },
+    {
+      "direction": "east",
+      "frame": 0,
+      "bbox": [
+        65,
+        20,
+        188,
+        236
+      ]
+    },
+    {
+      "direction": "east",
+      "frame": 1,
+      "bbox": [
+        71,
+        21,
+        185,
+        236
+      ]
+    },
+    {
+      "direction": "east",
+      "frame": 2,
+      "bbox": [
+        72,
+        20,
+        182,
+        236
+      ]
+    },
+    {
+      "direction": "east",
+      "frame": 3,
+      "bbox": [
+        74,
+        18,
+        182,
+        236
+      ]
+    },
+    {
+      "direction": "south_east",
+      "frame": 0,
+      "bbox": [
+        76,
+        20,
+        178,
+        238
+      ]
+    },
+    {
+      "direction": "south_east",
+      "frame": 1,
+      "bbox": [
+        73,
+        20,
+        180,
+        236
+      ]
+    },
+    {
+      "direction": "south_east",
+      "frame": 2,
+      "bbox": [
+        76,
+        20,
+        176,
+        236
+      ]
+    },
+    {
+      "direction": "south_east",
+      "frame": 3,
+      "bbox": [
+        75,
+        20,
+        178,
+        236
+      ]
+    }
+  ]
+}

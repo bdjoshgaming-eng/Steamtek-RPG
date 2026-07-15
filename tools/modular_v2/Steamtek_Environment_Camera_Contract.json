@@ -1,0 +1,42 @@
+{
+  "version": "environment_fixed_off_axis_60_v2",
+  "status": "locked_for_future_environment_production",
+  "approved_date": "2026-07-15",
+  "presentation": "fixed_orthographic_2_5d",
+  "projection": "off_axis_orthographic_dimetric",
+  "camera_type": "ORTHOGRAPHIC",
+  "azimuth_degrees": 60.0,
+  "elevation_degrees": 30.0,
+  "camera_roll_degrees": 0.0,
+  "runtime_camera_rotation": false,
+  "camera_location_vector": [5.656854, -9.797959, 6.531973],
+  "camera_forward_locked": [-0.433013, 0.75, -0.5],
+  "pixels_per_vertical_blender_unit": 181.01933598375618,
+  "projected_bay_step_front": [313.534, -90.509],
+  "projected_bay_step_side": [-181.02, -156.768],
+  "storey_rise": [0, -219],
+  "ground_grid": "custom_parallelogram_basis",
+  "legacy_grid": "symmetric_256x128_diamond",
+  "source_character_visual": "res://assets/characters/player/Steamtek_C001/animations/walk/godot/Steamtek_C001_WalkVisual.tscn",
+  "character_visual_scale": [0.73, 0.73],
+  "character_visual_offset": [0, -110],
+  "collision_footprint": [28, 18],
+  "render": {
+    "engine": "BLENDER_EEVEE_NEXT",
+    "format": "PNG",
+    "color": "RGBA",
+    "transparent": true,
+    "view_transform": "AgX",
+    "look": "AgX - Medium High Contrast"
+  },
+  "rules": [
+    "Do not rotate exported sprites in Godot to fake another azimuth.",
+    "Do not crop modules independently after pivot generation.",
+    "Do not scale module roots; root scale stays 1,1.",
+    "Do not force 60-degree production assets onto the legacy 256x128 symmetrical grid.",
+    "Do not bake cyan, magenta, amber, glow, spill, bloom, or colored reflections into production PNGs.",
+    "Colored illumination is owned by Godot lights, tintable emission layers, overlays, and shaders.",
+    "C001 is the immutable scale reference and remains at its production visual transform.",
+    "Preserve legacy V3 assets until their 60-degree replacements pass all gates."
+  ]
+}

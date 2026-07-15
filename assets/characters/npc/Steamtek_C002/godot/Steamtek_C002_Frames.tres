@@ -1,0 +1,597 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://chmhwq5fd78vp"]
+
+[ext_resource type="Texture2D" uid="uid://skdhgd100otm" path="res://assets/characters/npc/Steamtek_C002/production/idle/south/Steamtek_C002_idle_south_0001.png" id="Texture_1"]
+[ext_resource type="Texture2D" uid="uid://cim1rj0x06ma7" path="res://assets/characters/npc/Steamtek_C002/production/idle/south/Steamtek_C002_idle_south_0002.png" id="Texture_2"]
+[ext_resource type="Texture2D" uid="uid://bhgrm87pa8ooj" path="res://assets/characters/npc/Steamtek_C002/production/idle/south/Steamtek_C002_idle_south_0003.png" id="Texture_3"]
+[ext_resource type="Texture2D" uid="uid://dwmf410jt2u11" path="res://assets/characters/npc/Steamtek_C002/production/idle/south/Steamtek_C002_idle_south_0004.png" id="Texture_4"]
+[ext_resource type="Texture2D" uid="uid://carxxqwlgt3ha" path="res://assets/characters/npc/Steamtek_C002/production/idle/south/Steamtek_C002_idle_south_0005.png" id="Texture_5"]
+[ext_resource type="Texture2D" uid="uid://l2445f561wo1" path="res://assets/characters/npc/Steamtek_C002/production/idle/south/Steamtek_C002_idle_south_0006.png" id="Texture_6"]
+[ext_resource type="Texture2D" uid="uid://5bptk3exggh7" path="res://assets/characters/npc/Steamtek_C002/production/idle/south/Steamtek_C002_idle_south_0007.png" id="Texture_7"]
+[ext_resource type="Texture2D" uid="uid://l4elpm6q0cq4" path="res://assets/characters/npc/Steamtek_C002/production/idle/south/Steamtek_C002_idle_south_0008.png" id="Texture_8"]
+[ext_resource type="Texture2D" uid="uid://dyaifci1is7lm" path="res://assets/characters/npc/Steamtek_C002/production/idle/south_west/Steamtek_C002_idle_south_west_0001.png" id="Texture_9"]
+[ext_resource type="Texture2D" uid="uid://2r0f5croq7td" path="res://assets/characters/npc/Steamtek_C002/production/idle/south_west/Steamtek_C002_idle_south_west_0002.png" id="Texture_10"]
+[ext_resource type="Texture2D" uid="uid://gfd05a308p" path="res://assets/characters/npc/Steamtek_C002/production/idle/south_west/Steamtek_C002_idle_south_west_0003.png" id="Texture_11"]
+[ext_resource type="Texture2D" uid="uid://01hi08q5xed1" path="res://assets/characters/npc/Steamtek_C002/production/idle/south_west/Steamtek_C002_idle_south_west_0004.png" id="Texture_12"]
+[ext_resource type="Texture2D" uid="uid://bxhyotm6ha1bg" path="res://assets/characters/npc/Steamtek_C002/production/idle/south_west/Steamtek_C002_idle_south_west_0005.png" id="Texture_13"]
+[ext_resource type="Texture2D" uid="uid://dk5bunqwpx1t0" path="res://assets/characters/npc/Steamtek_C002/production/idle/south_west/Steamtek_C002_idle_south_west_0006.png" id="Texture_14"]
+[ext_resource type="Texture2D" uid="uid://f0vme4tlw4db" path="res://assets/characters/npc/Steamtek_C002/production/idle/south_west/Steamtek_C002_idle_south_west_0007.png" id="Texture_15"]
+[ext_resource type="Texture2D" uid="uid://bweqe10il5jr6" path="res://assets/characters/npc/Steamtek_C002/production/idle/south_west/Steamtek_C002_idle_south_west_0008.png" id="Texture_16"]
+[ext_resource type="Texture2D" uid="uid://bi11rob4uyavv" path="res://assets/characters/npc/Steamtek_C002/production/idle/west/Steamtek_C002_idle_west_0001.png" id="Texture_17"]
+[ext_resource type="Texture2D" uid="uid://4j7rri64n1gc" path="res://assets/characters/npc/Steamtek_C002/production/idle/west/Steamtek_C002_idle_west_0002.png" id="Texture_18"]
+[ext_resource type="Texture2D" uid="uid://n8fa3uao1ipq" path="res://assets/characters/npc/Steamtek_C002/production/idle/west/Steamtek_C002_idle_west_0003.png" id="Texture_19"]
+[ext_resource type="Texture2D" uid="uid://ba4qqkr3lt4wn" path="res://assets/characters/npc/Steamtek_C002/production/idle/west/Steamtek_C002_idle_west_0004.png" id="Texture_20"]
+[ext_resource type="Texture2D" uid="uid://cib6500y8bkp3" path="res://assets/characters/npc/Steamtek_C002/production/idle/west/Steamtek_C002_idle_west_0005.png" id="Texture_21"]
+[ext_resource type="Texture2D" uid="uid://b3gntdd2xda5v" path="res://assets/characters/npc/Steamtek_C002/production/idle/west/Steamtek_C002_idle_west_0006.png" id="Texture_22"]
+[ext_resource type="Texture2D" uid="uid://ba8i73kwc4vvb" path="res://assets/characters/npc/Steamtek_C002/production/idle/west/Steamtek_C002_idle_west_0007.png" id="Texture_23"]
+[ext_resource type="Texture2D" uid="uid://ccn0yx6bktapb" path="res://assets/characters/npc/Steamtek_C002/production/idle/west/Steamtek_C002_idle_west_0008.png" id="Texture_24"]
+[ext_resource type="Texture2D" uid="uid://dd8ud4m0ldm3k" path="res://assets/characters/npc/Steamtek_C002/production/idle/north_west/Steamtek_C002_idle_north_west_0001.png" id="Texture_25"]
+[ext_resource type="Texture2D" uid="uid://rtaqiwv2nluw" path="res://assets/characters/npc/Steamtek_C002/production/idle/north_west/Steamtek_C002_idle_north_west_0002.png" id="Texture_26"]
+[ext_resource type="Texture2D" uid="uid://cqrs8ueucdyq5" path="res://assets/characters/npc/Steamtek_C002/production/idle/north_west/Steamtek_C002_idle_north_west_0003.png" id="Texture_27"]
+[ext_resource type="Texture2D" uid="uid://csig6aotdw1r8" path="res://assets/characters/npc/Steamtek_C002/production/idle/north_west/Steamtek_C002_idle_north_west_0004.png" id="Texture_28"]
+[ext_resource type="Texture2D" uid="uid://bwx356b27nrue" path="res://assets/characters/npc/Steamtek_C002/production/idle/north_west/Steamtek_C002_idle_north_west_0005.png" id="Texture_29"]
+[ext_resource type="Texture2D" uid="uid://c5sr1w6h7g5oe" path="res://assets/characters/npc/Steamtek_C002/production/idle/north_west/Steamtek_C002_idle_north_west_0006.png" id="Texture_30"]
+[ext_resource type="Texture2D" uid="uid://b3a0a1afcobjx" path="res://assets/characters/npc/Steamtek_C002/production/idle/north_west/Steamtek_C002_idle_north_west_0007.png" id="Texture_31"]
+[ext_resource type="Texture2D" uid="uid://cqhwb1qxkvl87" path="res://assets/characters/npc/Steamtek_C002/production/idle/north_west/Steamtek_C002_idle_north_west_0008.png" id="Texture_32"]
+[ext_resource type="Texture2D" uid="uid://cpxsouccthe5" path="res://assets/characters/npc/Steamtek_C002/production/idle/north/Steamtek_C002_idle_north_0001.png" id="Texture_33"]
+[ext_resource type="Texture2D" uid="uid://boevh2tif56it" path="res://assets/characters/npc/Steamtek_C002/production/idle/north/Steamtek_C002_idle_north_0002.png" id="Texture_34"]
+[ext_resource type="Texture2D" uid="uid://b84g1ydlwqwxj" path="res://assets/characters/npc/Steamtek_C002/production/idle/north/Steamtek_C002_idle_north_0003.png" id="Texture_35"]
+[ext_resource type="Texture2D" uid="uid://dd6703oqj7683" path="res://assets/characters/npc/Steamtek_C002/production/idle/north/Steamtek_C002_idle_north_0004.png" id="Texture_36"]
+[ext_resource type="Texture2D" uid="uid://c2bur4pt1f6g4" path="res://assets/characters/npc/Steamtek_C002/production/idle/north/Steamtek_C002_idle_north_0005.png" id="Texture_37"]
+[ext_resource type="Texture2D" uid="uid://b7v4xmqthkgig" path="res://assets/characters/npc/Steamtek_C002/production/idle/north/Steamtek_C002_idle_north_0006.png" id="Texture_38"]
+[ext_resource type="Texture2D" uid="uid://dcqyv3gb78v0n" path="res://assets/characters/npc/Steamtek_C002/production/idle/north/Steamtek_C002_idle_north_0007.png" id="Texture_39"]
+[ext_resource type="Texture2D" uid="uid://cuhltwgidn5up" path="res://assets/characters/npc/Steamtek_C002/production/idle/north/Steamtek_C002_idle_north_0008.png" id="Texture_40"]
+[ext_resource type="Texture2D" uid="uid://dwuo8a5k562kv" path="res://assets/characters/npc/Steamtek_C002/production/idle/north_east/Steamtek_C002_idle_north_east_0001.png" id="Texture_41"]
+[ext_resource type="Texture2D" uid="uid://djce1nqjttwf" path="res://assets/characters/npc/Steamtek_C002/production/idle/north_east/Steamtek_C002_idle_north_east_0002.png" id="Texture_42"]
+[ext_resource type="Texture2D" uid="uid://dgvswy5lsj37r" path="res://assets/characters/npc/Steamtek_C002/production/idle/north_east/Steamtek_C002_idle_north_east_0003.png" id="Texture_43"]
+[ext_resource type="Texture2D" uid="uid://48wrwc0t32bf" path="res://assets/characters/npc/Steamtek_C002/production/idle/north_east/Steamtek_C002_idle_north_east_0004.png" id="Texture_44"]
+[ext_resource type="Texture2D" uid="uid://7iev2dvh35ex" path="res://assets/characters/npc/Steamtek_C002/production/idle/north_east/Steamtek_C002_idle_north_east_0005.png" id="Texture_45"]
+[ext_resource type="Texture2D" uid="uid://d1x3e0c5syurx" path="res://assets/characters/npc/Steamtek_C002/production/idle/north_east/Steamtek_C002_idle_north_east_0006.png" id="Texture_46"]
+[ext_resource type="Texture2D" uid="uid://dpkboffs2q8io" path="res://assets/characters/npc/Steamtek_C002/production/idle/north_east/Steamtek_C002_idle_north_east_0007.png" id="Texture_47"]
+[ext_resource type="Texture2D" uid="uid://cltpv4efm48hb" path="res://assets/characters/npc/Steamtek_C002/production/idle/north_east/Steamtek_C002_idle_north_east_0008.png" id="Texture_48"]
+[ext_resource type="Texture2D" uid="uid://brvaalo6gdpwb" path="res://assets/characters/npc/Steamtek_C002/production/idle/east/Steamtek_C002_idle_east_0001.png" id="Texture_49"]
+[ext_resource type="Texture2D" uid="uid://2bcbi7wbnskb" path="res://assets/characters/npc/Steamtek_C002/production/idle/east/Steamtek_C002_idle_east_0002.png" id="Texture_50"]
+[ext_resource type="Texture2D" uid="uid://cows32q5hjjg0" path="res://assets/characters/npc/Steamtek_C002/production/idle/east/Steamtek_C002_idle_east_0003.png" id="Texture_51"]
+[ext_resource type="Texture2D" uid="uid://cjqmfv6t84kct" path="res://assets/characters/npc/Steamtek_C002/production/idle/east/Steamtek_C002_idle_east_0004.png" id="Texture_52"]
+[ext_resource type="Texture2D" uid="uid://toa85cfg6kma" path="res://assets/characters/npc/Steamtek_C002/production/idle/east/Steamtek_C002_idle_east_0005.png" id="Texture_53"]
+[ext_resource type="Texture2D" uid="uid://402dp2q44ple" path="res://assets/characters/npc/Steamtek_C002/production/idle/east/Steamtek_C002_idle_east_0006.png" id="Texture_54"]
+[ext_resource type="Texture2D" uid="uid://criy86uagie87" path="res://assets/characters/npc/Steamtek_C002/production/idle/east/Steamtek_C002_idle_east_0007.png" id="Texture_55"]
+[ext_resource type="Texture2D" uid="uid://crvncv8tlpkvq" path="res://assets/characters/npc/Steamtek_C002/production/idle/east/Steamtek_C002_idle_east_0008.png" id="Texture_56"]
+[ext_resource type="Texture2D" uid="uid://djqv48qt6fj81" path="res://assets/characters/npc/Steamtek_C002/production/idle/south_east/Steamtek_C002_idle_south_east_0001.png" id="Texture_57"]
+[ext_resource type="Texture2D" uid="uid://c1lp00n1pbd31" path="res://assets/characters/npc/Steamtek_C002/production/idle/south_east/Steamtek_C002_idle_south_east_0002.png" id="Texture_58"]
+[ext_resource type="Texture2D" uid="uid://vgxomb1kplxw" path="res://assets/characters/npc/Steamtek_C002/production/idle/south_east/Steamtek_C002_idle_south_east_0003.png" id="Texture_59"]
+[ext_resource type="Texture2D" uid="uid://bqqyk7b8eqqnl" path="res://assets/characters/npc/Steamtek_C002/production/idle/south_east/Steamtek_C002_idle_south_east_0004.png" id="Texture_60"]
+[ext_resource type="Texture2D" uid="uid://2r8q3kw45jju" path="res://assets/characters/npc/Steamtek_C002/production/idle/south_east/Steamtek_C002_idle_south_east_0005.png" id="Texture_61"]
+[ext_resource type="Texture2D" uid="uid://dfyh66jattl5d" path="res://assets/characters/npc/Steamtek_C002/production/idle/south_east/Steamtek_C002_idle_south_east_0006.png" id="Texture_62"]
+[ext_resource type="Texture2D" uid="uid://bl8yemhmvq3y3" path="res://assets/characters/npc/Steamtek_C002/production/idle/south_east/Steamtek_C002_idle_south_east_0007.png" id="Texture_63"]
+[ext_resource type="Texture2D" uid="uid://7qxtmykgwuye" path="res://assets/characters/npc/Steamtek_C002/production/idle/south_east/Steamtek_C002_idle_south_east_0008.png" id="Texture_64"]
+[ext_resource type="Texture2D" uid="uid://bug743p4uo5e5" path="res://assets/characters/npc/Steamtek_C002/production/walk/south/Steamtek_C002_walk_south_0001.png" id="Texture_65"]
+[ext_resource type="Texture2D" uid="uid://bluddcm2kapv6" path="res://assets/characters/npc/Steamtek_C002/production/walk/south/Steamtek_C002_walk_south_0002.png" id="Texture_66"]
+[ext_resource type="Texture2D" uid="uid://dhj5kgb8ifuxt" path="res://assets/characters/npc/Steamtek_C002/production/walk/south/Steamtek_C002_walk_south_0003.png" id="Texture_67"]
+[ext_resource type="Texture2D" uid="uid://byqjvts0j3h00" path="res://assets/characters/npc/Steamtek_C002/production/walk/south/Steamtek_C002_walk_south_0004.png" id="Texture_68"]
+[ext_resource type="Texture2D" uid="uid://lfk4cko7dvii" path="res://assets/characters/npc/Steamtek_C002/production/walk/south/Steamtek_C002_walk_south_0005.png" id="Texture_69"]
+[ext_resource type="Texture2D" uid="uid://ipq7yur37cgo" path="res://assets/characters/npc/Steamtek_C002/production/walk/south/Steamtek_C002_walk_south_0006.png" id="Texture_70"]
+[ext_resource type="Texture2D" uid="uid://btyfvgx0mqhwi" path="res://assets/characters/npc/Steamtek_C002/production/walk/south/Steamtek_C002_walk_south_0007.png" id="Texture_71"]
+[ext_resource type="Texture2D" uid="uid://ci1x6q6mds8sw" path="res://assets/characters/npc/Steamtek_C002/production/walk/south/Steamtek_C002_walk_south_0008.png" id="Texture_72"]
+[ext_resource type="Texture2D" uid="uid://bys305188jso5" path="res://assets/characters/npc/Steamtek_C002/production/walk/south_west/Steamtek_C002_walk_south_west_0001.png" id="Texture_73"]
+[ext_resource type="Texture2D" uid="uid://2jtlms0esq08" path="res://assets/characters/npc/Steamtek_C002/production/walk/south_west/Steamtek_C002_walk_south_west_0002.png" id="Texture_74"]
+[ext_resource type="Texture2D" uid="uid://cggugtr6sisjx" path="res://assets/characters/npc/Steamtek_C002/production/walk/south_west/Steamtek_C002_walk_south_west_0003.png" id="Texture_75"]
+[ext_resource type="Texture2D" uid="uid://dctc3jildf70n" path="res://assets/characters/npc/Steamtek_C002/production/walk/south_west/Steamtek_C002_walk_south_west_0004.png" id="Texture_76"]
+[ext_resource type="Texture2D" uid="uid://r4cpej2shtp8" path="res://assets/characters/npc/Steamtek_C002/production/walk/south_west/Steamtek_C002_walk_south_west_0005.png" id="Texture_77"]
+[ext_resource type="Texture2D" uid="uid://c7pjgehu2lntm" path="res://assets/characters/npc/Steamtek_C002/production/walk/south_west/Steamtek_C002_walk_south_west_0006.png" id="Texture_78"]
+[ext_resource type="Texture2D" uid="uid://ber4ffaugesbb" path="res://assets/characters/npc/Steamtek_C002/production/walk/south_west/Steamtek_C002_walk_south_west_0007.png" id="Texture_79"]
+[ext_resource type="Texture2D" uid="uid://bg3tv7wj6wgki" path="res://assets/characters/npc/Steamtek_C002/production/walk/south_west/Steamtek_C002_walk_south_west_0008.png" id="Texture_80"]
+[ext_resource type="Texture2D" uid="uid://dsywotdyw18f" path="res://assets/characters/npc/Steamtek_C002/production/walk/west/Steamtek_C002_walk_west_0001.png" id="Texture_81"]
+[ext_resource type="Texture2D" uid="uid://frbj52kbdljv" path="res://assets/characters/npc/Steamtek_C002/production/walk/west/Steamtek_C002_walk_west_0002.png" id="Texture_82"]
+[ext_resource type="Texture2D" uid="uid://d4jijsjf41neo" path="res://assets/characters/npc/Steamtek_C002/production/walk/west/Steamtek_C002_walk_west_0003.png" id="Texture_83"]
+[ext_resource type="Texture2D" uid="uid://l731gtkgnwrc" path="res://assets/characters/npc/Steamtek_C002/production/walk/west/Steamtek_C002_walk_west_0004.png" id="Texture_84"]
+[ext_resource type="Texture2D" uid="uid://dbak6qmhqr56d" path="res://assets/characters/npc/Steamtek_C002/production/walk/west/Steamtek_C002_walk_west_0005.png" id="Texture_85"]
+[ext_resource type="Texture2D" uid="uid://cj2nh2bmrjq5n" path="res://assets/characters/npc/Steamtek_C002/production/walk/west/Steamtek_C002_walk_west_0006.png" id="Texture_86"]
+[ext_resource type="Texture2D" uid="uid://bwdamuri2b3xs" path="res://assets/characters/npc/Steamtek_C002/production/walk/west/Steamtek_C002_walk_west_0007.png" id="Texture_87"]
+[ext_resource type="Texture2D" uid="uid://j4aath1ynelm" path="res://assets/characters/npc/Steamtek_C002/production/walk/west/Steamtek_C002_walk_west_0008.png" id="Texture_88"]
+[ext_resource type="Texture2D" uid="uid://ni8iilustcn5" path="res://assets/characters/npc/Steamtek_C002/production/walk/north_west/Steamtek_C002_walk_north_west_0001.png" id="Texture_89"]
+[ext_resource type="Texture2D" uid="uid://docjurile2cii" path="res://assets/characters/npc/Steamtek_C002/production/walk/north_west/Steamtek_C002_walk_north_west_0002.png" id="Texture_90"]
+[ext_resource type="Texture2D" uid="uid://fo0gwvrfith3" path="res://assets/characters/npc/Steamtek_C002/production/walk/north_west/Steamtek_C002_walk_north_west_0003.png" id="Texture_91"]
+[ext_resource type="Texture2D" uid="uid://c4iq4h3xb78mx" path="res://assets/characters/npc/Steamtek_C002/production/walk/north_west/Steamtek_C002_walk_north_west_0004.png" id="Texture_92"]
+[ext_resource type="Texture2D" uid="uid://bk445g4ek8mr7" path="res://assets/characters/npc/Steamtek_C002/production/walk/north_west/Steamtek_C002_walk_north_west_0005.png" id="Texture_93"]
+[ext_resource type="Texture2D" uid="uid://b0stoblfbwt6s" path="res://assets/characters/npc/Steamtek_C002/production/walk/north_west/Steamtek_C002_walk_north_west_0006.png" id="Texture_94"]
+[ext_resource type="Texture2D" uid="uid://cpf0ytt1dck7m" path="res://assets/characters/npc/Steamtek_C002/production/walk/north_west/Steamtek_C002_walk_north_west_0007.png" id="Texture_95"]
+[ext_resource type="Texture2D" uid="uid://dopjvetstpu3d" path="res://assets/characters/npc/Steamtek_C002/production/walk/north_west/Steamtek_C002_walk_north_west_0008.png" id="Texture_96"]
+[ext_resource type="Texture2D" uid="uid://bs0vikrgmelv3" path="res://assets/characters/npc/Steamtek_C002/production/walk/north/Steamtek_C002_walk_north_0001.png" id="Texture_97"]
+[ext_resource type="Texture2D" uid="uid://cpadewwntw555" path="res://assets/characters/npc/Steamtek_C002/production/walk/north/Steamtek_C002_walk_north_0002.png" id="Texture_98"]
+[ext_resource type="Texture2D" uid="uid://bcp5f6b6bhc6h" path="res://assets/characters/npc/Steamtek_C002/production/walk/north/Steamtek_C002_walk_north_0003.png" id="Texture_99"]
+[ext_resource type="Texture2D" uid="uid://bl05bqama2w8n" path="res://assets/characters/npc/Steamtek_C002/production/walk/north/Steamtek_C002_walk_north_0004.png" id="Texture_100"]
+[ext_resource type="Texture2D" uid="uid://8fudlosak630" path="res://assets/characters/npc/Steamtek_C002/production/walk/north/Steamtek_C002_walk_north_0005.png" id="Texture_101"]
+[ext_resource type="Texture2D" uid="uid://cr5j7u8g3t171" path="res://assets/characters/npc/Steamtek_C002/production/walk/north/Steamtek_C002_walk_north_0006.png" id="Texture_102"]
+[ext_resource type="Texture2D" uid="uid://dxuiex0yqp010" path="res://assets/characters/npc/Steamtek_C002/production/walk/north/Steamtek_C002_walk_north_0007.png" id="Texture_103"]
+[ext_resource type="Texture2D" uid="uid://cneqbaj3wxpjo" path="res://assets/characters/npc/Steamtek_C002/production/walk/north/Steamtek_C002_walk_north_0008.png" id="Texture_104"]
+[ext_resource type="Texture2D" uid="uid://ctji1ikan7h0e" path="res://assets/characters/npc/Steamtek_C002/production/walk/north_east/Steamtek_C002_walk_north_east_0001.png" id="Texture_105"]
+[ext_resource type="Texture2D" uid="uid://cmfk5qxq0iwd4" path="res://assets/characters/npc/Steamtek_C002/production/walk/north_east/Steamtek_C002_walk_north_east_0002.png" id="Texture_106"]
+[ext_resource type="Texture2D" uid="uid://tegmebbsdi4e" path="res://assets/characters/npc/Steamtek_C002/production/walk/north_east/Steamtek_C002_walk_north_east_0003.png" id="Texture_107"]
+[ext_resource type="Texture2D" uid="uid://bfauk1m5oh3jn" path="res://assets/characters/npc/Steamtek_C002/production/walk/north_east/Steamtek_C002_walk_north_east_0004.png" id="Texture_108"]
+[ext_resource type="Texture2D" uid="uid://c63mdptbtmptl" path="res://assets/characters/npc/Steamtek_C002/production/walk/north_east/Steamtek_C002_walk_north_east_0005.png" id="Texture_109"]
+[ext_resource type="Texture2D" uid="uid://dfgp3bxfmnbnn" path="res://assets/characters/npc/Steamtek_C002/production/walk/north_east/Steamtek_C002_walk_north_east_0006.png" id="Texture_110"]
+[ext_resource type="Texture2D" uid="uid://gv5x0yw0xeg8" path="res://assets/characters/npc/Steamtek_C002/production/walk/north_east/Steamtek_C002_walk_north_east_0007.png" id="Texture_111"]
+[ext_resource type="Texture2D" uid="uid://dyg4w6fdi4o1l" path="res://assets/characters/npc/Steamtek_C002/production/walk/north_east/Steamtek_C002_walk_north_east_0008.png" id="Texture_112"]
+[ext_resource type="Texture2D" uid="uid://dbqnk7lyyoie3" path="res://assets/characters/npc/Steamtek_C002/production/walk/east/Steamtek_C002_walk_east_0001.png" id="Texture_113"]
+[ext_resource type="Texture2D" uid="uid://b7bwjauv6ly23" path="res://assets/characters/npc/Steamtek_C002/production/walk/east/Steamtek_C002_walk_east_0002.png" id="Texture_114"]
+[ext_resource type="Texture2D" uid="uid://d4lkx18ybvf4v" path="res://assets/characters/npc/Steamtek_C002/production/walk/east/Steamtek_C002_walk_east_0003.png" id="Texture_115"]
+[ext_resource type="Texture2D" uid="uid://dmxbu3n5qo5i3" path="res://assets/characters/npc/Steamtek_C002/production/walk/east/Steamtek_C002_walk_east_0004.png" id="Texture_116"]
+[ext_resource type="Texture2D" uid="uid://cgsifrn2el66j" path="res://assets/characters/npc/Steamtek_C002/production/walk/east/Steamtek_C002_walk_east_0005.png" id="Texture_117"]
+[ext_resource type="Texture2D" uid="uid://cgn4a04hfkqvl" path="res://assets/characters/npc/Steamtek_C002/production/walk/east/Steamtek_C002_walk_east_0006.png" id="Texture_118"]
+[ext_resource type="Texture2D" uid="uid://cwe7itfbd2nk6" path="res://assets/characters/npc/Steamtek_C002/production/walk/east/Steamtek_C002_walk_east_0007.png" id="Texture_119"]
+[ext_resource type="Texture2D" uid="uid://hwh2ffre8gu4" path="res://assets/characters/npc/Steamtek_C002/production/walk/east/Steamtek_C002_walk_east_0008.png" id="Texture_120"]
+[ext_resource type="Texture2D" uid="uid://uhfomrltpfro" path="res://assets/characters/npc/Steamtek_C002/production/walk/south_east/Steamtek_C002_walk_south_east_0001.png" id="Texture_121"]
+[ext_resource type="Texture2D" uid="uid://2gt2atqyvor0" path="res://assets/characters/npc/Steamtek_C002/production/walk/south_east/Steamtek_C002_walk_south_east_0002.png" id="Texture_122"]
+[ext_resource type="Texture2D" uid="uid://d3gsfy2ny5e7l" path="res://assets/characters/npc/Steamtek_C002/production/walk/south_east/Steamtek_C002_walk_south_east_0003.png" id="Texture_123"]
+[ext_resource type="Texture2D" uid="uid://cb1ti1xdunukv" path="res://assets/characters/npc/Steamtek_C002/production/walk/south_east/Steamtek_C002_walk_south_east_0004.png" id="Texture_124"]
+[ext_resource type="Texture2D" uid="uid://dqpdfgxtqevmp" path="res://assets/characters/npc/Steamtek_C002/production/walk/south_east/Steamtek_C002_walk_south_east_0005.png" id="Texture_125"]
+[ext_resource type="Texture2D" uid="uid://dupg3e5q4s6nd" path="res://assets/characters/npc/Steamtek_C002/production/walk/south_east/Steamtek_C002_walk_south_east_0006.png" id="Texture_126"]
+[ext_resource type="Texture2D" uid="uid://du1jdim03q6nx" path="res://assets/characters/npc/Steamtek_C002/production/walk/south_east/Steamtek_C002_walk_south_east_0007.png" id="Texture_127"]
+[ext_resource type="Texture2D" uid="uid://c8aajyocfmvk" path="res://assets/characters/npc/Steamtek_C002/production/walk/south_east/Steamtek_C002_walk_south_east_0008.png" id="Texture_128"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_49")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_50")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_51")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_52")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_53")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_54")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_55")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_56")
+}],
+"loop": 1,
+"name": &"idle_east",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_33")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_34")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_35")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_36")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_37")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_38")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_39")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_40")
+}],
+"loop": 1,
+"name": &"idle_north",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_41")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_42")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_43")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_44")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_45")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_46")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_47")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_48")
+}],
+"loop": 1,
+"name": &"idle_north_east",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_25")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_26")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_27")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_28")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_29")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_30")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_31")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_32")
+}],
+"loop": 1,
+"name": &"idle_north_west",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_8")
+}],
+"loop": 1,
+"name": &"idle_south",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_57")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_58")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_59")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_60")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_61")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_62")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_63")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_64")
+}],
+"loop": 1,
+"name": &"idle_south_east",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_9")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_10")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_11")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_12")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_14")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_15")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_16")
+}],
+"loop": 1,
+"name": &"idle_south_west",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_17")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_18")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_19")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_20")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_21")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_22")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_23")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_24")
+}],
+"loop": 1,
+"name": &"idle_west",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_113")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_114")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_115")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_116")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_117")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_118")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_119")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_120")
+}],
+"loop": 1,
+"name": &"walk_east",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_97")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_98")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_99")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_100")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_101")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_102")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_103")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_104")
+}],
+"loop": 1,
+"name": &"walk_north",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_105")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_106")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_107")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_108")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_109")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_110")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_111")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_112")
+}],
+"loop": 1,
+"name": &"walk_north_east",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_89")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_90")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_91")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_92")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_93")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_94")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_95")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_96")
+}],
+"loop": 1,
+"name": &"walk_north_west",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_65")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_66")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_67")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_68")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_69")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_70")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_71")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_72")
+}],
+"loop": 1,
+"name": &"walk_south",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_121")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_122")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_123")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_124")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_125")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_126")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_127")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_128")
+}],
+"loop": 1,
+"name": &"walk_south_east",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_73")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_74")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_75")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_76")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_77")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_78")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_79")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_80")
+}],
+"loop": 1,
+"name": &"walk_south_west",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("Texture_81")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_82")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_83")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_84")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_85")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_86")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_87")
+}, {
+"duration": 1.0,
+"texture": ExtResource("Texture_88")
+}],
+"loop": 1,
+"name": &"walk_west",
+"speed": 8.0
+}]

@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0.0",
+  "pipeline_version": "1.6.0",
+  "character_id": "Steamtek_CXXX",
+  "golden_reference": {
+    "character_id": "Steamtek_C001",
+    "immutable": true,
+    "verification_manifest": "Steamtek_C001_GoldenReference.json"
+  },
+  "render": {
+    "width": 1254,
+    "height": 1254,
+    "resolution_percentage": 100,
+    "format": "PNG",
+    "color_mode": "RGBA",
+    "transparent": true,
+    "fixed_canvas": true,
+    "crop_frames": false
+  },
+  "camera": {
+    "object": "Camera_Iso",
+    "type": "ORTHO",
+    "projection": "2:1_dimetric",
+    "azimuth_degrees": 45.0,
+    "elevation_degrees": 35.264389682754654,
+    "ortho_scale": 2.21636,
+    "target": [0.0, 0.0, 0.945],
+    "distance": 10.0
+  },
+  "scene_contract": {
+    "direction_root": "ROOT_Direction",
+    "ground_contact_root": "ROOT_GroundContact",
+    "character_facing_root": "ROOT_CharacterFacing",
+    "armature": "Armature",
+    "camera": "Camera_Iso",
+    "required_rig_status": "approved",
+    "required_collections": [
+      "COLLECTION_Character",
+      "COLLECTION_RenderRig",
+      "COLLECTION_References",
+      "COLLECTION_Export"
+    ]
+  },
+  "model": {
+    "forward_axis": "-Y",
+    "south_facing_yaw_offset_degrees": -45.0,
+    "ground_contact_world": [0.0, 0.0, 0.0],
+    "root_rule": "center_between_boots_at_ground_contact"
+  },
+  "directions": [
+    {"name": "south", "rotation_degrees": 0.0},
+    {"name": "south_west", "rotation_degrees": -45.0},
+    {"name": "west", "rotation_degrees": -90.0},
+    {"name": "north_west", "rotation_degrees": -135.0},
+    {"name": "north", "rotation_degrees": 180.0},
+    {"name": "north_east", "rotation_degrees": 135.0},
+    {"name": "east", "rotation_degrees": 90.0},
+    {"name": "south_east", "rotation_degrees": 45.0}
+  ],
+  "animations": {
+    "idle": {"action": "STK_IDLE", "fps": 8.0, "loop": true},
+    "walk": {"action": "STK_WALK", "fps": 8.0, "loop": true},
+    "run": {"action": "STK_RUN", "fps": 10.0, "loop": true},
+    "attack_pistol": {"action": "STK_ATTACK_PISTOL", "fps": 10.0, "loop": false},
+    "attack_rifle": {"action": "STK_ATTACK_RIFLE", "fps": 10.0, "loop": false},
+    "attack_melee": {"action": "STK_ATTACK_MELEE", "fps": 10.0, "loop": false},
+    "hit": {"action": "STK_HIT", "fps": 10.0, "loop": false},
+    "death": {"action": "STK_DEATH", "fps": 10.0, "loop": false}
+  },
+  "godot": {
+    "production_frame_size": [256, 256],
+    "production_resize": "fixed_canvas_lanczos_no_crop",
+    "visual_scale": [0.73, 0.73],
+    "visual_offset": [0.0, -110.0],
+    "collision_footprint": [28.0, 18.0],
+    "animation_name_pattern": "{animation}_{direction}",
+    "visual_node": "Visual"
+  },
+  "validation": {
+    "require_genuine_directions": true,
+    "allow_mirroring": false,
+    "ground_line_tolerance_pixels": 8,
+    "maximum_baseline_variation_pixels": 3,
+    "static_baseline_animations": ["idle"]
+  }
+}

@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://bougnwgr8jgqj"]
+
+[ext_resource type="Texture2D" uid="uid://ccaadplta0f6f" path="res://assets/surface/props/industrial_crate/production/P002_IndustrialCrate.png" id="1_31gvl"]
+
+[node name="P002_IndustrialCrate" type="StaticBody2D" unique_id=120694612]
+
+[node name="visual" type="Sprite2D" parent="." unique_id=1568914239]
+position = Vector2(-2, -31.999998)
+scale = Vector2(0.16, 0.16)
+texture = ExtResource("1_31gvl")
+
+[node name="BaseCollision" type="CollisionPolygon2D" parent="." unique_id=1110718659]
+position = Vector2(-2, 37.5625)
+scale = Vector2(1, 0.84375)
+polygon = PackedVector2Array(0, -54, -31, -62.2963, 1, -45.703705, 32, -63.481483)

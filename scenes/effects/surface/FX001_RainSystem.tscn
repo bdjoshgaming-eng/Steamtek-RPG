@@ -1,0 +1,73 @@
+[gd_scene format=3 uid="uid://4jpp5khy6ygj"]
+
+[sub_resource type="Gradient" id="Gradient_rohdq"]
+offsets = PackedFloat32Array(0, 0.08, 0.72, 1)
+colors = PackedColorArray(0.84313726, 0.90588236, 0.9372549, 0, 0.84313726, 0.90588236, 0.9372549, 0.4392157, 0.84313726, 0.90588236, 0.9372549, 0.27058825, 0.84313726, 0.90588236, 0.9372549, 0.27058825)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_rohdq"]
+gradient = SubResource("Gradient_rohdq")
+width = 1
+height = 52
+fill_from = Vector2(0.5, 0)
+fill_to = Vector2(0.5, 1)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0jbmm"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(900, 20, 1)
+angle_min = -2.9999893
+angle_max = -2.9999893
+direction = Vector3(0.06, 1, 0)
+spread = 2.0
+flatness = 1.0
+initial_velocity_min = 1000.0
+initial_velocity_max = 1300.0
+gravity = Vector3(-30, 300, 0)
+scale_min = 0.84999996
+
+[sub_resource type="Gradient" id="Gradient_0jbmm"]
+offsets = PackedFloat32Array(0, 0.1, 0.7, 1)
+colors = PackedColorArray(0.7882353, 0.8666667, 0.9098039, 0, 0.7882353, 0.8666667, 0.9098039, 0.2509804, 0.7882353, 0.8666667, 0.9098039, 0.14509805, 0.7882353, 0.8666667, 0.9098039, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_2wyq8"]
+gradient = SubResource("Gradient_0jbmm")
+width = 1
+height = 26
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_rohdq"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(900, 20, 1)
+angle_min = -1.9999893
+angle_max = -1.9999893
+direction = Vector3(0.04, 1, 0)
+spread = 3.0
+flatness = 1.0
+initial_velocity_min = 700.0
+initial_velocity_max = 950.0
+gravity = Vector3(-20, 220, 0)
+scale_min = 0.7
+
+[node name="FX001_RainSystem" type="Node2D" unique_id=420670253]
+
+[node name="RainNear" type="GPUParticles2D" parent="." unique_id=2047367782]
+z_index = 10
+texture_filter = 1
+position = Vector2(0, -400)
+amount = 90
+texture = SubResource("GradientTexture2D_rohdq")
+lifetime = 0.8
+preprocess = 1.0
+randomness = 0.2
+visibility_rect = Rect2(-1200, -600, 2400, 1600)
+process_material = SubResource("ParticleProcessMaterial_0jbmm")
+
+[node name="RainFar" type="GPUParticles2D" parent="." unique_id=774180532]
+texture_filter = 2
+position = Vector2(0, -400)
+amount = 500
+texture = SubResource("GradientTexture2D_2wyq8")
+preprocess = 1.0
+randomness = 0.3
+visibility_rect = Rect2(-1200, -600, 2400, 1600)
+process_material = SubResource("ParticleProcessMaterial_rohdq")

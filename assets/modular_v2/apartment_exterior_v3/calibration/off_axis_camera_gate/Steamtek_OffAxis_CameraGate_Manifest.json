@@ -1,0 +1,116 @@
+{
+  "status": "camera_gate_only_not_locked",
+  "camera_type": "ORTHOGRAPHIC",
+  "elevation_degrees": 30.0,
+  "camera_roll_degrees": 0.0,
+  "render_size": [
+    3000,
+    2200
+  ],
+  "candidates": [
+    {
+      "azimuth_degrees": 45.0,
+      "texture": "res://assets/modular_v2/apartment_exterior_v3/calibration/off_axis_camera_gate/ApartmentExterior_OffAxis_Azimuth45.png",
+      "camera_location_vector": [
+        8.0,
+        -8.0,
+        6.531973
+      ],
+      "camera_forward": [
+        -0.612372,
+        0.612372,
+        -0.5
+      ],
+      "front_bay_step": [
+        349.091,
+        174.546
+      ],
+      "side_bay_step": [
+        349.091,
+        -174.545
+      ],
+      "vertical_unit_step": [
+        0.0,
+        -213.774
+      ]
+    },
+    {
+      "azimuth_degrees": 35.0,
+      "texture": "res://assets/modular_v2/apartment_exterior_v3/calibration/off_axis_camera_gate/ApartmentExterior_OffAxis_Azimuth35.png",
+      "camera_location_vector": [
+        9.267648,
+        -6.489276,
+        6.531973
+      ],
+      "camera_forward": [
+        -0.709406,
+        0.496732,
+        -0.5
+      ],
+      "front_bay_step": [
+        283.168,
+        202.203
+      ],
+      "side_bay_step": [
+        404.406,
+        -141.584
+      ],
+      "vertical_unit_step": [
+        0.0,
+        -213.774
+      ]
+    },
+    {
+      "azimuth_degrees": 30.0,
+      "texture": "res://assets/modular_v2/apartment_exterior_v3/calibration/off_axis_camera_gate/ApartmentExterior_OffAxis_Azimuth30.png",
+      "camera_location_vector": [
+        9.797959,
+        -5.656854,
+        6.531973
+      ],
+      "camera_forward": [
+        -0.75,
+        0.433013,
+        -0.5
+      ],
+      "front_bay_step": [
+        246.845,
+        213.774
+      ],
+      "side_bay_step": [
+        427.547,
+        -123.422
+      ],
+      "vertical_unit_step": [
+        0.0,
+        -213.774
+      ]
+    },
+    {
+      "azimuth_degrees": 25.0,
+      "texture": "res://assets/modular_v2/apartment_exterior_v3/calibration/off_axis_camera_gate/ApartmentExterior_OffAxis_Azimuth25.png",
+      "camera_location_vector": [
+        10.253702,
+        -4.78138,
+        6.531973
+      ],
+      "camera_forward": [
+        -0.784886,
+        0.365998,
+        -0.5
+      ],
+      "front_bay_step": [
+        208.642,
+        223.717
+      ],
+      "side_bay_step": [
+        447.434,
+        -104.321
+      ],
+      "vertical_unit_step": [
+        0.0,
+        -213.774
+      ]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/modules/walls/SMV4_W101_FrontPlain.tscn" id="1_plain"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/modules/walls/SMV4_W102_FrontWindow.tscn" id="2_window"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/modules/walls/SMV4_W103_FrontDoor.tscn" id="3_door"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/modules/walls/SMV4_W104_FrontUtility.tscn" id="4_utility"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/modules/walls/SMV4_W201_SidePlain.tscn" id="5_side"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/modules/roofs/SMV4_R101_RoofCell.tscn" id="6_roof"]
+[ext_resource type="PackedScene" path="res://scenes/characters/C001_SteamtekRunner.tscn" id="7_character"]
+
+[node name="Steamtek_V4_NeutralFacade_ArtGate" type="Node2D"]
+editor_description = "Neutral gritty art gate. Base modules have no baked cyan, magenta, amber, bloom, or colored reflections. Door emission and light are separate Godot nodes."
+
+[node name="NeutralModules" type="Node2D" parent="."]
+position = Vector2(250, 650)
+
+[node name="Plain" parent="NeutralModules" instance=ExtResource("1_plain")]
+[node name="Window" parent="NeutralModules" instance=ExtResource("2_window")]
+position = Vector2(313.534, -90.509)
+[node name="Door" parent="NeutralModules" instance=ExtResource("3_door")]
+position = Vector2(627.068, -181.018)
+[node name="Utility" parent="NeutralModules" instance=ExtResource("4_utility")]
+position = Vector2(940.602, -271.527)
+[node name="Side" parent="NeutralModules" instance=ExtResource("5_side")]
+position = Vector2(1254.136, -362.036)
+[node name="Roof" parent="NeutralModules" instance=ExtResource("6_roof")]
+position = Vector2(0, -219)
+[node name="C001ScaleGate" parent="NeutralModules" instance=ExtResource("7_character")]
+position = Vector2(550, 90)
+
+[node name="Title" type="Label" parent="."]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 1100.0
+offset_bottom = 75.0
+text = "STEAMTEK V4 NEUTRAL FACADE ART GATE — 60° OFF-AXIS / GODOT LIGHTING"
+theme_override_colors/font_color = Color(0.92, 0.91, 0.86, 1)
+theme_override_font_sizes/font_size = 24

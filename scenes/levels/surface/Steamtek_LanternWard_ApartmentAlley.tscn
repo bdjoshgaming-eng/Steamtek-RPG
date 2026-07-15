@@ -1,0 +1,175 @@
+[gd_scene format=3 uid="uid://ces4jcepc5lx8"]
+
+[ext_resource type="Script" uid="uid://i1g76o7gbc6q" path="res://scenes/modular_v4/scripts/steamtek_v4_alley_ground.gd" id="1_ground"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/buildings/SMV4_B101_ApartmentExterior_Placeable.tscn" id="2_building"]
+[ext_resource type="PackedScene" path="res://scenes/characters/C001_PlayerBody.tscn" id="3_player"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/modules/walls/SMV4_W201_SidePlain.tscn" id="4_side_plain"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/modules/walls/SMV4_W202_SideWindow.tscn" id="5_side_window"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/modules/props/SMV4_P401_PressureBin.tscn" id="6_bin"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/modules/props/SMV4_P402_Dumpster.tscn" id="7_dumpster"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/modules/props/SMV4_P403_SteamVent.tscn" id="8_vent"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/modules/props/SMV4_P404_UtilityCabinet.tscn" id="9_cabinet"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/modules/props/SMV4_P405_PipeRack.tscn" id="10_pipes"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/modules/props/SMV4_P406_StreetFixture.tscn" id="11_fixture"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/modules/props/SMV4_P407_Barrier.tscn" id="12_barrier"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/effects/SMV4_FX401_RainOverlay.tscn" id="13_rain"]
+
+[sub_resource type="RectangleShape2D" id="HorizontalBoundary"]
+size = Vector2(2700, 50)
+
+[sub_resource type="RectangleShape2D" id="VerticalBoundary"]
+size = Vector2(50, 1800)
+
+[sub_resource type="Gradient" id="LightGradient"]
+offsets = PackedFloat32Array(0, 0.56, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.3, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="LightTexture"]
+gradient = SubResource("LightGradient")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[node name="Steamtek_LanternWard_ApartmentAlley" type="Node2D" unique_id=317120158]
+editor_description = "Production-layout opening slice: approved V4 apartment exterior, service alley to its right, reusable alley props, wet ground, separate Godot lights, rain, steam, collision, Y-sort, C001, and apartment zoning."
+metadata/steamtek_contract = "environment_off_axis_60_v4"
+metadata/status = "playable_opening_slice"
+
+[node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=816482314]
+color = Color(0.38, 0.42, 0.47, 1)
+
+[node name="Ground" type="Node2D" parent="." unique_id=1196387366]
+position = Vector2(100, 1020)
+script = ExtResource("1_ground")
+width_cells = 12
+depth_cells = 10
+
+[node name="ServiceAlleyApron" type="Polygon2D" parent="Ground" unique_id=185807747]
+color = Color(0.09, 0.112, 0.118, 0.88)
+polygon = PackedVector2Array(1254.136, -362.036, 892.096, -675.572, 1519.164, -856.59, 1881.204, -543.054, 1567.67, -452.545, 1205.63, -766.081)
+
+[node name="DrainChannel" type="Line2D" parent="Ground" unique_id=1723533821]
+points = PackedVector2Array(1398, -382, 1036, -696, 1663, -877)
+width = 14.0
+default_color = Color(0.035, 0.045, 0.048, 1)
+
+[node name="DrainHighlight" type="Line2D" parent="Ground" unique_id=972148092]
+points = PackedVector2Array(1405, -387, 1043, -701, 1670, -882)
+width = 2.0
+default_color = Color(0.42, 0.47, 0.47, 0.36)
+
+[node name="YSortLayer" type="Node2D" parent="." unique_id=1020134343]
+y_sort_enabled = true
+
+[node name="ApartmentExterior" parent="YSortLayer" unique_id=803069668 instance=ExtResource("2_building")]
+position = Vector2(100, 1020)
+
+[node name="OppositeAlleyWallA" parent="YSortLayer" unique_id=1230090959 instance=ExtResource("4_side_plain")]
+position = Vector2(2180, 820)
+
+[node name="OppositeAlleyWallB" parent="YSortLayer" unique_id=251130384 instance=ExtResource("5_side_window")]
+position = Vector2(1998.98, 663.232)
+
+[node name="OppositeAlleyWallC" parent="YSortLayer" unique_id=2085663298 instance=ExtResource("4_side_plain")]
+position = Vector2(1817.96, 506.464)
+
+[node name="PipeRack" parent="YSortLayer" unique_id=253273598 instance=ExtResource("10_pipes")]
+position = Vector2(1908, 535)
+
+[node name="UtilityCabinet" parent="YSortLayer" unique_id=1874269895 instance=ExtResource("9_cabinet")]
+position = Vector2(2030, 735)
+
+[node name="Dumpster" parent="YSortLayer" unique_id=996163713 instance=ExtResource("7_dumpster")]
+position = Vector2(1815, 795)
+
+[node name="PressureBinA" parent="YSortLayer" unique_id=252232295 instance=ExtResource("6_bin")]
+position = Vector2(1690, 842)
+
+[node name="PressureBinB" parent="YSortLayer" unique_id=1558215739 instance=ExtResource("6_bin")]
+position = Vector2(1770, 885)
+
+[node name="SteamVentA" parent="YSortLayer" unique_id=971678427 instance=ExtResource("8_vent")]
+position = Vector2(1480, 805)
+
+[node name="SteamVentB" parent="YSortLayer" unique_id=1663324253 instance=ExtResource("8_vent")]
+position = Vector2(1935, 925)
+
+[node name="StreetFixture" parent="YSortLayer" unique_id=296530611 instance=ExtResource("11_fixture")]
+position = Vector2(1575, 935)
+
+[node name="ServiceBarrier" parent="YSortLayer" unique_id=209840233 instance=ExtResource("12_barrier")]
+position = Vector2(2240, 1015)
+
+[node name="Player" parent="YSortLayer" unique_id=1474707656 instance=ExtResource("3_player")]
+position = Vector2(560, 1170)
+
+[node name="WorldBounds" type="StaticBody2D" parent="." unique_id=435644688]
+collision_mask = 2
+
+[node name="Top" type="CollisionShape2D" parent="WorldBounds" unique_id=1173878575]
+position = Vector2(1150, -170)
+shape = SubResource("HorizontalBoundary")
+
+[node name="Bottom" type="CollisionShape2D" parent="WorldBounds" unique_id=896445873]
+position = Vector2(1150, 1450)
+shape = SubResource("HorizontalBoundary")
+
+[node name="Left" type="CollisionShape2D" parent="WorldBounds" unique_id=1559669888]
+position = Vector2(-220, 640)
+shape = SubResource("VerticalBoundary")
+
+[node name="Right" type="CollisionShape2D" parent="WorldBounds" unique_id=1111047964]
+position = Vector2(2580, 640)
+shape = SubResource("VerticalBoundary")
+
+[node name="Lighting" type="Node2D" parent="." unique_id=1774125488]
+
+[node name="DoorCyanSpill" type="PointLight2D" parent="Lighting" unique_id=1361257602]
+position = Vector2(350, 860)
+color = Color(0.1, 0.7, 0.94, 1)
+energy = 0.56
+texture = SubResource("LightTexture")
+texture_scale = 2.2
+
+[node name="AlleyMagentaSpill" type="PointLight2D" parent="Lighting" unique_id=1483566997]
+position = Vector2(1950, 560)
+color = Color(0.92, 0.08, 0.56, 1)
+energy = 0.48
+texture = SubResource("LightTexture")
+texture_scale = 2.6
+
+[node name="StreetAmberSpill" type="PointLight2D" parent="Lighting" unique_id=1728638082]
+position = Vector2(1510, 985)
+color = Color(1, 0.46, 0.14, 1)
+energy = 0.4
+texture = SubResource("LightTexture")
+texture_scale = 2.8
+
+[node name="Rain" parent="." unique_id=1802351785 instance=ExtResource("13_rain")]
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=545820304]
+layer = 100
+
+[node name="Title" type="Label" parent="UI" unique_id=187951929]
+offset_left = 22.0
+offset_top = 18.0
+offset_right = 900.0
+offset_bottom = 56.0
+theme_override_colors/font_color = Color(0.93, 0.92, 0.86, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.025, 0.03, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 22
+text = "STEAMTEK — APARTMENT SERVICE ALLEY"
+
+[node name="Instructions" type="Label" parent="UI" unique_id=211222314]
+offset_left = 22.0
+offset_top = 52.0
+offset_right = 980.0
+offset_bottom = 88.0
+theme_override_colors/font_color = Color(0.78, 0.82, 0.81, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.025, 0.03, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 17
+text = "WASD: Move     Enter or R: Use apartment door"

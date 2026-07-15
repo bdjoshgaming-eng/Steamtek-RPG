@@ -1,0 +1,167 @@
+{
+  "contract": {
+    "projection": "true_2_to_1_dimetric",
+    "camera_type": "ORTHOGRAPHIC",
+    "elevation_degrees": 30.0,
+    "locked_azimuth": "south_east_to_north_west",
+    "comparison_azimuth": "south_west_to_north_east",
+    "camera_forward_locked": [
+      -0.612372,
+      0.612372,
+      -0.5
+    ],
+    "pixels_per_vertical_blender_unit": 181.01933598375618,
+    "projected_bay_step_front": [
+      256,
+      -128
+    ],
+    "projected_bay_step_side": [
+      -256,
+      -128
+    ],
+    "storey_rise": [
+      0,
+      -219
+    ],
+    "source_character_visual": "res://assets/characters/player/Steamtek_C001/animations/walk/godot/Steamtek_C001_WalkVisual.tscn",
+    "character_visual_scale": [
+      0.73,
+      0.73
+    ],
+    "character_visual_offset": [
+      0,
+      -110
+    ],
+    "collision_footprint": [
+      28,
+      18
+    ]
+  },
+  "modules": {
+    "FrontPlain": {
+      "texture": "res://assets/modular_v2/apartment_exterior_v3/production/SMV3_FrontPlain.png",
+      "canvas": [
+        768,
+        768
+      ],
+      "root_offset": [
+        128.0,
+        -48.873
+      ],
+      "snap_step": [
+        256,
+        -128
+      ]
+    },
+    "FrontWindow": {
+      "texture": "res://assets/modular_v2/apartment_exterior_v3/production/SMV3_FrontWindow.png",
+      "canvas": [
+        768,
+        768
+      ],
+      "root_offset": [
+        128.0,
+        -48.873
+      ],
+      "snap_step": [
+        256,
+        -128
+      ]
+    },
+    "FrontDoor": {
+      "texture": "res://assets/modular_v2/apartment_exterior_v3/production/SMV3_FrontDoor.png",
+      "canvas": [
+        768,
+        768
+      ],
+      "root_offset": [
+        128.0,
+        -48.873
+      ],
+      "snap_step": [
+        256,
+        -128
+      ]
+    },
+    "FrontUtility": {
+      "texture": "res://assets/modular_v2/apartment_exterior_v3/production/SMV3_FrontUtility.png",
+      "canvas": [
+        768,
+        768
+      ],
+      "root_offset": [
+        128.0,
+        -48.873
+      ],
+      "snap_step": [
+        256,
+        -128
+      ]
+    },
+    "SidePlain": {
+      "texture": "res://assets/modular_v2/apartment_exterior_v3/production/SMV3_SidePlain.png",
+      "canvas": [
+        768,
+        768
+      ],
+      "root_offset": [
+        128.0,
+        -176.873
+      ],
+      "snap_step": [
+        -256,
+        -128
+      ]
+    },
+    "SideWindow": {
+      "texture": "res://assets/modular_v2/apartment_exterior_v3/production/SMV3_SideWindow.png",
+      "canvas": [
+        768,
+        768
+      ],
+      "root_offset": [
+        128.0,
+        -176.873
+      ],
+      "snap_step": [
+        -256,
+        -128
+      ]
+    },
+    "RoofMacro": {
+      "texture": "res://assets/modular_v2/apartment_exterior_v3/production/SMV3_RoofMacro.png",
+      "canvas": [
+        2200,
+        1300
+      ],
+      "root_offset": [
+        1516.308,
+        55.248
+      ],
+      "snap_step": null
+    },
+    "FoundationMacro": {
+      "texture": "res://assets/modular_v2/apartment_exterior_v3/production/SMV3_FoundationMacro.png",
+      "canvas": [
+        2200,
+        1300
+      ],
+      "root_offset": [
+        1516.308,
+        108.307
+      ],
+      "snap_step": null
+    }
+  },
+  "golden": {
+    "texture": "res://assets/modular_v2/apartment_exterior_v3/production/SMV3_B101_ApartmentExterior_Golden.png",
+    "canvas": [
+      3000,
+      2200
+    ],
+    "root_offset": [
+      1064.727,
+      -186.908
+    ]
+  }
+}

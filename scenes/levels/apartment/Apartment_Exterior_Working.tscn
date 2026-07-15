@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://16to7u7qk0b1"]
+
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/buildings/SMV4_B101_ApartmentExterior_Placeable.tscn" id="1_building"]
+
+[node name="Apartment_Exterior_Working" type="Node2D"]
+editor_description = "Steamtek V4 fixed off-axis 60-degree apartment exterior. Kept at this path so the existing main scene remains valid without editing gameplay code."
+
+[node name="SMV4_ApartmentExterior" parent="." instance=ExtResource("1_building")]

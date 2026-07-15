@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/modules/walls/SMV4_W101_FrontPlain.tscn" id="1_front"]
+[ext_resource type="PackedScene" path="res://scenes/modular_v4/modules/walls/SMV4_W201_SidePlain.tscn" id="2_side"]
+
+[node name="SMV4_C101_OutsideCorner" type="Node2D" groups=["steamtek_modular", "steamtek_modular_v4"]]
+metadata/steamtek_contract = "environment_off_axis_60_v4"
+metadata/steamtek_lattice_axis_a = Vector2(313.534, -90.509)
+metadata/steamtek_lattice_axis_b = Vector2(-181.02, -156.768)
+
+[node name="Front" parent="." instance=ExtResource("1_front")]
+[node name="Side" parent="." instance=ExtResource("2_side")]
+
+[node name="Snap_Front" type="Marker2D" parent="." groups=["steamtek_snap"]]
+position = Vector2(313.534, -90.509)
+[node name="Snap_Side" type="Marker2D" parent="." groups=["steamtek_snap"]]
+position = Vector2(-181.02, -156.768)

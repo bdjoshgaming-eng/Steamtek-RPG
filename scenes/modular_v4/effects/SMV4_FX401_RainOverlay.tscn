@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scenes/modular_v4/scripts/steamtek_v4_rain_overlay.gd" id="1_rain"]
+
+[node name="SMV4_FX401_RainOverlay" type="CanvasLayer" groups=["steamtek_fx", "steamtek_modular_v4"]]
+layer = 80
+
+[node name="Rain" type="Node2D" parent="."]
+script = ExtResource("1_rain")
+

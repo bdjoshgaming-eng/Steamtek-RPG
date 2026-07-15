@@ -1,0 +1,46 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/modular_v2/apartment_exterior_v3/production/SMV3_B101_ApartmentExterior_Golden.png" id="1_tex"]
+
+[sub_resource type="ConvexPolygonShape2D" id="BuildingShape"]
+points = PackedVector2Array(0, 0, 1024, -512, 256, -896, -768, -384)
+
+[sub_resource type="RectangleShape2D" id="DoorShape"]
+size = Vector2(82, 48)
+
+[node name="SMV3_B101_ApartmentExterior_Placeable" type="Node2D" groups=["steamtek_modular", "steamtek_placeable_building", "steamtek_apartment_v3"]]
+editor_description = "Golden placeable apartment exterior. Root is ground-contact origin; building sorts as one object. Door area is ready for the later zone-transition script."
+metadata/steamtek_contract = "environment_west_east_v1"
+metadata/source_blend = "res://blender/modular_v2/apartment_exterior_v3/Steamtek_ApartmentExterior_WestEast_Master.blend"
+metadata/mockup_reference = "res://docs/references/ApartmentExterior_AssemblyMockup.png"
+metadata/aesthetic_reference = "res://docs/references/Steamtek_Surface_ColorPalette_Aesthetic_Reference.png"
+
+[node name="Visual" type="Sprite2D" parent="."]
+position = Vector2(1064.727, -186.908)
+texture = ExtResource("1_tex")
+
+[node name="BuildingBody" type="StaticBody2D" parent="."]
+
+[node name="BuildingCollision" type="CollisionShape2D" parent="BuildingBody"]
+shape = SubResource("BuildingShape")
+
+[node name="DoorInteraction" type="Area2D" parent="." groups=["steamtek_zone_door"]]
+position = Vector2(134, -67)
+metadata/target_scene = "res://scenes/levels/apartment/Apartment_Interior.tscn"
+
+[node name="DoorInteractionShape" type="CollisionShape2D" parent="DoorInteraction"]
+shape = SubResource("DoorShape")
+
+[node name="DoorGroundContact" type="Marker2D" parent="."]
+position = Vector2(134, -67)
+
+[node name="Snap_SW" type="Marker2D" parent="." groups=["steamtek_snap"]]
+
+[node name="Snap_SE" type="Marker2D" parent="." groups=["steamtek_snap"]]
+position = Vector2(1024, -512)
+
+[node name="Snap_NE" type="Marker2D" parent="." groups=["steamtek_snap"]]
+position = Vector2(256, -896)
+
+[node name="Snap_NW" type="Marker2D" parent="." groups=["steamtek_snap"]]
+position = Vector2(-768, -384)

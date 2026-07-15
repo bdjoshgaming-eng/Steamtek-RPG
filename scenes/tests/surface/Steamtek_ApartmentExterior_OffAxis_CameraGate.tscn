@@ -1,0 +1,195 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/modular_v2/apartment_exterior_v3/calibration/off_axis_camera_gate/ApartmentExterior_OffAxis_Azimuth45.png" id="1_45"]
+[ext_resource type="Texture2D" path="res://assets/modular_v2/apartment_exterior_v3/calibration/off_axis_camera_gate/ApartmentExterior_OffAxis_Azimuth35.png" id="2_35"]
+[ext_resource type="Texture2D" path="res://assets/modular_v2/apartment_exterior_v3/calibration/off_axis_camera_gate/ApartmentExterior_OffAxis_Azimuth30.png" id="3_30"]
+[ext_resource type="Texture2D" path="res://assets/modular_v2/apartment_exterior_v3/calibration/off_axis_camera_gate/ApartmentExterior_OffAxis_Azimuth25.png" id="4_25"]
+[ext_resource type="Texture2D" path="res://assets/modular_v2/apartment_exterior_v3/calibration/off_axis_camera_gate/ApartmentExterior_OffAxis_Azimuth60.png" id="5_60"]
+
+[node name="SteamtekApartmentExteriorOffAxisCameraGate" type="Node2D"]
+editor_description = "Golden-building camera gate. Compare the four fixed orthographic azimuths before locking Steamtek's off-axis 2.5D camera contract."
+
+[node name="Title" type="Label" parent="."]
+offset_left = -620.0
+offset_top = -730.0
+offset_right = 620.0
+offset_bottom = -686.0
+theme_override_colors/font_color = Color(0.94, 0.63, 0.25, 1)
+theme_override_font_sizes/font_size = 30
+text = "STEAMTEK — FIXED OFF-AXIS 2.5D CAMERA GATE — 60° LOCKED"
+horizontal_alignment = 1
+
+[node name="Instructions" type="Label" parent="."]
+offset_left = -620.0
+offset_top = -680.0
+offset_right = 620.0
+offset_bottom = -624.0
+theme_override_colors/font_color = Color(0.78, 0.85, 0.92, 1)
+theme_override_font_sizes/font_size = 17
+text = "Same building • Orthographic • 30° elevation • No roll\nCompare facade readability, side-wall depth, roof footprint, and usable character space."
+horizontal_alignment = 1
+
+[node name="Azimuth45" type="Node2D" parent="."]
+position = Vector2(-500, -360)
+
+[node name="Render" type="Sprite2D" parent="Azimuth45"]
+scale = Vector2(0.16, 0.16)
+texture = ExtResource("1_45")
+
+[node name="Label" type="Label" parent="Azimuth45"]
+offset_left = -245.0
+offset_top = -215.0
+offset_right = 245.0
+offset_bottom = -180.0
+theme_override_colors/font_color = Color(0.88, 0.9, 0.94, 1)
+theme_override_font_sizes/font_size = 20
+text = "45° — CURRENT / SYMMETRICAL"
+horizontal_alignment = 1
+
+[node name="BasisGuide" type="Line2D" parent="Azimuth45"]
+position = Vector2(-105, 225)
+points = PackedVector2Array(0, 0, 104.727, 52.364, 209.455, 0, 104.727, -52.364, 0, 0)
+width = 3.0
+default_color = Color(0.18, 0.78, 1, 0.95)
+
+[node name="GuideLabel" type="Label" parent="Azimuth45"]
+offset_left = -245.0
+offset_top = 278.0
+offset_right = 245.0
+offset_bottom = 306.0
+theme_override_colors/font_color = Color(0.45, 0.78, 0.94, 1)
+theme_override_font_sizes/font_size = 14
+text = "equal projected axes"
+horizontal_alignment = 1
+
+[node name="Azimuth35" type="Node2D" parent="."]
+position = Vector2(500, -360)
+
+[node name="Render" type="Sprite2D" parent="Azimuth35"]
+scale = Vector2(0.16, 0.16)
+texture = ExtResource("2_35")
+
+[node name="Label" type="Label" parent="Azimuth35"]
+offset_left = -245.0
+offset_top = -215.0
+offset_right = 245.0
+offset_bottom = -180.0
+theme_override_colors/font_color = Color(0.88, 0.9, 0.94, 1)
+theme_override_font_sizes/font_size = 20
+text = "35° — MILD OFF-AXIS"
+horizontal_alignment = 1
+
+[node name="BasisGuide" type="Line2D" parent="Azimuth35"]
+position = Vector2(-103, 225)
+points = PackedVector2Array(0, 0, 84.95, 60.661, 206.272, 18.186, 121.322, -42.475, 0, 0)
+width = 3.0
+default_color = Color(0.18, 0.78, 1, 0.95)
+
+[node name="GuideLabel" type="Label" parent="Azimuth35"]
+offset_left = -245.0
+offset_top = 278.0
+offset_right = 245.0
+offset_bottom = 306.0
+theme_override_colors/font_color = Color(0.45, 0.78, 0.94, 1)
+theme_override_font_sizes/font_size = 14
+text = "balanced off-axis footprint"
+horizontal_alignment = 1
+
+[node name="Azimuth30" type="Node2D" parent="."]
+position = Vector2(-500, 360)
+
+[node name="Render" type="Sprite2D" parent="Azimuth30"]
+scale = Vector2(0.16, 0.16)
+texture = ExtResource("3_30")
+
+[node name="Label" type="Label" parent="Azimuth30"]
+offset_left = -245.0
+offset_top = -215.0
+offset_right = 245.0
+offset_bottom = -180.0
+theme_override_colors/font_color = Color(0.98, 0.7, 0.28, 1)
+theme_override_font_sizes/font_size = 20
+text = "30° — STRONG OFF-AXIS"
+horizontal_alignment = 1
+
+[node name="BasisGuide" type="Line2D" parent="Azimuth30"]
+position = Vector2(-101, 225)
+points = PackedVector2Array(0, 0, 74.054, 64.132, 202.318, 27.106, 128.264, -37.027, 0, 0)
+width = 3.0
+default_color = Color(0.98, 0.57, 0.18, 0.98)
+
+[node name="GuideLabel" type="Label" parent="Azimuth30"]
+offset_left = -245.0
+offset_top = 278.0
+offset_right = 245.0
+offset_bottom = 306.0
+theme_override_colors/font_color = Color(0.98, 0.65, 0.28, 1)
+theme_override_font_sizes/font_size = 14
+text = "clear dominant facade + useful side depth"
+horizontal_alignment = 1
+
+[node name="Azimuth25" type="Node2D" parent="."]
+position = Vector2(500, 360)
+
+[node name="Render" type="Sprite2D" parent="Azimuth25"]
+scale = Vector2(0.16, 0.16)
+texture = ExtResource("4_25")
+
+[node name="Label" type="Label" parent="Azimuth25"]
+offset_left = -245.0
+offset_top = -215.0
+offset_right = 245.0
+offset_bottom = -180.0
+theme_override_colors/font_color = Color(0.88, 0.9, 0.94, 1)
+theme_override_font_sizes/font_size = 20
+text = "25° — EXTREME OFF-AXIS"
+horizontal_alignment = 1
+
+[node name="BasisGuide" type="Line2D" parent="Azimuth25"]
+position = Vector2(-98, 225)
+points = PackedVector2Array(0, 0, 62.593, 67.115, 196.823, 35.819, 134.23, -31.296, 0, 0)
+width = 3.0
+default_color = Color(0.18, 0.78, 1, 0.95)
+
+[node name="GuideLabel" type="Label" parent="Azimuth25"]
+offset_left = -245.0
+offset_top = 278.0
+offset_right = 245.0
+offset_bottom = 306.0
+theme_override_colors/font_color = Color(0.45, 0.78, 0.94, 1)
+theme_override_font_sizes/font_size = 14
+text = "maximum facade dominance / narrow side plane"
+horizontal_alignment = 1
+
+[node name="Azimuth60" type="Node2D" parent="."]
+position = Vector2(0, 1050)
+
+[node name="Render" type="Sprite2D" parent="Azimuth60"]
+scale = Vector2(0.16, 0.16)
+texture = ExtResource("5_60")
+
+[node name="Label" type="Label" parent="Azimuth60"]
+offset_left = -300.0
+offset_top = -215.0
+offset_right = 300.0
+offset_bottom = -180.0
+theme_override_colors/font_color = Color(0.98, 0.7, 0.28, 1)
+theme_override_font_sizes/font_size = 22
+text = "60° — APPROVED / LOCKED STEAMTEK VIEW"
+horizontal_alignment = 1
+
+[node name="BasisGuide" type="Line2D" parent="Azimuth60"]
+position = Vector2(-103, 225)
+points = PackedVector2Array(0, 0, 128.264, 37.027, 202.318, -27.105, 74.054, -64.132, 0, 0)
+width = 4.0
+default_color = Color(0.98, 0.57, 0.18, 0.98)
+
+[node name="GuideLabel" type="Label" parent="Azimuth60"]
+offset_left = -300.0
+offset_top = 278.0
+offset_right = 300.0
+offset_bottom = 306.0
+theme_override_colors/font_color = Color(0.98, 0.65, 0.28, 1)
+theme_override_font_sizes/font_size = 14
+text = "custom parallelogram basis — not the legacy 256×128 diamond"
+horizontal_alignment = 1
