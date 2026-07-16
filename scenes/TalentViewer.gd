@@ -148,8 +148,8 @@ func _build_talent_ui() -> void:
 	add_child(backdrop)
 
 	var main_panel = Panel.new()
-	main_panel.position = Vector2(460, 195)
-	main_panel.size = Vector2(1070, 740)
+	main_panel.position = Vector2(340, 195)
+	main_panel.size = Vector2(1220, 740)
 	main_panel.add_theme_stylebox_override("panel", main._make_flat_style(Color(0.043, 0.086, 0.086)))
 	add_child(main_panel)
 
@@ -263,13 +263,13 @@ func _build_talent_ui() -> void:
 	# columns without a linked Elite Profession just show blank space.
 	talent_column_labels_container = HBoxContainer.new()
 	talent_column_labels_container.position = Vector2(250, 122)
-	talent_column_labels_container.size = Vector2(800, 30)
+	talent_column_labels_container.size = Vector2(850, 30)
 	talent_column_labels_container.add_theme_constant_override("separation", 14)
 	main_panel.add_child(talent_column_labels_container)
 
 	talent_grid_container = HBoxContainer.new()
 	talent_grid_container.position = Vector2(250, 164)
-	talent_grid_container.size = Vector2(800, 330)
+	talent_grid_container.size = Vector2(850, 330)
 	talent_grid_container.add_theme_constant_override("separation", 14)
 	main_panel.add_child(talent_grid_container)
 
@@ -309,7 +309,7 @@ func _build_talent_ui() -> void:
 	# currently-viewed profession.
 	var grants_panel = Panel.new()
 	grants_panel.position = Vector2(250, 590)
-	grants_panel.size = Vector2(395, 110)
+	grants_panel.size = Vector2(470, 110)
 	grants_panel.add_theme_stylebox_override("panel", main._make_flat_style(Color(0.03, 0.06, 0.06)))
 	main_panel.add_child(grants_panel)
 
@@ -333,8 +333,8 @@ func _build_talent_ui() -> void:
 	grants_scroll.add_child(talent_details_label)
 
 	var learned_panel = Panel.new()
-	learned_panel.position = Vector2(655, 590)
-	learned_panel.size = Vector2(395, 110)
+	learned_panel.position = Vector2(730, 590)
+	learned_panel.size = Vector2(470, 110)
 	learned_panel.add_theme_stylebox_override("panel", main._make_flat_style(Color(0.03, 0.06, 0.06)))
 	main_panel.add_child(learned_panel)
 
@@ -545,18 +545,18 @@ func _refresh_talent_grid(profession_name: String) -> void:
 		var elites_requiring_column = _get_elites_requiring(profession_name, top_tier_path_name)
 
 		var col_label_box = VBoxContainer.new()
-		col_label_box.custom_minimum_size = Vector2(180, 30)
+		col_label_box.custom_minimum_size = Vector2(155, 30)
 		col_label_box.add_theme_constant_override("separation", 2)
 		talent_column_labels_container.add_child(col_label_box)
 
 		for elite_name in elites_requiring_column:
 			var col_link_btn = _make_profession_link_button(elite_name)
-			col_link_btn.custom_minimum_size = Vector2(180, 15)
+			col_link_btn.custom_minimum_size = Vector2(155, 15)
 			col_label_box.add_child(col_link_btn)
 
 	for column in columns:
 		var col_box = VBoxContainer.new()
-		col_box.custom_minimum_size = Vector2(180, 0)
+		col_box.custom_minimum_size = Vector2(155, 0)
 		col_box.add_theme_constant_override("separation", 6)
 		talent_grid_container.add_child(col_box)
 
@@ -595,7 +595,7 @@ func _refresh_talent_grid(profession_name: String) -> void:
 
 			var btn = Button.new()
 			btn.text = main._get_talent_box_label(profession_name, path_name)
-			btn.custom_minimum_size = Vector2(170, 70)
+			btn.custom_minimum_size = Vector2(145, 70)
 			btn.focus_mode = Control.FOCUS_NONE
 			btn.add_theme_stylebox_override("normal", style)
 			btn.add_theme_stylebox_override("hover", style)
@@ -641,7 +641,7 @@ func _refresh_talent_grid(profession_name: String) -> void:
 		# flavorful names instead of "Blade I/II/III/IV".
 		var tree_label = Label.new()
 		tree_label.text = column["base"]
-		tree_label.custom_minimum_size = Vector2(170, 0)
+		tree_label.custom_minimum_size = Vector2(145, 0)
 		tree_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		tree_label.modulate = Color(0.6, 0.75, 0.75)
 		tree_label.add_theme_font_size_override("font_size", 13)

@@ -4,7 +4,7 @@ extends Control
 # CraftingBook.gd
 # ============================================================
 # The Crafting Book panel (recipe list + Assembly screen), pulled out
-# of main.gd (part of the ongoing split — see GameData.gd and
+# of main.gd (part of the ongoing split -- see GameData.gd and
 # TalentViewer.gd for earlier passes). Attached to the CraftingBookUI
 # Control node, instantiated by main.gd's _build_crafting_book_ui(),
 # which sets `main` below before calling build().
@@ -42,7 +42,7 @@ const RANGED_WEAPON_CLASSES = ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotg
 # alone (e.g. Med Crafting Kit, or the Ordnance Specialist launchers)
 # just needs that profession unlocked at all. An optional
 # "requires_box" alongside it narrows that down to a specific rank
-# within that profession (e.g. "Crafting II" — Workbench Basics/Fine
+# within that profession (e.g. "Crafting II" -- Workbench Basics/Fine
 # Tuning/Quality Assembly aren't separate professions, just Scrap
 # Tinkerer's own Crafting column ranks).
 func _recipe_is_unlocked(recipe: Dictionary) -> bool:
@@ -113,7 +113,7 @@ func _build_crafting_book_ui() -> void:
 	close_button.pressed.connect(func(): visible = false)
 	main_panel.add_child(close_button)
 
-	# Left panel — ingredient breakdown for the selected recipe, plus
+	# Left panel -- ingredient breakdown for the selected recipe, plus
 	# the actual Craft button and result message.
 	var details_panel = Panel.new()
 	details_panel.position = Vector2(20, 50)
@@ -156,7 +156,7 @@ func _build_crafting_book_ui() -> void:
 	crafting_book_result_label.modulate = Color(0.9, 0.85, 0.6)
 	details_panel.add_child(crafting_book_result_label)
 
-	# Right panel — scrollable Class > Type > Subclass > Recipe list.
+	# Right panel -- scrollable Class > Type > Subclass > Recipe list.
 	var list_panel = Panel.new()
 	list_panel.position = Vector2(420, 50)
 	list_panel.size = Vector2(560, 660)
@@ -302,7 +302,7 @@ func _find_first_matching_instance(requirement_key: String) -> String:
 	return ""
 
 # Switches the right panel from the schematic browser into the
-# Assembly step for the currently selected recipe — this is where the
+# Assembly step for the currently selected recipe -- this is where the
 # player picks exactly which resource stack fills each slot and sees
 # a live projected-quality preview before committing, similar in
 # spirit to SWG's assembly screen (not its exact formulas or look).
@@ -385,7 +385,7 @@ func _refresh_crafting_assembly_view() -> void:
 	_update_assembly_preview()
 
 # Live preview of what the current resource selections would produce
-# — our own version of "see how resources affect the build" before
+# -- our own version of "see how resources affect the build" before
 # committing, not a copy of any specific game's exact formula/look.
 func _update_assembly_preview() -> void:
 	var recipe = GameData.recipes[crafting_assembly_recipe_index]
@@ -422,7 +422,7 @@ func _update_assembly_preview() -> void:
 
 # Commits the craft using the SPECIFIC resource stacks chosen in
 # Assembly, rather than auto-picking from main.inventory like the old
-# flow — this is the actual "Assemble" action.
+# flow -- this is the actual "Assemble" action.
 func _execute_assembly_craft() -> void:
 	var recipe = GameData.recipes[crafting_assembly_recipe_index]
 

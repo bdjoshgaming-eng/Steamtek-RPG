@@ -6,12 +6,22 @@ extends Node3D
 const WALK_SPEED := 4.2
 const MOVEMENT_ACCELERATION := 18.0
 const MOVEMENT_DECELERATION := 24.0
-const TURN_RESPONSE := 12.0
+# Fast enough to align the body with a new movement direction before the
+# first planted step reads, while still using continuous yaw interpolation.
+const TURN_RESPONSE := 24.0
+# C002's authored visual-forward axis is rotated from the movement root.
+# This measured correction aligns the rig with camera-relative travel.
+const MODEL_FORWARD_YAW_OFFSET := deg_to_rad(40.0)
 const GRAVITY := 18.0
 const CAMERA_POSITION := Vector3(8.660254, 10.0, 15.0)
 const CAMERA_SIZE := 18.0
 const PAINTED_WALL_TEXTURE := "res://assets/modular_v2/apartment_exterior_v3/production/SMV3_FrontPlain.png"
-const CHARACTER_SCENE := "res://assets/characters/npc/Steamtek_C002/production/STK_C002_RigProof_v1.glb"
+const DEFAULT_CHARACTER_SCENE := "res://assets/characters/npc/Steamtek_C002/production/STK_C002_RigProof_v1.glb"
+
+## Allows the proven hybrid controller to review replacement character meshes
+## without overwriting or forking the movement/animation implementation.
+@export_file("*.glb") var character_scene_path := DEFAULT_CHARACTER_SCENE
+@export var character_instance_name := "STK_C002_RigProof"
 
 var player: CharacterBody3D
 var player_visual: Node3D
@@ -20,6 +30,14 @@ var character_animation_player: AnimationPlayer
 var idle_animation := ""
 var walk_animation := ""
 var active_animation := ""
+var diagnostics_label: Label
+var force_stationary_walk := false
+var target_facing_yaw := 0.0
+var review_environment: Environment
+var atmospheric_moon: DirectionalLight3D
+var neutral_review_key: DirectionalLight3D
+var atmospheric_practicals: Array[OmniLight3D] = []
+var atmospheric_lighting_enabled := true
 
 
 func _ready() -> void:
@@ -36,6 +54,8 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if player == null or camera == null:
 		return
+	if Input.is_action_just_pressed("ui_accept"):
+		force_stationary_walk = not force_stationary_walk
 
 	var input_vector := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var camera_forward := -camera.global_transform.basis.z
@@ -50,7 +70,11 @@ func _physics_process(delta: float) -> void:
 	# the live 3D character never visibly snaps between compass directions.
 	var input_strength := clampf(input_vector.length(), 0.0, 1.0)
 	var move_direction := camera_right * input_vector.x + camera_forward * -input_vector.y
-	if move_direction.length_squared() > 0.001:
+	if force_stationary_walk:
+		player.velocity.x = move_toward(player.velocity.x, 0.0, MOVEMENT_DECELERATION * delta)
+		player.velocity.z = move_toward(player.velocity.z, 0.0, MOVEMENT_DECELERATION * delta)
+		_play_character_animation(walk_animation)
+	elif move_direction.length_squared() > 0.001:
 		move_direction = move_direction.normalized()
 		var target_velocity := move_direction * WALK_SPEED * input_strength
 		player.velocity.x = move_toward(
@@ -64,11 +88,11 @@ func _physics_process(delta: float) -> void:
 			MOVEMENT_ACCELERATION * delta
 		)
 
-		var target_yaw := atan2(move_direction.x, move_direction.z)
+		target_facing_yaw = atan2(move_direction.x, move_direction.z) + MODEL_FORWARD_YAW_OFFSET
 		var turn_weight := 1.0 - exp(-TURN_RESPONSE * delta)
 		player_visual.rotation.y = lerp_angle(
 			player_visual.rotation.y,
-			target_yaw,
+			target_facing_yaw,
 			turn_weight
 		)
 		_play_character_animation(walk_animation)
@@ -91,19 +115,25 @@ func _physics_process(delta: float) -> void:
 		player.velocity.y = -0.2
 
 	player.move_and_slide()
+	_update_animation_telemetry()
+
+
+func _unhandled_key_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_L:
+		atmospheric_lighting_enabled = not atmospheric_lighting_enabled
+		_apply_lighting_review_mode()
+		get_viewport().set_input_as_handled()
+
 
 func _build_environment() -> void:
 	var world_environment := WorldEnvironment.new()
 	world_environment.name = "NightEnvironment"
-	var environment := Environment.new()
-	environment.background_mode = Environment.BG_COLOR
-	environment.background_color = Color("071018")
-	environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	environment.ambient_light_color = Color("31445b")
-	environment.ambient_light_energy = 0.55
-	environment.reflected_light_source = Environment.REFLECTION_SOURCE_DISABLED
-	environment.tonemap_mode = Environment.TONE_MAPPER_FILMIC
-	world_environment.environment = environment
+	review_environment = Environment.new()
+	review_environment.background_mode = Environment.BG_COLOR
+	review_environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+	review_environment.reflected_light_source = Environment.REFLECTION_SOURCE_DISABLED
+	review_environment.tonemap_mode = Environment.TONE_MAPPER_FILMIC
+	world_environment.environment = review_environment
 	add_child(world_environment)
 
 
@@ -119,18 +149,28 @@ func _build_camera() -> void:
 
 
 func _build_lighting() -> void:
-	var moon := DirectionalLight3D.new()
-	moon.name = "MoonKey"
-	moon.rotation_degrees = Vector3(-52.0, -25.0, 0.0)
-	moon.light_color = Color("9cbce8")
-	moon.light_energy = 1.35
-	moon.shadow_enabled = true
-	moon.directional_shadow_max_distance = 40.0
-	add_child(moon)
+	atmospheric_moon = DirectionalLight3D.new()
+	atmospheric_moon.name = "MoonKey"
+	atmospheric_moon.rotation_degrees = Vector3(-52.0, -25.0, 0.0)
+	atmospheric_moon.light_color = Color("9cbce8")
+	atmospheric_moon.light_energy = 1.35
+	atmospheric_moon.shadow_enabled = true
+	atmospheric_moon.directional_shadow_max_distance = 40.0
+	add_child(atmospheric_moon)
 
 	_add_omni_light("CyanPractical", Vector3(-4.5, 2.5, -1.0), Color("16d9ff"), 7.0, 7.5)
 	_add_omni_light("MagentaPractical", Vector3(4.2, 1.8, 1.0), Color("ff2aa8"), 5.0, 6.0)
 	_add_omni_light("AmberPractical", Vector3(0.0, 3.0, -4.5), Color("ff9b38"), 4.0, 5.5)
+
+	neutral_review_key = DirectionalLight3D.new()
+	neutral_review_key.name = "NeutralMaterialReviewKey"
+	neutral_review_key.rotation_degrees = Vector3(-48.0, -32.0, 0.0)
+	neutral_review_key.light_color = Color("f4f1e8")
+	neutral_review_key.light_energy = 1.45
+	neutral_review_key.shadow_enabled = true
+	neutral_review_key.directional_shadow_max_distance = 40.0
+	add_child(neutral_review_key)
+	_apply_lighting_review_mode()
 
 
 func _add_omni_light(node_name: String, world_position: Vector3, color: Color, energy: float, range_value: float) -> void:
@@ -142,6 +182,29 @@ func _add_omni_light(node_name: String, world_position: Vector3, color: Color, e
 	light.omni_range = range_value
 	light.shadow_enabled = true
 	add_child(light)
+	atmospheric_practicals.append(light)
+
+
+func _apply_lighting_review_mode() -> void:
+	if review_environment == null or atmospheric_moon == null or neutral_review_key == null:
+		return
+	if atmospheric_lighting_enabled:
+		review_environment.background_color = Color("071018")
+		review_environment.ambient_light_color = Color("31445b")
+		review_environment.ambient_light_energy = 0.55
+		atmospheric_moon.visible = true
+		neutral_review_key.visible = false
+		for light in atmospheric_practicals:
+			light.visible = true
+	else:
+		review_environment.background_color = Color("1a1c20")
+		review_environment.ambient_light_color = Color("d8dce2")
+		review_environment.ambient_light_energy = 0.82
+		atmospheric_moon.visible = false
+		neutral_review_key.visible = true
+		for light in atmospheric_practicals:
+			light.visible = false
+	_update_animation_telemetry()
 
 
 func _build_floor() -> void:
@@ -242,20 +305,20 @@ func _build_player() -> void:
 	player.add_child(collision)
 
 	player_visual = Node3D.new()
-	player_visual.name = "CharacterVisual_AnimatedRigProof"
+	player_visual.name = "CharacterVisual_%s" % character_instance_name
 	player.add_child(player_visual)
 
-	var packed_character := load(CHARACTER_SCENE) as PackedScene
+	var packed_character := load(character_scene_path) as PackedScene
 	if packed_character == null:
-		push_error("Animated character scene is unavailable: %s" % CHARACTER_SCENE)
+		push_error("Animated character scene is unavailable: %s" % character_scene_path)
 		return
 
 	var character_instance := packed_character.instantiate()
-	character_instance.name = "STK_C002_RigProof"
+	character_instance.name = character_instance_name
 	player_visual.add_child(character_instance)
 	character_animation_player = _find_animation_player(character_instance)
 	if character_animation_player == null:
-		push_error("No AnimationPlayer was imported from %s" % CHARACTER_SCENE)
+		push_error("No AnimationPlayer was imported from %s" % character_scene_path)
 		return
 
 	idle_animation = _find_animation_name("STK_IDLE")
@@ -263,6 +326,9 @@ func _build_player() -> void:
 	if idle_animation.is_empty() or walk_animation.is_empty():
 		push_error("Required STK_IDLE/STK_WALK animations were not found. Imported: %s" % str(character_animation_player.get_animation_list()))
 		return
+	_configure_animation_loop(idle_animation)
+	_configure_animation_loop(walk_animation)
+	_print_imported_animation_report()
 	_play_character_animation(idle_animation)
 
 
@@ -290,7 +356,55 @@ func _play_character_animation(animation_name: String) -> void:
 	if character_animation_player == null or animation_name.is_empty() or active_animation == animation_name:
 		return
 	character_animation_player.play(animation_name, 0.16)
+	character_animation_player.speed_scale = 1.0
 	active_animation = animation_name
+
+
+func _configure_animation_loop(animation_name: String) -> void:
+	var animation := character_animation_player.get_animation(animation_name)
+	if animation == null:
+		return
+	# Blender/glTF currently imports both clips with LOOP_NONE. The controller
+	# intentionally does not restart an already-active clip, so a non-looping
+	# walk freezes after its first second while world movement continues.
+	animation.loop_mode = Animation.LOOP_LINEAR
+
+
+func _print_imported_animation_report() -> void:
+	for animation_name in [idle_animation, walk_animation]:
+		var animation := character_animation_player.get_animation(animation_name)
+		if animation == null:
+			continue
+		print(
+			"STEAMTEK_ANIMATION name=%s length=%.3f tracks=%d loop=%d" % [
+				animation_name,
+				animation.length,
+				animation.get_track_count(),
+				animation.loop_mode,
+			]
+		)
+
+
+func _update_animation_telemetry() -> void:
+	if diagnostics_label == null or character_animation_player == null:
+		return
+	var current := character_animation_player.current_animation
+	var animation := character_animation_player.get_animation(current)
+	var horizontal_speed := Vector2(player.velocity.x, player.velocity.z).length()
+	if animation == null:
+		diagnostics_label.text = "ANIMATION TELEMETRY\nNo active imported animation"
+		return
+	diagnostics_label.text = (
+		"ANIMATION TELEMETRY\n"
+		+ "Clip: %s\n" % current
+		+ "Position: %.3f / %.3f sec\n" % [character_animation_player.current_animation_position, animation.length]
+		+ "Playback speed: %.2f | Tracks: %d | Loop mode: %d\n" % [character_animation_player.speed_scale, animation.get_track_count(), animation.loop_mode]
+		+ "Horizontal speed: %.3f / %.3f\n" % [horizontal_speed, WALK_SPEED]
+		+ "Facing: current %.1f deg | target %.1f deg\n" % [rad_to_deg(player_visual.rotation.y), rad_to_deg(target_facing_yaw)]
+		+ "Model-forward correction: %+.1f deg (locked)\n" % rad_to_deg(MODEL_FORWARD_YAW_OFFSET)
+		+ "Stationary walk test: %s (SPACE to toggle)\n" % ["ON" if force_stationary_walk else "OFF"]
+		+ "Lighting: %s (L to toggle)" % ["STEAMTEK ATMOSPHERE" if atmospheric_lighting_enabled else "NEUTRAL MATERIAL REVIEW"]
+	)
 
 
 func _make_material(color: Color, metallic: float, roughness: float) -> StandardMaterial3D:
@@ -322,14 +436,27 @@ func _build_interface() -> void:
 
 	var label := Label.new()
 	label.position = Vector2(42, 38)
-	label.text = "STEAMTEK - LIVE 3D HYBRID PROOF\nWASD: move the animated 3D rig\nLocked camera: 60 deg azimuth / 30 deg elevation / orthographic\nTest: walk in front of and behind the wall art and 3D structures"
+	label.text = "STEAMTEK - LIVE 3D HYBRID PROOF\nWASD: move | SPACE: stationary walk | L: lighting review mode\nLocked camera: 60 deg azimuth / 30 deg elevation / orthographic\nTest: movement, occlusion, deformation, and material response"
 	label.add_theme_color_override("font_color", Color("d7e9ff"))
 	label.add_theme_font_size_override("font_size", 19)
 	canvas.add_child(label)
 
 	var badge := Label.new()
 	badge.position = Vector2(24, 174)
-	badge.text = "CYAN + MAGENTA: runtime lights | painted wall: existing Steamtek PNG | character: animated 3D rig proof"
+	badge.text = "CYAN + MAGENTA: runtime lights | painted wall: existing Steamtek PNG | character: %s" % character_instance_name
 	badge.add_theme_color_override("font_color", Color("50e8ff"))
 	badge.add_theme_font_size_override("font_size", 16)
 	canvas.add_child(badge)
+
+	var diagnostics_panel := ColorRect.new()
+	diagnostics_panel.position = Vector2(24, 214)
+	diagnostics_panel.size = Vector2(620, 188)
+	diagnostics_panel.color = Color(0.015, 0.025, 0.04, 0.90)
+	canvas.add_child(diagnostics_panel)
+
+	diagnostics_label = Label.new()
+	diagnostics_label.position = Vector2(42, 228)
+	diagnostics_label.text = "ANIMATION TELEMETRY\nWaiting for imported animation data..."
+	diagnostics_label.add_theme_color_override("font_color", Color("f4d58a"))
+	diagnostics_label.add_theme_font_size_override("font_size", 16)
+	canvas.add_child(diagnostics_label)

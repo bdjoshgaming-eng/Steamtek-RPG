@@ -4,7 +4,7 @@ extends Control
 # CraftingResultPopup.gd
 # ============================================================
 # The "Item Crafted!" popup, pulled out of main.gd (part of the
-# ongoing split — see GameData.gd and TalentViewer.gd for earlier
+# ongoing split -- see GameData.gd and TalentViewer.gd for earlier
 # passes). Attached to the CraftingResultUI Control node, instantiated
 # by main.gd's _build_crafting_result_ui(), which sets `main` below
 # before calling build(). The Crafting Book (still in main.gd for now)

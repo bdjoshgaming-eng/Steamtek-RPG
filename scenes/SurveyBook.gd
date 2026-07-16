@@ -4,14 +4,14 @@ extends Control
 # SurveyBook.gd
 # ============================================================
 # The Survey Book panel, pulled out of main.gd (part of the ongoing
-# split — see GameData.gd and TalentViewer.gd for earlier passes).
+# split -- see GameData.gd and TalentViewer.gd for earlier passes).
 # Attached to the SurveyBookUI Control node, instantiated by main.gd's
 # _build_survey_book_ui(), which sets `main` below before calling
 # build().
 #
 # This one leans on a LOT of core game state (resource tracking,
 # hotspots, scanning XP, etc.) since scanning/sampling is a core
-# mechanic, not just UI — everything not exclusive to this panel is
+# mechanic, not just UI -- everything not exclusive to this panel is
 # prefixed with "main." accordingly. _make_crafting_book_header() and
 # book_category_collapsed are also shared with the Crafting Book (both
 # use the same collapsible-category header system).
@@ -59,7 +59,7 @@ func _build_survey_book_ui() -> void:
 	close_button.pressed.connect(func(): visible = false)
 	main_panel.add_child(close_button)
 
-	# Left panel — concentration reading and Sample button. No stats.
+	# Left panel -- concentration reading and Sample button. No stats.
 	var details_panel = Panel.new()
 	details_panel.position = Vector2(20, 50)
 	details_panel.size = Vector2(320, 560)
@@ -96,7 +96,7 @@ func _build_survey_book_ui() -> void:
 	survey_book_message_label.modulate = Color(0.9, 0.85, 0.6)
 	details_panel.add_child(survey_book_message_label)
 
-	# Right panel — scrollable Class > Subclass > active resource list.
+	# Right panel -- scrollable Class > Subclass > active resource list.
 	var list_panel = Panel.new()
 	list_panel.position = Vector2(360, 50)
 	list_panel.size = Vector2(520, 560)
@@ -180,7 +180,7 @@ func _refresh_survey_book() -> void:
 				btn.pressed.connect(_select_survey_book_resource.bind(instance_name))
 				survey_book_list_container.add_child(btn)
 
-# Scans a resource — same math as the old resource_tree selection
+# Scans a resource -- same math as the old resource_tree selection
 # (nearest-hotspot concentration, Scanning XP, skill bonuses), just
 # without ever displaying main.resource_stats anywhere on this screen.
 func _select_survey_book_resource(instance_name: String) -> void:
@@ -193,8 +193,8 @@ func _select_survey_book_resource(instance_name: String) -> void:
 	var concentration = int(round(100 * proximity))
 	concentration = max(concentration, 1)
 
-	var scanning_nodes = main._get_scrap_tinkerer_rank_count("Scanning")
-	var mastery_nodes = main._get_scrap_tinkerer_rank_count("Fabrication Mastery")
+	var scanning_nodes = main._get_profession_rank_count("Scanning")
+	var mastery_nodes = main._get_profession_rank_count("Fabrication Mastery")
 	concentration += (scanning_nodes * 5) + (mastery_nodes * 2)
 	concentration = min(concentration, 100)
 

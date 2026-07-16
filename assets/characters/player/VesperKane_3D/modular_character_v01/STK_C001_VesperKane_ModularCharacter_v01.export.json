@@ -1,0 +1,52 @@
+{
+  "character_id": "Steamtek_C001_VesperKane",
+  "contract": "vesper_modular_character_v01",
+  "source_blend": "Steamtek_C001_VesperKane_ModularCharacter_v01.blend",
+  "output_glb": "STK_C001_VesperKane_ModularCharacter_v01.glb",
+  "bone_count": 706,
+  "body_mesh_count": 20,
+  "outfit_mesh_count": 31,
+  "body_regions": [
+    "foot_l",
+    "foot_r",
+    "forearm_r",
+    "hand_r",
+    "head",
+    "mechanical_arm_l",
+    "neck",
+    "pelvis",
+    "shin_l",
+    "shin_r",
+    "thigh_l",
+    "thigh_r",
+    "torso",
+    "upper_arm_r"
+  ],
+  "equipment_slots": [
+    "boots",
+    "gloves",
+    "headgear",
+    "hip_right",
+    "legs",
+    "outer_torso",
+    "shoulders",
+    "waist"
+  ],
+  "mechanical_arm_side": "physical_left",
+  "skeleton_changed": false,
+  "animation_changed": false,
+  "scale_changed": false,
+  "runtime_lighting_only": true,
+  "actions": [
+    {
+      "name": "STK_IDLE",
+      "frame_start": 1.0,
+      "frame_end": 8.0
+    },
+    {
+      "name": "STK_WALK",
+      "frame_start": 1.0,
+      "frame_end": 25.0
+    }
+  ]
+}

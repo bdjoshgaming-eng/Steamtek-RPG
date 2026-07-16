@@ -1,0 +1,35 @@
+{
+  "source_blend": "C:\\Users\\bdjos\\Documents\\Codex\\2026-07-10\\can\\work\\vesper\\Steamtek_C001_VesperKane_ProductionMesh_v01.blend",
+  "output_glb": "C:\\Users\\bdjos\\Documents\\Codex\\2026-07-10\\can\\work\\vesper\\STK_C001_VesperKane_ProductionMesh_v01.glb",
+  "character_id": "Steamtek_C001_VesperKane",
+  "stage": "production_mesh_v01_geometry_and_weights",
+  "mesh_count": 34,
+  "vertex_count": 3954,
+  "bone_count": 706,
+  "mechanical_arm_side": "physical_left",
+  "uv_ready": true,
+  "runtime_lighting_only": true,
+  "actions": [
+    {
+      "name": "STK_IDLE",
+      "frame_start": 1.0,
+      "frame_end": 8.0
+    },
+    {
+      "name": "STK_WALK",
+      "frame_start": 1.0,
+      "frame_end": 25.0
+    }
+  ],
+  "export_kwargs": {
+    "filepath": "C:\\Users\\bdjos\\Documents\\Codex\\2026-07-10\\can\\work\\vesper\\STK_C001_VesperKane_ProductionMesh_v01.glb",
+    "export_format": "GLB",
+    "use_selection": true,
+    "export_animations": true,
+    "export_skins": true,
+    "export_morph": true,
+    "export_yup": true,
+    "export_apply": false,
+    "export_animation_mode": "ACTIONS"
+  }
+}

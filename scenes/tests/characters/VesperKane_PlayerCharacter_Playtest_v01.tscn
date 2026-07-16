@@ -1,0 +1,150 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="Script" path="res://scenes/tests/characters/vesper_character_playtest.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/characters/player/VesperKane_PlayerCharacter_v01.tscn" id="2_character"]
+[ext_resource type="Script" path="res://scenes/interactions/steamtek_interactable_3d.gd" id="3_interactable"]
+[ext_resource type="Script" path="res://scenes/interactions/steamtek_test_door_3d.gd" id="4_door"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SkyMaterial"]
+sky_top_color = Color(0.003, 0.009, 0.02, 1)
+sky_horizon_color = Color(0.02, 0.035, 0.055, 1)
+ground_bottom_color = Color(0.002, 0.004, 0.008, 1)
+ground_horizon_color = Color(0.015, 0.025, 0.04, 1)
+
+[sub_resource type="Sky" id="Sky"]
+sky_material = SubResource("SkyMaterial")
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 2
+sky = SubResource("Sky")
+ambient_light_source = 3
+ambient_light_color = Color(0.18, 0.28, 0.42, 1)
+ambient_light_energy = 0.45
+tonemap_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="FloorMaterial"]
+albedo_color = Color(0.025, 0.045, 0.075, 1)
+metallic = 0.35
+roughness = 0.72
+
+[sub_resource type="BoxMesh" id="FloorMesh"]
+material = SubResource("FloorMaterial")
+size = Vector3(22, 0.2, 22)
+
+[sub_resource type="BoxShape3D" id="FloorCollision"]
+size = Vector3(22, 0.2, 22)
+
+[sub_resource type="StandardMaterial3D" id="ObstacleMaterial"]
+albedo_color = Color(0.11, 0.12, 0.15, 1)
+metallic = 0.55
+roughness = 0.58
+
+[sub_resource type="BoxMesh" id="ObstacleMesh"]
+material = SubResource("ObstacleMaterial")
+size = Vector3(2.4, 2.1, 0.45)
+
+[sub_resource type="BoxShape3D" id="ObstacleCollision"]
+size = Vector3(2.4, 2.1, 0.45)
+
+[sub_resource type="BoxShape3D" id="DoorInteractionShape"]
+size = Vector3(3.0, 2.35, 2.0)
+
+[sub_resource type="LabelSettings" id="LabelSettings"]
+font_size = 20
+font_color = Color(0.82, 0.9, 1, 1)
+outline_size = 5
+outline_color = Color(0.005, 0.01, 0.02, 0.9)
+
+[node name="VesperKane_PlayerCharacter_Playtest_v01" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment")
+
+[node name="KeyLight" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-52, -38, 0)
+light_color = Color(0.58, 0.76, 1, 1)
+light_energy = 1.1
+shadow_enabled = true
+
+[node name="WarmRim" type="OmniLight3D" parent="."]
+position = Vector3(-3.5, 2.8, -2.5)
+light_color = Color(1, 0.38, 0.12, 1)
+light_energy = 3.2
+omni_range = 7.0
+shadow_enabled = true
+
+[node name="Floor" type="StaticBody3D" parent="."]
+position = Vector3(0, -0.1, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("FloorMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("FloorCollision")
+
+[node name="TestDoor" type="Node3D" parent="."]
+position = Vector3(0, 0, -3.25)
+
+[node name="Visual" type="MeshInstance3D" parent="TestDoor"]
+position = Vector3(0, 1.05, 0)
+mesh = SubResource("ObstacleMesh")
+
+[node name="DoorBody" type="StaticBody3D" parent="TestDoor"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Collision" type="CollisionShape3D" parent="TestDoor/DoorBody"]
+position = Vector3(0, 1.05, 0)
+shape = SubResource("ObstacleCollision")
+
+[node name="InteractionArea" type="Area3D" parent="TestDoor"]
+position = Vector3(0, 1.05, 0.72)
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("4_door")
+visual_path = NodePath("../Visual")
+blocking_collision_path = NodePath("../DoorBody/Collision")
+closed_prompt = "Open test door"
+open_prompt = "Close test door"
+
+[node name="Collision" type="CollisionShape3D" parent="TestDoor/InteractionArea"]
+shape = SubResource("DoorInteractionShape")
+
+[node name="VesperKane_PlayerCharacter_v01" parent="." instance=ExtResource("2_character")]
+
+[node name="CameraRig" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig"]
+position = Vector3(8.66, 6.77, 5)
+projection = 1
+size = 8.5
+current = true
+
+[node name="PlaytestUI" type="CanvasLayer" parent="."]
+
+[node name="Instructions" type="Label" parent="PlaytestUI"]
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 650.0
+offset_bottom = 82.0
+text = "VESPER PRODUCTION CHARACTER PLAYTEST\nWASD: move  |  Approach the door and press E"
+label_settings = SubResource("LabelSettings")
+
+[node name="InteractionPrompt" type="Label" parent="PlaytestUI"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -190.0
+offset_top = -92.0
+offset_right = 190.0
+offset_bottom = -48.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "[ E ]  Open test door"
+label_settings = SubResource("LabelSettings")
+horizontal_alignment = 1

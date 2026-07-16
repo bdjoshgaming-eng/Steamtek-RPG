@@ -4,11 +4,11 @@ extends Control
 # TrainerDialogue.gd
 # ============================================================
 # The SWG-style trainer popup, pulled out of main.gd (part of the
-# ongoing split — see GameData.gd and TalentViewer.gd for earlier
+# ongoing split -- see GameData.gd and TalentViewer.gd for earlier
 # passes).
 #
 # UNLIKE the other panels (Talent Viewer, Ability Book, etc.), this
-# one is NOT instantiated by main.gd — it's attached directly to the
+# one is NOT instantiated by main.gd -- it's attached directly to the
 # existing TrainerUI scene node (the one already built with
 # DialogueLayout/TrainInfoLabel/TrainerOptions/TrainResultLabel
 # children). One manual step is required in the Godot editor: select
@@ -44,7 +44,7 @@ func _ready() -> void:
 # --- Trainer Dialogue (popup, SWG-style) ---
 # Replaces the old Tree/Button pane. Rather than a static UI layout that
 # can overflow with long labels, this drives a single Panel through three
-# states — GREETING, SKILL_LIST, CONFIRM — clearing and rebuilding the
+# states -- GREETING, SKILL_LIST, CONFIRM -- clearing and rebuilding the
 # option buttons in trainer_options each time the state changes.
 
 func _clear_trainer_options() -> void:
@@ -91,42 +91,46 @@ func _show_trainer_skill_list() -> void:
 	var this_trainer_profession = main.trainers[main.active_trainer_index]["profession"]
 
 	if not main.professions_unlocked.get(this_trainer_profession, false):
-		train_info_label.text = "What would you like to learn?"
-
-		var cost_text: String
-		if main.has_chosen_starting_profession:
-			cost_text = str(main.PROFESSION_ENTRY_COST) + " " + main._points_pool_label(this_trainer_profession) + ", " + str(main.ADDITIONAL_PROFESSION_COGS_COST) + " Cogs"
+		var missing = main._get_missing_profession_prereqs(this_trainer_profession)
+		if missing.size() > 0:
+			train_info_label.text = "You must " + ", ".join(missing) + " before training here."
 		else:
-			cost_text = str(main.PROFESSION_ENTRY_COST) + " " + main._points_pool_label(this_trainer_profession) + " (Free starting profession!)"
+			train_info_label.text = "Complete the unlock quest to begin training as " + this_trainer_profession + "."
+		_add_trainer_option("Back", _on_trainer_option_back_to_greeting)
+		return
 
-		_add_trainer_option("Learn " + this_trainer_profession + " (" + cost_text + ")", _make_trainer_confirm_callback(this_trainer_profession, "LEARN_PROFESSION"))
+	var prof_data = GameData.novice_professions[this_trainer_profession]
+
+	# Keystone professions: trainers direct players to the Talent Viewer
+	if prof_data.has("keystones"):
+		train_info_label.text = "I can show you techniques, but the real growth comes from experience in the field.\n\nOpen your Talent Viewer (T) to spend your earned XP on keystones."
+		_add_trainer_option("Back", _on_trainer_option_back_to_greeting)
+		return
+
+	# Path-based professions
+	if not prof_data.has("paths"):
+		train_info_label.text = "Nothing available to train right now."
 		_add_trainer_option("Back", _on_trainer_option_back_to_greeting)
 		return
 
 	var anything_shown = false
-
-	for path_name in GameData.novice_professions[this_trainer_profession]["paths"].keys():
-		var path_data = GameData.novice_professions[this_trainer_profession]["paths"][path_name]
+	for path_name in prof_data["paths"].keys():
+		var path_data = prof_data["paths"][path_name]
 		var unlocked = path_data["unlocked_nodes"]
 		var max_nodes = path_data.get("max_nodes", main.NODES_PER_PATH)
-
 		if unlocked >= max_nodes:
 			continue
-
 		if not main._is_prereq_met(this_trainer_profession, path_data):
 			continue
-
 		var costs = main._get_box_cost(path_data)
 		var xp_type = path_data["xp_type"]
 		var current_xp = main.xp_pools[xp_type]
-
 		if current_xp < costs["xp_cost"]:
 			continue
 		if main._get_points_available(this_trainer_profession) < costs["point_cost"]:
 			continue
 		if main.cogs < costs["cogs_cost"]:
 			continue
-
 		var display_text = main._get_talent_box_label(this_trainer_profession, path_name) + " (" + str(unlocked) + "/" + str(max_nodes) + ")"
 		_add_trainer_option(display_text, _make_trainer_confirm_callback(this_trainer_profession, path_name))
 		anything_shown = true
@@ -164,9 +168,9 @@ func _show_trainer_confirm() -> void:
 	_add_trainer_option("Yes", _on_trainer_confirm_yes)
 	_add_trainer_option("No", _on_trainer_confirm_no)
 
-# Lean, SWG-style confirm line for the trainer popup — just the main.cogs cost,
+# Lean, SWG-style confirm line for the trainer popup -- just the main.cogs cost,
 # no rank/node/XP detail. (The Talent Viewer's _build_skill_info_text still
-# shows the full breakdown elsewhere — this is a separate, simpler string
+# shows the full breakdown elsewhere -- this is a separate, simpler string
 # used only for this one screen.)
 func _build_trainer_confirm_text(profession_name: String, path_name: String) -> String:
 	var path_data = GameData.novice_professions[profession_name]["paths"][path_name]

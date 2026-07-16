@@ -1,0 +1,203 @@
+[gd_scene load_steps=17 format=3]
+
+[ext_resource type="Script" path="res://scenes/levels/transition_tests/steamtek_transition_level_3d.gd" id="1_level"]
+[ext_resource type="PackedScene" path="res://scenes/characters/player/VesperKane_PlayerCharacter_v01.tscn" id="2_character"]
+[ext_resource type="PackedScene" path="res://scenes/interactions/SteamtekZoneDoor3D.tscn" id="3_zone_door"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SkyMaterial"]
+sky_top_color = Color(0.002, 0.006, 0.015, 1)
+sky_horizon_color = Color(0.018, 0.028, 0.05, 1)
+ground_bottom_color = Color(0.001, 0.003, 0.007, 1)
+ground_horizon_color = Color(0.012, 0.02, 0.035, 1)
+
+[sub_resource type="Sky" id="Sky"]
+sky_material = SubResource("SkyMaterial")
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 2
+sky = SubResource("Sky")
+ambient_light_source = 3
+ambient_light_color = Color(0.15, 0.23, 0.36, 1)
+ambient_light_energy = 0.42
+tonemap_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="GroundMaterial"]
+albedo_color = Color(0.025, 0.035, 0.052, 1)
+metallic = 0.35
+roughness = 0.7
+
+[sub_resource type="StandardMaterial3D" id="FacadeMaterial"]
+albedo_color = Color(0.055, 0.06, 0.07, 1)
+metallic = 0.2
+roughness = 0.82
+
+[sub_resource type="StandardMaterial3D" id="DoorMaterial"]
+albedo_color = Color(0.09, 0.075, 0.06, 1)
+metallic = 0.72
+roughness = 0.42
+
+[sub_resource type="BoxMesh" id="GroundMesh"]
+material = SubResource("GroundMaterial")
+size = Vector3(16, 0.2, 14)
+
+[sub_resource type="BoxShape3D" id="GroundShape"]
+size = Vector3(16, 0.2, 14)
+
+[sub_resource type="BoxMesh" id="FacadeSideMesh"]
+material = SubResource("FacadeMaterial")
+size = Vector3(3.1, 4.2, 0.55)
+
+[sub_resource type="BoxShape3D" id="FacadeSideShape"]
+size = Vector3(3.1, 4.2, 0.55)
+
+[sub_resource type="BoxMesh" id="FacadeTopMesh"]
+material = SubResource("FacadeMaterial")
+size = Vector3(2.1, 1.7, 0.55)
+
+[sub_resource type="BoxShape3D" id="FacadeTopShape"]
+size = Vector3(2.1, 1.7, 0.55)
+
+[sub_resource type="BoxMesh" id="DoorMesh"]
+material = SubResource("DoorMaterial")
+size = Vector3(1.65, 2.55, 0.28)
+
+[sub_resource type="BoxShape3D" id="DoorBodyShape"]
+size = Vector3(1.65, 2.55, 0.35)
+
+[sub_resource type="LabelSettings" id="LabelSettings"]
+font_size = 20
+font_color = Color(0.84, 0.91, 1, 1)
+outline_size = 5
+outline_color = Color(0.004, 0.008, 0.018, 0.95)
+
+[node name="ApartmentExterior_TransitionTest_v01" type="Node3D"]
+script = ExtResource("1_level")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment")
+
+[node name="MoonKey" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-53, -40, 0)
+light_color = Color(0.52, 0.7, 1, 1)
+light_energy = 1.0
+shadow_enabled = true
+
+[node name="DoorWarmLight" type="OmniLight3D" parent="."]
+position = Vector3(0, 2.5, -4.55)
+light_color = Color(1, 0.45, 0.16, 1)
+light_energy = 4.2
+omni_range = 6.0
+shadow_enabled = true
+
+[node name="Ground" type="StaticBody3D" parent="."]
+position = Vector3(0, -0.1, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("GroundMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("GroundShape")
+
+[node name="ApartmentFacade" type="Node3D" parent="."]
+position = Vector3(0, 0, -4.5)
+
+[node name="LeftWall" type="StaticBody3D" parent="ApartmentFacade"]
+position = Vector3(-2.6, 2.1, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="ApartmentFacade/LeftWall"]
+mesh = SubResource("FacadeSideMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="ApartmentFacade/LeftWall"]
+shape = SubResource("FacadeSideShape")
+
+[node name="RightWall" type="StaticBody3D" parent="ApartmentFacade"]
+position = Vector3(2.6, 2.1, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="ApartmentFacade/RightWall"]
+mesh = SubResource("FacadeSideMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="ApartmentFacade/RightWall"]
+shape = SubResource("FacadeSideShape")
+
+[node name="DoorHeader" type="StaticBody3D" parent="ApartmentFacade"]
+position = Vector3(0, 3.35, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="ApartmentFacade/DoorHeader"]
+mesh = SubResource("FacadeTopMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="ApartmentFacade/DoorHeader"]
+shape = SubResource("FacadeTopShape")
+
+[node name="DoorVisual" type="MeshInstance3D" parent="ApartmentFacade"]
+position = Vector3(0, 1.275, 0.18)
+mesh = SubResource("DoorMesh")
+
+[node name="DoorBody" type="StaticBody3D" parent="ApartmentFacade"]
+position = Vector3(0, 1.275, 0.18)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Collision" type="CollisionShape3D" parent="ApartmentFacade/DoorBody"]
+shape = SubResource("DoorBodyShape")
+
+[node name="ApartmentDoor" parent="ApartmentFacade" instance=ExtResource("3_zone_door")]
+position = Vector3(0, 1.15, 1.0)
+interaction_prompt = "Enter apartment"
+target_scene_path = "res://scenes/levels/apartment_3d/ApartmentInterior_TransitionTest_v01.tscn"
+target_spawn_id = "InteriorEntrySpawn"
+
+[node name="ExteriorReturnSpawn" type="Marker3D" parent="."]
+position = Vector3(0, 0, -1.8)
+
+[node name="VesperKane_PlayerCharacter_v01" parent="." instance=ExtResource("2_character")]
+position = Vector3(0, 0, 1.5)
+
+[node name="CameraRig" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig"]
+position = Vector3(8.66, 6.77, 5)
+projection = 1
+size = 8.5
+current = true
+
+[node name="TransitionUI" type="CanvasLayer" parent="."]
+
+[node name="Title" type="Label" parent="TransitionUI"]
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 760.0
+offset_bottom = 88.0
+text = "APARTMENT EXTERIOR — TRANSITION SYSTEM TEST\nArchitecture is graybox; transition behavior is production infrastructure."
+label_settings = SubResource("LabelSettings")
+
+[node name="InteractionPrompt" type="Label" parent="TransitionUI"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_top = -92.0
+offset_right = 200.0
+offset_bottom = -48.0
+grow_horizontal = 2
+grow_vertical = 0
+label_settings = SubResource("LabelSettings")
+horizontal_alignment = 1
+
+[node name="Fade" type="ColorRect" parent="TransitionUI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)

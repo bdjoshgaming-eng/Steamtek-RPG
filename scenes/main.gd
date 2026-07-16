@@ -178,37 +178,51 @@ var all_possible_resources = []
 
 var gem_gated_subclasses = ["Amethyst", "Diamond", "Sapphire", "Ruby", "Emerald"]
 
-func _get_scrap_tinkerer_rank_count(base_name: String) -> int:
+func _get_profession_rank_count(base_name: String) -> int:
+	# Returns count of unlocked rank boxes for path-based professions.
+	# Keystone-based professions (Street Thug) have no rank columns
+	# so this always returns 0 for them -- scanning/sampling bonuses
+	# will be driven by keystone nodes in a future pass.
+	var prof_data = GameData.novice_professions["Street Thug"]
+	if not prof_data.has("paths"):
+		return 0
 	var total = 0
 	for suffix in [" I", " II", " III", " IV"]:
 		var path_name = base_name + suffix
-		if GameData.novice_professions["Scrap Tinkerer"]["paths"].has(path_name):
-			total += GameData.novice_professions["Scrap Tinkerer"]["paths"][path_name]["unlocked_nodes"]
+		if prof_data["paths"].has(path_name):
+			total += prof_data["paths"][path_name]["unlocked_nodes"]
 	return total
 
-# --- Apothecary rank/stat helpers ---
-# Every bonus here is derived live from unlocked_nodes rather than cached,
-# so there's nothing to keep in sync when a node gets trained.
-func _get_apothecary_rank_unlocked(path_name: String) -> bool:
-	var path_data = GameData.novice_professions["Apothecary"]["paths"].get(path_name, null)
+
+func _get_rank_unlocked(path_name: String) -> bool:
+	# For keystone-based professions, "rank unlocked" means the
+	# corresponding keystone is unlocked. For path-based professions,
+	# checks unlocked_nodes on the path.
+	var prof_data = GameData.novice_professions["Street Thug"]
+	if prof_data.has("keystones"):
+		return prof_data["keystones"].get(path_name, {}).get("unlocked", false)
+	if not prof_data.has("paths"):
+		return false
+	var path_data = prof_data["paths"].get(path_name, null)
 	if path_data == null:
 		return false
 	return path_data["unlocked_nodes"] >= path_data.get("max_nodes", NODES_PER_PATH)
 
+
 func _get_healing_speed_bonus() -> int:
-	return 2 if _get_apothecary_rank_unlocked("Healing I") else 0
+	return 2 if _get_rank_unlocked("Healing I") else 0
 
 func _get_healing_knowledge_bonus() -> int:
-	return 2 if _get_apothecary_rank_unlocked("Healing I") else 0
+	return 2 if _get_rank_unlocked("Healing I") else 0
 
 # Wound Care stacks across ranks II-IV: +4 at II, +4 more at III, +2 more at IV.
 func _get_wound_care_bonus() -> int:
 	var bonus = 0
-	if _get_apothecary_rank_unlocked("Healing II"):
+	if _get_rank_unlocked("Healing II"):
 		bonus += 4
-	if _get_apothecary_rank_unlocked("Healing III"):
+	if _get_rank_unlocked("Healing III"):
 		bonus += 4
-	if _get_apothecary_rank_unlocked("Healing IV"):
+	if _get_rank_unlocked("Healing IV"):
 		bonus += 2
 	return bonus
 
@@ -216,22 +230,22 @@ func _get_wound_care_bonus() -> int:
 # grants Medicine Potency instead, plus unlocks new recipes later.
 func _get_medicinal_knowledge_bonus() -> int:
 	var bonus = 0
-	if _get_apothecary_rank_unlocked("Medicine Crafting I"):
+	if _get_rank_unlocked("Medicine Crafting I"):
 		bonus += 4
-	if _get_apothecary_rank_unlocked("Medicine Crafting II"):
+	if _get_rank_unlocked("Medicine Crafting II"):
 		bonus += 4
-	if _get_apothecary_rank_unlocked("Medicine Crafting III"):
+	if _get_rank_unlocked("Medicine Crafting III"):
 		bonus += 4
 	return bonus
 
 func _get_medicine_potency_bonus() -> int:
-	return 2 if _get_apothecary_rank_unlocked("Medicine Crafting IV") else 0
+	return 2 if _get_rank_unlocked("Medicine Crafting IV") else 0
 
 # Foraging Chance stacks +1 per rank, I through IV (max +4).
 func _get_foraging_chance_bonus() -> int:
 	var bonus = 0
 	for rank_name in ["Medical Foraging I", "Medical Foraging II", "Medical Foraging III", "Medical Foraging IV"]:
-		if _get_apothecary_rank_unlocked(rank_name):
+		if _get_rank_unlocked(rank_name):
 			bonus += 1
 	return bonus
 
@@ -261,7 +275,7 @@ func _consume_one_bandage_charge() -> void:
 			return
 
 func _is_gem_scanning_unlocked() -> bool:
-	return _get_scrap_tinkerer_rank_count("Scanning") >= 3
+	return _get_profession_rank_count("Scanning") >= 3
 var resource_class_lookup: Dictionary = {}
 
 var tool_class_access = {
@@ -569,6 +583,15 @@ const COGS_MAX_DROP = 5
 # --- Trainer ---
 const TRAINER_INTERACT_RANGE = 150.0
 var trainers: Array = []
+
+# Central interactables registry. Every object the player can press E
+# on registers itself here at startup. Each entry is a Dictionary:
+#   "node"     Node2D  -- used to measure distance
+#   "range"    float   -- how close the player must be
+#   "type"     String  -- "trainer" | "quest" | "dumpster" | "door" | etc.
+#   "callback" Callable -- what happens when the player interacts
+# _attempt_interact() finds the closest in-range entry and fires it.
+var interactables: Array = []
 var active_trainer_index: int = -1
 var trainer_dialogue_state: String = "GREETING"
 var trainer_result_text: String = ""
@@ -643,54 +666,10 @@ var blood_bag_ready_at_unix: float = 0.0
 # --- Skills ---
 
 var xp_pools: Dictionary = {
-	"Martial XP": 0,
-	"Ranged Weapon": 0,
-	"Rifle XP": 0,
-	"Shotgun XP": 0,
-	"Pistol XP": 0,
-	# Heavy Weapons XP no longer maps to a live talent column -- Chrome
-	# Gunner's old Heavy Weapons tree was renamed to Pistols (which has
-	# its own fresh XP type above). Grenade Launcher/Flame Thrower kills
-	# still earn this XP (see GameData.heavy_weapon_types below), but it's
-	# unspendable until a home for it exists again (Ordinance Specialist
-	# is the likely candidate once it's fleshed out).
-	"Heavy Weapons XP": 0,
-	"Scanning": 0,
-	"Sampling": 0,
-	"Crafting": 0,
-	"Fabrication": 0,
-	"One Hand XP": 0,
-	"Two Hand XP": 0,
-	"Unarmed XP": 0,
-	"Healing XP": 0,
-	"Medicine Crafting XP": 0,
-	"Scavenging XP": 0,
-	"Pressure Enforcer Mastery XP": 0,
-	"Chrome Gunner Mastery XP": 0,
-	"Scrap Tinkerer Mastery XP": 0,
-	"Apothecary Mastery XP": 0,
-	# --- Elite Professions (placeholder skill trees) ---
-	"Optics XP": 0,
-	"Concealment XP": 0,
-	"Longshot XP": 0,
-	"Sniper Training XP": 0,
-	"Sniper Mastery XP": 0,
-	"Explosives XP": 0,
-	"Incendiaries XP": 0,
-	"Deployment XP": 0,
-	"Ordnance Training XP": 0,
-	"Ordnance Specialist Mastery XP": 0,
-	"Trigger Discipline XP": 0,
-	"Dual Wielding XP": 0,
-	"Fast Draw XP": 0,
-	"Quickdraw Training XP": 0,
-	"Quickdraw Technician Mastery XP": 0,
-	"Toxins XP": 0,
-	"Compounds XP": 0,
-	"Delivery Systems XP": 0,
-	"Toxinsmith Training XP": 0,
-	"Toxinsmith Mastery XP": 0
+	"Combat XP": 0,
+	"Crafting XP": 0
 }
+
 
 
 const LOOT_TIER_CHANCES = {
@@ -735,39 +714,34 @@ const skill_point_costs = [1, 2, 3, 4]
 # call (it needs both Master Apothecary AND Chrome Gunner Shotguns IV)
 # -- filed under Engineer since Apothecary is its thematic home; revisit
 # if that feels wrong once it's actually designed.
-const MILITANT_PROFESSIONS: Array = ["Pressure Enforcer", "Chrome Gunner", "Sniper", "Ordnance Specialist", "Quickdraw Technician"]
-const ENGINEER_PROFESSIONS: Array = ["Scrap Tinkerer", "Apothecary", "Toxinsmith"]
+const STREET_THUG_PROFESSIONS: Array = ["Street Thug"]
 
-var militant_points_available: int = 100
-var engineer_points_available: int = 100
+var thug_points_available: int = 100
 var cogs: int = 0
 
-func _is_militant_profession(profession_name: String) -> bool:
-	return MILITANT_PROFESSIONS.has(profession_name)
+func _points_pool_label(_profession_name: String) -> String:
+	return "Thug Points"
 
-func _points_pool_label(profession_name: String) -> String:
-	return "Militant Points" if _is_militant_profession(profession_name) else "Engineer Points"
+func _get_points_available(_profession_name: String) -> int:
+	return thug_points_available
 
-func _get_points_available(profession_name: String) -> int:
-	return militant_points_available if _is_militant_profession(profession_name) else engineer_points_available
-
-func _spend_points(profession_name: String, amount: int) -> void:
-	if _is_militant_profession(profession_name):
-		militant_points_available -= amount
-	else:
-		engineer_points_available -= amount
+func _spend_points(_profession_name: String, amount: int) -> void:
+	thug_points_available -= amount
 
 var professions_unlocked: Dictionary = {
-	"Pressure Enforcer": false,
-	"Chrome Gunner": false,
-	"Scrap Tinkerer": false,
-	"Apothecary": false
+	"Street Thug": false,
+	"Enforcer": false, "Specialist": false,
+	"Ranger": false, "Commando": false, "Engineer": false, "Medic": false,
+	"Sniper": false, "Bombardier": false, "Demolitionist": false, "Bioforge Tech": false,
+	"Deadeye": false, "Siege Operator": false, "Wrecker": false, "Phantom": false,
+	"Huntsman": false, "Warlord": false, "Saboteur": false, "Venomcaster": false,
+	"Stalker": false, "Razorback": false, "Blastmaster": false, "Plague Engineer": false,
+	"Ghost Medic": false, "Warchemist": false, "Toxinsmith": false, "Plague Doctor": false
 }
 var has_chosen_starting_profession: bool = false
 const PROFESSION_ENTRY_COST = 5
 const ADDITIONAL_PROFESSION_COGS_COST = 1
 const NODES_PER_PATH = 4
-const MARTIAL_XP_RATE = 0.25
 const DUMMY_KILL_XP = 50
 
 var selected_profession: String = ""
@@ -859,10 +833,10 @@ func _ready() -> void:
 	var trainer_gold = Color(1.0, 0.85, 0.3)
 
 	trainers = [
-		{"node": trainer, "sprite": trainer_sprite, "name_label": trainer_name_label, "name": "Foreman Brassguard", "profession": "Pressure Enforcer"},
-		{"node": trainer2, "sprite": trainer2_sprite, "name_label": trainer2_name_label, "name": "Sergeant Chromewell", "profession": "Chrome Gunner"},
-		{"node": trainer3, "sprite": trainer3_sprite, "name_label": trainer3_name_label, "name": "Tinker Wrenfield", "profession": "Scrap Tinkerer"},
-		{"node": trainer4, "sprite": trainer4_sprite, "name_label": trainer4_name_label, "name": "Doctor Vellum", "profession": "Apothecary"}
+		{"node": trainer, "sprite": trainer_sprite, "name_label": trainer_name_label, "name": "Foreman Brassguard", "profession": "Street Thug"},
+		{"node": trainer2, "sprite": trainer2_sprite, "name_label": trainer2_name_label, "name": "Sergeant Chromewell", "profession": "Street Thug"},
+		{"node": trainer3, "sprite": trainer3_sprite, "name_label": trainer3_name_label, "name": "Tinker Wrenfield", "profession": "Street Thug"},
+		{"node": trainer4, "sprite": trainer4_sprite, "name_label": trainer4_name_label, "name": "Doctor Vellum", "profession": "Street Thug"}
 	]
 
 	for t in trainers:
@@ -871,6 +845,28 @@ func _ready() -> void:
 		t["name_label"].horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		t["name_label"].custom_minimum_size = Vector2(NAME_LABEL_WIDTH, 0)
 		t["name_label"].modulate = trainer_gold
+
+	# Register all interactables. Order doesn't matter -- _attempt_interact
+	# always picks the closest one in range, not the first match.
+	for t in trainers:
+		interactables.append({
+			"node": t["node"],
+			"range": TRAINER_INTERACT_RANGE,
+			"type": "trainer",
+			"callback": func(): _attempt_talk_to_trainer()
+		})
+	interactables.append({
+		"node": quest_book,
+		"range": 150.0,
+		"type": "quest",
+		"callback": func(): quest_system.try_interact("QuestBook")
+	})
+	interactables.append({
+		"node": dumpster,
+		"range": 120.0,
+		"type": "dumpster",
+		"callback": func(): _scavenge_dumpster()
+	})
 
 	message_clear_timer.timeout.connect(_on_message_clear_timer_timeout)
 	xp_gain_clear_timer.timeout.connect(_on_xp_gain_clear_timer_timeout)
@@ -888,9 +884,9 @@ func _ready() -> void:
 	train_info_label.custom_minimum_size = Vector2(340, 0)
 
 	for profession_name in GameData.novice_professions.keys():
-		if GameData.ELITE_PROFESSION_PREREQS.has(profession_name):
-			continue
-		profession_options_list.add_item(profession_name)
+		var tree_entry = GameData.PROFESSION_TREE.get(profession_name, {})
+		if tree_entry.get("tier", 99) == 1:
+			profession_options_list.add_item(profession_name)
 	profession_options_list.focus_mode = Control.FOCUS_NONE
 	choose_profession_button.pressed.connect(_on_choose_profession_pressed)
 	choose_profession_button.focus_mode = Control.FOCUS_NONE
@@ -929,12 +925,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		var mouse_world = get_viewport().get_canvas_transform().affine_inverse() * event.position
 		_try_click_target(mouse_world)
 
-	if event.is_action_pressed("forage"):
-		_attempt_forage()
-
 	if event.is_action_pressed("interact"):
-		quest_system.try_interact("QuestBook")
-		_attempt_talk_to_trainer()
+		_attempt_interact()
 
 	if event.is_action_pressed("profession_menu"):
 		if not has_chosen_starting_profession:
@@ -1098,15 +1090,15 @@ func _on_tree_item_selected() -> void:
 	var concentration = int(round(100 * proximity))
 	concentration = max(concentration, 1)
 
-	var scanning_nodes = _get_scrap_tinkerer_rank_count("Scanning")
-	var mastery_nodes = _get_scrap_tinkerer_rank_count("Fabrication Mastery")
+	var scanning_nodes = _get_profession_rank_count("Scanning")
+	var mastery_nodes = _get_profession_rank_count("Fabrication Mastery")
 	concentration += (scanning_nodes * 5) + (mastery_nodes * 2)
 	concentration = min(concentration, 100)
 
 	current_scan_resource = instance_name
 	current_scan_concentration = concentration
 
-	_add_skill_xp("Scanning", 5)
+	_add_skill_xp("Crafting XP", 5)
 
 	scan_result_label.text = _get_resource_display_label(instance_name) + ": " + str(concentration) + "% concentration"
 
@@ -1137,7 +1129,7 @@ func _on_sample_pressed() -> void:
 	_add_to_inventory_with_instance(current_scan_resource, actual_amount)
 	_update_inventory_display()
 
-	_add_skill_xp("Sampling", 10)
+	_add_skill_xp("Crafting XP", 10)
 
 	resource_pools[current_scan_resource] -= actual_amount
 
@@ -1145,8 +1137,8 @@ func _on_sample_pressed() -> void:
 		_deplete_and_replace(current_scan_resource)
 
 	const SAMPLE_BASE_COOLDOWN = 20.0
-	var sampling_nodes = _get_scrap_tinkerer_rank_count("Sampling")
-	var mastery_nodes_cd = _get_scrap_tinkerer_rank_count("Fabrication Mastery")
+	var sampling_nodes = _get_profession_rank_count("Sampling")
+	var mastery_nodes_cd = _get_profession_rank_count("Fabrication Mastery")
 	var cooldown_reduction = (sampling_nodes * 0.10) + (mastery_nodes_cd * 0.05)
 	cooldown_reduction = min(cooldown_reduction, 0.9)
 	cooldown_timer.wait_time = SAMPLE_BASE_COOLDOWN * (1.0 - cooldown_reduction)
@@ -1522,8 +1514,8 @@ func _on_craft_pressed() -> void:
 func _finalize_crafted_item(recipe: Dictionary, base_quality: int) -> Dictionary:
 	var quality = base_quality
 
-	var crafting_nodes = _get_scrap_tinkerer_rank_count("Crafting")
-	var mastery_nodes_q = _get_scrap_tinkerer_rank_count("Fabrication Mastery")
+	var crafting_nodes = _get_profession_rank_count("Crafting")
+	var mastery_nodes_q = _get_profession_rank_count("Fabrication Mastery")
 	var quality_multiplier = 1.0 + (crafting_nodes * 0.03) + (mastery_nodes_q * 0.01)
 	quality = min(1000, round(quality * quality_multiplier))
 
@@ -1546,11 +1538,11 @@ func _finalize_crafted_item(recipe: Dictionary, base_quality: int) -> Dictionary
 	if recipe.has("max_charges"):
 		inventory_stats[item_key]["Charges"] = recipe["max_charges"]
 
-	_add_skill_xp("Crafting", 15)
-	_add_skill_xp("Fabrication", 5)
+	_add_skill_xp("Crafting XP", 15)
+	
 
 	if recipe.has("item_class") and recipe["item_class"] == "Medicine":
-		_add_skill_xp("Medicine Crafting XP", 15)
+		_add_skill_xp("Crafting XP", 15)
 
 	if recipe.has("item_class"):
 		crafted_item_class[item_key] = recipe["item_class"]
@@ -1655,8 +1647,7 @@ func _save_game() -> void:
 		"equipped_weapon_name": equipped_weapon_name,
 		"novice_professions": GameData.novice_professions,
 		"xp_pools": xp_pools,
-		"militant_points_available": militant_points_available,
-		"engineer_points_available": engineer_points_available,
+		"thug_points_available": thug_points_available,
 		"professions_unlocked": professions_unlocked,
 		"has_chosen_starting_profession": has_chosen_starting_profession,
 		"quest_data": quest_system.get_save_data(),
@@ -1748,12 +1739,25 @@ func _load_game() -> void:
 		for profession_name in loaded_professions.keys():
 			if not GameData.novice_professions.has(profession_name):
 				continue
-
-			var loaded_paths = loaded_professions[profession_name]["paths"]
-			for path_name in loaded_paths.keys():
-				if GameData.novice_professions[profession_name]["paths"].has(path_name):
-					var loaded_nodes = int(loaded_paths[path_name]["unlocked_nodes"])
-					GameData.novice_professions[profession_name]["paths"][path_name]["unlocked_nodes"] = loaded_nodes
+			var prof_data = GameData.novice_professions[profession_name]
+			var loaded_prof = loaded_professions[profession_name]
+			# Path-based professions (shell classes)
+			if prof_data.has("paths") and loaded_prof.has("paths"):
+				var loaded_paths = loaded_prof["paths"]
+				for path_name in loaded_paths.keys():
+					if prof_data["paths"].has(path_name):
+						var loaded_nodes = int(loaded_paths[path_name]["unlocked_nodes"])
+						prof_data["paths"][path_name]["unlocked_nodes"] = loaded_nodes
+			# Keystone-based professions (Street Thug)
+			elif prof_data.has("keystones") and loaded_prof.has("keystones"):
+				for ks_name in loaded_prof["keystones"].keys():
+					if prof_data["keystones"].has(ks_name):
+						var loaded_ks = loaded_prof["keystones"][ks_name]
+						prof_data["keystones"][ks_name]["unlocked"] = loaded_ks.get("unlocked", false)
+						prof_data["keystones"][ks_name]["points_spent"] = int(loaded_ks.get("points_spent", 0))
+						for node_name in loaded_ks.get("nodes", {}).keys():
+							if prof_data["keystones"][ks_name]["nodes"].has(node_name):
+								prof_data["keystones"][ks_name]["nodes"][node_name]["purchased"] = loaded_ks["nodes"][node_name].get("purchased", false)
 
 	var loaded_xp_pools = save_data.get("xp_pools", null)
 	if loaded_xp_pools != null:
@@ -1761,8 +1765,7 @@ func _load_game() -> void:
 			if xp_pools.has(xp_type):
 				xp_pools[xp_type] = int(loaded_xp_pools[xp_type])
 
-	militant_points_available = int(save_data.get("militant_points_available", militant_points_available))
-	engineer_points_available = int(save_data.get("engineer_points_available", engineer_points_available))
+	thug_points_available = int(save_data.get("thug_points_available", thug_points_available))
 
 	has_chosen_starting_profession = save_data.get("has_chosen_starting_profession", false)
 	if save_data.has("quest_data"):
@@ -1856,7 +1859,10 @@ func _attempt_ability(ability_name: String) -> void:
 	var required_profession = ability["requires_profession"]
 
 	if required_box != "":
-		var box_data = GameData.novice_professions[required_profession]["paths"][required_box]
+		var _rp_data = GameData.novice_professions.get(required_profession, {})
+		if not _rp_data.has("paths") or not _rp_data["paths"].has(required_box):
+			return
+		var box_data = _rp_data["paths"][required_box]
 		if box_data["unlocked_nodes"] < 1:
 			_show_combat_message("You haven't learned " + ability_name + " yet! Unlock " + required_box + " first.")
 			return
@@ -1888,8 +1894,9 @@ func _get_pressure_weapon_type_label(weapon_class: String, weapon_subclass: Stri
 func _get_total_passive_stat(profession_name: String, stat_name: String) -> float:
 	var total = 0.0
 
-	for path_name in GameData.novice_professions[profession_name]["paths"].keys():
-		var path_data = GameData.novice_professions[profession_name]["paths"][path_name]
+	var _paths_data = GameData.novice_professions[profession_name].get("paths", {})
+	for path_name in _paths_data.keys():
+		var path_data = _paths_data[path_name]
 		var owned = path_data["unlocked_nodes"] >= path_data.get("max_nodes", NODES_PER_PATH)
 		if not owned:
 			continue
@@ -1978,24 +1985,6 @@ func _apply_taunt(target_id: String, duration: float) -> void:
 # callers handle that case themselves (general category bonus only,
 # no specific-type XP). Also returns "" for anything totally
 # unrecognized; callers treat that as the bare-handed/Unarmed default.
-func _get_weapon_xp_type(weapon_class: String) -> String:
-	if weapon_class == "One Hand":
-		return "One Hand XP"
-	elif weapon_class == "Two Hand":
-		return "Two Hand XP"
-	elif weapon_class == "Brass Knuckles":
-		return "Unarmed XP"
-	elif weapon_class == "Pistol":
-		return "Pistol XP"
-	elif GameData.rifle_weapons.has(weapon_class):
-		return "Rifle XP"
-	elif GameData.shotgun_weapons.has(weapon_class):
-		return "Shotgun XP"
-	elif GameData.heavy_weapon_types.has(weapon_class):
-		return "Heavy Weapons XP"
-	else:
-		return ""
-
 func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: String) -> void:
 	if not player_alive:
 		_show_combat_message("You are defeated! Waiting to respawn...")
@@ -2058,15 +2047,8 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 	elif GameData.pressure_enforcer_weapons.has(weapon_class):
 		xp_class_key = "Two Hand" if weapon_subclass == "2 Handed" else "One Hand"
 
-	var profession_name = ""
-	var conditioning_paths = []
-
-	if GameData.pressure_enforcer_weapons.has(weapon_class) or equipped_weapon_name == "":
-		profession_name = "Pressure Enforcer"
-		conditioning_paths = ["Martial Training I", "Martial Training II", "Martial Training III"]
-	elif GameData.chrome_gunner_weapons.has(weapon_class):
-		profession_name = "Chrome Gunner"
-		conditioning_paths = ["Ranged Training I", "Ranged Training II", "Ranged Training III"]
+	var profession_name = "Street Thug"
+	var conditioning_paths = ["Combat Training I", "Combat Training II", "Combat Training III"]
 
 	var crit_hit = false
 
@@ -2074,12 +2056,15 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 		var conditioning_nodes = 0
 		var max_conditioning_nodes = 0
 		for path_name in conditioning_paths:
-			var path_data = GameData.novice_professions[profession_name]["paths"][path_name]
+			var _pdata = GameData.novice_professions[profession_name].get("paths", {})
+			var path_data = _pdata.get(path_name, null)
+			if path_data == null:
+				continue
 			conditioning_nodes += path_data["unlocked_nodes"]
 			max_conditioning_nodes += path_data.get("max_nodes", NODES_PER_PATH)
 
 		var speed_bonus = 0.0
-		if profession_name == "Pressure Enforcer":
+		if GameData.pressure_enforcer_weapons.has(weapon_class) or equipped_weapon_name == "":
 			var weapon_type_label = _get_pressure_weapon_type_label(weapon_class, weapon_subclass)
 			if weapon_type_label != "":
 				var speed_stat_total = _get_total_passive_stat(profession_name, weapon_type_label + " Speed")
@@ -2102,11 +2087,28 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 	var weapon_cert_req = GameData.WEAPON_CERT_REQUIREMENTS.get(equipped_weapon_name, null)
 	var is_uncertified = false
 	if weapon_cert_req != null:
-		var cert_path_data = GameData.novice_professions[weapon_cert_req["profession"]]["paths"][weapon_cert_req["box"]]
-		var cert_max = cert_path_data.get("max_nodes", NODES_PER_PATH)
-		if cert_path_data["unlocked_nodes"] < cert_max:
+		var requirement_options = weapon_cert_req if weapon_cert_req is Array else [weapon_cert_req]
+		is_uncertified = true
+		for option in requirement_options:
+			var cert_prof_data = GameData.novice_professions.get(option["profession"], {})
+			# Keystone professions: certified if the profession is unlocked
+			# (keystone node purchase is the new cert mechanism, handled
+			# separately -- for now unlocking the profession is sufficient)
+			if cert_prof_data.has("keystones"):
+				if professions_unlocked.get(option["profession"], false):
+					is_uncertified = false
+					break
+				continue
+			# Path-based professions: check the specific box
+			if not cert_prof_data.has("paths") or not cert_prof_data["paths"].has(option["box"]):
+				continue
+			var cert_path_data = cert_prof_data["paths"][option["box"]]
+			var cert_max = cert_path_data.get("max_nodes", NODES_PER_PATH)
+			if cert_path_data["unlocked_nodes"] >= cert_max:
+				is_uncertified = false
+				break
+		if is_uncertified:
 			weapon_cert_multiplier = 0.5
-			is_uncertified = true
 
 	damage = round(damage * damage_multiplier * certification_multiplier * weapon_cert_multiplier)
 
@@ -2117,7 +2119,7 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 	# stats push that up meaningfully from there.
 	var weapon_accuracy = weapon_stats.get("Accuracy", 50)
 	var player_accuracy_bonus = 0.0
-	if profession_name == "Pressure Enforcer":
+	if GameData.pressure_enforcer_weapons.has(weapon_class) or equipped_weapon_name == "":
 		var weapon_type_label_for_accuracy = _get_pressure_weapon_type_label(weapon_class, weapon_subclass)
 		if weapon_type_label_for_accuracy != "":
 			player_accuracy_bonus = _get_total_passive_stat(profession_name, weapon_type_label_for_accuracy + " Accuracy")
@@ -2319,25 +2321,8 @@ func _defeat_dummy() -> String:
 			if share_xp <= 0:
 				continue
 
-			if wc == "One Hand" or wc == "Two Hand" or wc == "Brass Knuckles":
-				var weapon_type_xp_type = _get_weapon_xp_type(wc)
-				_add_skill_xp(weapon_type_xp_type, share_xp)
-				_add_skill_xp("Martial XP", int(round(share_xp * MARTIAL_XP_RATE)))
-				xp_summary_parts.append(str(share_xp) + " " + weapon_type_xp_type)
-			elif GameData.chrome_gunner_weapons.has(wc):
-				var ranged_type_xp_type = _get_weapon_xp_type(wc)
-				if ranged_type_xp_type != "":
-					_add_skill_xp(ranged_type_xp_type, share_xp)
-					xp_summary_parts.append(str(share_xp) + " " + ranged_type_xp_type)
-				else:
-					xp_summary_parts.append(str(share_xp) + " Ranged Weapon")
-				_add_skill_xp("Ranged Weapon", share_xp)
-			else:
-				# Bare-handed or an unrecognized weapon class -- Unarmed
-				# XP is the base/default for the Attack ability.
-				_add_skill_xp("Unarmed XP", share_xp)
-				_add_skill_xp("Martial XP", int(round(share_xp * MARTIAL_XP_RATE)))
-				xp_summary_parts.append(str(share_xp) + " Unarmed XP")
+			_add_skill_xp("Combat XP", share_xp)
+			xp_summary_parts.append(str(share_xp) + " Combat XP")
 
 	if xp_summary_parts.size() > 0:
 		_show_xp_gain_message("You've gained " + ", ".join(xp_summary_parts) + "!")
@@ -2410,23 +2395,8 @@ func _defeat_enemy2() -> String:
 			if share_xp2 <= 0:
 				continue
 
-			if wc == "One Hand" or wc == "Two Hand" or wc == "Brass Knuckles":
-				var weapon_type_xp_type2 = _get_weapon_xp_type(wc)
-				_add_skill_xp(weapon_type_xp_type2, share_xp2)
-				_add_skill_xp("Martial XP", int(round(share_xp2 * MARTIAL_XP_RATE)))
-				xp_summary_parts2.append(str(share_xp2) + " " + weapon_type_xp_type2)
-			elif GameData.chrome_gunner_weapons.has(wc):
-				var ranged_type_xp_type2 = _get_weapon_xp_type(wc)
-				if ranged_type_xp_type2 != "":
-					_add_skill_xp(ranged_type_xp_type2, share_xp2)
-					xp_summary_parts2.append(str(share_xp2) + " " + ranged_type_xp_type2)
-				else:
-					xp_summary_parts2.append(str(share_xp2) + " Ranged Weapon")
-				_add_skill_xp("Ranged Weapon", share_xp2)
-			else:
-				_add_skill_xp("Unarmed XP", share_xp2)
-				_add_skill_xp("Martial XP", int(round(share_xp2 * MARTIAL_XP_RATE)))
-				xp_summary_parts2.append(str(share_xp2) + " Unarmed XP")
+			_add_skill_xp("Combat XP", share_xp2)
+			xp_summary_parts2.append(str(share_xp2) + " Combat XP")
 
 	if xp_summary_parts2.size() > 0:
 		_show_xp_gain_message("You've gained " + ", ".join(xp_summary_parts2) + "!")
@@ -2507,85 +2477,68 @@ func _is_prereq_met(profession_name: String, path_data: Dictionary) -> bool:
 		return true
 
 	if prereq_name == "__ALL__":
-		for other_path_name in GameData.novice_professions[profession_name]["paths"].keys():
+		var prof_paths = GameData.novice_professions[profession_name].get("paths", {})
+		for other_path_name in prof_paths.keys():
 			if other_path_name == "Master":
 				continue
-			var other_path_data = GameData.novice_professions[profession_name]["paths"][other_path_name]
+			var other_path_data = prof_paths[other_path_name]
 			var other_max = other_path_data.get("max_nodes", NODES_PER_PATH)
 			if other_path_data["unlocked_nodes"] < other_max:
 				return false
 		return true
 
-	var prereq_data = GameData.novice_professions[profession_name]["paths"][prereq_name]
+	var _pp = GameData.novice_professions[profession_name].get("paths", {})
+	if not _pp.has(prereq_name):
+		return true
+	var prereq_data = _pp[prereq_name]
 	var prereq_max = prereq_data.get("max_nodes", NODES_PER_PATH)
 	return prereq_data["unlocked_nodes"] >= prereq_max
 
 func _get_xp_type_cap(xp_type: String) -> int:
-	var lowest_available_cost = -1
-	var highest_cost_seen = 0
-	var has_new_style = false
-
-	var highest_unlocked_old_style = 0
-	var has_old_style = false
+	# For keystone professions: find the cheapest keystone not yet
+	# unlocked that uses this XP type, and return its cost * 1.5
+	# as the "cap" (used to scale the XP gain display bar).
+	# For path professions: original logic.
+	var lowest_ks_cost = -1
+	var highest_path_cost = 0
+	var has_path_style = false
 
 	for profession_name in GameData.novice_professions.keys():
-		for path_name in GameData.novice_professions[profession_name]["paths"].keys():
-			var path_data = GameData.novice_professions[profession_name]["paths"][path_name]
-			if path_data["xp_type"] != xp_type:
-				continue
+		var prof_data = GameData.novice_professions[profession_name]
+		if prof_data.has("keystones"):
+			for ks_name in prof_data["keystones"].keys():
+				var ks = prof_data["keystones"][ks_name]
+				if ks.get("unlocked", false):
+					continue
+				var cost = ks.get("xp_cost", 10)
+				if lowest_ks_cost == -1 or cost < lowest_ks_cost:
+					lowest_ks_cost = cost
+		elif prof_data.has("paths"):
+			for path_name in prof_data["paths"].keys():
+				var path_data = prof_data["paths"][path_name]
+				if path_data.get("xp_type", "") != xp_type:
+					continue
+				has_path_style = true
+				if path_data.has("xp_cost"):
+					highest_path_cost = max(highest_path_cost, path_data["xp_cost"])
 
-			if path_data.has("xp_cost"):
-				has_new_style = true
-				highest_cost_seen = max(highest_cost_seen, path_data["xp_cost"])
-
-				var max_nodes = path_data.get("max_nodes", 1)
-				var already_owned = path_data["unlocked_nodes"] >= max_nodes
-
-				if not already_owned and _is_prereq_met(profession_name, path_data):
-					if lowest_available_cost == -1 or path_data["xp_cost"] < lowest_available_cost:
-						lowest_available_cost = path_data["xp_cost"]
-			else:
-				has_old_style = true
-				if path_data["unlocked_nodes"] > highest_unlocked_old_style:
-					highest_unlocked_old_style = path_data["unlocked_nodes"]
-
-	if has_new_style:
-		if lowest_available_cost != -1:
-			return int(lowest_available_cost * 1.5)
-		return int(highest_cost_seen * 1.5)
-
-	if has_old_style:
-		var next_index = min(highest_unlocked_old_style, NODES_PER_PATH - 1)
-		return int(skill_xp_thresholds[next_index] * 1.5)
-
+	if lowest_ks_cost != -1:
+		return int(lowest_ks_cost * 1.5)
+	if has_path_style:
+		return int(highest_path_cost * 1.5)
 	return int(skill_xp_thresholds[0] * 1.5)
 
+
 func _refresh_skill_tree_ui() -> void:
+	# Legacy debug skill tree -- replaced by the new keystone/node
+	# system. Stubbed out to prevent crashes while the new Talent
+	# Viewer UI is being built.
 	skill_tree.clear()
 	var root = skill_tree.create_item()
 	skill_tree.hide_root = true
-
-	for profession_name in GameData.novice_professions.keys():
-		var profession_item = skill_tree.create_item(root)
-		var header_text = profession_name
-		if not professions_unlocked.get(profession_name, false):
-			header_text += " [LOCKED]"
-		profession_item.set_text(0, header_text)
-		profession_item.set_selectable(0, false)
-
-		for path_name in GameData.novice_professions[profession_name]["paths"].keys():
-			var path_data = GameData.novice_professions[profession_name]["paths"][path_name]
-			var unlocked = path_data["unlocked_nodes"]
-			var max_nodes = path_data.get("max_nodes", NODES_PER_PATH)
-
-			var display_text = path_name + " (" + str(unlocked) + "/" + str(max_nodes) + ")"
-
-			if unlocked < max_nodes and not _is_prereq_met(profession_name, path_data):
-				display_text += " [LOCKED]"
-
-			var leaf = skill_tree.create_item(profession_item)
-			leaf.set_text(0, display_text)
-			leaf.set_metadata(0, profession_name + "|" + path_name)
+	var notice = skill_tree.create_item(root)
+	notice.set_text(0, "Talent system redesigned -- use the Talent Viewer (T)")
+	notice.set_selectable(0, false)
 
 func _on_skill_tree_item_selected() -> void:
 	var selected = skill_tree.get_selected()
@@ -2608,7 +2561,10 @@ func _xp_label(xp_type: String) -> String:
 	return xp_type + " XP"
 
 func _build_skill_info_text(profession_name: String, path_name: String) -> String:
-	var path_data = GameData.novice_professions[profession_name]["paths"][path_name]
+	var _pdata = GameData.novice_professions[profession_name].get("paths", {})
+	var path_data = _pdata.get(path_name, null)
+	if path_data == null:
+		return profession_name + " uses the new keystone system."
 	var xp_type = path_data["xp_type"]
 	var xp = xp_pools[xp_type]
 	var unlocked = path_data["unlocked_nodes"]
@@ -2663,7 +2619,12 @@ func _on_spend_point_pressed() -> void:
 		skill_result_label.text = nearby_trainer["name"] + " only trains " + nearby_trainer["profession"] + " skills!"
 		return
 
-	var path_data = GameData.novice_professions[selected_profession]["paths"][selected_path]
+	var prof_data = GameData.novice_professions[selected_profession]
+	if not prof_data.has("paths"):
+		skill_result_label.text = selected_profession + " uses the new keystone system -- use the Talent Viewer instead."
+		return
+
+	var path_data = prof_data["paths"][selected_path]
 	var xp_type = path_data["xp_type"]
 	var max_nodes = path_data.get("max_nodes", NODES_PER_PATH)
 
@@ -2744,30 +2705,59 @@ func _on_xp_gain_clear_timer_timeout() -> void:
 
 # Entry requirements for Elite Professions -- each entry must reference
 
-# Returns a list of human-readable "Profession - Box" strings for any
-# prereq not yet owned. Empty array means the profession is open to
-# select. Professions with no entry in GameData.ELITE_PROFESSION_PREREQS (the
-# four base professions) always return empty -- no gating on them.
-func _get_missing_elite_prereqs(profession_name: String) -> Array:
+# Returns true if every box in the given profession's tree is fully
+# unlocked. This is the definition of "mastered" -- required before
+# the player can do the unlock quest for the next tier.
+func _is_profession_mastered(profession_name: String) -> bool:
+	if not professions_unlocked.get(profession_name, false):
+		return false
+	var prof_data = GameData.novice_professions[profession_name]
+	# New keystone-based professions (Street Thug) use keystones not paths
+	if prof_data.has("keystones"):
+		for ks_name in prof_data["keystones"].keys():
+			var ks = prof_data["keystones"][ks_name]
+			if not ks.get("unlocked", false):
+				return false
+			if ks.get("points_spent", 0) < ks.get("points_max", 0):
+				return false
+		return true
+	# Legacy path-based professions (shell classes)
+	if not prof_data.has("paths"):
+		return false
+	var paths = prof_data["paths"]
+	for path_name in paths.keys():
+		var path_data = paths[path_name]
+		if path_data["unlocked_nodes"] < path_data.get("max_nodes", NODES_PER_PATH):
+			return false
+	return true
+
+# Returns a list of human-readable strings for any mastery prereqs not
+# yet met. Empty array means the profession's unlock quest is available.
+func _get_missing_profession_prereqs(profession_name: String) -> Array:
 	var missing: Array = []
-	for prereq in GameData.ELITE_PROFESSION_PREREQS.get(profession_name, []):
-		var path_data = GameData.novice_professions[prereq["profession"]]["paths"][prereq["box"]]
-		var max_nodes = path_data.get("max_nodes", NODES_PER_PATH)
-		if path_data["unlocked_nodes"] < max_nodes:
-			missing.append(prereq["profession"] + " - " + prereq["box"])
+	var tree_entry = GameData.PROFESSION_TREE.get(profession_name, {})
+	for required in tree_entry.get("requires_mastered", []):
+		if not _is_profession_mastered(required):
+			missing.append("Master " + required)
+	# Mastery professions additionally require both elite classes mastered
+	var pair = tree_entry.get("mastery_pair", [])
+	if pair.size() == 2:
+		for elite in pair:
+			if not _is_profession_mastered(elite):
+				missing.append("Master " + elite)
 	return missing
 
-# Reverse of the above: given a base profession and one of its boxes
-# (e.g. "Chrome Gunner", "Rifles IV"), returns which Elite Profession(s)
-# require that specific box -- used to show "leads to X" labels on the
-# BASE profession's own tree, same idea as SWG showing which advanced
-# professions a given box feeds into.
+# Given a profession and one of its box names, returns which higher-tier
+# professions list that profession as a prerequisite -- used by the
+# Talent Viewer to show "leads to X" labels above the Master box.
 func _get_elites_requiring(profession_name: String, box_name: String) -> Array:
+	if box_name != "Master":
+		return []
 	var result: Array = []
-	for elite_name in GameData.ELITE_PROFESSION_PREREQS.keys():
-		for prereq in GameData.ELITE_PROFESSION_PREREQS[elite_name]:
-			if prereq["profession"] == profession_name and prereq["box"] == box_name:
-				result.append(elite_name)
+	for next_name in GameData.PROFESSION_TREE.keys():
+		var entry = GameData.PROFESSION_TREE[next_name]
+		if profession_name in entry.get("requires_mastered", []):
+			result.append(next_name)
 	return result
 
 func _on_choose_profession_pressed() -> void:
@@ -2778,7 +2768,7 @@ func _on_choose_profession_pressed() -> void:
 
 	var chosen_profession = profession_options_list.get_item_text(selection[0])
 
-	var missing_prereqs = _get_missing_elite_prereqs(chosen_profession)
+	var missing_prereqs = _get_missing_profession_prereqs(chosen_profession)
 	if missing_prereqs.size() > 0:
 		profession_select_result_label.text = "Requires: " + ", ".join(missing_prereqs)
 		return
@@ -3278,10 +3268,15 @@ func _get_total_skill_points_spent() -> int:
 	var total_spent = 0
 
 	for profession_name in GameData.novice_professions.keys():
-		for path_name in GameData.novice_professions[profession_name]["paths"].keys():
-			var unlocked = GameData.novice_professions[profession_name]["paths"][path_name]["unlocked_nodes"]
-			for i in range(unlocked):
-				total_spent += skill_point_costs[i]
+		var prof_data = GameData.novice_professions[profession_name]
+		if prof_data.has("keystones"):
+			for ks_name in prof_data["keystones"].keys():
+				total_spent += prof_data["keystones"][ks_name].get("points_spent", 0)
+		elif prof_data.has("paths"):
+			for path_name in prof_data["paths"].keys():
+				var unlocked = prof_data["paths"][path_name]["unlocked_nodes"]
+				for i in range(unlocked):
+					total_spent += skill_point_costs[i]
 
 	if has_chosen_starting_profession:
 		total_spent += PROFESSION_ENTRY_COST
@@ -3387,7 +3382,7 @@ func _scavenge_dumpster() -> void:
 	_update_inventory_display()
 	_update_cogs_display()
 
-	_add_skill_xp("Scavenging XP", FORAGE_XP)
+	_add_skill_xp("Crafting XP", FORAGE_XP)
 	_show_xp_gain_message("You've gained " + str(FORAGE_XP) + " Scavenging XP!")
 
 	_show_combat_message("You scavenge and find: " + str(plastic_amount) + " Plastic, " + str(DUMPSTER_COGS_MIN) + " Cogs")
@@ -3411,8 +3406,8 @@ func _attempt_use_bandage() -> void:
 		_show_combat_message("You must wait " + str(int(seconds_left)) + " seconds before you can use that again.")
 		return
 
-	if not professions_unlocked.get("Apothecary", false):
-		_show_combat_message("You need to be an Apothecary to use a Crate of Bandages!")
+	if not professions_unlocked.get("Street Thug", false):
+		_show_combat_message("You need Street Thug Medicine Crafting to use a Crate of Bandages!")
 		return
 
 	if not player_alive:
@@ -3456,7 +3451,7 @@ func _attempt_use_bandage() -> void:
 
 	_update_inventory_display()
 
-	_add_skill_xp("Healing XP", BANDAGE_HEALING_XP)
+	_add_skill_xp("Combat XP", BANDAGE_HEALING_XP)
 	_show_xp_gain_message("You've gained " + str(BANDAGE_HEALING_XP) + " Healing XP!")
 	_show_combat_message("You use a Crate of Bandages and heal " + str(heal_amount) + " HP! (-" + str(BANDAGE_ACTION_COST) + " Action)")
 
@@ -3502,10 +3497,10 @@ func _consume_one_quantity_item(base_name: String) -> int:
 	return quality
 
 func _attempt_iv_drip() -> void:
-	if not professions_unlocked.get("Apothecary", false):
-		_show_combat_message("You need to be an Apothecary to use IV Drip!")
+	if not professions_unlocked.get("Street Thug", false):
+		_show_combat_message("You need Street Thug Medicine Crafting to use IV Drip!")
 		return
-	if not _get_apothecary_rank_unlocked("Healing II"):
+	if not _get_rank_unlocked("Healing II"):
 		_show_combat_message("You need Healing Rank II to use IV Drip!")
 		return
 	if not player_alive:
@@ -3528,10 +3523,10 @@ func _attempt_iv_drip() -> void:
 	_show_combat_message("You apply an IV Drip -- healing " + str(IV_DRIP_HEAL_PER_TICK) + " HP/sec for " + str(IV_DRIP_DURATION_TICKS) + " seconds.")
 
 func _attempt_healing_vapor() -> void:
-	if not professions_unlocked.get("Apothecary", false):
-		_show_combat_message("You need to be an Apothecary to use Healing Vapor!")
+	if not professions_unlocked.get("Street Thug", false):
+		_show_combat_message("You need Street Thug Medicine Crafting to use Healing Vapor!")
 		return
-	if not _get_apothecary_rank_unlocked("Healing IV"):
+	if not _get_rank_unlocked("Healing IV"):
 		_show_combat_message("You need Healing Rank IV to use Healing Vapor!")
 		return
 	if not player_alive:
@@ -3559,10 +3554,10 @@ func _attempt_healing_vapor() -> void:
 	_show_combat_message("You release a cloud of Healing Vapor, restoring " + str(heal_amount) + " HP!")
 
 func _attempt_adrenaline_boost() -> void:
-	if not professions_unlocked.get("Apothecary", false):
-		_show_combat_message("You need to be an Apothecary to use Adrenaline Boost!")
+	if not professions_unlocked.get("Street Thug", false):
+		_show_combat_message("You need Street Thug Medicine Crafting to use Adrenaline Boost!")
 		return
-	if not _get_apothecary_rank_unlocked("Stims I"):
+	if not _get_rank_unlocked("Stims I"):
 		_show_combat_message("You need Stims Rank I to use Adrenaline Boost!")
 		return
 	if not player_alive:
@@ -3597,10 +3592,10 @@ func _attempt_adrenaline_boost() -> void:
 	_show_combat_message("You inject an Adrenaline Shot -- +" + str(bonus_amount) + " Max Action for 10 minutes!")
 
 func _attempt_blood_bag() -> void:
-	if not professions_unlocked.get("Apothecary", false):
-		_show_combat_message("You need to be an Apothecary to use Blood Bag!")
+	if not professions_unlocked.get("Street Thug", false):
+		_show_combat_message("You need Street Thug Medicine Crafting to use Blood Bag!")
 		return
-	if not _get_apothecary_rank_unlocked("Stims III"):
+	if not _get_rank_unlocked("Stims III"):
 		_show_combat_message("You need Stims Rank III to use Blood Bag!")
 		return
 	if not player_alive:
@@ -3687,12 +3682,25 @@ func _is_ability_learned(ability_name: String) -> bool:
 		return false
 
 	var required_box = ability["requires_box"]
-	if required_box != "":
-		var box_data = GameData.novice_professions[required_profession]["paths"][required_box]
-		if box_data["unlocked_nodes"] < 1:
-			return false
+	if required_box == "":
+		return true
 
-	return true
+	var prof_data = GameData.novice_professions.get(required_profession, {})
+
+	# Keystone-based: ability is learned if its node is purchased
+	# in the matching keystone
+	if prof_data.has("keystones"):
+		for ks_name in prof_data["keystones"].keys():
+			var ks = prof_data["keystones"][ks_name]
+			if ks["nodes"].has(ability_name) and ks["nodes"][ability_name].get("purchased", false):
+				return true
+		return false
+
+	# Path-based: check unlocked_nodes
+	if not prof_data.has("paths") or not prof_data["paths"].has(required_box):
+		return false
+	var box_data = prof_data["paths"][required_box]
+	return box_data["unlocked_nodes"] >= 1
 
 func _trigger_slot(slot: ActionBarSlot) -> void:
 	if slot.assigned_ability != "":
@@ -3734,20 +3742,42 @@ func _use_inventory_item(_item_key: String, display_name: String) -> void:
 
 # --- Trainer ---
 
-func _attempt_talk_to_trainer() -> void:
+# Finds the closest interactable within range and fires its callback.
+# This is the single handler for the E key -- trainers, quest givers,
+# dumpsters, doors, chests, NPCs all register in the interactables array
+# at startup and this function handles all of them uniformly.
+# Adding a new interactable = one append() call in _ready(), no new
+# input handling code needed.
+func _attempt_interact() -> void:
+	var closest_dist = INF
+	var closest_entry = null
+
+	for entry in interactables:
+		var node = entry["node"]
+		if not is_instance_valid(node) or not node.visible:
+			continue
+		var dist = player.global_position.distance_to(node.global_position)
+		if dist <= entry["range"] and dist < closest_dist:
+			closest_dist = dist
+			closest_entry = entry
+
+	if closest_entry != null:
+		closest_entry["callback"].call()
+
+func _attempt_talk_to_trainer() -> bool:
 	var nearest_index = _get_nearest_trainer_in_range()
 	if nearest_index == -1:
-		_show_combat_message("No trainer is close enough to talk to.")
-		return
+		return false
 
 	if trainer_ui.visible and active_trainer_index == nearest_index:
 		trainer_ui.visible = false
-		return
+		return true
 
 	active_trainer_index = nearest_index
 	trainer_ui.visible = true
 	trainer_dialogue_state = "GREETING"
 	_refresh_trainer_dialogue()
+	return true
 
 func _get_nearest_trainer_in_range() -> int:
 	var nearest_index = -1
@@ -3808,46 +3838,52 @@ func _on_trainer_option_stop_conversing() -> void:
 	trainer_ui.visible = false
 	active_trainer_index = -1
 
+func _on_trainer_option_back_to_greeting() -> void:
+	trainer_dialogue_state = "GREETING"
+	_refresh_trainer_dialogue()
+
 func _show_trainer_skill_list() -> void:
 	var this_trainer_profession = trainers[active_trainer_index]["profession"]
 
 	if not professions_unlocked.get(this_trainer_profession, false):
-		train_info_label.text = "What would you like to learn?"
-
-		var cost_text: String
-		if has_chosen_starting_profession:
-			cost_text = str(PROFESSION_ENTRY_COST) + " " + _points_pool_label(this_trainer_profession) + ", " + str(ADDITIONAL_PROFESSION_COGS_COST) + " Cogs"
+		var missing = _get_missing_profession_prereqs(this_trainer_profession)
+		if missing.size() > 0:
+			train_info_label.text = "You must " + ", ".join(missing) + " before training here."
 		else:
-			cost_text = str(PROFESSION_ENTRY_COST) + " " + _points_pool_label(this_trainer_profession) + " (Free starting profession!)"
+			train_info_label.text = "Complete the unlock quest to begin training as " + this_trainer_profession + "."
+		_add_trainer_option("Back", _on_trainer_option_back_to_greeting)
+		return
 
-		_add_trainer_option("Learn " + this_trainer_profession + " (" + cost_text + ")", _make_trainer_confirm_callback(this_trainer_profession, "LEARN_PROFESSION"))
+	var prof_data = GameData.novice_professions[this_trainer_profession]
+
+	if prof_data.has("keystones"):
+		train_info_label.text = "I can show you techniques, but the real growth comes from experience in the field.\n\nOpen your Talent Viewer (T) to spend your earned XP on keystones."
+		_add_trainer_option("Back", _on_trainer_option_back_to_greeting)
+		return
+
+	if not prof_data.has("paths"):
+		train_info_label.text = "Nothing available to train right now."
 		_add_trainer_option("Back", _on_trainer_option_back_to_greeting)
 		return
 
 	var anything_shown = false
-
-	for path_name in GameData.novice_professions[this_trainer_profession]["paths"].keys():
-		var path_data = GameData.novice_professions[this_trainer_profession]["paths"][path_name]
+	for path_name in prof_data["paths"].keys():
+		var path_data = prof_data["paths"][path_name]
 		var unlocked = path_data["unlocked_nodes"]
 		var max_nodes = path_data.get("max_nodes", NODES_PER_PATH)
-
 		if unlocked >= max_nodes:
 			continue
-
 		if not _is_prereq_met(this_trainer_profession, path_data):
 			continue
-
 		var costs = _get_box_cost(path_data)
 		var xp_type = path_data["xp_type"]
 		var current_xp = xp_pools[xp_type]
-
 		if current_xp < costs["xp_cost"]:
 			continue
 		if _get_points_available(this_trainer_profession) < costs["point_cost"]:
 			continue
 		if cogs < costs["cogs_cost"]:
 			continue
-
 		var display_text = _get_talent_box_label(this_trainer_profession, path_name) + " (" + str(unlocked) + "/" + str(max_nodes) + ")"
 		_add_trainer_option(display_text, _make_trainer_confirm_callback(this_trainer_profession, path_name))
 		anything_shown = true
@@ -3858,10 +3894,6 @@ func _show_trainer_skill_list() -> void:
 		train_info_label.text = "Nothing available to train right now.\nEarn more XP, Points, or Cogs."
 
 	_add_trainer_option("Back", _on_trainer_option_back_to_greeting)
-
-func _on_trainer_option_back_to_greeting() -> void:
-	trainer_dialogue_state = "GREETING"
-	_refresh_trainer_dialogue()
 
 # Returns a Callable bound to a specific profession/path so each skill-list
 # button opens the confirm screen for that exact entry, without needing a
@@ -3890,7 +3922,10 @@ func _show_trainer_confirm() -> void:
 # shows the full breakdown elsewhere -- this is a separate, simpler string
 # used only for this one screen.)
 func _build_trainer_confirm_text(profession_name: String, path_name: String) -> String:
-	var path_data = GameData.novice_professions[profession_name]["paths"][path_name]
+	var _pdata = GameData.novice_professions[profession_name].get("paths", {})
+	var path_data = _pdata.get(path_name, null)
+	if path_data == null:
+		return "This profession uses the new keystone system."
 	var costs = _get_box_cost(path_data)
 	return "This skill will cost " + str(costs["cogs_cost"]) + " Cogs. Are you sure?"
 
@@ -3949,13 +3984,18 @@ func _learn_trainer_profession() -> void:
 	_refresh_skill_tree_ui()
 
 func _grant_novice_unlock(profession_name: String) -> void:
-	if GameData.novice_professions[profession_name]["paths"].has("Novice"):
-		GameData.novice_professions[profession_name]["paths"]["Novice"]["unlocked_nodes"] = 1
+	var prof_data = GameData.novice_professions[profession_name]
 
-	if profession_name == "Scrap Tinkerer":
+	# Path-based professions: set Novice path unlocked_nodes to 1
+	if prof_data.has("paths") and prof_data["paths"].has("Novice"):
+		prof_data["paths"]["Novice"]["unlocked_nodes"] = 1
+
+	# Keystone professions have no Novice path -- the profession
+	# itself is marked unlocked via professions_unlocked, and
+	# individual keystones are unlocked separately with XP.
+
+	if profession_name == "Street Thug":
 		_add_to_inventory("Mineral Survey Tool", 1)
-		_add_to_inventory("Flora Tool", 1)
-		_add_to_inventory("Steam and Oil Sniffer", 1)
 		_add_to_inventory("Rusty Crafting Kit", 1)
 		_update_inventory_display()
 
@@ -3979,16 +4019,9 @@ func _grant_starting_bandages() -> void:
 
 func _grant_profession_starting_kit(profession_name: String) -> void:
 	match profession_name:
-		"Pressure Enforcer":
-			_grant_starting_weapon("Piston Blade", 0)
-			_add_to_inventory("Mineral Survey Tool", 1)
-			_add_to_inventory("Rusty Crafting Kit", 1)
-		"Chrome Gunner":
-			_grant_starting_weapon("Pressure Scattergun", 0)
-			_add_to_inventory("Mineral Survey Tool", 1)
-			_add_to_inventory("Rusty Crafting Kit", 1)
-		"Apothecary":
-			_grant_starting_weapon("Pneumatic Rifle", 0)
+		"Street Thug":
+			_grant_starting_weapon("Riveted Knuckles", 0)
+			_grant_starting_weapon("Rusty Pistol", 0)
 			_add_to_inventory("Mineral Survey Tool", 1)
 			_add_to_inventory("Rusty Crafting Kit", 1)
 
@@ -4107,8 +4140,9 @@ func _get_talent_learned_summary(profession_name: String) -> String:
 	var ability_lines: Array = []
 	var passive_totals: Dictionary = {}
 
-	for path_name in GameData.novice_professions[profession_name]["paths"].keys():
-		var path_data = GameData.novice_professions[profession_name]["paths"][path_name]
+	var _paths_data = GameData.novice_professions[profession_name].get("paths", {})
+	for path_name in _paths_data.keys():
+		var path_data = _paths_data[path_name]
 		var owned = path_data["unlocked_nodes"] >= path_data.get("max_nodes", NODES_PER_PATH)
 		if not owned:
 			continue
@@ -4193,8 +4227,8 @@ func _build_talent_ui() -> void:
 	talent_ui.add_child(backdrop)
 
 	var main_panel = Panel.new()
-	main_panel.position = Vector2(460, 195)
-	main_panel.size = Vector2(1070, 740)
+	main_panel.position = Vector2(300, 195)
+	main_panel.size = Vector2(1340, 740)
 	main_panel.add_theme_stylebox_override("panel", _make_flat_style(Color(0.043, 0.086, 0.086)))
 	talent_ui.add_child(main_panel)
 
@@ -4222,50 +4256,44 @@ func _build_talent_ui() -> void:
 	profession_list.add_theme_constant_override("separation", 4)
 	profession_scroll.add_child(profession_list)
 
-	# Basic professions first, then Elite -- Elite membership is
-	# determined by GameData.ELITE_PROFESSION_PREREQS, so this list stays in
-	# sync automatically if more Elite Professions are added later.
-	var basic_header = Label.new()
-	basic_header.text = "Basic"
-	basic_header.custom_minimum_size = Vector2(210, 0)
-	basic_header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	basic_header.modulate = Color(0.6, 0.9, 0.9)
-	basic_header.add_theme_font_size_override("font_size", 15)
-	profession_list.add_child(basic_header)
+	# Profession list grouped by tier using PROFESSION_TREE
+	var tier_labels = {1: "Base", 2: "Intermediate", 3: "Advanced", 4: "Elite", 5: "Mastery"}
+	var tiers_shown: Array = []
 
-	for profession_name in GameData.novice_professions.keys():
-		if GameData.ELITE_PROFESSION_PREREQS.has(profession_name):
+	for tier in [1, 2, 3, 4, 5]:
+		var profs_in_tier: Array = []
+		for profession_name in GameData.novice_professions.keys():
+			var entry = GameData.PROFESSION_TREE.get(profession_name, {})
+			if entry.get("tier", 99) == tier:
+				profs_in_tier.append(profession_name)
+		if profs_in_tier.size() == 0:
 			continue
-		var p_button = Button.new()
-		p_button.text = profession_name
-		p_button.focus_mode = Control.FOCUS_NONE
-		p_button.custom_minimum_size = Vector2(210, 30)
-		p_button.pressed.connect(_talent_select_profession.bind(profession_name))
-		profession_list.add_child(p_button)
 
-	# Spacer between the Basic and Elite groups -- more breathing room
-	# than the list's normal 4px separation.
-	var group_spacer = Control.new()
-	group_spacer.custom_minimum_size = Vector2(210, 20)
-	profession_list.add_child(group_spacer)
+		if tiers_shown.size() > 0:
+			var group_spacer = Control.new()
+			group_spacer.custom_minimum_size = Vector2(210, 12)
+			profession_list.add_child(group_spacer)
 
-	var elite_header = Label.new()
-	elite_header.text = "Elite"
-	elite_header.custom_minimum_size = Vector2(210, 0)
-	elite_header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	elite_header.modulate = Color(0.6, 0.9, 0.9)
-	elite_header.add_theme_font_size_override("font_size", 15)
-	profession_list.add_child(elite_header)
+		var tier_header = Label.new()
+		tier_header.text = tier_labels.get(tier, "Tier " + str(tier))
+		tier_header.custom_minimum_size = Vector2(210, 0)
+		tier_header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		tier_header.modulate = Color(0.6, 0.9, 0.9)
+		tier_header.add_theme_font_size_override("font_size", 15)
+		profession_list.add_child(tier_header)
 
-	for profession_name in GameData.novice_professions.keys():
-		if not GameData.ELITE_PROFESSION_PREREQS.has(profession_name):
-			continue
-		var p_button = Button.new()
-		p_button.text = profession_name
-		p_button.focus_mode = Control.FOCUS_NONE
-		p_button.custom_minimum_size = Vector2(210, 30)
-		p_button.pressed.connect(_talent_select_profession.bind(profession_name))
-		profession_list.add_child(p_button)
+		for profession_name in profs_in_tier:
+			var p_button = Button.new()
+			p_button.text = profession_name
+			p_button.focus_mode = Control.FOCUS_NONE
+			p_button.custom_minimum_size = Vector2(210, 30)
+			p_button.pressed.connect(_talent_select_profession.bind(profession_name))
+			# Grey out professions not yet unlocked
+			if not professions_unlocked.get(profession_name, false):
+				p_button.modulate = Color(0.5, 0.5, 0.5)
+			profession_list.add_child(p_button)
+
+		tiers_shown.append(tier)
 
 	# For Elite Professions, shows which base profession(s) must be
 	# mastered to enter this one -- same idea as SWG's blue prereq names
@@ -4308,13 +4336,13 @@ func _build_talent_ui() -> void:
 	# columns without a linked Elite Profession just show blank space.
 	talent_column_labels_container = HBoxContainer.new()
 	talent_column_labels_container.position = Vector2(250, 122)
-	talent_column_labels_container.size = Vector2(800, 30)
+	talent_column_labels_container.size = Vector2(1050, 30)
 	talent_column_labels_container.add_theme_constant_override("separation", 14)
 	main_panel.add_child(talent_column_labels_container)
 
 	talent_grid_container = HBoxContainer.new()
 	talent_grid_container.position = Vector2(250, 164)
-	talent_grid_container.size = Vector2(800, 330)
+	talent_grid_container.size = Vector2(1050, 330)
 	talent_grid_container.add_theme_constant_override("separation", 14)
 	main_panel.add_child(talent_grid_container)
 
@@ -4420,7 +4448,13 @@ func _group_talent_paths(profession_name: String) -> Array:
 	var columns: Array = []
 	var lookup: Dictionary = {}
 
-	for path_name in GameData.novice_professions[profession_name]["paths"].keys():
+	# Keystone professions use a different UI -- return empty so the
+	# old column grid renders nothing (new keystone UI replaces this).
+	var prof_data = GameData.novice_professions.get(profession_name, {})
+	if prof_data.has("keystones") or not prof_data.has("paths"):
+		return columns
+
+	for path_name in prof_data["paths"].keys():
 		if path_name == "Master" or path_name == "Novice":
 			continue
 
@@ -4480,7 +4514,20 @@ func _talent_select_node(profession_name: String, path_name: String) -> void:
 func _refresh_talent_grid(profession_name: String) -> void:
 	current_talent_profession = profession_name
 
-	# "Leads to: X" -- shows which Elite Profession(s) require mastering
+	# Keystone professions (Street Thug) use a different UI -- clear
+	# the old column grid and return. New keystone UI replaces this.
+	var prof_data = GameData.novice_professions.get(profession_name, {})
+	if prof_data.has("keystones") or not prof_data.has("paths"):
+		for child in talent_grid_container.get_children():
+			child.queue_free()
+		for child in talent_master_container.get_children():
+			child.queue_free()
+		for child in talent_column_labels_container.get_children():
+			child.queue_free()
+		talent_details_label.text = "Select a keystone to view details. (New UI coming soon)"
+		talent_learned_label.text = ""
+		talent_points_label.text = "Thug Points: " + str(thug_points_available)
+		return
 	# THIS profession (i.e. its own Master box), with a connector line
 	# down to the Master box (not touching it). This is the reverse of
 	# a prereq list: a base profession's tree shows what it leads to,
@@ -4499,19 +4546,12 @@ func _refresh_talent_grid(profession_name: String) -> void:
 	else:
 		talent_requirements_line.visible = false
 
-	# Below Novice: for Elite Professions, shows which base
-	# profession(s) are required to enter this one -- the forward
-	# direction of GameData.ELITE_PROFESSION_PREREQS, deduped by profession
-	# (Sniper needs two different Chrome Gunner boxes but should only
-	# show "Chrome Gunner" once; Toxinsmith needs two different
-	# professions, so both show, each on its own line).
+	# Below Novice: shows which profession(s) must be mastered to
+	# unlock this one -- sourced from PROFESSION_TREE.requires_mastered.
 	for child in talent_prereq_container.get_children():
 		child.queue_free()
 
-	var required_profession_names: Array = []
-	for prereq in GameData.ELITE_PROFESSION_PREREQS.get(profession_name, []):
-		if not required_profession_names.has(prereq["profession"]):
-			required_profession_names.append(prereq["profession"])
+	var required_profession_names: Array = GameData.PROFESSION_TREE.get(profession_name, {}).get("requires_mastered", [])
 	if required_profession_names.size() > 0:
 		for required_profession_name in required_profession_names:
 			var prereq_link_btn = _make_profession_link_button(required_profession_name)
@@ -4566,7 +4606,7 @@ func _refresh_talent_grid(profession_name: String) -> void:
 		novice_btn.pressed.connect(_talent_select_node.bind(profession_name, "Novice"))
 		talent_novice_container.add_child(novice_btn)
 
-	talent_points_label.text = "Militant Points: " + str(militant_points_available) + "   |   Engineer Points: " + str(engineer_points_available)
+	talent_points_label.text = "Thug Points: " + str(thug_points_available)
 	talent_details_label.text = "Select a skill box to view details."
 	talent_learned_label.text = _get_talent_learned_summary(profession_name)
 
@@ -4589,18 +4629,18 @@ func _refresh_talent_grid(profession_name: String) -> void:
 		var elites_requiring_column = _get_elites_requiring(profession_name, top_tier_path_name)
 
 		var col_label_box = VBoxContainer.new()
-		col_label_box.custom_minimum_size = Vector2(180, 30)
+		col_label_box.custom_minimum_size = Vector2(195, 30)
 		col_label_box.add_theme_constant_override("separation", 2)
 		talent_column_labels_container.add_child(col_label_box)
 
 		for elite_name in elites_requiring_column:
 			var col_link_btn = _make_profession_link_button(elite_name)
-			col_link_btn.custom_minimum_size = Vector2(180, 15)
+			col_link_btn.custom_minimum_size = Vector2(195, 15)
 			col_label_box.add_child(col_link_btn)
 
 	for column in columns:
 		var col_box = VBoxContainer.new()
-		col_box.custom_minimum_size = Vector2(180, 0)
+		col_box.custom_minimum_size = Vector2(195, 0)
 		col_box.add_theme_constant_override("separation", 6)
 		talent_grid_container.add_child(col_box)
 
@@ -4625,7 +4665,10 @@ func _refresh_talent_grid(profession_name: String) -> void:
 
 		for tier in tier_keys:
 			var path_name = column["tiers"][tier]
-			var path_data = GameData.novice_professions[profession_name]["paths"][path_name]
+			var _pdata = GameData.novice_professions[profession_name].get("paths", {})
+			var path_data = _pdata.get(path_name, null)
+			if path_data == null:
+				continue
 
 			var owned = path_data["unlocked_nodes"] >= path_data.get("max_nodes", NODES_PER_PATH)
 
@@ -4639,7 +4682,7 @@ func _refresh_talent_grid(profession_name: String) -> void:
 
 			var btn = Button.new()
 			btn.text = _get_talent_box_label(profession_name, path_name)
-			btn.custom_minimum_size = Vector2(170, 70)
+			btn.custom_minimum_size = Vector2(185, 70)
 			btn.focus_mode = Control.FOCUS_NONE
 			btn.add_theme_stylebox_override("normal", style)
 			btn.add_theme_stylebox_override("hover", style)
@@ -4685,7 +4728,7 @@ func _refresh_talent_grid(profession_name: String) -> void:
 		# flavorful names instead of "Blade I/II/III/IV".
 		var tree_label = Label.new()
 		tree_label.text = column["base"]
-		tree_label.custom_minimum_size = Vector2(170, 0)
+		tree_label.custom_minimum_size = Vector2(185, 0)
 		tree_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		tree_label.modulate = Color(0.6, 0.75, 0.75)
 		tree_label.add_theme_font_size_override("font_size", 13)
@@ -4776,15 +4819,15 @@ func _refresh_ability_book() -> void:
 
 	var available_names: Array = ["Attack"]
 
-	if professions_unlocked.get("Apothecary", false):
+	if professions_unlocked.get("Street Thug", false):
 		available_names.append("Apply Bandage")
-		if _get_apothecary_rank_unlocked("Healing II"):
+		if _get_rank_unlocked("Healing II"):
 			available_names.append("IV Drip")
-		if _get_apothecary_rank_unlocked("Healing IV"):
+		if _get_rank_unlocked("Healing IV"):
 			available_names.append("Healing Vapor")
-		if _get_apothecary_rank_unlocked("Stims I"):
+		if _get_rank_unlocked("Stims I"):
 			available_names.append("Adrenaline Boost")
-		if _get_apothecary_rank_unlocked("Stims III"):
+		if _get_rank_unlocked("Stims III"):
 			available_names.append("Blood Bag")
 
 	for profession_name in GameData.novice_professions.keys():
@@ -5796,15 +5839,15 @@ func _select_survey_book_resource(instance_name: String) -> void:
 	var concentration = int(round(100 * proximity))
 	concentration = max(concentration, 1)
 
-	var scanning_nodes = _get_scrap_tinkerer_rank_count("Scanning")
-	var mastery_nodes = _get_scrap_tinkerer_rank_count("Fabrication Mastery")
+	var scanning_nodes = _get_profession_rank_count("Scanning")
+	var mastery_nodes = _get_profession_rank_count("Fabrication Mastery")
 	concentration += (scanning_nodes * 5) + (mastery_nodes * 2)
 	concentration = min(concentration, 100)
 
 	current_scan_resource = instance_name
 	current_scan_concentration = concentration
 
-	_add_skill_xp("Scanning", 5)
+	_add_skill_xp("Crafting XP", 5)
 
 	survey_book_scan_label.text = _get_resource_display_label(instance_name) + ": " + str(concentration) + "% concentration"
 	survey_book_message_label.text = ""

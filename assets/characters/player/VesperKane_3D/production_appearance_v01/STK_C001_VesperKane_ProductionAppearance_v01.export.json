@@ -1,0 +1,72 @@
+{
+  "source_blend": "C:\\Users\\bdjos\\Documents\\Codex\\2026-07-10\\can\\work\\vesper\\Steamtek_C001_VesperKane_ProductionAppearance_v01.blend",
+  "output_glb": "C:\\Users\\bdjos\\Documents\\Codex\\2026-07-10\\can\\work\\vesper\\STK_C001_VesperKane_ProductionAppearance_v01.glb",
+  "character_id": "Steamtek_C001_VesperKane",
+  "stage": "production_appearance_v01_pbr_review",
+  "mesh_count": 39,
+  "vertex_count": 4672,
+  "bone_count": 706,
+  "pbr_texture_count": 32,
+  "pbr_textures": [
+    "VK_aged_brass_BaseColor",
+    "VK_aged_brass_Metallic",
+    "VK_aged_brass_Normal",
+    "VK_aged_brass_Roughness",
+    "VK_black_leather_BaseColor",
+    "VK_black_leather_Metallic",
+    "VK_black_leather_Normal",
+    "VK_black_leather_Roughness",
+    "VK_coat_edge_BaseColor",
+    "VK_coat_edge_Metallic",
+    "VK_coat_edge_Normal",
+    "VK_coat_edge_Roughness",
+    "VK_coat_fabric_BaseColor",
+    "VK_coat_fabric_Metallic",
+    "VK_coat_fabric_Normal",
+    "VK_coat_fabric_Roughness",
+    "VK_dark_steel_BaseColor",
+    "VK_dark_steel_Metallic",
+    "VK_dark_steel_Normal",
+    "VK_dark_steel_Roughness",
+    "VK_gunmetal_BaseColor",
+    "VK_gunmetal_Metallic",
+    "VK_gunmetal_Normal",
+    "VK_gunmetal_Roughness",
+    "VK_rubber_BaseColor",
+    "VK_rubber_Metallic",
+    "VK_rubber_Normal",
+    "VK_rubber_Roughness",
+    "VK_skin_BaseColor",
+    "VK_skin_Metallic",
+    "VK_skin_Normal",
+    "VK_skin_Roughness"
+  ],
+  "mechanical_arm_side": "physical_left",
+  "baked_environment_color": false,
+  "skeleton_changed": false,
+  "animation_changed": false,
+  "scale_changed": false,
+  "actions": [
+    {
+      "name": "STK_IDLE",
+      "frame_start": 1.0,
+      "frame_end": 8.0
+    },
+    {
+      "name": "STK_WALK",
+      "frame_start": 1.0,
+      "frame_end": 25.0
+    }
+  ],
+  "export_kwargs": {
+    "filepath": "C:\\Users\\bdjos\\Documents\\Codex\\2026-07-10\\can\\work\\vesper\\STK_C001_VesperKane_ProductionAppearance_v01.glb",
+    "export_format": "GLB",
+    "use_selection": true,
+    "export_animations": true,
+    "export_skins": true,
+    "export_morph": true,
+    "export_yup": true,
+    "export_apply": false,
+    "export_animation_mode": "ACTIONS"
+  }
+}

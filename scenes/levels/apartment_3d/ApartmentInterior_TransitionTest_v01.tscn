@@ -1,0 +1,239 @@
+[gd_scene load_steps=21 format=3]
+
+[ext_resource type="Script" path="res://scenes/levels/transition_tests/steamtek_transition_level_3d.gd" id="1_level"]
+[ext_resource type="PackedScene" path="res://scenes/characters/player/VesperKane_PlayerCharacter_v01.tscn" id="2_character"]
+[ext_resource type="PackedScene" path="res://scenes/interactions/SteamtekZoneDoor3D.tscn" id="3_zone_door"]
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 1
+background_color = Color(0.005, 0.008, 0.014, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.24, 0.2, 0.16, 1)
+ambient_light_energy = 0.48
+tonemap_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="FloorMaterial"]
+albedo_color = Color(0.055, 0.045, 0.038, 1)
+metallic = 0.18
+roughness = 0.78
+
+[sub_resource type="StandardMaterial3D" id="WallMaterial"]
+albedo_color = Color(0.065, 0.065, 0.075, 1)
+metallic = 0.22
+roughness = 0.8
+
+[sub_resource type="StandardMaterial3D" id="DoorMaterial"]
+albedo_color = Color(0.095, 0.07, 0.045, 1)
+metallic = 0.68
+roughness = 0.4
+
+[sub_resource type="BoxMesh" id="FloorMesh"]
+material = SubResource("FloorMaterial")
+size = Vector3(10, 0.2, 8)
+
+[sub_resource type="BoxShape3D" id="FloorShape"]
+size = Vector3(10, 0.2, 8)
+
+[sub_resource type="BoxMesh" id="BackWallMesh"]
+material = SubResource("WallMaterial")
+size = Vector3(10, 3.2, 0.35)
+
+[sub_resource type="BoxShape3D" id="BackWallShape"]
+size = Vector3(10, 3.2, 0.35)
+
+[sub_resource type="BoxMesh" id="SideWallMesh"]
+material = SubResource("WallMaterial")
+size = Vector3(0.35, 3.2, 8)
+
+[sub_resource type="BoxShape3D" id="SideWallShape"]
+size = Vector3(0.35, 3.2, 8)
+
+[sub_resource type="BoxMesh" id="DoorMesh"]
+material = SubResource("DoorMaterial")
+size = Vector3(1.65, 2.55, 0.25)
+
+[sub_resource type="BoxShape3D" id="DoorBodyShape"]
+size = Vector3(1.65, 2.55, 0.35)
+
+[sub_resource type="BoxMesh" id="FrontSideMesh"]
+material = SubResource("WallMaterial")
+size = Vector3(4.1, 3.2, 0.35)
+
+[sub_resource type="BoxShape3D" id="FrontSideShape"]
+size = Vector3(4.1, 3.2, 0.35)
+
+[sub_resource type="BoxMesh" id="FrontHeaderMesh"]
+material = SubResource("WallMaterial")
+size = Vector3(1.8, 0.65, 0.35)
+
+[sub_resource type="BoxShape3D" id="FrontHeaderShape"]
+size = Vector3(1.8, 0.65, 0.35)
+
+[sub_resource type="LabelSettings" id="LabelSettings"]
+font_size = 20
+font_color = Color(1, 0.9, 0.76, 1)
+outline_size = 5
+outline_color = Color(0.01, 0.007, 0.004, 0.95)
+
+[node name="ApartmentInterior_TransitionTest_v01" type="Node3D"]
+script = ExtResource("1_level")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment")
+
+[node name="InteriorKey" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-58, -35, 0)
+light_color = Color(1, 0.73, 0.48, 1)
+light_energy = 0.75
+shadow_enabled = true
+
+[node name="InteriorLamp" type="OmniLight3D" parent="."]
+position = Vector3(-2.2, 2.4, -0.8)
+light_color = Color(1, 0.38, 0.13, 1)
+light_energy = 3.8
+omni_range = 6.0
+shadow_enabled = true
+
+[node name="Floor" type="StaticBody3D" parent="."]
+position = Vector3(0, -0.1, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("FloorMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("FloorShape")
+
+[node name="BackWall" type="StaticBody3D" parent="."]
+position = Vector3(0, 1.6, -4)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="BackWall"]
+mesh = SubResource("BackWallMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="BackWall"]
+shape = SubResource("BackWallShape")
+
+[node name="LeftWall" type="StaticBody3D" parent="."]
+position = Vector3(-5, 1.6, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="LeftWall"]
+mesh = SubResource("SideWallMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="LeftWall"]
+shape = SubResource("SideWallShape")
+
+[node name="RightWall" type="StaticBody3D" parent="."]
+position = Vector3(5, 1.6, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="RightWall"]
+mesh = SubResource("SideWallMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="RightWall"]
+shape = SubResource("SideWallShape")
+
+[node name="ExitDoorVisual" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.275, 3.86)
+mesh = SubResource("DoorMesh")
+
+[node name="FrontLeftWall" type="StaticBody3D" parent="."]
+position = Vector3(-2.95, 1.6, 4)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="FrontLeftWall"]
+mesh = SubResource("FrontSideMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="FrontLeftWall"]
+shape = SubResource("FrontSideShape")
+
+[node name="FrontRightWall" type="StaticBody3D" parent="."]
+position = Vector3(2.95, 1.6, 4)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="FrontRightWall"]
+mesh = SubResource("FrontSideMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="FrontRightWall"]
+shape = SubResource("FrontSideShape")
+
+[node name="FrontDoorHeader" type="StaticBody3D" parent="."]
+position = Vector3(0, 2.875, 4)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="FrontDoorHeader"]
+mesh = SubResource("FrontHeaderMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="FrontDoorHeader"]
+shape = SubResource("FrontHeaderShape")
+
+[node name="ExitDoorBody" type="StaticBody3D" parent="."]
+position = Vector3(0, 1.275, 3.86)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Collision" type="CollisionShape3D" parent="ExitDoorBody"]
+shape = SubResource("DoorBodyShape")
+
+[node name="ExitDoor" parent="." instance=ExtResource("3_zone_door")]
+position = Vector3(0, 1.15, 3.0)
+interaction_prompt = "Exit to alley"
+target_scene_path = "res://scenes/levels/surface_3d/ApartmentExterior_TransitionTest_v01.tscn"
+target_spawn_id = "ExteriorReturnSpawn"
+
+[node name="InteriorEntrySpawn" type="Marker3D" parent="."]
+position = Vector3(0, 0, 1.8)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="VesperKane_PlayerCharacter_v01" parent="." instance=ExtResource("2_character")]
+position = Vector3(0, 0, 1.8)
+
+[node name="CameraRig" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig"]
+position = Vector3(8.66, 6.77, 5)
+projection = 1
+size = 8.5
+current = true
+
+[node name="TransitionUI" type="CanvasLayer" parent="."]
+
+[node name="Title" type="Label" parent="TransitionUI"]
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 760.0
+offset_bottom = 88.0
+text = "APARTMENT INTERIOR — TRANSITION SYSTEM TEST\nRoom architecture is graybox; walk to the door and press E to return."
+label_settings = SubResource("LabelSettings")
+
+[node name="InteractionPrompt" type="Label" parent="TransitionUI"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_top = -92.0
+offset_right = 200.0
+offset_bottom = -48.0
+grow_horizontal = 2
+grow_vertical = 0
+label_settings = SubResource("LabelSettings")
+horizontal_alignment = 1
+
+[node name="Fade" type="ColorRect" parent="TransitionUI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)

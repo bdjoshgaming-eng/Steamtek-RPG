@@ -4,13 +4,13 @@ extends Control
 # InventoryBook.gd
 # ============================================================
 # The Inventory Book panel, pulled out of main.gd (part of the ongoing
-# split — see GameData.gd and TalentViewer.gd for earlier passes).
+# split -- see GameData.gd and TalentViewer.gd for earlier passes).
 # Attached to the InventoryBookUI Control node, instantiated by
 # main.gd's _build_inventory_book_ui(), which sets `main` below before
 # calling build().
 #
 # Note: equipped_weapon_name is core combat state read by the whole
-# combat system, not exclusive to this panel — this script both reads
+# combat system, not exclusive to this panel -- this script both reads
 # AND writes it (double-clicking an item equips/unequips it) via the
 # main. prefix, exactly as main.gd itself would.
 # ============================================================
@@ -54,7 +54,7 @@ func _build_inventory_book_ui() -> void:
 	close_button.pressed.connect(func(): visible = false)
 	main_panel.add_child(close_button)
 
-	# Left panel — details for whichever item was last clicked.
+	# Left panel -- details for whichever item was last clicked.
 	var details_panel = Panel.new()
 	details_panel.position = Vector2(20, 50)
 	details_panel.size = Vector2(320, 560)
@@ -80,7 +80,7 @@ func _build_inventory_book_ui() -> void:
 	inventory_book_stats_label.modulate = Color(0.85, 0.95, 0.95)
 	details_scroll.add_child(inventory_book_stats_label)
 
-	# Right panel — scrollable list of every item currently held.
+	# Right panel -- scrollable list of every item currently held.
 	var list_panel = Panel.new()
 	list_panel.position = Vector2(360, 50)
 	list_panel.size = Vector2(520, 560)
@@ -112,7 +112,7 @@ func _format_quantity_tiered(qty: int) -> String:
 # Builds the label text for one main.inventory slot. Resources show a
 # tiered quantity (1-999 plain, 1000+ as "10k"/"23k"/etc). Items with
 # a Charges stat show that instead. Everything else (unique crafted
-# equipment) shows just its name — no "(1)" clutter, since each craft
+# equipment) shows just its name -- no "(1)" clutter, since each craft
 # is its own slot now. Genuinely stacked non-resource items (like loot
 # that dropped together and shares an ID) still show a plain count.
 func _get_inventory_slot_label(item_key: String) -> String:
@@ -168,7 +168,7 @@ func _refresh_inventory_book() -> void:
 
 		# Equipped item gets a visible border so it's obvious which
 		# weapon is currently active, without needing a separate
-		# Equip window at all — double-click toggles it on/off.
+		# Equip window at all -- double-click toggles it on/off.
 		if item_key == main.equipped_weapon_name:
 			var equipped_style = main._make_flat_style(Color(0.15, 0.15, 0.15))
 			equipped_style.border_width_left = 3
@@ -182,7 +182,7 @@ func _refresh_inventory_book() -> void:
 			btn.add_theme_stylebox_override("focus", equipped_style)
 
 		# Drag-and-drop uses the item's display name (e.g. "Mineral
-		# Survey Tool"), not its internal instance key — raw resources
+		# Survey Tool"), not its internal instance key -- raw resources
 		# have randomly-generated instance keys, but _use_ability_by_name
 		# (called on drop) dispatches based on the recognizable display
 		# name instead.
@@ -194,7 +194,7 @@ func _refresh_inventory_book() -> void:
 		inventory_book_list_container.add_child(btn)
 
 # Real functional effect text for consumables whose Quality actually
-# drives something (Adrenaline Shot, Empty IV Bag) — shown in the
+# drives something (Adrenaline Shot, Empty IV Bag) -- shown in the
 # Inventory Book instead of just hiding Quality with nothing to
 # replace it. Returns [] for anything not specifically handled here.
 func _get_consumable_effect_lines(base_name: String, quality: int) -> Array:
@@ -219,7 +219,7 @@ func _select_inventory_book_item(item_key: String) -> void:
 	lines.append(display_name)
 
 	# For raw resources, the main.inventory key IS the resource's unique
-	# generated name (e.g. "Thaliryxqven") — show it as its own line,
+	# generated name (e.g. "Thaliryxqven") -- show it as its own line,
 	# since it's meaningful identity info, not just internal plumbing.
 	if main.resource_subclass_of.has(item_key):
 		lines.append(item_key)

@@ -30,7 +30,7 @@ var recipes = [
 		"output": "Piston Blade",
 		"item_class": "Sword",
 		"item_subclass": "1 Handed",
-		"requires_profession": "Scrap Tinkerer",
+		"requires_profession": "Street Thug",
 		"weapon_categorical_stats": {"Damage Type": "Slashing", "Wound Type": "Bleed"},
 		"weapon_stat_ranges": {"Speed": [2.8, 1.8], "Damage Rating": [8, 16], "Accuracy": [55, 75]}
 	},
@@ -42,7 +42,7 @@ var recipes = [
 		"output": "Piston Greatblade",
 		"item_class": "Sword",
 		"item_subclass": "2 Handed",
-		"requires_profession": "Scrap Tinkerer",
+		"requires_profession": "Street Thug",
 		"weapon_categorical_stats": {"Damage Type": "Slashing", "Wound Type": "Bleed"},
 		"weapon_stat_ranges": {"Speed": [4.0, 3.0], "Damage Rating": [18, 32], "Accuracy": [40, 60]}
 	},
@@ -54,7 +54,7 @@ var recipes = [
 		"output": "Pressure Maul",
 		"item_class": "Hammer",
 		"item_subclass": "2 Handed",
-		"requires_profession": "Scrap Tinkerer",
+		"requires_profession": "Street Thug",
 		"weapon_categorical_stats": {"Damage Type": "Blunt", "Wound Type": "Crush"},
 		"weapon_stat_ranges": {"Speed": [4.5, 3.2], "Damage Rating": [20, 36], "Accuracy": [35, 55]}
 	},
@@ -66,7 +66,7 @@ var recipes = [
 		"output": "Arc Rod",
 		"item_class": "Stun Stick",
 		"item_subclass": "1 Handed",
-		"requires_profession": "Scrap Tinkerer",
+		"requires_profession": "Street Thug",
 		"weapon_categorical_stats": {"Damage Type": "Blunt", "Wound Type": "Stun"},
 		"weapon_stat_ranges": {"Speed": [2.4, 1.6], "Damage Rating": [6, 14], "Accuracy": [55, 75]}
 	},
@@ -78,7 +78,7 @@ var recipes = [
 		"output": "Riveted Knuckles",
 		"item_class": "Brass Knuckles",
 		"item_subclass": "1 Handed",
-		"requires_profession": "Scrap Tinkerer",
+		"requires_profession": "Street Thug",
 		"weapon_categorical_stats": {"Damage Type": "Unarmed", "Wound Type": "Bruise"},
 		"weapon_stat_ranges": {"Speed": [1.8, 1.0], "Damage Rating": [5, 12], "Accuracy": [65, 85]}
 	},
@@ -130,14 +130,14 @@ var recipes = [
 		"output": "Crate of Bandages",
 		"max_charges": 5,
 		"item_class": "Medicine",
-		"requires_profession": "Apothecary"
+		"requires_profession": "Street Thug"
 	},
 	{
 		"name": "Antiseptic Salve",
 		"requires": {"Antiseptic Moss": 2, "Spring Water": 1},
 		"output": "Antiseptic Salve",
 		"item_class": "Medicine",
-		"requires_profession": "Apothecary",
+		"requires_profession": "Street Thug",
 		"requires_box": "Medicine Crafting I"
 	},
 	{
@@ -145,7 +145,7 @@ var recipes = [
 		"requires": {"Bloomwort": 1, "Torn Cloth": 5},
 		"output": "Vitality Tonic",
 		"item_class": "Medicine",
-		"requires_profession": "Apothecary",
+		"requires_profession": "Street Thug",
 		"requires_box": "Medicine Crafting I"
 	},
 	{
@@ -153,7 +153,7 @@ var recipes = [
 		"requires": {"Plastic": 2},
 		"output": "Syringe",
 		"item_class": "Component",
-		"requires_profession": "Apothecary",
+		"requires_profession": "Street Thug",
 		"requires_box": "Medicine Crafting II"
 	},
 	{
@@ -162,7 +162,7 @@ var recipes = [
 		"quality_ingredients": ["Water", "Healroot"],
 		"output": "Adrenaline Shot",
 		"item_class": "Medicine",
-		"requires_profession": "Apothecary",
+		"requires_profession": "Street Thug",
 		"requires_box": "Medicine Crafting II"
 	},
 	{
@@ -170,7 +170,7 @@ var recipes = [
 		"requires": {"Plastic": 3},
 		"output": "Empty IV Bag",
 		"item_class": "Component",
-		"requires_profession": "Apothecary",
+		"requires_profession": "Street Thug",
 		"requires_box": "Medicine Crafting II"
 	},
 	{
@@ -181,7 +181,7 @@ var recipes = [
 		"output": "Rusty Pistol",
 		"item_class": "Pistol",
 		"item_subclass": "Pistol",
-		"requires_profession": "Scrap Tinkerer",
+		"requires_profession": "Street Thug",
 		"weapon_categorical_stats": {"Damage Type": "Kinetic", "Wound Type": "Puncture"},
 		"weapon_stat_ranges": {"Speed": [1.2, 0.6], "Damage Rating": [6, 14], "Range": [15, 25], "Ammo Capacity": [8, 15], "Reload Speed": [3.0, 1.5], "Accuracy": [65, 85]}
 	},
@@ -193,7 +193,7 @@ var recipes = [
 		"output": "Pneumatic Rifle",
 		"item_class": "Assault Rifle",
 		"item_subclass": "Assault Rifle",
-		"requires_profession": "Scrap Tinkerer",
+		"requires_profession": "Street Thug",
 		"weapon_categorical_stats": {"Damage Type": "Kinetic", "Wound Type": "Puncture"},
 		"weapon_stat_ranges": {"Speed": [0.4, 0.15], "Damage Rating": [8, 18], "Range": [40, 70], "Ammo Capacity": [20, 35], "Reload Speed": [3.5, 2.0], "Accuracy": [45, 65]}
 	},
@@ -205,7 +205,7 @@ var recipes = [
 		"output": "Pneumatic Longrifle",
 		"item_class": "Sniper Rifle",
 		"item_subclass": "Sniper Rifle",
-		"requires_profession": "Scrap Tinkerer",
+		"requires_profession": "Street Thug",
 		"weapon_categorical_stats": {"Damage Type": "Kinetic", "Wound Type": "Puncture"},
 		"weapon_stat_ranges": {"Speed": [3.0, 1.8], "Damage Rating": [30, 55], "Range": [100, 160], "Ammo Capacity": [4, 8], "Reload Speed": [4.0, 2.5], "Accuracy": [70, 90]}
 	},
@@ -217,7 +217,7 @@ var recipes = [
 		"output": "Pressure Scattergun",
 		"item_class": "Shotgun",
 		"item_subclass": "Shotgun",
-		"requires_profession": "Scrap Tinkerer",
+		"requires_profession": "Street Thug",
 		"weapon_categorical_stats": {"Damage Type": "Kinetic", "Wound Type": "Laceration"},
 		"weapon_stat_ranges": {"Speed": [3.5, 2.5], "Damage Rating": [22, 38], "Range": [8, 15], "Ammo Capacity": [4, 8], "Reload Speed": [5.0, 3.5], "Accuracy": [35, 55]}
 	},
@@ -253,8 +253,8 @@ var recipes = [
 		"output": "Hydraulic Saber",
 		"item_class": "Sword",
 		"item_subclass": "1 Handed",
-		"requires_profession": "Scrap Tinkerer",
-		"requires_box": "Crafting I",
+		"requires_profession": "Street Thug",
+		"requires_box": "Weapons Crafting I",
 		"weapon_categorical_stats": {"Damage Type": "Slashing", "Wound Type": "Bleed"},
 		"weapon_stat_ranges": {"Speed": [2.4, 1.5], "Damage Rating": [14, 26], "Accuracy": [60, 80]}
 	},
@@ -266,8 +266,8 @@ var recipes = [
 		"output": "Compression Sledge",
 		"item_class": "Hammer",
 		"item_subclass": "2 Handed",
-		"requires_profession": "Scrap Tinkerer",
-		"requires_box": "Crafting I",
+		"requires_profession": "Street Thug",
+		"requires_box": "Weapons Crafting I",
 		"weapon_categorical_stats": {"Damage Type": "Blunt", "Wound Type": "Crush"},
 		"weapon_stat_ranges": {"Speed": [3.6, 2.4], "Damage Rating": [30, 50], "Accuracy": [40, 60]}
 	},
@@ -279,8 +279,8 @@ var recipes = [
 		"output": "Pneumatic Knuckles",
 		"item_class": "Brass Knuckles",
 		"item_subclass": "1 Handed",
-		"requires_profession": "Scrap Tinkerer",
-		"requires_box": "Crafting I",
+		"requires_profession": "Street Thug",
+		"requires_box": "Weapons Crafting I",
 		"weapon_categorical_stats": {"Damage Type": "Unarmed", "Wound Type": "Bruise"},
 		"weapon_stat_ranges": {"Speed": [1.5, 0.8], "Damage Rating": [9, 18], "Accuracy": [70, 90]}
 	},
@@ -292,8 +292,8 @@ var recipes = [
 		"output": "Steam Baton",
 		"item_class": "Baton",
 		"item_subclass": "1 Handed",
-		"requires_profession": "Scrap Tinkerer",
-		"requires_box": "Crafting I",
+		"requires_profession": "Street Thug",
+		"requires_box": "Weapons Crafting I",
 		"weapon_categorical_stats": {"Damage Type": "Blunt", "Wound Type": "Bruise"},
 		"weapon_stat_ranges": {"Speed": [2.2, 1.4], "Damage Rating": [12, 22], "Accuracy": [60, 80]}
 	},
@@ -305,8 +305,8 @@ var recipes = [
 		"output": "Vented Long-Rifle",
 		"item_class": "Sniper Rifle",
 		"item_subclass": "Sniper Rifle",
-		"requires_profession": "Scrap Tinkerer",
-		"requires_box": "Crafting II",
+		"requires_profession": "Street Thug",
+		"requires_box": "Weapons Crafting II",
 		"weapon_categorical_stats": {"Damage Type": "Kinetic", "Wound Type": "Puncture"},
 		"weapon_stat_ranges": {"Speed": [2.6, 1.5], "Damage Rating": [45, 75], "Range": [120, 190], "Ammo Capacity": [5, 10], "Reload Speed": [3.5, 2.2], "Accuracy": [75, 95]}
 	},
@@ -318,8 +318,8 @@ var recipes = [
 		"output": "Double-Bore Scattergun",
 		"item_class": "Shotgun",
 		"item_subclass": "Shotgun",
-		"requires_profession": "Scrap Tinkerer",
-		"requires_box": "Crafting II",
+		"requires_profession": "Street Thug",
+		"requires_box": "Weapons Crafting II",
 		"weapon_categorical_stats": {"Damage Type": "Kinetic", "Wound Type": "Laceration"},
 		"weapon_stat_ranges": {"Speed": [4.5, 3.2], "Damage Rating": [35, 60], "Range": [10, 18], "Ammo Capacity": [2, 4], "Reload Speed": [6.0, 4.5], "Accuracy": [35, 55]}
 	},
@@ -331,8 +331,8 @@ var recipes = [
 		"output": "Copper Lined Gun",
 		"item_class": "Pistol",
 		"item_subclass": "Pistol",
-		"requires_profession": "Scrap Tinkerer",
-		"requires_box": "Crafting II",
+		"requires_profession": "Street Thug",
+		"requires_box": "Weapons Crafting II",
 		"weapon_categorical_stats": {"Damage Type": "Kinetic", "Wound Type": "Puncture"},
 		"weapon_stat_ranges": {"Speed": [1.0, 0.5], "Damage Rating": [10, 22], "Range": [20, 32], "Ammo Capacity": [10, 18], "Reload Speed": [2.5, 1.2], "Accuracy": [70, 90]}
 	},
@@ -353,35 +353,35 @@ var recipes = [
 		"requires": {"Metal": 5},
 		"output": "Mineral Survey Tool",
 		"item_class": "Tool",
-		"requires_profession": "Scrap Tinkerer"
+		"requires_profession": "Street Thug"
 	},
 	{
 		"name": "Flora Tool",
 		"requires": {"Metal": 5},
 		"output": "Flora Tool",
 		"item_class": "Tool",
-		"requires_profession": "Scrap Tinkerer"
+		"requires_profession": "Street Thug"
 	},
 	{
 		"name": "Liquid and Chem Tool",
 		"requires": {"Metal": 5},
 		"output": "Liquid and Chem Tool",
 		"item_class": "Tool",
-		"requires_profession": "Scrap Tinkerer"
+		"requires_profession": "Street Thug"
 	},
 	{
 		"name": "Rusty Crafting Kit",
 		"requires": {"Black Iron": 5, "Copper": 2},
 		"output": "Rusty Crafting Kit",
 		"item_class": "Tool",
-		"requires_profession": "Scrap Tinkerer"
+		"requires_profession": "Street Thug"
 	},
 	{
 		"name": "Med Crafting Kit",
 		"requires": {"Black Iron": 5, "Copper": 2},
 		"output": "Med Crafting Kit",
 		"item_class": "Tool",
-		"requires_profession": "Apothecary"
+		"requires_profession": "Street Thug"
 	},
 	{
 		"name": "Weapon Muzzle",
@@ -390,8 +390,8 @@ var recipes = [
 		"output": "Weapon Muzzle",
 		"item_class": "Component",
 		"item_subclass": "Muzzle",
-		"requires_profession": "Scrap Tinkerer",
-		"requires_box": "Crafting III",
+		"requires_profession": "Street Thug",
+		"requires_box": "Weapons Crafting III",
 		"weapon_stat_ranges": {"Damage Rating Bonus": [2, 6], "Range Bonus": [2, 8]}
 	}
 ]
@@ -402,29 +402,22 @@ var recipes = [
 # certification box is owned -- gives "Weapon Cert" real mechanical
 # weight instead of being purely cosmetic.
 const WEAPON_CERT_REQUIREMENTS: Dictionary = {
-	"Piston Blade": {"profession": "Pressure Enforcer", "box": "Novice"},
-	"Piston Greatblade": {"profession": "Pressure Enforcer", "box": "Novice"},
-	"Pressure Maul": {"profession": "Pressure Enforcer", "box": "Novice"},
-	"Arc Rod": {"profession": "Pressure Enforcer", "box": "Novice"},
-	"Riveted Knuckles": {"profession": "Pressure Enforcer", "box": "Novice"},
-	"Hydraulic Saber": {"profession": "Pressure Enforcer", "box": "One Hand III"},
-	"Steam Baton": {"profession": "Pressure Enforcer", "box": "One Hand III"},
-	"Compression Sledge": {"profession": "Pressure Enforcer", "box": "Two Hand III"},
-	"Pneumatic Knuckles": {"profession": "Pressure Enforcer", "box": "Unarmed III"},
-	"Rusty Pistol": {"profession": "Chrome Gunner", "box": "Novice"},
-	# Pneumatic Rifle is both Chrome Gunner's novice rifle AND
-	# Apothecary's starting weapon -- certified via either profession's
-	# Novice box, so a fresh Apothecary isn't penalized for using their
-	# own starting gear.
-	"Pneumatic Rifle": [
-		{"profession": "Chrome Gunner", "box": "Novice"},
-		{"profession": "Apothecary", "box": "Novice"}
-	],
-	"Pneumatic Longrifle": {"profession": "Chrome Gunner", "box": "Novice"},
-	"Pressure Scattergun": {"profession": "Chrome Gunner", "box": "Novice"},
-	"Vented Long-Rifle": {"profession": "Chrome Gunner", "box": "Rifles III"},
-	"Double-Bore Scattergun": {"profession": "Chrome Gunner", "box": "Shotguns III"},
-	"Copper Lined Gun": {"profession": "Chrome Gunner", "box": "Pistols III"},
+	"Piston Blade": {"profession": "Street Thug", "box": "Novice"},
+	"Piston Greatblade": {"profession": "Street Thug", "box": "Novice"},
+	"Pressure Maul": {"profession": "Street Thug", "box": "Novice"},
+	"Arc Rod": {"profession": "Street Thug", "box": "Novice"},
+	"Riveted Knuckles": {"profession": "Street Thug", "box": "Novice"},
+	"Hydraulic Saber": {"profession": "Street Thug", "box": "Melee II"},
+	"Steam Baton": {"profession": "Street Thug", "box": "Melee II"},
+	"Compression Sledge": {"profession": "Street Thug", "box": "Melee III"},
+	"Pneumatic Knuckles": {"profession": "Street Thug", "box": "Melee II"},
+	"Rusty Pistol": {"profession": "Street Thug", "box": "Novice"},
+	"Pneumatic Rifle": {"profession": "Street Thug", "box": "Novice"},
+	"Pneumatic Longrifle": {"profession": "Street Thug", "box": "Novice"},
+	"Pressure Scattergun": {"profession": "Street Thug", "box": "Novice"},
+	"Vented Long-Rifle": {"profession": "Street Thug", "box": "Ranged III"},
+	"Double-Bore Scattergun": {"profession": "Street Thug", "box": "Ranged III"},
+	"Copper Lined Gun": {"profession": "Street Thug", "box": "Ranged III"},
 	"Canister Launcher": {"profession": "Ordnance Specialist", "box": "Novice"},
 	"Oil Burner": {"profession": "Ordnance Specialist", "box": "Novice"},
 	"Pressure-Fed Launcher": {"profession": "Ordnance Specialist", "box": "Novice"}
@@ -433,258 +426,398 @@ const WEAPON_CERT_REQUIREMENTS: Dictionary = {
 
 # --- Ability Definitions ---
 var ability_definitions: Dictionary = {
-	"Quick Hit": {"weapons": ["Sword", "Axe", "Baton"], "weapon_category": "One Hand", "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Pressure Enforcer", "requires_box": "Novice"},
-	"Overhead Swing": {"weapons": ["Sword", "Axe", "Hammer"], "weapon_category": "Two Hand", "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Pressure Enforcer", "requires_box": "Novice"},
-	"Backhand": {"weapons": ["Brass Knuckles"], "weapon_category": "Unarmed", "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Pressure Enforcer", "requires_box": "Novice"},
-	"Slap": {"weapons": ["Brass Knuckles"], "weapon_category": "Unarmed", "action_cost": 50, "damage_multiplier": 1.25, "requires_profession": "Pressure Enforcer", "requires_box": "Unarmed II"},
-	"Thrust": {"weapons": ["Sword", "Axe", "Baton"], "weapon_category": "One Hand", "action_cost": 50, "damage_multiplier": 1.25, "requires_profession": "Pressure Enforcer", "requires_box": "One Hand II"},
-	"Bludgeon": {"weapons": ["Sword", "Axe", "Hammer", "Stun Stick"], "weapon_category": "Two Hand", "action_cost": 50, "damage_multiplier": 1.25, "requires_profession": "Pressure Enforcer", "requires_box": "Two Hand II"},
-	"Roundhouse": {"weapons": ["Brass Knuckles"], "weapon_category": "Unarmed", "action_cost": 60, "damage_multiplier": 1.5, "aoe": true, "requires_profession": "Pressure Enforcer", "requires_box": "Unarmed IV"},
-	"Flourish": {"weapons": ["Sword", "Axe", "Baton"], "weapon_category": "One Hand", "action_cost": 60, "damage_multiplier": 1.5, "aoe": true, "requires_profession": "Pressure Enforcer", "requires_box": "One Hand IV"},
-	"Power Swing": {"weapons": ["Sword", "Axe", "Hammer", "Stun Stick"], "weapon_category": "Two Hand", "action_cost": 60, "damage_multiplier": 1.5, "aoe": true, "requires_profession": "Pressure Enforcer", "requires_box": "Two Hand IV"},
-	"Subdue": {"weapons": ["Sword", "Axe", "Baton", "Hammer", "Brass Knuckles", "Stun Stick"], "action_cost": 30, "damage_multiplier": 0, "debuff": "damage", "debuff_amount": 0.10, "debuff_duration": 3.0, "requires_profession": "Pressure Enforcer", "requires_box": "Martial Training I"},
-	"Disorient": {"weapons": ["Sword", "Axe", "Baton", "Hammer", "Brass Knuckles", "Stun Stick"], "action_cost": 30, "damage_multiplier": 0, "debuff": "accuracy", "debuff_amount": 0.05, "debuff_duration": 3.0, "requires_profession": "Pressure Enforcer", "requires_box": "Martial Training III"},
-	"Bleed": {"weapons": ["Sword", "Axe", "Baton", "Hammer", "Brass Knuckles", "Stun Stick"], "action_cost": 30, "damage_multiplier": 0, "dot_damage_per_tick": 8, "dot_duration_ticks": 3, "requires_profession": "Pressure Enforcer", "requires_box": "Master"},
-	"Bruise": {"weapons": ["Sword", "Axe", "Baton", "Hammer", "Brass Knuckles", "Stun Stick"], "action_cost": 30, "damage_multiplier": 0, "debuff": "attack_speed", "debuff_amount": 0.20, "debuff_duration": 3.0, "requires_profession": "Pressure Enforcer", "requires_box": "Master"},
-	"Anger": {"weapons": ["Sword", "Axe", "Baton", "Hammer", "Brass Knuckles", "Stun Stick"], "action_cost": 30, "damage_multiplier": 0, "taunt_duration": 3.0, "requires_profession": "Pressure Enforcer", "requires_box": "Master"},
-	"Aimed Shot": {"weapons": ["Assault Rifle", "Sniper Rifle"], "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Chrome Gunner", "requires_box": "Novice"},
-	"Scatter Blast": {"weapons": ["Shotgun"], "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Chrome Gunner", "requires_box": "Novice"},
-	"Suppressing Fire": {"weapons": ["Grenade Launcher", "Flame Thrower"], "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Chrome Gunner", "requires_box": "Novice"},
-	"Piercing Round": {"weapons": ["Assault Rifle", "Sniper Rifle"], "action_cost": 50, "damage_multiplier": 1.25, "requires_profession": "Chrome Gunner", "requires_box": "Rifles I"},
-	"Point-Blank Burst": {"weapons": ["Shotgun"], "action_cost": 50, "damage_multiplier": 1.25, "requires_profession": "Chrome Gunner", "requires_box": "Shotguns I"},
-	"Suppressive Volley": {"weapons": ["Assault Rifle", "Sniper Rifle"], "action_cost": 60, "damage_multiplier": 1.5, "aoe": true, "requires_profession": "Chrome Gunner", "requires_box": "Rifles III"},
-	"Buckshot Barrage": {"weapons": ["Shotgun"], "action_cost": 60, "damage_multiplier": 1.5, "aoe": true, "requires_profession": "Chrome Gunner", "requires_box": "Shotguns III"}
+	"Quick Hit": {"weapons": ["Sword", "Axe", "Baton"], "weapon_category": "One Hand", "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Street Thug", "requires_box": "Novice"},
+	"Overhead Swing": {"weapons": ["Sword", "Axe", "Hammer"], "weapon_category": "Two Hand", "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Street Thug", "requires_box": "Novice"},
+	"Backhand": {"weapons": ["Brass Knuckles"], "weapon_category": "Unarmed", "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Street Thug", "requires_box": "Novice"},
+	"Slap": {"weapons": ["Brass Knuckles"], "weapon_category": "Unarmed", "action_cost": 50, "damage_multiplier": 1.25, "requires_profession": "Street Thug", "requires_box": "Melee II"},
+	"Thrust": {"weapons": ["Sword", "Axe", "Baton"], "weapon_category": "One Hand", "action_cost": 50, "damage_multiplier": 1.25, "requires_profession": "Street Thug", "requires_box": "Melee II"},
+	"Bludgeon": {"weapons": ["Sword", "Axe", "Hammer", "Stun Stick"], "weapon_category": "Two Hand", "action_cost": 50, "damage_multiplier": 1.25, "requires_profession": "Street Thug", "requires_box": "Melee II"},
+	"Roundhouse": {"weapons": ["Brass Knuckles"], "weapon_category": "Unarmed", "action_cost": 60, "damage_multiplier": 1.5, "aoe": true, "requires_profession": "Street Thug", "requires_box": "Master"},
+	"Flourish": {"weapons": ["Sword", "Axe", "Baton"], "weapon_category": "One Hand", "action_cost": 60, "damage_multiplier": 1.5, "aoe": true, "requires_profession": "Street Thug", "requires_box": "Master"},
+	"Power Swing": {"weapons": ["Sword", "Axe", "Hammer", "Stun Stick"], "weapon_category": "Two Hand", "action_cost": 60, "damage_multiplier": 1.5, "aoe": true, "requires_profession": "Street Thug", "requires_box": "Master"},
+	"Subdue": {"weapons": ["Sword", "Axe", "Baton", "Hammer", "Brass Knuckles", "Stun Stick"], "action_cost": 30, "damage_multiplier": 0, "debuff": "damage", "debuff_amount": 0.10, "debuff_duration": 3.0, "requires_profession": "Street Thug", "requires_box": "Combat Training I"},
+	"Disorient": {"weapons": ["Sword", "Axe", "Baton", "Hammer", "Brass Knuckles", "Stun Stick"], "action_cost": 30, "damage_multiplier": 0, "debuff": "accuracy", "debuff_amount": 0.05, "debuff_duration": 3.0, "requires_profession": "Street Thug", "requires_box": "Combat Training II"},
+	"Bleed": {"weapons": ["Sword", "Axe", "Baton", "Hammer", "Brass Knuckles", "Stun Stick"], "action_cost": 30, "damage_multiplier": 0, "dot_damage_per_tick": 8, "dot_duration_ticks": 3, "requires_profession": "Street Thug", "requires_box": "Master"},
+	"Bruise": {"weapons": ["Sword", "Axe", "Baton", "Hammer", "Brass Knuckles", "Stun Stick"], "action_cost": 30, "damage_multiplier": 0, "debuff": "attack_speed", "debuff_amount": 0.20, "debuff_duration": 3.0, "requires_profession": "Street Thug", "requires_box": "Master"},
+	"Anger": {"weapons": ["Sword", "Axe", "Baton", "Hammer", "Brass Knuckles", "Stun Stick"], "action_cost": 30, "damage_multiplier": 0, "taunt_duration": 3.0, "requires_profession": "Street Thug", "requires_box": "Master"},
+	"Aimed Shot": {"weapons": ["Assault Rifle", "Sniper Rifle"], "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Street Thug", "requires_box": "Novice"},
+	"Scatter Blast": {"weapons": ["Shotgun"], "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Street Thug", "requires_box": "Novice"},
+	"Suppressing Fire": {"weapons": ["Grenade Launcher", "Flame Thrower"], "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Street Thug", "requires_box": "Novice"},
+	"Piercing Round": {"weapons": ["Assault Rifle", "Sniper Rifle"], "action_cost": 50, "damage_multiplier": 1.25, "requires_profession": "Street Thug", "requires_box": "Ranged III"},
+	"Point-Blank Burst": {"weapons": ["Shotgun"], "action_cost": 50, "damage_multiplier": 1.25, "requires_profession": "Street Thug", "requires_box": "Ranged II"},
+	"Suppressive Volley": {"weapons": ["Assault Rifle", "Sniper Rifle"], "action_cost": 60, "damage_multiplier": 1.5, "aoe": true, "requires_profession": "Street Thug", "requires_box": "Master"},
+	"Buckshot Barrage": {"weapons": ["Shotgun"], "action_cost": 60, "damage_multiplier": 1.5, "aoe": true, "requires_profession": "Street Thug", "requires_box": "Master"}
 }
 
 
 # --- Profession Talent Trees ---
 var novice_professions: Dictionary = {
-	"Pressure Enforcer": {
-		"paths": {
-			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Martial XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
-
-			"Unarmed I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Unarmed XP", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"Unarmed II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Unarmed XP", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "Unarmed I"},
-			"Unarmed III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Unarmed XP", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "Unarmed II"},
-			"Unarmed IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Unarmed XP", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "Unarmed III"},
-
-			"One Hand I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "One Hand XP", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"One Hand II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "One Hand XP", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "One Hand I"},
-			"One Hand III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "One Hand XP", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "One Hand II"},
-			"One Hand IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "One Hand XP", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "One Hand III"},
-
-			"Two Hand I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Two Hand XP", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"Two Hand II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Two Hand XP", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "Two Hand I"},
-			"Two Hand III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Two Hand XP", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "Two Hand II"},
-			"Two Hand IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Two Hand XP", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "Two Hand III"},
-
-			"Martial Training I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Martial XP", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"Martial Training II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Martial XP", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "Martial Training I"},
-			"Martial Training III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Martial XP", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "Martial Training II"},
-			"Martial Training IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Martial XP", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "Martial Training III"},
-
-			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Pressure Enforcer Mastery XP", "xp_cost": 0, "point_cost": 5, "cogs_cost": 5, "requires": "__ALL__"}
+	"Street Thug": {
+		"xp_type": "Combat XP",
+		"point_type": "Thug Points",
+		# New keystone/node system. Each profession has a "keystones" dict
+		# instead of "paths". Each keystone is a named cluster (Melee,
+		# Ranged, Crafting, Auxiliary) containing individual purchasable
+		# nodes. Nodes have a "type" (stat or ability), a "cost" in points,
+		# a "stat" or "ability" they grant, and a "purchased" flag.
+		# "points_spent" tracks how many points have been spent in the
+		# keystone. "points_max" is the cap. "mastered" flips true when
+		# points_spent == points_max AND all purchased abilities have their
+		# upgrade applied.
+		# "unlocked" starts false -- you unlock a keystone with XP, then
+		# spend node points freely within it.
+		"keystones": {
+			"Melee": {
+				"unlocked": false,
+				"xp_cost": 10,
+				"points_spent": 0,
+				"points_max": 10,
+				"nodes": {
+					# --- Accuracy nodes (5) ---
+					"Accuracy 1": {"type": "stat", "cost": 1, "stat": "Melee Accuracy", "amount": 3, "purchased": false},
+					"Accuracy 2": {"type": "stat", "cost": 1, "stat": "Melee Accuracy", "amount": 3, "purchased": false},
+					"Accuracy 3": {"type": "stat", "cost": 1, "stat": "Melee Accuracy", "amount": 3, "purchased": false},
+					"Accuracy 4": {"type": "stat", "cost": 1, "stat": "Melee Accuracy", "amount": 3, "purchased": false},
+					"Accuracy 5": {"type": "stat", "cost": 1, "stat": "Melee Accuracy", "amount": 3, "purchased": false},
+					# --- Speed nodes (5) ---
+					"Speed 1": {"type": "stat", "cost": 1, "stat": "Melee Speed", "amount": 3, "purchased": false},
+					"Speed 2": {"type": "stat", "cost": 1, "stat": "Melee Speed", "amount": 3, "purchased": false},
+					"Speed 3": {"type": "stat", "cost": 1, "stat": "Melee Speed", "amount": 3, "purchased": false},
+					"Speed 4": {"type": "stat", "cost": 1, "stat": "Melee Speed", "amount": 3, "purchased": false},
+					"Speed 5": {"type": "stat", "cost": 1, "stat": "Melee Speed", "amount": 3, "purchased": false},
+					# --- Crit Damage nodes (5) ---
+					"Crit Damage 1": {"type": "stat", "cost": 1, "stat": "Crit Damage", "amount": 3, "purchased": false},
+					"Crit Damage 2": {"type": "stat", "cost": 1, "stat": "Crit Damage", "amount": 3, "purchased": false},
+					"Crit Damage 3": {"type": "stat", "cost": 1, "stat": "Crit Damage", "amount": 3, "purchased": false},
+					"Crit Damage 4": {"type": "stat", "cost": 1, "stat": "Crit Damage", "amount": 3, "purchased": false},
+					"Crit Damage 5": {"type": "stat", "cost": 1, "stat": "Crit Damage", "amount": 3, "purchased": false},
+					# --- Ability nodes (3, cost 2 each) ---
+					"Quick Hit": {
+						"type": "ability", "cost": 2, "ability": "Quick Hit", "purchased": false,
+						"mastery_upgrade": "Quick Hit gains +15% damage and applies a 1s slow"
+					},
+					"Overhead Swing": {
+						"type": "ability", "cost": 2, "ability": "Overhead Swing", "purchased": false,
+						"mastery_upgrade": "Overhead Swing becomes an AoE hit striking all enemies in melee range"
+					},
+					"Bash": {
+						"type": "ability", "cost": 2, "ability": "Bash", "purchased": false,
+						"mastery_upgrade": "Bash gains a stun component -- target is stunned for 2s"
+					}
+				}
+			},
+			"Ranged": {
+				"unlocked": false,
+				"xp_cost": 10,
+				"points_spent": 0,
+				"points_max": 10,
+				"nodes": {
+					# --- Accuracy nodes (5) ---
+					"Accuracy 1": {"type": "stat", "cost": 1, "stat": "Ranged Accuracy", "amount": 3, "purchased": false},
+					"Accuracy 2": {"type": "stat", "cost": 1, "stat": "Ranged Accuracy", "amount": 3, "purchased": false},
+					"Accuracy 3": {"type": "stat", "cost": 1, "stat": "Ranged Accuracy", "amount": 3, "purchased": false},
+					"Accuracy 4": {"type": "stat", "cost": 1, "stat": "Ranged Accuracy", "amount": 3, "purchased": false},
+					"Accuracy 5": {"type": "stat", "cost": 1, "stat": "Ranged Accuracy", "amount": 3, "purchased": false},
+					# --- Speed nodes (5) ---
+					"Speed 1": {"type": "stat", "cost": 1, "stat": "Ranged Speed", "amount": 3, "purchased": false},
+					"Speed 2": {"type": "stat", "cost": 1, "stat": "Ranged Speed", "amount": 3, "purchased": false},
+					"Speed 3": {"type": "stat", "cost": 1, "stat": "Ranged Speed", "amount": 3, "purchased": false},
+					"Speed 4": {"type": "stat", "cost": 1, "stat": "Ranged Speed", "amount": 3, "purchased": false},
+					"Speed 5": {"type": "stat", "cost": 1, "stat": "Ranged Speed", "amount": 3, "purchased": false},
+					# --- Crit Damage nodes (5) ---
+					"Crit Damage 1": {"type": "stat", "cost": 1, "stat": "Crit Damage", "amount": 3, "purchased": false},
+					"Crit Damage 2": {"type": "stat", "cost": 1, "stat": "Crit Damage", "amount": 3, "purchased": false},
+					"Crit Damage 3": {"type": "stat", "cost": 1, "stat": "Crit Damage", "amount": 3, "purchased": false},
+					"Crit Damage 4": {"type": "stat", "cost": 1, "stat": "Crit Damage", "amount": 3, "purchased": false},
+					"Crit Damage 5": {"type": "stat", "cost": 1, "stat": "Crit Damage", "amount": 3, "purchased": false},
+					# --- Ability nodes (3, cost 2 each) ---
+					"Aimed Shot": {
+						"type": "ability", "cost": 2, "ability": "Aimed Shot", "purchased": false,
+						"mastery_upgrade": "Aimed Shot gains +20% damage and ignores 10% of target defense"
+					},
+					"Scatter Blast": {
+						"type": "ability", "cost": 2, "ability": "Scatter Blast", "purchased": false,
+						"mastery_upgrade": "Scatter Blast becomes an AoE hitting all enemies in shotgun range"
+					},
+					"Suppressing Fire": {
+						"type": "ability", "cost": 2, "ability": "Suppressing Fire", "purchased": false,
+						"mastery_upgrade": "Suppressing Fire reduces target accuracy by 15% for 3s"
+					}
+				}
+			},
+			"Crafting": {
+				"unlocked": false,
+				"xp_cost": 10,
+				"points_spent": 0,
+				"points_max": 12,
+				"nodes": {
+					# --- Survey Rate nodes (4) ---
+					"Survey Rate 1": {"type": "stat", "cost": 3, "stat": "Survey Rate", "amount": 5, "purchased": false},
+					"Survey Rate 2": {"type": "stat", "cost": 3, "stat": "Survey Rate", "amount": 5, "purchased": false},
+					"Survey Rate 3": {"type": "stat", "cost": 3, "stat": "Survey Rate", "amount": 5, "purchased": false},
+					"Survey Rate 4": {"type": "stat", "cost": 3, "stat": "Survey Rate", "amount": 5, "purchased": false},
+					# --- Gear Customization nodes (4) ---
+					"Gear Customization 1": {"type": "stat", "cost": 3, "stat": "Gear Customization", "amount": 5, "purchased": false},
+					"Gear Customization 2": {"type": "stat", "cost": 3, "stat": "Gear Customization", "amount": 5, "purchased": false},
+					"Gear Customization 3": {"type": "stat", "cost": 3, "stat": "Gear Customization", "amount": 5, "purchased": false},
+					"Gear Customization 4": {"type": "stat", "cost": 3, "stat": "Gear Customization", "amount": 5, "purchased": false},
+					# --- Crafting Assembly nodes (4) ---
+					"Crafting Assembly 1": {"type": "stat", "cost": 3, "stat": "Crafting Assembly", "amount": 5, "purchased": false},
+					"Crafting Assembly 2": {"type": "stat", "cost": 3, "stat": "Crafting Assembly", "amount": 5, "purchased": false},
+					"Crafting Assembly 3": {"type": "stat", "cost": 3, "stat": "Crafting Assembly", "amount": 5, "purchased": false},
+					"Crafting Assembly 4": {"type": "stat", "cost": 3, "stat": "Crafting Assembly", "amount": 5, "purchased": false},
+					# --- Crafting Experimentation nodes (4) ---
+					"Crafting Experimentation 1": {"type": "stat", "cost": 3, "stat": "Crafting Experimentation", "amount": 5, "purchased": false},
+					"Crafting Experimentation 2": {"type": "stat", "cost": 3, "stat": "Crafting Experimentation", "amount": 5, "purchased": false},
+					"Crafting Experimentation 3": {"type": "stat", "cost": 3, "stat": "Crafting Experimentation", "amount": 5, "purchased": false},
+					"Crafting Experimentation 4": {"type": "stat", "cost": 3, "stat": "Crafting Experimentation", "amount": 5, "purchased": false}
+				}
+			},
+			"Auxiliary": {
+				"unlocked": false,
+				"xp_cost": 10,
+				"points_spent": 0,
+				"points_max": 12,
+				"nodes": {
+					# --- Melee Defense nodes (3) ---
+					"Melee Defense 1": {"type": "stat", "cost": 3, "stat": "Melee Defense", "amount": 5, "purchased": false},
+					"Melee Defense 2": {"type": "stat", "cost": 3, "stat": "Melee Defense", "amount": 5, "purchased": false},
+					"Melee Defense 3": {"type": "stat", "cost": 3, "stat": "Melee Defense", "amount": 5, "purchased": false},
+					# --- Ranged Defense nodes (3) ---
+					"Ranged Defense 1": {"type": "stat", "cost": 3, "stat": "Ranged Defense", "amount": 5, "purchased": false},
+					"Ranged Defense 2": {"type": "stat", "cost": 3, "stat": "Ranged Defense", "amount": 5, "purchased": false},
+					"Ranged Defense 3": {"type": "stat", "cost": 3, "stat": "Ranged Defense", "amount": 5, "purchased": false},
+					# --- Toughness nodes (3) ---
+					"Toughness 1": {"type": "stat", "cost": 3, "stat": "Toughness", "amount": 5, "purchased": false},
+					"Toughness 2": {"type": "stat", "cost": 3, "stat": "Toughness", "amount": 5, "purchased": false},
+					"Toughness 3": {"type": "stat", "cost": 3, "stat": "Toughness", "amount": 5, "purchased": false},
+					# --- Loot Chance nodes (3) ---
+					"Loot Chance 1": {"type": "stat", "cost": 3, "stat": "Loot Chance", "amount": 5, "purchased": false},
+					"Loot Chance 2": {"type": "stat", "cost": 3, "stat": "Loot Chance", "amount": 5, "purchased": false},
+					"Loot Chance 3": {"type": "stat", "cost": 3, "stat": "Loot Chance", "amount": 5, "purchased": false},
+					# --- Cog Bonus nodes (3) ---
+					"Cog Bonus 1": {"type": "stat", "cost": 3, "stat": "Cog Bonus", "amount": 5, "purchased": false},
+					"Cog Bonus 2": {"type": "stat", "cost": 3, "stat": "Cog Bonus", "amount": 5, "purchased": false},
+					"Cog Bonus 3": {"type": "stat", "cost": 3, "stat": "Cog Bonus", "amount": 5, "purchased": false},
+					# --- Movement Speed nodes (3) ---
+					"Movement Speed 1": {"type": "stat", "cost": 3, "stat": "Movement Speed", "amount": 5, "purchased": false},
+					"Movement Speed 2": {"type": "stat", "cost": 3, "stat": "Movement Speed", "amount": 5, "purchased": false},
+					"Movement Speed 3": {"type": "stat", "cost": 3, "stat": "Movement Speed", "amount": 5, "purchased": false}
+				}
+			}
 		}
 	},
-	"Chrome Gunner": {
+
+	"Enforcer": {
+		"xp_type": "Combat XP",
+		"point_type": "Enforcer Points",
 		"paths": {
-			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Ranged Weapon", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
-
-			"Pistols I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Pistol XP", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"Pistols II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Pistol XP", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "Pistols I"},
-			"Pistols III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Pistol XP", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "Pistols II"},
-			"Pistols IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Pistol XP", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "Pistols III"},
-
-			"Shotguns I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Shotgun XP", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"Shotguns II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Shotgun XP", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "Shotguns I"},
-			"Shotguns III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Shotgun XP", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "Shotguns II"},
-			"Shotguns IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Shotgun XP", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "Shotguns III"},
-
-			"Rifles I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Rifle XP", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"Rifles II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Rifle XP", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "Rifles I"},
-			"Rifles III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Rifle XP", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "Rifles II"},
-			"Rifles IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Rifle XP", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "Rifles III"},
-
-			"Ranged Training I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Ranged Weapon", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"Ranged Training II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Ranged Weapon", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "Ranged Training I"},
-			"Ranged Training III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Ranged Weapon", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "Ranged Training II"},
-			"Ranged Training IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Ranged Weapon", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "Ranged Training III"},
-
-			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Chrome Gunner Mastery XP", "xp_cost": 0, "point_cost": 5, "cogs_cost": 5, "requires": "__ALL__"}
+			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
+			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 50, "point_cost": 5, "cogs_cost": 200, "requires": "Novice"}
 		}
 	},
-	"Scrap Tinkerer": {
+	"Specialist": {
+		"xp_type": "Combat XP",
+		"point_type": "Specialist Points",
 		"paths": {
-			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Scanning", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
-
-			"Scanning I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Scanning", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"Scanning II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Scanning", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "Scanning I"},
-			"Scanning III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Scanning", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "Scanning II"},
-			"Scanning IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Scanning", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "Scanning III"},
-
-			"Sampling I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Sampling", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"Sampling II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Sampling", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "Sampling I"},
-			"Sampling III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Sampling", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "Sampling II"},
-			"Sampling IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Sampling", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "Sampling III"},
-
-			"Crafting I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Crafting", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"Crafting II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Crafting", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "Crafting I"},
-			"Crafting III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Crafting", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "Crafting II"},
-			"Crafting IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Crafting", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "Crafting III"},
-
-			"Fabrication Mastery I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Fabrication", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"Fabrication Mastery II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Fabrication", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "Fabrication Mastery I"},
-			"Fabrication Mastery III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Fabrication", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "Fabrication Mastery II"},
-			"Fabrication Mastery IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Fabrication", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "Fabrication Mastery III"},
-
-			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Scrap Tinkerer Mastery XP", "xp_cost": 0, "point_cost": 5, "cogs_cost": 5, "requires": "__ALL__"}
+			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
+			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 50, "point_cost": 5, "cogs_cost": 200, "requires": "Novice"}
 		}
 	},
-	"Apothecary": {
+	"Ranger": {
+		"xp_type": "Combat XP",
+		"point_type": "Ranger Points",
 		"paths": {
-			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Healing XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
-
-			"Healing I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Healing XP", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"Healing II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Healing XP", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "Healing I"},
-			"Healing III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Healing XP", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "Healing II"},
-			"Healing IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Healing XP", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "Healing III"},
-
-			"Medicine Crafting I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Medicine Crafting XP", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"Medicine Crafting II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Medicine Crafting XP", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "Medicine Crafting I"},
-			"Medicine Crafting III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Medicine Crafting XP", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "Medicine Crafting II"},
-			"Medicine Crafting IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Medicine Crafting XP", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "Medicine Crafting III"},
-
-			"Medical Foraging I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Scavenging XP", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"Medical Foraging II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Scavenging XP", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "Medical Foraging I"},
-			"Medical Foraging III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Scavenging XP", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "Medical Foraging II"},
-			"Medical Foraging IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Scavenging XP", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "Medical Foraging III"},
-
-			"Stims I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Medicine Crafting XP", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"Stims II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Medicine Crafting XP", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "Stims I"},
-			"Stims III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Medicine Crafting XP", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "Stims II"},
-			"Stims IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Medicine Crafting XP", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "Stims III"},
-
-			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Apothecary Mastery XP", "xp_cost": 0, "point_cost": 5, "cogs_cost": 5, "requires": "__ALL__"}
+			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
+			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 50, "point_cost": 5, "cogs_cost": 200, "requires": "Novice"}
 		}
 	},
-
-	# --- Elite Professions ---
-	# Placeholder skeletons only, matching the base four professions'
-	# shape exactly (Novice, 4 ranked columns, Master) so they show up
-	# correctly in the Talent Viewer and are functionally purchasable
-	# node-by-node -- but no TALENT_SKILL_REWARDS entries exist for any
-	# of these yet, so every box just displays "Not yet designed" /
-	# "Reserved for future stats" until they're actually designed.
-	# Entry into each is gated by ELITE_PROFESSION_PREREQS below.
+	"Commando": {
+		"xp_type": "Combat XP",
+		"point_type": "Commando Points",
+		"paths": {
+			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
+			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 50, "point_cost": 5, "cogs_cost": 200, "requires": "Novice"}
+		}
+	},
+	"Engineer": {
+		"xp_type": "Combat XP",
+		"point_type": "Engineer Points",
+		"paths": {
+			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
+			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 50, "point_cost": 5, "cogs_cost": 200, "requires": "Novice"}
+		}
+	},
+	"Medic": {
+		"xp_type": "Combat XP",
+		"point_type": "Medic Points",
+		"paths": {
+			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
+			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 50, "point_cost": 5, "cogs_cost": 200, "requires": "Novice"}
+		}
+	},
 	"Sniper": {
+		"xp_type": "Combat XP",
+		"point_type": "Sniper Points",
 		"paths": {
-			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Sniper Training XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
-
-			"Optics I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Optics XP", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"Optics II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Optics XP", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "Optics I"},
-			"Optics III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Optics XP", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "Optics II"},
-			"Optics IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Optics XP", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "Optics III"},
-
-			"Concealment I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Concealment XP", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"Concealment II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Concealment XP", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "Concealment I"},
-			"Concealment III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Concealment XP", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "Concealment II"},
-			"Concealment IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Concealment XP", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "Concealment III"},
-
-			"Longshot I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Longshot XP", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"Longshot II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Longshot XP", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "Longshot I"},
-			"Longshot III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Longshot XP", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "Longshot II"},
-			"Longshot IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Longshot XP", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "Longshot III"},
-
-			"Sniper Training I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Sniper Training XP", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"Sniper Training II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Sniper Training XP", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "Sniper Training I"},
-			"Sniper Training III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Sniper Training XP", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "Sniper Training II"},
-			"Sniper Training IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Sniper Training XP", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "Sniper Training III"},
-
-			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Sniper Mastery XP", "xp_cost": 0, "point_cost": 5, "cogs_cost": 5, "requires": "__ALL__"}
+			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
+			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 50, "point_cost": 5, "cogs_cost": 200, "requires": "Novice"}
 		}
 	},
-	"Ordnance Specialist": {
+	"Bombardier": {
+		"xp_type": "Combat XP",
+		"point_type": "Bombardier Points",
 		"paths": {
-			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Ordnance Training XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
-
-			"Explosives I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Explosives XP", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"Explosives II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Explosives XP", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "Explosives I"},
-			"Explosives III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Explosives XP", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "Explosives II"},
-			"Explosives IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Explosives XP", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "Explosives III"},
-
-			"Incendiaries I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Incendiaries XP", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"Incendiaries II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Incendiaries XP", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "Incendiaries I"},
-			"Incendiaries III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Incendiaries XP", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "Incendiaries II"},
-			"Incendiaries IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Incendiaries XP", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "Incendiaries III"},
-
-			"Deployment I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Deployment XP", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"Deployment II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Deployment XP", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "Deployment I"},
-			"Deployment III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Deployment XP", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "Deployment II"},
-			"Deployment IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Deployment XP", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "Deployment III"},
-
-			"Ordnance Training I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Ordnance Training XP", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"Ordnance Training II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Ordnance Training XP", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "Ordnance Training I"},
-			"Ordnance Training III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Ordnance Training XP", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "Ordnance Training II"},
-			"Ordnance Training IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Ordnance Training XP", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "Ordnance Training III"},
-
-			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Ordnance Specialist Mastery XP", "xp_cost": 0, "point_cost": 5, "cogs_cost": 5, "requires": "__ALL__"}
+			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
+			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 50, "point_cost": 5, "cogs_cost": 200, "requires": "Novice"}
 		}
 	},
-	"Quickdraw Technician": {
+	"Demolitionist": {
+		"xp_type": "Combat XP",
+		"point_type": "Demolitionist Points",
 		"paths": {
-			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Quickdraw Training XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
-
-			"Trigger Discipline I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Trigger Discipline XP", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"Trigger Discipline II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Trigger Discipline XP", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "Trigger Discipline I"},
-			"Trigger Discipline III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Trigger Discipline XP", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "Trigger Discipline II"},
-			"Trigger Discipline IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Trigger Discipline XP", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "Trigger Discipline III"},
-
-			"Dual Wielding I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Dual Wielding XP", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"Dual Wielding II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Dual Wielding XP", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "Dual Wielding I"},
-			"Dual Wielding III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Dual Wielding XP", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "Dual Wielding II"},
-			"Dual Wielding IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Dual Wielding XP", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "Dual Wielding III"},
-
-			"Fast Draw I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Fast Draw XP", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"Fast Draw II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Fast Draw XP", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "Fast Draw I"},
-			"Fast Draw III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Fast Draw XP", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "Fast Draw II"},
-			"Fast Draw IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Fast Draw XP", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "Fast Draw III"},
-
-			"Quickdraw Training I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Quickdraw Training XP", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"Quickdraw Training II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Quickdraw Training XP", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "Quickdraw Training I"},
-			"Quickdraw Training III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Quickdraw Training XP", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "Quickdraw Training II"},
-			"Quickdraw Training IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Quickdraw Training XP", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "Quickdraw Training III"},
-
-			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Quickdraw Technician Mastery XP", "xp_cost": 0, "point_cost": 5, "cogs_cost": 5, "requires": "__ALL__"}
+			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
+			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 50, "point_cost": 5, "cogs_cost": 200, "requires": "Novice"}
+		}
+	},
+	"Bioforge Tech": {
+		"xp_type": "Combat XP",
+		"point_type": "Bioforge Tech Points",
+		"paths": {
+			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
+			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 50, "point_cost": 5, "cogs_cost": 200, "requires": "Novice"}
+		}
+	},
+	"Deadeye": {
+		"xp_type": "Combat XP",
+		"point_type": "Deadeye Points",
+		"paths": {
+			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
+			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 50, "point_cost": 5, "cogs_cost": 200, "requires": "Novice"}
+		}
+	},
+	"Siege Operator": {
+		"xp_type": "Combat XP",
+		"point_type": "Siege Operator Points",
+		"paths": {
+			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
+			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 50, "point_cost": 5, "cogs_cost": 200, "requires": "Novice"}
+		}
+	},
+	"Wrecker": {
+		"xp_type": "Combat XP",
+		"point_type": "Wrecker Points",
+		"paths": {
+			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
+			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 50, "point_cost": 5, "cogs_cost": 200, "requires": "Novice"}
+		}
+	},
+	"Phantom": {
+		"xp_type": "Combat XP",
+		"point_type": "Phantom Points",
+		"paths": {
+			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
+			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 50, "point_cost": 5, "cogs_cost": 200, "requires": "Novice"}
+		}
+	},
+	"Huntsman": {
+		"xp_type": "Combat XP",
+		"point_type": "Huntsman Points",
+		"paths": {
+			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
+			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 50, "point_cost": 5, "cogs_cost": 200, "requires": "Novice"}
+		}
+	},
+	"Warlord": {
+		"xp_type": "Combat XP",
+		"point_type": "Warlord Points",
+		"paths": {
+			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
+			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 50, "point_cost": 5, "cogs_cost": 200, "requires": "Novice"}
+		}
+	},
+	"Saboteur": {
+		"xp_type": "Combat XP",
+		"point_type": "Saboteur Points",
+		"paths": {
+			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
+			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 50, "point_cost": 5, "cogs_cost": 200, "requires": "Novice"}
+		}
+	},
+	"Venomcaster": {
+		"xp_type": "Combat XP",
+		"point_type": "Venomcaster Points",
+		"paths": {
+			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
+			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 50, "point_cost": 5, "cogs_cost": 200, "requires": "Novice"}
+		}
+	},
+	"Stalker": {
+		"xp_type": "Combat XP",
+		"point_type": "Stalker Points",
+		"paths": {
+			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
+			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 50, "point_cost": 5, "cogs_cost": 200, "requires": "Novice"}
+		}
+	},
+	"Razorback": {
+		"xp_type": "Combat XP",
+		"point_type": "Razorback Points",
+		"paths": {
+			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
+			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 50, "point_cost": 5, "cogs_cost": 200, "requires": "Novice"}
+		}
+	},
+	"Blastmaster": {
+		"xp_type": "Combat XP",
+		"point_type": "Blastmaster Points",
+		"paths": {
+			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
+			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 50, "point_cost": 5, "cogs_cost": 200, "requires": "Novice"}
+		}
+	},
+	"Plague Engineer": {
+		"xp_type": "Combat XP",
+		"point_type": "Plague Engineer Points",
+		"paths": {
+			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
+			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 50, "point_cost": 5, "cogs_cost": 200, "requires": "Novice"}
+		}
+	},
+	"Ghost Medic": {
+		"xp_type": "Combat XP",
+		"point_type": "Ghost Medic Points",
+		"paths": {
+			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
+			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 50, "point_cost": 5, "cogs_cost": 200, "requires": "Novice"}
+		}
+	},
+	"Warchemist": {
+		"xp_type": "Combat XP",
+		"point_type": "Warchemist Points",
+		"paths": {
+			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
+			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 50, "point_cost": 5, "cogs_cost": 200, "requires": "Novice"}
 		}
 	},
 	"Toxinsmith": {
+		"xp_type": "Combat XP",
+		"point_type": "Toxinsmith Points",
 		"paths": {
-			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Toxinsmith Training XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
-
-			"Toxins I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Toxins XP", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"Toxins II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Toxins XP", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "Toxins I"},
-			"Toxins III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Toxins XP", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "Toxins II"},
-			"Toxins IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Toxins XP", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "Toxins III"},
-
-			"Compounds I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Compounds XP", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"Compounds II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Compounds XP", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "Compounds I"},
-			"Compounds III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Compounds XP", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "Compounds II"},
-			"Compounds IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Compounds XP", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "Compounds III"},
-
-			"Delivery Systems I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Delivery Systems XP", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"Delivery Systems II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Delivery Systems XP", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "Delivery Systems I"},
-			"Delivery Systems III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Delivery Systems XP", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "Delivery Systems II"},
-			"Delivery Systems IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Delivery Systems XP", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "Delivery Systems III"},
-
-			"Toxinsmith Training I": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Toxinsmith Training XP", "xp_cost": 1, "point_cost": 1, "cogs_cost": 1, "requires": ""},
-			"Toxinsmith Training II": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Toxinsmith Training XP", "xp_cost": 1, "point_cost": 2, "cogs_cost": 1, "requires": "Toxinsmith Training I"},
-			"Toxinsmith Training III": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Toxinsmith Training XP", "xp_cost": 1, "point_cost": 3, "cogs_cost": 1, "requires": "Toxinsmith Training II"},
-			"Toxinsmith Training IV": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Toxinsmith Training XP", "xp_cost": 1, "point_cost": 4, "cogs_cost": 1, "requires": "Toxinsmith Training III"},
-
-			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Toxinsmith Mastery XP", "xp_cost": 0, "point_cost": 5, "cogs_cost": 5, "requires": "__ALL__"}
+			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
+			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 50, "point_cost": 5, "cogs_cost": 200, "requires": "Novice"}
+		}
+	},
+	"Plague Doctor": {
+		"xp_type": "Combat XP",
+		"point_type": "Plague Doctor Points",
+		"paths": {
+			"Novice": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 0, "point_cost": 0, "cogs_cost": 0, "requires": ""},
+			"Master": {"unlocked_nodes": 0, "max_nodes": 1, "xp_type": "Combat XP", "xp_cost": 50, "point_cost": 5, "cogs_cost": 200, "requires": "Novice"}
 		}
 	}
 }
+
 
 
 # --- Weapon Category Groupings ---
@@ -700,23 +833,48 @@ var heavy_weapon_types = ["Grenade Launcher", "Flame Thrower"]
 # _on_choose_profession_pressed before a profession can be selected;
 # these are the only gates on Elite Professions right now (no
 # abilities/stats/certs have been designed for them yet).
-const ELITE_PROFESSION_PREREQS: Dictionary = {
-	"Sniper": [
-		{"profession": "Chrome Gunner", "box": "Rifles IV"},
-		{"profession": "Chrome Gunner", "box": "Ranged Training IV"}
-	],
-	"Ordnance Specialist": [
-		{"profession": "Chrome Gunner", "box": "Master"}
-	],
-	"Quickdraw Technician": [
-		{"profession": "Chrome Gunner", "box": "Pistols IV"},
-		{"profession": "Chrome Gunner", "box": "Ranged Training IV"}
-	],
-	"Toxinsmith": [
-		{"profession": "Apothecary", "box": "Master"},
-		{"profession": "Chrome Gunner", "box": "Shotguns IV"}
-	]
+# --- Profession Advancement Tree ---
+# Defines the unlock prerequisites for each profession tier.
+# "requires_mastered" = list of professions the player must have
+# fully mastered (every box unlocked) before the unlock quest
+# for this profession becomes available.
+# "tier" = 1 (base), 2 (intermediate), 3 (advanced), 4 (elite), 5 (mastery)
+# "branch" = which side of the tree this belongs to
+#   "enforcer" = Enforcer/Ranger/Commando/Sniper/Bombardier side
+#   "specialist" = Specialist/Engineer/Medic/Demolitionist/Bioforge side
+#   "mastery" = cross-class mastery profession
+# "mastery_pair" = for mastery professions, [primary, secondary] elite classes
+const PROFESSION_TREE: Dictionary = {
+	"Street Thug":       {"tier": 1, "branch": "base",       "requires_mastered": []},
+	"Enforcer":          {"tier": 2, "branch": "enforcer",    "requires_mastered": ["Street Thug"]},
+	"Specialist":        {"tier": 2, "branch": "specialist",  "requires_mastered": ["Street Thug"]},
+	"Ranger":            {"tier": 3, "branch": "enforcer",    "requires_mastered": ["Enforcer"]},
+	"Commando":          {"tier": 3, "branch": "enforcer",    "requires_mastered": ["Enforcer"]},
+	"Engineer":          {"tier": 3, "branch": "specialist",  "requires_mastered": ["Specialist"]},
+	"Medic":             {"tier": 3, "branch": "specialist",  "requires_mastered": ["Specialist"]},
+	"Sniper":            {"tier": 4, "branch": "enforcer",    "requires_mastered": ["Ranger"]},
+	"Bombardier":        {"tier": 4, "branch": "enforcer",    "requires_mastered": ["Commando"]},
+	"Demolitionist":     {"tier": 4, "branch": "specialist",  "requires_mastered": ["Engineer"]},
+	"Bioforge Tech":     {"tier": 4, "branch": "specialist",  "requires_mastered": ["Medic"]},
+	# --- Mastery Professions (require 2 mastered elite classes + quest) ---
+	"Deadeye":           {"tier": 5, "branch": "mastery", "mastery_pair": ["Sniper", "Sniper"]},
+	"Siege Operator":    {"tier": 5, "branch": "mastery", "mastery_pair": ["Sniper", "Bombardier"]},
+	"Wrecker":           {"tier": 5, "branch": "mastery", "mastery_pair": ["Sniper", "Demolitionist"]},
+	"Phantom":           {"tier": 5, "branch": "mastery", "mastery_pair": ["Sniper", "Bioforge Tech"]},
+	"Huntsman":          {"tier": 5, "branch": "mastery", "mastery_pair": ["Bombardier", "Sniper"]},
+	"Warlord":           {"tier": 5, "branch": "mastery", "mastery_pair": ["Bombardier", "Bombardier"]},
+	"Saboteur":          {"tier": 5, "branch": "mastery", "mastery_pair": ["Bombardier", "Demolitionist"]},
+	"Venomcaster":       {"tier": 5, "branch": "mastery", "mastery_pair": ["Bombardier", "Bioforge Tech"]},
+	"Stalker":           {"tier": 5, "branch": "mastery", "mastery_pair": ["Demolitionist", "Sniper"]},
+	"Razorback":         {"tier": 5, "branch": "mastery", "mastery_pair": ["Demolitionist", "Bombardier"]},
+	"Blastmaster":       {"tier": 5, "branch": "mastery", "mastery_pair": ["Demolitionist", "Demolitionist"]},
+	"Plague Engineer":   {"tier": 5, "branch": "mastery", "mastery_pair": ["Demolitionist", "Bioforge Tech"]},
+	"Ghost Medic":       {"tier": 5, "branch": "mastery", "mastery_pair": ["Bioforge Tech", "Sniper"]},
+	"Warchemist":        {"tier": 5, "branch": "mastery", "mastery_pair": ["Bioforge Tech", "Bombardier"]},
+	"Toxinsmith":        {"tier": 5, "branch": "mastery", "mastery_pair": ["Bioforge Tech", "Demolitionist"]},
+	"Plague Doctor":     {"tier": 5, "branch": "mastery", "mastery_pair": ["Bioforge Tech", "Bioforge Tech"]}
 }
+
 
 
 # --- Talent Box Display Names ---
@@ -731,106 +889,160 @@ const ELITE_PROFESSION_PREREQS: Dictionary = {
 # professions. Falls back to the raw path_name if a box isn't listed
 # here (e.g. Novice/Master, which already display fine as-is).
 const TALENT_BOX_DISPLAY_NAMES: Dictionary = {
-	"Pressure Enforcer": {
-		"Unarmed I": "Dirty Fighting", "Unarmed II": "Brawler's Instinct", "Unarmed III": "Iron Knuckles", "Unarmed IV": "Unarmed Mastery",
-		"One Hand I": "Balanced Grip", "One Hand II": "Practiced Strikes", "One Hand III": "Precision Training", "One Hand IV": "One Handed Mastery",
-		"Two Hand I": "Heavy Hands", "Two Hand II": "Crushing Grip", "Two Hand III": "Sledge Work", "Two Hand IV": "Two Hand Mastery",
-		"Martial Training I": "Combat Drills", "Martial Training II": "Battle Focus", "Martial Training III": "Tactical Sense", "Martial Training IV": "Martial Mastery"
-	},
-	"Chrome Gunner": {
-		"Pistols I": "Quickdraw Basics", "Pistols II": "Suppressor Fit", "Pistols III": "Rapid Cycling", "Pistols IV": "Pistol Mastery",
-		"Shotguns I": "Close Quarters", "Shotguns II": "Wide Spread", "Shotguns III": "Breach Tactics", "Shotguns IV": "Shotgun Mastery",
-		"Rifles I": "Steady Aim", "Rifles II": "Long Sightlines", "Rifles III": "Marksmanship", "Rifles IV": "Rifle Mastery",
-		"Ranged Training I": "Weapon Handling", "Ranged Training II": "Target Acquisition", "Ranged Training III": "Combat Reflexes", "Ranged Training IV": "Ranged Mastery"
-	},
-	"Scrap Tinkerer": {
-		"Scanning I": "Basic Readings", "Scanning II": "Signal Tracing", "Scanning III": "Deep Scan", "Scanning IV": "Scanning Mastery",
-		"Sampling I": "Quick Extraction", "Sampling II": "Steady Hands", "Sampling III": "Efficient Harvest", "Sampling IV": "Sampling Mastery",
-		"Crafting I": "Workbench Basics", "Crafting II": "Fine Tuning", "Crafting III": "Quality Assembly", "Crafting IV": "Crafting Mastery",
-		"Fabrication Mastery I": "Parts Efficiency", "Fabrication Mastery II": "Waste Reduction", "Fabrication Mastery III": "Efficient Output", "Fabrication Mastery IV": "Master Fabricator"
-	},
-	"Apothecary": {
-		"Healing I": "Basic Salves", "Healing II": "Steady Drip", "Healing III": "Advanced Compounds", "Healing IV": "Vapor Therapy",
-		"Medicine Crafting I": "Basic Remedies", "Medicine Crafting II": "Refined Formulas", "Medicine Crafting III": "Potent Mixtures", "Medicine Crafting IV": "Master Chemist",
-		"Medical Foraging I": "Herb Sense", "Medical Foraging II": "Keen Eye", "Medical Foraging III": "Efficient Gathering", "Medical Foraging IV": "Foraging Mastery",
-		"Stims I": "Quick Boost", "Stims II": "Focused Dose", "Stims III": "Sustained Boost", "Stims IV": "Stim Mastery"
+	"Street Thug": {
+		"Melee I": "Dirty Fighting",
+		"Melee II": "Brawler's Instinct",
+		"Melee III": "Iron Knuckles",
+		"Ranged I": "Quickdraw Basics",
+		"Ranged II": "Close Quarters",
+		"Ranged III": "Steady Aim",
+		"Combat Training I": "Combat Drills",
+		"Combat Training II": "Target Acquisition",
+		"Combat Training III": "Tactical Sense",
+		"Weapons Crafting I": "Workbench Basics",
+		"Weapons Crafting II": "Fine Tuning",
+		"Weapons Crafting III": "Quality Assembly",
+		"Medicine Crafting I": "Basic Remedies",
+		"Medicine Crafting II": "Refined Formulas",
+		"Medicine Crafting III": "Potent Mixtures"
 	}
 }
 
 
 # --- Talent Skill Rewards (Talent Viewer "what this grants" data) ---
 const TALENT_SKILL_REWARDS: Dictionary = {
-	"Pressure Enforcer": {
-		"Novice": {"type": "novice_grants", "names": ["Quick Hit", "Overhead Swing", "Backhand", "Weapon Cert - Piston Blade", "Weapon Cert - Piston Greatblade", "Weapon Cert - Pressure Maul", "Weapon Cert - Arc Rod", "Weapon Cert - Riveted Knuckles"]},
-		"Unarmed I": {"type": "passive", "stats": [["Unarmed Accuracy", 4], ["Unarmed Speed", 2]]},
-		"Unarmed II": {"type": "passive", "stats": [["Unarmed Accuracy", 4], ["Unarmed Speed", 2]], "ability": "Slap"},
-		"Unarmed III": {"type": "passive", "stats": [["Unarmed Accuracy", 4], ["Unarmed Speed", 2]], "weapon": "Pneumatic Knuckles"},
-		"Unarmed IV": {"type": "passive", "stats": [["Unarmed Accuracy", 4], ["Unarmed Speed", 2]], "ability": "Roundhouse"},
-		"One Hand I": {"type": "passive", "stats": [["One Hand Accuracy", 4], ["One Hand Speed", 2]]},
-		"One Hand II": {"type": "passive", "stats": [["One Hand Accuracy", 4], ["One Hand Speed", 2]], "ability": "Thrust"},
-		"One Hand III": {"type": "passive", "stats": [["One Hand Accuracy", 4], ["One Hand Speed", 2]], "weapons": ["Hydraulic Saber", "Steam Baton"]},
-		"One Hand IV": {"type": "passive", "stats": [["One Hand Accuracy", 4], ["One Hand Speed", 2]], "ability": "Flourish"},
-		"Two Hand I": {"type": "passive", "stats": [["Two Hand Accuracy", 4], ["Two Hand Speed", 2]]},
-		"Two Hand II": {"type": "passive", "stats": [["Two Hand Accuracy", 4], ["Two Hand Speed", 2]], "ability": "Bludgeon"},
-		"Two Hand III": {"type": "passive", "stats": [["Two Hand Accuracy", 4], ["Two Hand Speed", 2]], "weapon": "Compression Sledge"},
-		"Two Hand IV": {"type": "passive", "stats": [["Two Hand Accuracy", 4], ["Two Hand Speed", 2]], "ability": "Power Swing"},
-		"Martial Training I": {"type": "passive", "stats": [], "ability": "Subdue"},
-		"Martial Training II": {"type": "passive", "stats": []},
-		"Martial Training III": {"type": "passive", "stats": [], "ability": "Disorient"},
-		"Martial Training IV": {"type": "passive", "stats": []},
-		"Master": {"type": "passive", "stats": [["Unarmed Speed", 2], ["Unarmed Accuracy", 4], ["One Hand Speed", 2], ["One Hand Accuracy", 4], ["Two Hand Speed", 2], ["Two Hand Accuracy", 4]], "abilities": ["Bleed", "Bruise", "Anger"]}
-	},
-	"Chrome Gunner": {
-		"Novice": {"type": "novice_grants", "names": ["Aimed Shot", "Scatter Blast", "Suppressing Fire"]},
-		"Pistols I": {"type": "passive", "stats": []},
-		"Pistols II": {"type": "passive", "stats": []},
-		"Pistols III": {"type": "weapon", "name": "Copper Lined Gun"},
-		"Pistols IV": {"type": "passive", "stats": []},
-		"Shotguns I": {"type": "ability", "name": "Point-Blank Burst"},
-		"Shotguns II": {"type": "passive", "stats": []},
-		"Shotguns III": {"type": "weapon", "name": "Double-Bore Scattergun"},
-		"Rifles I": {"type": "ability", "name": "Piercing Round"},
-		"Rifles II": {"type": "passive", "stats": []},
-		"Rifles III": {"type": "weapon", "name": "Vented Long-Rifle"},
-		"Ranged Training I": {"type": "passive", "stats": [["Attack Speed", 5], ["Crit Chance", 3]]},
-		"Ranged Training II": {"type": "passive", "stats": [["Attack Speed", 5], ["Crit Chance", 3]]},
-		"Ranged Training III": {"type": "passive", "stats": [["Attack Speed", 5], ["Crit Chance", 3]]},
-		"Master": {"type": "ability", "name": "Bleeding"}
-	},
-	"Scrap Tinkerer": {
-		"Novice": {"type": "novice_grants", "names": ["Mineral Survey Tool", "Flora Tool", "Liquid and Chem Tool", "Rusty Crafting Kit"]},
-		"Scanning I": {"type": "passive", "stats": [["Scan Concentration", 5]]},
-		"Scanning II": {"type": "passive", "stats": [["Scan Concentration", 5]]},
-		"Scanning III": {"type": "passive", "stats": [["Scan Concentration", 5]]},
-		"Sampling I": {"type": "passive", "stats": [["Sample Speed", 10]]},
-		"Sampling II": {"type": "passive", "stats": [["Sample Speed", 10]]},
-		"Sampling III": {"type": "passive", "stats": [["Sample Speed", 10]]},
-		"Crafting I": {"type": "passive", "stats": [["Crafting Quality", 3]], "recipe_unlocks": ["Hydraulic Saber", "Steam Baton", "Compression Sledge", "Pneumatic Knuckles"]},
-		"Crafting II": {"type": "passive", "stats": [["Crafting Quality", 3]], "recipe_unlocks": ["Vented Long-Rifle", "Double-Bore Scattergun", "Copper Lined Gun"]},
-		"Crafting III": {"type": "passive", "stats": [["Crafting Quality", 3]], "recipe_unlocks": ["Weapon Muzzle"]},
-		"Fabrication Mastery I": {"type": "passive", "stats": [["Scan Concentration", 2], ["Sample Speed", 5], ["Crafting Quality", 1]]},
-		"Fabrication Mastery II": {"type": "passive", "stats": [["Scan Concentration", 2], ["Sample Speed", 5], ["Crafting Quality", 1]]},
-		"Fabrication Mastery III": {"type": "passive", "stats": [["Scan Concentration", 2], ["Sample Speed", 5], ["Crafting Quality", 1]]},
-		"Master": {"type": "ability", "name": "Overclock"}
-	},
-	"Apothecary": {
-		"Novice": {"type": "novice_grants", "names": ["Apply Bandage", "Weapon Cert - Pneumatic Rifle", "Med Crafting Kit"]},
-		"Healing I": {"type": "passive", "stats": [["Healing Speed", 2], ["Healing Knowledge", 2]]},
-		"Healing II": {"type": "passive", "stats": [["Wound Care", 4]], "ability": "IV Drip"},
-		"Healing III": {"type": "passive", "stats": [["Wound Care", 4]]},
-		"Healing IV": {"type": "passive", "stats": [["Wound Care", 2]], "ability": "Healing Vapor"},
+	"Street Thug": {
+		"Novice": {"type": "novice_grants", "names": [
+			"Quick Hit", "Overhead Swing", "Backhand",
+			"Ranged Attack",
+			"Weapon Cert - Riveted Knuckles",
+			"Weapon Cert - Rusty Pistol",
+			"Mineral Survey Tool", "Rusty Crafting Kit"
+		]},
+		"Melee I": {"type": "passive", "stats": [["Unarmed Accuracy", 4], ["Unarmed Speed", 2], ["One Hand Accuracy", 2], ["Two Hand Accuracy", 2]]},
+		"Melee II": {"type": "passive", "stats": [["One Hand Accuracy", 4], ["One Hand Speed", 2], ["Unarmed Accuracy", 2], ["Two Hand Accuracy", 2]], "abilities": ["Slap", "Thrust", "Bludgeon"], "weapons": ["Hydraulic Saber", "Steam Baton"]},
+		"Melee III": {"type": "passive", "stats": [["Two Hand Accuracy", 4], ["Two Hand Speed", 2], ["One Hand Speed", 2], ["Unarmed Speed", 2]], "weapon": "Compression Sledge"},
+		"Ranged I": {"type": "passive", "stats": [["Pistol Accuracy", 4], ["Pistol Speed", 2]], "abilities": ["Aimed Shot"], "weapons": ["Rusty Pistol", "Pneumatic Longrifle", "Pressure Scattergun"]},
+		"Ranged II": {"type": "passive", "stats": [["Shotgun Accuracy", 4], ["Shotgun Speed", 2]], "abilities": ["Scatter Blast", "Point-Blank Burst"], "weapons": ["Pneumatic Rifle", "Pneumatic Longrifle"]},
+		"Ranged III": {"type": "passive", "stats": [["Rifle Accuracy", 4], ["Rifle Speed", 2]], "abilities": ["Suppressing Fire", "Piercing Round"], "weapons": ["Vented Long-Rifle", "Double-Bore Scattergun", "Copper Lined Gun"]},
+		"Combat Training I": {"type": "passive", "stats": [["Attack Speed", 5], ["Crit Chance", 2]], "ability": "Subdue"},
+		"Combat Training II": {"type": "passive", "stats": [["Attack Speed", 5], ["Crit Chance", 3]], "ability": "Disorient"},
+		"Combat Training III": {"type": "passive", "stats": [["Attack Speed", 5], ["Crit Chance", 3], ["Unarmed Accuracy", 2], ["One Hand Accuracy", 2], ["Two Hand Accuracy", 2]]},
+		"Weapons Crafting I": {"type": "passive", "stats": [["Crafting Quality", 3]], "recipe_unlocks": ["Hydraulic Saber", "Steam Baton", "Compression Sledge", "Pneumatic Knuckles"]},
+		"Weapons Crafting II": {"type": "passive", "stats": [["Crafting Quality", 3]], "recipe_unlocks": ["Vented Long-Rifle", "Double-Bore Scattergun", "Copper Lined Gun"]},
+		"Weapons Crafting III": {"type": "passive", "stats": [["Crafting Quality", 3]], "recipe_unlocks": ["Weapon Muzzle"]},
 		"Medicine Crafting I": {"type": "passive", "stats": [["Medicinal Knowledge", 4]], "recipe_unlocks": ["Antiseptic Salve", "Vitality Tonic"]},
 		"Medicine Crafting II": {"type": "passive", "stats": [["Medicinal Knowledge", 4]], "recipe_unlocks": ["Syringe", "Adrenaline Shot", "Empty IV Bag"]},
 		"Medicine Crafting III": {"type": "passive", "stats": [["Medicinal Knowledge", 4]]},
-		"Medicine Crafting IV": {"type": "passive", "stats": [["Medicine Potency", 2]]},
-		"Medical Foraging I": {"type": "passive", "stats": [["Foraging Chance", 1]]},
-		"Medical Foraging II": {"type": "passive", "stats": [["Foraging Chance", 1]]},
-		"Medical Foraging III": {"type": "passive", "stats": [["Foraging Chance", 1]]},
-		"Medical Foraging IV": {"type": "passive", "stats": [["Foraging Chance", 1]]},
-		"Stims I": {"type": "passive", "stats": [], "ability": "Adrenaline Boost"},
-		"Stims II": {"type": "passive", "stats": []},
-		"Stims III": {"type": "passive", "stats": [], "ability": "Blood Bag"},
-		"Stims IV": {"type": "passive", "stats": []},
-		"Master": {"type": "ability", "name": "Panacea"}
+		"Master": {"type": "passive", "stats": [
+			["Unarmed Speed", 4], ["Unarmed Accuracy", 4],
+			["One Hand Speed", 4], ["One Hand Accuracy", 4],
+			["Two Hand Speed", 4], ["Two Hand Accuracy", 4],
+			["Attack Speed", 5], ["Crit Chance", 5]
+		], "abilities": ["Roundhouse", "Flourish", "Power Swing", "Bleed", "Bruise", "Anger"]}
+	},
+	"Enforcer": {
+		"Novice": {"type": "novice_grants", "names": []},
+		"Master": {"type": "passive", "stats": []}
+	},
+	"Specialist": {
+		"Novice": {"type": "novice_grants", "names": []},
+		"Master": {"type": "passive", "stats": []}
+	},
+	"Ranger": {
+		"Novice": {"type": "novice_grants", "names": []},
+		"Master": {"type": "passive", "stats": []}
+	},
+	"Commando": {
+		"Novice": {"type": "novice_grants", "names": []},
+		"Master": {"type": "passive", "stats": []}
+	},
+	"Engineer": {
+		"Novice": {"type": "novice_grants", "names": []},
+		"Master": {"type": "passive", "stats": []}
+	},
+	"Medic": {
+		"Novice": {"type": "novice_grants", "names": []},
+		"Master": {"type": "passive", "stats": []}
+	},
+	"Sniper": {
+		"Novice": {"type": "novice_grants", "names": []},
+		"Master": {"type": "passive", "stats": []}
+	},
+	"Bombardier": {
+		"Novice": {"type": "novice_grants", "names": []},
+		"Master": {"type": "passive", "stats": []}
+	},
+	"Demolitionist": {
+		"Novice": {"type": "novice_grants", "names": []},
+		"Master": {"type": "passive", "stats": []}
+	},
+	"Bioforge Tech": {
+		"Novice": {"type": "novice_grants", "names": []},
+		"Master": {"type": "passive", "stats": []}
+	},
+	"Deadeye": {
+		"Novice": {"type": "novice_grants", "names": []},
+		"Master": {"type": "passive", "stats": []}
+	},
+	"Siege Operator": {
+		"Novice": {"type": "novice_grants", "names": []},
+		"Master": {"type": "passive", "stats": []}
+	},
+	"Wrecker": {
+		"Novice": {"type": "novice_grants", "names": []},
+		"Master": {"type": "passive", "stats": []}
+	},
+	"Phantom": {
+		"Novice": {"type": "novice_grants", "names": []},
+		"Master": {"type": "passive", "stats": []}
+	},
+	"Huntsman": {
+		"Novice": {"type": "novice_grants", "names": []},
+		"Master": {"type": "passive", "stats": []}
+	},
+	"Warlord": {
+		"Novice": {"type": "novice_grants", "names": []},
+		"Master": {"type": "passive", "stats": []}
+	},
+	"Saboteur": {
+		"Novice": {"type": "novice_grants", "names": []},
+		"Master": {"type": "passive", "stats": []}
+	},
+	"Venomcaster": {
+		"Novice": {"type": "novice_grants", "names": []},
+		"Master": {"type": "passive", "stats": []}
+	},
+	"Stalker": {
+		"Novice": {"type": "novice_grants", "names": []},
+		"Master": {"type": "passive", "stats": []}
+	},
+	"Razorback": {
+		"Novice": {"type": "novice_grants", "names": []},
+		"Master": {"type": "passive", "stats": []}
+	},
+	"Blastmaster": {
+		"Novice": {"type": "novice_grants", "names": []},
+		"Master": {"type": "passive", "stats": []}
+	},
+	"Plague Engineer": {
+		"Novice": {"type": "novice_grants", "names": []},
+		"Master": {"type": "passive", "stats": []}
+	},
+	"Ghost Medic": {
+		"Novice": {"type": "novice_grants", "names": []},
+		"Master": {"type": "passive", "stats": []}
+	},
+	"Warchemist": {
+		"Novice": {"type": "novice_grants", "names": []},
+		"Master": {"type": "passive", "stats": []}
+	},
+	"Toxinsmith": {
+		"Novice": {"type": "novice_grants", "names": []},
+		"Master": {"type": "passive", "stats": []}
+	},
+	"Plague Doctor": {
+		"Novice": {"type": "novice_grants", "names": []},
+		"Master": {"type": "passive", "stats": []}
 	}
 }

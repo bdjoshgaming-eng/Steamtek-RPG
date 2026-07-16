@@ -4,13 +4,13 @@ extends Control
 # AbilityBook.gd
 # ============================================================
 # The Ability Book panel, pulled out of main.gd (part of the ongoing
-# split — see GameData.gd and TalentViewer.gd for the earlier passes).
+# split -- see GameData.gd and TalentViewer.gd for the earlier passes).
 # Attached directly to the AbilityBookUI Control node, instantiated by
 # main.gd's _build_ability_book_ui(), which sets `main` below before
 # calling build().
 #
 # Shared with other systems, so left in main.gd instead of moving here:
-# _make_flat_style(), _use_ability_by_name(), _get_apothecary_rank_unlocked(),
+# _make_flat_style(), _use_ability_by_name(), _get_rank_unlocked(),
 # ABILITY_DRAG_SOURCE_SCRIPT_PATH (also used by the Inventory Book), and
 # professions_unlocked. Every reference to those below is prefixed
 # with "main." accordingly.
@@ -96,7 +96,7 @@ func _make_ability_book_button(ability_name: String) -> Button:
 
 	var drag_script = load(main.ABILITY_DRAG_SOURCE_SCRIPT_PATH)
 	if drag_script == null:
-		push_warning("Ability Book: could not load drag script at " + main.ABILITY_DRAG_SOURCE_SCRIPT_PATH + " — dragging will not work until this path is fixed.")
+		push_warning("Ability Book: could not load drag script at " + main.ABILITY_DRAG_SOURCE_SCRIPT_PATH + " -- dragging will not work until this path is fixed.")
 	else:
 		btn.set_script(drag_script)
 		btn.set("ability_name", ability_name)
@@ -107,18 +107,7 @@ func _refresh_ability_book() -> void:
 	for child in ability_book_list_container.get_children():
 		child.queue_free()
 
-	var available_names: Array = ["Attack"]
-
-	if main.professions_unlocked.get("Apothecary", false):
-		available_names.append("Apply Bandage")
-		if main._get_apothecary_rank_unlocked("Healing II"):
-			available_names.append("IV Drip")
-		if main._get_apothecary_rank_unlocked("Healing IV"):
-			available_names.append("Healing Vapor")
-		if main._get_apothecary_rank_unlocked("Stims I"):
-			available_names.append("Adrenaline Boost")
-		if main._get_apothecary_rank_unlocked("Stims III"):
-			available_names.append("Blood Bag")
+	var available_names: Array = ["Attack", "Ranged Attack"]
 
 	for profession_name in GameData.novice_professions.keys():
 		if not main.professions_unlocked.get(profession_name, false):
