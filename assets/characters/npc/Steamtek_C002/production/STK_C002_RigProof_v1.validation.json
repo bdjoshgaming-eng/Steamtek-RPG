@@ -1,0 +1,25 @@
+{
+  "input_glb": "C:\\Users\\bdjos\\Documents\\Codex\\2026-07-10\\steampunk-alleyway-map-chatgpt-conversation-6a5068ff\\character_3d_pipeline\\STK_C002_RigProof_v1_walk_v3.glb",
+  "file_size": 1481096,
+  "object_count": 76,
+  "mesh_count": 75,
+  "armatures": [
+    {
+      "name": "Armature",
+      "bone_count": 706
+    }
+  ],
+  "actions": [
+    {
+      "name": "STK_IDLE",
+      "frame_start": 1.0,
+      "frame_end": 8.0
+    },
+    {
+      "name": "STK_WALK",
+      "frame_start": 1.0,
+      "frame_end": 25.0
+    }
+  ],
+  "valid": true
+}

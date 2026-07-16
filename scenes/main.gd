@@ -5,7 +5,7 @@ extends Node2D
 # elite prereqs, talent display names/rewards) now lives in
 # GameData.gd, an autoload singleton (Pass 1 of splitting this file
 # apart). Every reference to those tables below is prefixed with
-# 'GameData.' — e.g. GameData.novice_professions, GameData.recipes.
+# 'GameData.' -- e.g. GameData.novice_professions, GameData.recipes.
 # ============================================================
 
 @onready var survey_ui: Control = $UILayer/SurveyUI
@@ -34,6 +34,7 @@ extends Node2D
 @onready var player_action_bar_bg: Polygon2D = %PlayerActionBarBg
 @onready var player_action_bar_fill: Polygon2D = %PlayerActionBarFill
 @onready var dummy_health_bar_bg: Polygon2D = %DummyHealthBarBg
+var dummy_target_indicator: Line2D = null
 @onready var dummy_health_bar_fill: Polygon2D = %DummyHealthBarFill
 @onready var dummy_action_bar_bg: Polygon2D = %DummyActionBarBg
 @onready var dummy_action_bar_fill: Polygon2D = %DummyActionBarFill
@@ -41,6 +42,7 @@ extends Node2D
 
 @onready var enemy2: Node2D = %Enemy2
 @onready var enemy2_health_bar_bg: Polygon2D = %Enemy2HealthBarBg
+var enemy2_target_indicator: Line2D = null
 @onready var enemy2_health_bar_fill: Polygon2D = %Enemy2HealthBarFill
 @onready var enemy2_action_bar_bg: Polygon2D = %Enemy2ActionBarBg
 @onready var enemy2_action_bar_fill: Polygon2D = %Enemy2ActionBarFill
@@ -61,8 +63,16 @@ extends Node2D
 @onready var trainer4_sprite: Sprite2D = %Trainer4Sprite
 @onready var trainer4_name_label: Label = %Trainer4NameLabel
 @onready var trainer_ui: Control = $TrainerUI
+@onready var dialogue_layout: VBoxContainer = $TrainerUI/DialogueLayout
+@onready var train_info_label: Label = $TrainerUI/DialogueLayout/TrainInfoLabel
+@onready var trainer_options: VBoxContainer = $TrainerUI/DialogueLayout/TrainerOptions
+@onready var train_result_label: Label = $TrainerUI/DialogueLayout/TrainResultLabel
 @onready var dumpster: Node2D = %Dumpster
 @onready var dumpster_visual: Polygon2D = %DumpsterVisual
+@onready var quest_book: Node2D = %QuestBook
+@onready var quest_book_visual: Polygon2D = %QuestBookVisual
+
+var quest_system: Node
 @onready var dumpster_cooldown_timer: Timer = $DumpsterCooldownTimer
 @onready var bandage_cooldown_timer: Timer = $BandageCooldownTimer
 @onready var resource_shift_timer: Timer = $ResourceShiftTimer
@@ -231,7 +241,7 @@ func _has_bandages_for_salve() -> bool:
 			return true
 	return false
 
-# Consumes one charge off the first available Crate of Bandages stack —
+# Consumes one charge off the first available Crate of Bandages stack --
 # same depletion pattern as _attempt_use_bandage, reused here since
 # Healing abilities are fueled by the same item.
 func _consume_one_bandage_charge() -> void:
@@ -286,7 +296,7 @@ var resource_stats: Dictionary = {}
 var resource_hotspots: Dictionary = {}
 # Each resource's hotspot cluster is centered on a fixed world position,
 # tracked here separately from the player. This is what actually moves
-# on a "shift" — NOT the player's current position — so a shift really
+# on a "shift" -- NOT the player's current position -- so a shift really
 # does relocate where the good spots are, rather than just re-rolling
 # hotspots around wherever you happen to be standing (which would make
 # the shift statistically meaningless, since your scan reading is
@@ -295,12 +305,12 @@ var resource_hotspot_centers: Dictionary = {}
 const MAX_CONCENTRATION_RANGE = 2500.0
 const HOTSPOT_SPAWN_RADIUS = 2000.0
 # Each resource now gets multiple hotspots scattered around, so you're
-# not stuck chasing one single point across a large map — whichever
+# not stuck chasing one single point across a large map -- whichever
 # hotspot is nearest to you determines your scan reading.
 const HOTSPOTS_PER_RESOURCE = 4
 const RESOURCE_SHIFT_INTERVAL = 600.0
 # How far a resource's hotspot cluster can drift from its previous
-# center on each shift — deliberately larger than HOTSPOT_SPAWN_RADIUS
+# center on each shift -- deliberately larger than HOTSPOT_SPAWN_RADIUS
 # so the whole cluster meaningfully relocates, not just jitters in
 # place.
 const RESOURCE_SHIFT_DRIFT_RADIUS = 3000.0
@@ -339,26 +349,69 @@ var consumable_base_name: Dictionary = {}
 # --- Combat ---
 var equipped_weapon_name: String = ""
 const MELEE_RANGE = 180.0
-# Hit-chance formula constants — our own numbers/scale, not copied
+# Hit-chance formula constants -- our own numbers/scale, not copied
 # from any external source. See _perform_attack() for the formula.
 const BASE_HIT_CHANCE = 50.0
 const MIN_HIT_CHANCE = 10.0
 const MAX_HIT_CHANCE = 95.0
+
+# Range-based accuracy modifiers (SWG-inspired).
+# Each weapon category has an OPTIMAL band, a REDUCED band, and anything
+# outside both is WAY_LESS_OPTIMAL. Scale: ~45px per "foot" based on
+# existing MELEE_RANGE (180px = ~4ft touching range).
+# OPTIMAL = +0 accuracy penalty, REDUCED = -20, WAY_LESS = -45.
+# These subtract from the hit_chance BEFORE clamping to MIN_HIT_CHANCE.
+const RANGE_PENALTY_REDUCED = 20.0
+const RANGE_PENALTY_WAY_LESS = 45.0
+
+# Per-weapon-class max ENGAGEMENT range -- each class gets its own ceiling.
+# A sniper rifle that can only reach 650px but has an optimal band at 1125px+
+# is nonsensical, so engagement range is now weapon-class-aware.
+const ENGAGE_RANGE_PISTOL = 1125.0
+const ENGAGE_RANGE_RIFLE = 1575.0
+const ENGAGE_RANGE_SNIPER = 2250.0
+const ENGAGE_RANGE_SHOTGUN = 450.0
+const ENGAGE_RANGE_HEAVY = 675.0
+
+# Shotgun: optimal 0-180px (0-4ft), reduced 180-450px (4-10ft)
+const SHOTGUN_OPTIMAL_MAX = 180.0
+const SHOTGUN_REDUCED_MAX = 450.0
+
+# Pistol: optimal 225-675px (5-15ft), reduced outside that up to 1125px
+const PISTOL_OPTIMAL_MIN = 225.0
+const PISTOL_OPTIMAL_MAX = 675.0
+const PISTOL_REDUCED_MAX = 1125.0
+
+# Rifle: optimal 720-1125px (16-25ft), reduced outside that up to 1575px
+const RIFLE_OPTIMAL_MIN = 720.0
+const RIFLE_OPTIMAL_MAX = 1125.0
+const RIFLE_REDUCED_MAX = 1575.0
+
+# Sniper: optimal 1125-2250px (25-50ft), reduced at 675-1125 (too close)
+const SNIPER_OPTIMAL_MIN = 1125.0
+const SNIPER_OPTIMAL_MAX = 2250.0
+const SNIPER_REDUCED_MIN = 675.0
+
+# Heavy Weapons (Grenade Launcher, Flame Thrower): SWG-inspired -- close range,
+# high damage, AoE/DoT. Flame thrower basically extended melee, grenade launcher
+# arcs close-to-mid. Small penalty beyond optimal so they can not snipe at range,
+# but no massive falloff since AoE makes precision less critical.
+const HEAVY_OPTIMAL_MAX = 450.0
 # Tuned so a brand-new, untrained character (Quality-0 Piston Blade,
 # 55 Accuracy, no trained Accuracy bonuses) lands at ~85% hit chance
-# against the training Dummy — solidly likely to land a hit, with just
+# against the training Dummy -- solidly likely to land a hit, with just
 # a small chance to whiff, since it's meant to feel like a low-stakes
 # practice target rather than a real fight. Other starting weapons
 # (Pressure Scattergun, Pneumatic Rifle) have their own Accuracy
-# ranges, so they'll land close to but not necessarily exactly 85% —
+# ranges, so they'll land close to but not necessarily exactly 85% --
 # that variance across weapon types is expected, not a bug.
 const DUMMY_DEFENSE = -2.0
 const ENEMY2_DEFENSE = 16.0
-# Light Action cost for the basic Attack — like walking burning a few
+# Light Action cost for the basic Attack -- like walking burning a few
 # calories, not meant to be draining. Tune this one number to adjust.
 const BASIC_ATTACK_ACTION_COST = 20
 # Basic Attack's real Action cost now scales with the equipped
-# weapon's Speed stat instead of using this flat value — fast/light
+# weapon's Speed stat instead of using this flat value -- fast/light
 # weapons (knuckles, stun sticks) cost less Action per swing, slow/
 # heavy weapons (hammers, greatblades) cost more. This constant is
 # now only the fallback when no weapon Speed stat is available.
@@ -368,6 +421,61 @@ func _get_dynamic_attack_action_cost() -> int:
 		return BASIC_ATTACK_ACTION_COST
 	var speed = weapon_stats["Speed"]
 	return max(5, int(round(speed * 10.0)))
+
+# Returns an accuracy PENALTY (positive = worse) based on weapon class
+# and current distance to target. Inspired by SWG's range-based accuracy
+# system -- each weapon type has an optimal band; outside that band the
+# penalty increases, making it significantly harder to land hits at
+# wrong ranges. Added directly to the hit_chance formula as a subtraction.
+func _get_range_accuracy_penalty(weapon_class: String, dist: float) -> float:
+	if weapon_class == "Shotgun":
+		if dist <= SHOTGUN_OPTIMAL_MAX:
+			return 0.0
+		elif dist <= SHOTGUN_REDUCED_MAX:
+			return RANGE_PENALTY_REDUCED
+		else:
+			return RANGE_PENALTY_WAY_LESS
+
+	elif weapon_class == "Pistol":
+		if dist >= PISTOL_OPTIMAL_MIN and dist <= PISTOL_OPTIMAL_MAX:
+			return 0.0
+		elif dist <= PISTOL_REDUCED_MAX:
+			return RANGE_PENALTY_REDUCED
+		else:
+			return RANGE_PENALTY_WAY_LESS
+
+	elif weapon_class == "Sniper Rifle":
+		if dist >= SNIPER_OPTIMAL_MIN and dist <= SNIPER_OPTIMAL_MAX:
+			return 0.0
+		elif dist > SNIPER_OPTIMAL_MAX:
+			return RANGE_PENALTY_WAY_LESS
+		elif dist >= SNIPER_REDUCED_MIN:
+			# Close but not optimal -- reduced accuracy
+			return RANGE_PENALTY_REDUCED
+		else:
+			# Point-blank with a sniper -- nearly impossible to aim
+			return RANGE_PENALTY_WAY_LESS
+
+	elif GameData.rifle_weapons.has(weapon_class):
+		if dist >= RIFLE_OPTIMAL_MIN and dist <= RIFLE_OPTIMAL_MAX:
+			return 0.0
+		elif dist <= RIFLE_REDUCED_MAX:
+			return RANGE_PENALTY_REDUCED
+		else:
+			return RANGE_PENALTY_WAY_LESS
+
+	elif GameData.heavy_weapon_types.has(weapon_class):
+		# SWG-inspired: heavy weapons hit hard close up with AoE/DoT.
+		# Small penalty beyond optimal to stop them from sniping, but
+		# no massive falloff -- area effect makes precision less critical.
+		if dist <= HEAVY_OPTIMAL_MAX:
+			return 0.0
+		else:
+			return RANGE_PENALTY_REDUCED
+
+	# Melee, Unarmed, Brass Knuckles -- no range check applies here
+	# since melee already can't attack outside MELEE_RANGE.
+	return 0.0
 
 const HEALTH_BAR_WIDTH = 60.0
 const HEALTH_BAR_HEIGHT = 8.0
@@ -380,7 +488,7 @@ const HUD_BAR_GAP = 6.0
 const NAME_LABEL_WIDTH = 150.0
 # ActionBar and PlayerHUD are both positioned automatically at runtime
 # by _layout_hud() (called once from _ready()) rather than a fixed
-# guessed position — the ActionBar is centered horizontally near the
+# guessed position -- the ActionBar is centered horizontally near the
 # bottom of the screen, and PlayerHUD aligns its left edge with the
 # ActionBar's left edge, sitting just above it. Adjust these two
 # constants to change the bottom margin / gap between them.
@@ -408,28 +516,28 @@ var dummy_max_action: int = 50
 var dummy_current_action: int = 50
 var dummy_current_health: int = 50
 var dummy_alive: bool = true
-# Subdue (damage debuff) is fully functional — reduces this enemy's
+# Subdue (damage debuff) is fully functional -- reduces this enemy's
 # outgoing damage while active. Disorient (accuracy debuff) is tracked
 # here too but has no live effect yet, since there's no hit/miss combat
 # system for reduced accuracy to act on.
 var dummy_damage_debuff: float = 0.0
 var dummy_accuracy_debuff: float = 0.0
-# Bruise (attack-speed debuff) — slows this enemy's own attack cadence
+# Bruise (attack-speed debuff) -- slows this enemy's own attack cadence
 # while active. Applied as a multiplier on the enemy's attack cooldown.
 var dummy_attack_speed_debuff: float = 0.0
-# Bleed (damage-over-time) — ticks once per second alongside player
+# Bleed (damage-over-time) -- ticks once per second alongside player
 # regen (see _on_player_regen_tick), dealing dot_damage_per_tick each
 # tick for dot_duration_ticks seconds.
 var dummy_bleed_ticks_remaining: int = 0
 var dummy_bleed_damage_per_tick: int = 0
-# Anger (taunt) — tracks that this enemy has been provoked into
+# Anger (taunt) -- tracks that this enemy has been provoked into
 # targeting the player. Right now the player is the only possible
 # target, so this has no visible effect yet; it's scaffolding for
 # when co-op/companion targets exist and taunt needs to redirect
 # an enemy away from them and onto the player.
 var dummy_taunted_until_msec: int = 0
 # Tracks cumulative damage dealt to this enemy broken down by weapon
-# class used, across the whole fight — reset on respawn and after
+# class used, across the whole fight -- reset on respawn and after
 # granting kill XP. Lets kill XP be split proportionally across every
 # weapon type actually used, instead of all going to whatever's
 # equipped at the moment of the killing blow.
@@ -437,8 +545,8 @@ var dummy_damage_by_weapon_class: Dictionary = {}
 
 var enemy2_name: String = "Rust Marauder"
 var enemy2_difficulty: int = 8
-var enemy2_max_health: int = 80
-var enemy2_current_health: int = 80
+var enemy2_max_health: int = 110
+var enemy2_current_health: int = 110
 var enemy2_alive: bool = true
 var enemy2_max_action: int = 80
 var enemy2_current_action: int = 80
@@ -473,7 +581,7 @@ const skill_cogs_costs = [1, 1, 1, 1]
 const FORAGE_XP = 10
 
 # --- Dumpster (Scavenging) ---
-# Fixed, non-moving scavenge point — the only scavenge point in the
+# Fixed, non-moving scavenge point -- the only scavenge point in the
 # game right now (the earlier test herb patch has been removed).
 var dumpster_available: bool = true
 const DUMPSTER_RANGE = 150.0
@@ -488,10 +596,11 @@ const BANDAGE_COOLDOWN = 6.0
 const BANDAGE_ACTION_COST = 50
 var bandage_ready: bool = true
 var attack_ready: bool = true
-var combat: Node
+var targeted_enemy: String = ""
+const ENEMY_CLICK_RADIUS = 60.0
 
 # --- Healing abilities (IV Drip, Healing Vapor) ---
-# Duration assumptions (not specified by design yet — flagged for review):
+# Duration assumptions (not specified by design yet -- flagged for review):
 # IV Drip ticks once per second via the existing health regen tick, for
 # 10 seconds (10 total HP). Healing Vapor is a single instant AoE burst.
 const IV_DRIP_HEAL_PER_TICK = 1
@@ -503,14 +612,14 @@ var iv_drip_ticks_remaining: int = 0
 var iv_drip_ready_at_msec: int = 0
 var healing_vapor_ready_at_msec: int = 0
 
-# --- Stims (Adrenaline Boost only — II/III/IV intentionally not built yet) ---
-# Temporarily raises max Action (not a heal) — e.g. 850 max + a 50
+# --- Stims (Adrenaline Boost only -- II/III/IV intentionally not built yet) ---
+# Temporarily raises max Action (not a heal) -- e.g. 850 max + a 50
 # bonus = 900 max, with current Action rising by the same amount so
 # the new headroom is immediately usable. Bonus scales with the
 # consumed Adrenaline Shot's Quality (30 at Quality 0, up to 100 at
 # Quality 1000). Lasts 10 minutes, then reverts automatically. Cooldown
-# matches the duration, so a new Boost can't be applied — and therefore
-# can't stack — until the current one has fully worn off.
+# matches the duration, so a new Boost can't be applied -- and therefore
+# can't stack -- until the current one has fully worn off.
 const ADRENALINE_BOOST_MIN_ACTION = 30
 const ADRENALINE_BOOST_MAX_ACTION = 100
 const ADRENALINE_BOOST_DURATION_SEC = 600.0
@@ -519,7 +628,7 @@ var adrenaline_boost_bonus_amount: int = 0
 var adrenaline_boost_expires_at_unix: float = 0.0
 var adrenaline_boost_ready_at_unix: float = 0.0
 
-# Blood Bag (Stims III) — same structure as Adrenaline Boost, but
+# Blood Bag (Stims III) -- same structure as Adrenaline Boost, but
 # raises max Health instead of max Action. Same 10-minute duration and
 # matching cooldown, for the same non-stacking reason. Bonus scales
 # with the consumed Empty IV Bag's Quality the same way (30-100).
@@ -539,7 +648,7 @@ var xp_pools: Dictionary = {
 	"Rifle XP": 0,
 	"Shotgun XP": 0,
 	"Pistol XP": 0,
-	# Heavy Weapons XP no longer maps to a live talent column — Chrome
+	# Heavy Weapons XP no longer maps to a live talent column -- Chrome
 	# Gunner's old Heavy Weapons tree was renamed to Pistols (which has
 	# its own fresh XP type above). Grenade Launcher/Flame Thrower kills
 	# still earn this XP (see GameData.heavy_weapon_types below), but it's
@@ -602,8 +711,8 @@ var loot_tables: Dictionary = {
 		"Uncommon": [{"item": "Damaged Circuit", "min_amount": 1, "max_amount": 3}],
 		"Rare": [{"item": "Overcharged Coil", "min_amount": 1, "max_amount": 2}]
 	},
-	"Dumpster": {
-		"Common": [{"item": "Torn Cloth", "min_amount": 1, "max_amount": 3}],
+	"ForageSpot": {
+		"Common": [{"item": "Torn Cloth", "min_amount": 1, "max_amount": 3}, {"item": "Plastic", "min_amount": 1, "max_amount": 3}],
 		"Uncommon": [{"item": "Antiseptic Moss", "min_amount": 1, "max_amount": 2}, {"item": "Healroot", "min_amount": 1, "max_amount": 2}],
 		"Rare": [{"item": "Bloomwort", "min_amount": 1, "max_amount": 1}]
 	}
@@ -621,10 +730,10 @@ const skill_point_costs = [1, 2, 3, 4]
 # Combat professions draw from Militant Points; crafting/sampling
 # professions draw from Engineer Points. This split exists so a solo/
 # co-op player never has to choose between "being good at combat" and
-# "being good at crafting" — crafting is too central to the game to be
+# "being good at crafting" -- crafting is too central to the game to be
 # gated behind the same currency as fighting. Toxinsmith is a judgment
 # call (it needs both Master Apothecary AND Chrome Gunner Shotguns IV)
-# — filed under Engineer since Apothecary is its thematic home; revisit
+# -- filed under Engineer since Apothecary is its thematic home; revisit
 # if that feels wrong once it's actually designed.
 const MILITANT_PROFESSIONS: Array = ["Pressure Enforcer", "Chrome Gunner", "Sniper", "Ordnance Specialist", "Quickdraw Technician"]
 const ENGINEER_PROFESSIONS: Array = ["Scrap Tinkerer", "Apothecary", "Toxinsmith"]
@@ -670,11 +779,7 @@ func _ready() -> void:
 	if resource_hotspot_centers == null:
 		resource_hotspot_centers = {}
 
-	combat = preload("res://scenes/Combat.gd").new()
-	combat.main = self
-	add_child(combat)
-
-	# Force the real target resolution at runtime. This is a stopgap —
+	# Force the real target resolution at runtime. This is a stopgap --
 	# ideally also update Project Settings > Display > Window >
 	# Viewport Width/Height to 1920x1080 directly in the editor so the
 	# project's own default matches this everywhere, not just here.
@@ -713,7 +818,7 @@ func _ready() -> void:
 	craft_button.pressed.connect(_on_craft_pressed)
 	craft_button.focus_mode = Control.FOCUS_NONE
 
-	attack_cooldown_timer.timeout.connect(combat._on_attack_cooldown_finished)
+	attack_cooldown_timer.timeout.connect(_on_attack_cooldown_finished)
 	dummy_attack_cooldown_timer.timeout.connect(_on_dummy_attack_cooldown_finished)
 	player_respawn_timer.timeout.connect(_on_player_respawn)
 	player_regen_timer.timeout.connect(_on_player_regen_tick)
@@ -722,22 +827,34 @@ func _ready() -> void:
 	player_action_regen_timer.start()
 
 	player_spawn_position = player.position
-	dummy_respawn_timer.timeout.connect(combat._on_dummy_respawn)
+	dummy_respawn_timer.timeout.connect(_on_dummy_respawn)
 	enemy2_attack_cooldown_timer.timeout.connect(_on_enemy2_attack_cooldown_finished)
-	enemy2_respawn_timer.timeout.connect(combat._on_enemy2_respawn)
+	enemy2_respawn_timer.timeout.connect(_on_enemy2_respawn)
 	dumpster_cooldown_timer.timeout.connect(_on_dumpster_cooldown_finished)
 	bandage_cooldown_timer.timeout.connect(_on_bandage_cooldown_finished)
 	resource_shift_timer.timeout.connect(_on_resource_shift_timer_timeout)
 	resource_shift_timer.wait_time = RESOURCE_SHIFT_INTERVAL
 	resource_shift_timer.start()
 
-	# Dumpster placeholder visual — a plain brownish rectangle until real
+	# Dumpster placeholder visual -- a plain brownish rectangle until real
 	# art exists. Deliberately does NOT move on respawn, unlike the herb
 	# patch, since this is meant to be a fixed, static scavenge point.
 	dumpster_visual.color = Color(0.45, 0.35, 0.25)
 	dumpster_visual.polygon = PackedVector2Array([
 		Vector2(-25, -20), Vector2(25, -20), Vector2(25, 20), Vector2(-25, 20)
 	])
+
+	# Quest book placeholder -- red rectangle, 100px left of spawn.
+	# Replace with real art later; position set in the scene node itself.
+	quest_book_visual.color = Color(0.85, 0.1, 0.1)
+	quest_book_visual.polygon = PackedVector2Array([
+		Vector2(-15, -20), Vector2(15, -20), Vector2(15, 20), Vector2(-15, 20)
+	])
+
+	quest_system = preload("res://scenes/Quest.gd").new()
+	quest_system.main = self
+	add_child(quest_system)
+	quest_system.setup()
 
 	var trainer_gold = Color(1.0, 0.85, 0.3)
 
@@ -765,11 +882,10 @@ func _ready() -> void:
 	spend_point_button.visible = false
 	_refresh_skill_tree_ui()
 
-	# Trainer Dialogue now lives in TrainerDialogue.gd, attached directly
-	# to the TrainerUI scene node (see that file for details). It
-	# configures its own layout/label setup in its own _ready(); this
-	# just hands it the main reference it needs for shared state.
-	trainer_ui.main = self
+	trainer_ui.visible = false
+	dialogue_layout.add_theme_constant_override("separation", 10)
+	train_info_label.autowrap_mode = TextServer.AUTOWRAP_WORD
+	train_info_label.custom_minimum_size = Vector2(340, 0)
 
 	for profession_name in GameData.novice_professions.keys():
 		if GameData.ELITE_PROFESSION_PREREQS.has(profession_name):
@@ -807,14 +923,17 @@ func _unhandled_input(event: InputEvent) -> void:
 			_refresh_inventory_book()
 
 	if event.is_action_pressed("inventory_menu"):
-		inventory_book_ui.visible = not inventory_book_ui.visible
-		if inventory_book_ui.visible:
-			_refresh_inventory_book()
+		_cycle_target()
+
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		var mouse_world = get_viewport().get_canvas_transform().affine_inverse() * event.position
+		_try_click_target(mouse_world)
 
 	if event.is_action_pressed("forage"):
 		_attempt_forage()
 
 	if event.is_action_pressed("interact"):
+		quest_system.try_interact("QuestBook")
 		_attempt_talk_to_trainer()
 
 	if event.is_action_pressed("profession_menu"):
@@ -857,10 +976,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("talent_view"):
 		talent_ui.visible = not talent_ui.visible
 		if talent_ui.visible:
-			var default_profession = talent_ui.current_talent_profession
+			var default_profession = current_talent_profession
 			if default_profession == "":
 				default_profession = GameData.novice_professions.keys()[0]
-			talent_ui._refresh_talent_grid(default_profession)
+			_refresh_talent_grid(default_profession)
 
 func _generate_unique_resource_name() -> String:
 	var new_name = ""
@@ -1000,7 +1119,7 @@ func _on_tree_item_selected() -> void:
 func _on_sample_pressed() -> void:
 	if current_scan_resource == "":
 		sample_message_label.text = "Scan a resource first!"
-		survey_book_ui.survey_book_message_label.text = "Scan a resource first!"
+		survey_book_message_label.text = "Scan a resource first!"
 		return
 
 	if not cooldown_timer.is_stopped():
@@ -1013,7 +1132,7 @@ func _on_sample_pressed() -> void:
 	var type_name = resource_type_of[current_scan_resource]
 	var sample_message = "You have sampled " + str(actual_amount) + " " + type_name + "!"
 	sample_message_label.text = sample_message
-	survey_book_ui.survey_book_message_label.text = sample_message
+	survey_book_message_label.text = sample_message
 
 	_add_to_inventory_with_instance(current_scan_resource, actual_amount)
 	_update_inventory_display()
@@ -1034,11 +1153,11 @@ func _on_sample_pressed() -> void:
 
 	cooldown_timer.start()
 	sample_button.disabled = true
-	survey_book_ui.survey_book_sample_button.disabled = true
+	survey_book_sample_button.disabled = true
 
 func _on_cooldown_finished() -> void:
 	sample_button.disabled = false
-	survey_book_ui.survey_book_sample_button.disabled = false
+	survey_book_sample_button.disabled = false
 
 func _get_yield_for_concentration(concentration: int) -> int:
 	if concentration <= 25:
@@ -1298,7 +1417,7 @@ func _matches_requirement(instance_name: String, requirement_key: String) -> boo
 	if instance_name == requirement_key:
 		return true
 	# Class-level match: a recipe can require an entire resource class
-	# (e.g. "Metal") instead of one specific subclass — satisfied by
+	# (e.g. "Metal") instead of one specific subclass -- satisfied by
 	# any resource belonging to that class (Black Iron, Copper, etc.).
 	if resource_classes.has(requirement_key):
 		var subclass_name = resource_subclass_of.get(instance_name, "")
@@ -1394,7 +1513,7 @@ func _on_craft_pressed() -> void:
 	_show_combat_message("You have successfully crafted " + article + " " + recipe["output"] + "!")
 
 # Shared by both the old auto-pick crafting flow (_on_craft_pressed)
-# and the new Assembly step (_execute_assembly_craft) — takes an
+# and the new Assembly step (_execute_assembly_craft) -- takes an
 # already-computed base quality (before the Scrap Tinkerer skill
 # multiplier) and a recipe, and handles everything from there:
 # quality scaling, item creation, XP, weapon stat generation. Returns
@@ -1409,10 +1528,10 @@ func _finalize_crafted_item(recipe: Dictionary, base_quality: int) -> Dictionary
 	quality = min(1000, round(quality * quality_multiplier))
 
 	# Every crafted item gets its own unique identity, since its exact
-	# stats depend on which resources went into it — two Piston Blades
+	# stats depend on which resources went into it -- two Piston Blades
 	# made from different Gunmetal Steel batches are genuinely
 	# different items, not stacked copies of one. (Loot that drops
-	# together from a single kill is a separate system — that one
+	# together from a single kill is a separate system -- that one
 	# intentionally CAN share an identifier, since it's not crafted.)
 	var item_key = _generate_unique_resource_name()
 	consumable_base_name[item_key] = recipe["output"]
@@ -1540,6 +1659,7 @@ func _save_game() -> void:
 		"engineer_points_available": engineer_points_available,
 		"professions_unlocked": professions_unlocked,
 		"has_chosen_starting_profession": has_chosen_starting_profession,
+		"quest_data": quest_system.get_save_data(),
 		"player_position": {"x": player.position.x, "y": player.position.y},
 		"player_current_health": player_current_health,
 		"player_current_action": player_current_action,
@@ -1645,6 +1765,8 @@ func _load_game() -> void:
 	engineer_points_available = int(save_data.get("engineer_points_available", engineer_points_available))
 
 	has_chosen_starting_profession = save_data.get("has_chosen_starting_profession", false)
+	if save_data.has("quest_data"):
+		quest_system.load_save_data(save_data["quest_data"])
 	var loaded_unlocks = save_data.get("professions_unlocked", null)
 	if loaded_unlocks != null:
 		for profession_name in loaded_unlocks.keys():
@@ -1693,22 +1815,664 @@ func _load_game() -> void:
 	_show_combat_message("Game loaded!")
 
 # --- Combat ---
-# Attack resolution, abilities, hit chance, and kill/XP crediting now
-# live in their own script (Combat.gd) — same back-reference pattern
-# as the UI panels, just on a plain Node instead of a Control since it
-# has no UI of its own.
 
 func _attempt_attack() -> void:
-	combat._attempt_attack()
+	_perform_attack(1.0, _get_dynamic_attack_action_cost(), "")
+
+func _attempt_ranged_attack() -> void:
+	var weapon_class = crafted_item_class.get(equipped_weapon_name, "")
+	if not GameData.chrome_gunner_weapons.has(weapon_class):
+		if equipped_weapon_name == "":
+			_show_combat_message("No weapon equipped! Ranged Attack needs a ranged weapon.")
+		else:
+			_show_combat_message("Ranged Attack only works with ranged weapons! Use a melee ability instead.")
+		return
+	_perform_attack(1.0, _get_dynamic_attack_action_cost(), "Ranged Attack")
 
 func _attempt_ability(ability_name: String) -> void:
-	combat._attempt_ability(ability_name)
+	var ability = GameData.ability_definitions[ability_name]
+	var weapon_class = crafted_item_class.get(equipped_weapon_name, "")
+	var weapon_subclass = crafted_item_subclass.get(equipped_weapon_name, "")
+
+	if ability.has("weapon_category"):
+		# Pressure Enforcer melee abilities: gated by the equipped
+		# weapon's actual One Hand/Two Hand/Unarmed category (subclass-
+		# aware), not just its item_class -- a "Sword" alone doesn't say
+		# whether it's one- or two-handed, so item_class matching isn't
+		# enough here. Bare hands resolve to "Unarmed" the same way a
+		# real Brass Knuckles weapon does.
+		var equipped_category = _get_pressure_weapon_type_label(weapon_class, weapon_subclass)
+		if equipped_category != ability["weapon_category"]:
+			_show_combat_message(ability_name + " only works with " + ability["weapon_category"] + " weapons.")
+			return
+	else:
+		# Every other ability (Chrome Gunner's ranged weapons, etc.) --
+		# item_class alone is unambiguous here, no subclass needed.
+		if not ability["weapons"].has(weapon_class):
+			_show_combat_message(ability_name + " only works with " + ", ".join(ability["weapons"]) + " weapons.")
+			return
+
+	var required_box = ability["requires_box"]
+	var required_profession = ability["requires_profession"]
+
+	if required_box != "":
+		var box_data = GameData.novice_professions[required_profession]["paths"][required_box]
+		if box_data["unlocked_nodes"] < 1:
+			_show_combat_message("You haven't learned " + ability_name + " yet! Unlock " + required_box + " first.")
+			return
+	else:
+		if not professions_unlocked.get(required_profession, false):
+			_show_combat_message("You need to be a " + required_profession + " to use " + ability_name + "!")
+			return
+
+	_perform_attack(ability["damage_multiplier"], ability["action_cost"], ability_name)
+
+# Maps a weapon's item_class + item_subclass to its Pressure Enforcer
+# weapon-type label ("One Hand"/"Two Hand"/"Unarmed"), used to look up
+# the matching per-type stat (e.g. "One Hand Speed") for whichever
+# weapon is currently equipped. Subclass (not just class) matters here
+# since some classes span both -- a Sword can be "1 Handed" (Piston
+# Blade) or "2 Handed" (Piston Greatblade), so item_class alone can't
+# tell them apart.
+func _get_pressure_weapon_type_label(weapon_class: String, weapon_subclass: String) -> String:
+	if weapon_class == "Brass Knuckles" or weapon_class == "":
+		return "Unarmed"
+	elif GameData.pressure_enforcer_weapons.has(weapon_class):
+		return "Two Hand" if weapon_subclass == "2 Handed" else "One Hand"
+	return ""
+
+# Sums a named passive stat (e.g. "One Hand Speed") across every owned
+# skill box in a profession, reading directly from GameData.TALENT_SKILL_REWARDS --
+# the same data that drives the Talent Viewer -- so gameplay math and
+# what's shown on screen can never drift out of sync.
+func _get_total_passive_stat(profession_name: String, stat_name: String) -> float:
+	var total = 0.0
+
+	for path_name in GameData.novice_professions[profession_name]["paths"].keys():
+		var path_data = GameData.novice_professions[profession_name]["paths"][path_name]
+		var owned = path_data["unlocked_nodes"] >= path_data.get("max_nodes", NODES_PER_PATH)
+		if not owned:
+			continue
+
+		var reward = GameData.TALENT_SKILL_REWARDS.get(profession_name, {}).get(path_name, null)
+		if reward == null or reward.get("type", "") != "passive":
+			continue
+
+		for stat_pair in reward["stats"]:
+			if stat_pair[0] == stat_name:
+				total += stat_pair[1]
+
+	return total
+
+# Applies a timed debuff to a target. "damage" reduces their outgoing
+# damage (fully functional, applied in the enemy attack functions
+# below). "accuracy" is tracked but currently has no live effect --
+# there's no hit/miss system yet for reduced accuracy to act on.
+# "attack_speed" (Bruise) is fully functional -- it lengthens this
+# target's own attack cooldown while active, applied in the enemy
+# attack functions below alongside the damage debuff.
+func _apply_debuff(target_id: String, debuff_type: String, amount: float, duration: float) -> void:
+	if debuff_type == "damage":
+		if target_id == "dummy":
+			dummy_damage_debuff = amount
+		else:
+			enemy2_damage_debuff = amount
+	elif debuff_type == "accuracy":
+		if target_id == "dummy":
+			dummy_accuracy_debuff = amount
+		else:
+			enemy2_accuracy_debuff = amount
+	elif debuff_type == "attack_speed":
+		if target_id == "dummy":
+			dummy_attack_speed_debuff = amount
+		else:
+			enemy2_attack_speed_debuff = amount
+
+	var timer = get_tree().create_timer(duration)
+	timer.timeout.connect(func():
+		if debuff_type == "damage":
+			if target_id == "dummy":
+				dummy_damage_debuff = 0.0
+			else:
+				enemy2_damage_debuff = 0.0
+		elif debuff_type == "accuracy":
+			if target_id == "dummy":
+				dummy_accuracy_debuff = 0.0
+			else:
+				enemy2_accuracy_debuff = 0.0
+		elif debuff_type == "attack_speed":
+			if target_id == "dummy":
+				dummy_attack_speed_debuff = 0.0
+			else:
+				enemy2_attack_speed_debuff = 0.0
+	)
+
+# Applies Bleed (damage-over-time) to a target. Ticks once per second
+# via _on_player_regen_tick, dealing damage_per_tick each tick for
+# duration_ticks seconds -- same tick cadence as the Apothecary HoTs
+# (IV Drip, Blood Bag), just damage instead of healing.
+func _apply_dot(target_id: String, damage_per_tick: int, duration_ticks: int) -> void:
+	if target_id == "dummy":
+		dummy_bleed_damage_per_tick = damage_per_tick
+		dummy_bleed_ticks_remaining = duration_ticks
+	else:
+		enemy2_bleed_damage_per_tick = damage_per_tick
+		enemy2_bleed_ticks_remaining = duration_ticks
+
+# Applies Anger (taunt) to a target for duration seconds. Currently the
+# player is the only attackable target either enemy can go after, so
+# this has no visible effect yet -- it's scaffolding for when co-op
+# companions/allies exist and taunt needs to pull enemy attention off
+# them and back onto the player. Target-selection logic should check
+# this timestamp first once that exists.
+func _apply_taunt(target_id: String, duration: float) -> void:
+	var expires_at_msec = Time.get_ticks_msec() + int(duration * 1000.0)
+	if target_id == "dummy":
+		dummy_taunted_until_msec = expires_at_msec
+	else:
+		enemy2_taunted_until_msec = expires_at_msec
+
+# Resolves a weapon class to its specific weapon-type XP pool. Returns
+# "" for a recognized category weapon that doesn't have its own
+# specific pool yet (e.g. Pistol, before a Pistols XP pool exists) --
+# callers handle that case themselves (general category bonus only,
+# no specific-type XP). Also returns "" for anything totally
+# unrecognized; callers treat that as the bare-handed/Unarmed default.
+func _get_weapon_xp_type(weapon_class: String) -> String:
+	if weapon_class == "One Hand":
+		return "One Hand XP"
+	elif weapon_class == "Two Hand":
+		return "Two Hand XP"
+	elif weapon_class == "Brass Knuckles":
+		return "Unarmed XP"
+	elif weapon_class == "Pistol":
+		return "Pistol XP"
+	elif GameData.rifle_weapons.has(weapon_class):
+		return "Rifle XP"
+	elif GameData.shotgun_weapons.has(weapon_class):
+		return "Shotgun XP"
+	elif GameData.heavy_weapon_types.has(weapon_class):
+		return "Heavy Weapons XP"
+	else:
+		return ""
+
+func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: String) -> void:
+	if not player_alive:
+		_show_combat_message("You are defeated! Waiting to respawn...")
+		return
+
+	if ability_name == "":
+		# Plain "Attack" is the universal Unarmed action -- bare hands or
+		# an actual Brass Knuckles weapon only. Every other weapon type
+		# has its own dedicated ability instead (Quick Hit, Overhead
+		# Swing, the Chrome Gunner equivalents, etc.) -- equip one of
+		# those and use its named ability rather than generic Attack.
+		var attack_weapon_class = crafted_item_class.get(equipped_weapon_name, "")
+		if equipped_weapon_name != "" and attack_weapon_class != "Brass Knuckles":
+			_show_combat_message("Attack only works unarmed! Use a weapon-specific ability instead, or unequip your weapon.")
+			return
+	elif equipped_weapon_name == "":
+		var allows_bare_handed = GameData.ability_definitions.has(ability_name) and GameData.ability_definitions[ability_name]["weapons"].has("Brass Knuckles")
+		if not allows_bare_handed:
+			_show_combat_message("No weapon equipped! Press I to equip one.")
+			return
+
+	if not attack_ready:
+		return
+
+	var target_id = _get_nearest_enemy_in_range()
+	if target_id == "":
+		if targeted_enemy == "":
+			_show_combat_message("No target! Press Tab or click an enemy to target.")
+		else:
+			_show_combat_message("Target out of range! Move closer.")
+		return
+
+	if action_cost > 0 and player_current_action < action_cost:
+		_show_combat_message("Not enough Action! Need " + str(action_cost) + ", have " + str(player_current_action) + ".")
+		return
+
+	var weapon_stats = inventory_stats.get(equipped_weapon_name, {})
+	var base_damage = weapon_stats.get("Damage Rating", 5)
+	var speed = weapon_stats.get("Speed", 2.0)
+
+	var variance = base_damage * 0.2
+	var min_damage = max(1, int(base_damage - variance))
+	var max_damage = int(base_damage + variance)
+	var damage = randi_range(min_damage, max_damage)
+
+	var weapon_class = crafted_item_class.get(equipped_weapon_name, "")
+	var weapon_subclass = crafted_item_subclass.get(equipped_weapon_name, "")
+
+	# Melee item_class alone can't tell a one-handed weapon from a
+	# two-handed one of the same class (e.g. Piston Blade vs Piston
+	# Greatblade are both "Sword") -- item_subclass ("1 Handed"/
+	# "2 Handed") is what actually distinguishes them, so that's what
+	# determines the XP-tracking category for melee weapons. Brass
+	# Knuckles stay Unarmed regardless of subclass; ranged weapon
+	# classes are unaffected since their subclass always matches their
+	# class 1:1 already.
+	var xp_class_key = weapon_class
+	if weapon_class == "Brass Knuckles" or equipped_weapon_name == "":
+		xp_class_key = "Brass Knuckles"
+	elif GameData.pressure_enforcer_weapons.has(weapon_class):
+		xp_class_key = "Two Hand" if weapon_subclass == "2 Handed" else "One Hand"
+
+	var profession_name = ""
+	var conditioning_paths = []
+
+	if GameData.pressure_enforcer_weapons.has(weapon_class) or equipped_weapon_name == "":
+		profession_name = "Pressure Enforcer"
+		conditioning_paths = ["Martial Training I", "Martial Training II", "Martial Training III"]
+	elif GameData.chrome_gunner_weapons.has(weapon_class):
+		profession_name = "Chrome Gunner"
+		conditioning_paths = ["Ranged Training I", "Ranged Training II", "Ranged Training III"]
+
+	var crit_hit = false
+
+	if profession_name != "":
+		var conditioning_nodes = 0
+		var max_conditioning_nodes = 0
+		for path_name in conditioning_paths:
+			var path_data = GameData.novice_professions[profession_name]["paths"][path_name]
+			conditioning_nodes += path_data["unlocked_nodes"]
+			max_conditioning_nodes += path_data.get("max_nodes", NODES_PER_PATH)
+
+		var speed_bonus = 0.0
+		if profession_name == "Pressure Enforcer":
+			var weapon_type_label = _get_pressure_weapon_type_label(weapon_class, weapon_subclass)
+			if weapon_type_label != "":
+				var speed_stat_total = _get_total_passive_stat(profession_name, weapon_type_label + " Speed")
+				speed_bonus = speed_stat_total / 100.0
+		else:
+			speed_bonus = conditioning_nodes * 0.05
+		speed = speed * (1.0 - speed_bonus)
+
+		var crit_chance = conditioning_nodes * 0.03
+		if randf() < crit_chance:
+			var crit_multiplier = 2.0 if conditioning_nodes >= max_conditioning_nodes else 1.5
+			damage = round(damage * crit_multiplier)
+			crit_hit = true
+
+	var certification_multiplier = 1.0
+	if profession_name != "" and professions_unlocked.get(profession_name, false):
+		certification_multiplier = 1.10
+
+	var weapon_cert_multiplier = 1.0
+	var weapon_cert_req = GameData.WEAPON_CERT_REQUIREMENTS.get(equipped_weapon_name, null)
+	var is_uncertified = false
+	if weapon_cert_req != null:
+		var cert_path_data = GameData.novice_professions[weapon_cert_req["profession"]]["paths"][weapon_cert_req["box"]]
+		var cert_max = cert_path_data.get("max_nodes", NODES_PER_PATH)
+		if cert_path_data["unlocked_nodes"] < cert_max:
+			weapon_cert_multiplier = 0.5
+			is_uncertified = true
+
+	damage = round(damage * damage_multiplier * certification_multiplier * weapon_cert_multiplier)
+
+	# Hit-chance roll: our own formula, weapon Accuracy + player Accuracy
+	# bonus (Pressure Enforcer only, for now) vs a flat per-enemy Defense
+	# value. BASE_HIT_CHANCE keeps a bare, unskilled attacker landing
+	# hits close to half the time; weapon quality and trained Accuracy
+	# stats push that up meaningfully from there.
+	var weapon_accuracy = weapon_stats.get("Accuracy", 50)
+	var player_accuracy_bonus = 0.0
+	if profession_name == "Pressure Enforcer":
+		var weapon_type_label_for_accuracy = _get_pressure_weapon_type_label(weapon_class, weapon_subclass)
+		if weapon_type_label_for_accuracy != "":
+			player_accuracy_bonus = _get_total_passive_stat(profession_name, weapon_type_label_for_accuracy + " Accuracy")
+
+	var target_defense = DUMMY_DEFENSE if target_id == "dummy" else ENEMY2_DEFENSE
+	var target_node_for_range = dummy if target_id == "dummy" else enemy2
+	var dist_to_target = player.global_position.distance_to(target_node_for_range.global_position)
+	var range_penalty = _get_range_accuracy_penalty(weapon_class, dist_to_target)
+
+	var hit_chance = clamp(BASE_HIT_CHANCE + (weapon_accuracy * 0.6) + player_accuracy_bonus - target_defense - range_penalty, MIN_HIT_CHANCE, MAX_HIT_CHANCE)
+
+	if action_cost > 0:
+		player_current_action -= action_cost
+
+	if randf() * 100.0 > hit_chance:
+		var miss_target_name = dummy_name if target_id == "dummy" else enemy2_name
+		var miss_message = ""
+		if ability_name != "":
+			miss_message = ability_name + "! "
+		miss_message += "You miss " + miss_target_name + "!"
+		if range_penalty >= RANGE_PENALTY_WAY_LESS:
+			miss_message += " (Way out of optimal range!)"
+		elif range_penalty >= RANGE_PENALTY_REDUCED:
+			miss_message += " (Out of optimal range)"
+		if action_cost > 0:
+			miss_message += " (-" + str(action_cost) + " Action)"
+		_show_combat_message(miss_message)
+
+		attack_ready = false
+		attack_cooldown_timer.wait_time = speed
+		attack_cooldown_timer.start()
+		return
+
+	var target_name = dummy_name if target_id == "dummy" else enemy2_name
+
+	var is_aoe = false
+	if ability_name != "" and GameData.ability_definitions.has(ability_name):
+		is_aoe = GameData.ability_definitions[ability_name].get("aoe", false)
+
+	var targets_to_hit: Array = []
+	if is_aoe:
+		if dummy_alive and player.global_position.distance_to(dummy.global_position) <= MELEE_RANGE:
+			targets_to_hit.append("dummy")
+		if enemy2_alive and player.global_position.distance_to(enemy2.global_position) <= MELEE_RANGE:
+			targets_to_hit.append("enemy2")
+	else:
+		targets_to_hit.append(target_id)
+
+	var hit_message = ""
+	if ability_name != "":
+		hit_message = ability_name + "! "
+	if crit_hit:
+		hit_message += "CRITICAL HIT! "
+
+	if is_aoe and targets_to_hit.size() > 1:
+		hit_message += "You hit all nearby enemies for " + str(int(damage)) + " damage each!"
+	else:
+		hit_message += "You hit " + target_name + " for " + str(int(damage)) + " damage!"
+
+	if action_cost > 0:
+		hit_message += " (-" + str(action_cost) + " Action)"
+	if is_uncertified:
+		hit_message += " (Uncertified weapon -- reduced effectiveness)"
+
+	var action_drain_amount = 0
+	var debuff_type = ""
+	var debuff_amount = 0.0
+	var debuff_duration = 0.0
+	var dot_damage_per_tick = 0
+	var dot_duration_ticks = 0
+	var taunt_duration = 0.0
+	if ability_name != "" and GameData.ability_definitions.has(ability_name):
+		var ability_data = GameData.ability_definitions[ability_name]
+		action_drain_amount = ability_data.get("action_drain", 0)
+		debuff_type = ability_data.get("debuff", "")
+		debuff_amount = ability_data.get("debuff_amount", 0.0)
+		debuff_duration = ability_data.get("debuff_duration", 0.0)
+		dot_damage_per_tick = ability_data.get("dot_damage_per_tick", 0)
+		dot_duration_ticks = ability_data.get("dot_duration_ticks", 0)
+		taunt_duration = ability_data.get("taunt_duration", 0.0)
+
+	var defeat_messages: Array = []
+
+	for hit_target_id in targets_to_hit:
+		if hit_target_id == "dummy":
+			dummy_current_health -= int(damage)
+			dummy_damage_by_weapon_class[xp_class_key] = dummy_damage_by_weapon_class.get(xp_class_key, 0) + int(damage)
+			if action_drain_amount > 0:
+				dummy_current_action = max(0, dummy_current_action - action_drain_amount)
+			if debuff_type != "":
+				_apply_debuff("dummy", debuff_type, debuff_amount, debuff_duration)
+			if dot_duration_ticks > 0:
+				_apply_dot("dummy", dot_damage_per_tick, dot_duration_ticks)
+			if taunt_duration > 0.0:
+				_apply_taunt("dummy", taunt_duration)
+			if dummy_current_health <= 0 or dummy_current_action <= 0:
+				defeat_messages.append(_defeat_dummy())
+		else:
+			enemy2_current_health -= int(damage)
+			enemy2_damage_by_weapon_class[xp_class_key] = enemy2_damage_by_weapon_class.get(xp_class_key, 0) + int(damage)
+			if action_drain_amount > 0:
+				enemy2_current_action = max(0, enemy2_current_action - action_drain_amount)
+			if debuff_type != "":
+				_apply_debuff("enemy2", debuff_type, debuff_amount, debuff_duration)
+			if dot_duration_ticks > 0:
+				_apply_dot("enemy2", dot_damage_per_tick, dot_duration_ticks)
+			if taunt_duration > 0.0:
+				_apply_taunt("enemy2", taunt_duration)
+			if enemy2_current_health <= 0 or enemy2_current_action <= 0:
+				defeat_messages.append(_defeat_enemy2())
+
+	if action_drain_amount > 0:
+		hit_message += " (-" + str(action_drain_amount) + " Enemy Action)"
+	if debuff_type == "damage":
+		hit_message += " (" + ability_name + " applied -- target deals reduced damage)"
+	elif debuff_type == "accuracy":
+		hit_message += " (" + ability_name + " applied -- target accuracy reduced)"
+	elif debuff_type == "attack_speed":
+		hit_message += " (" + ability_name + " applied -- target attacks slower)"
+	if dot_duration_ticks > 0:
+		hit_message += " (" + ability_name + " applied -- " + str(dot_damage_per_tick) + " damage/sec for " + str(dot_duration_ticks) + " seconds)"
+	if taunt_duration > 0.0:
+		hit_message += " (" + ability_name + " applied -- target is enraged)"
+
+	# Combine damage-dealt text with any defeat/loot messages into ONE
+	# message instead of two competing _show_combat_message() calls --
+	# previously the defeat message was shown first, then immediately
+	# overwritten by the damage message before it could ever be seen.
+	for defeat_message in defeat_messages:
+		hit_message += "\n" + defeat_message
+
+	_show_combat_message(hit_message)
+
+	attack_ready = false
+	attack_cooldown_timer.wait_time = speed
+	attack_cooldown_timer.start()
+
+func _on_attack_cooldown_finished() -> void:
+	attack_ready = true
+
+func _get_nearest_enemy_in_range() -> String:
+	var weapon_class = crafted_item_class.get(equipped_weapon_name, "")
+	var attack_range: float
+	if weapon_class == "Pistol":
+		attack_range = ENGAGE_RANGE_PISTOL
+	elif weapon_class == "Sniper Rifle":
+		attack_range = ENGAGE_RANGE_SNIPER
+	elif GameData.rifle_weapons.has(weapon_class):
+		attack_range = ENGAGE_RANGE_RIFLE
+	elif weapon_class == "Shotgun":
+		attack_range = ENGAGE_RANGE_SHOTGUN
+	elif GameData.heavy_weapon_types.has(weapon_class):
+		attack_range = ENGAGE_RANGE_HEAVY
+	else:
+		attack_range = MELEE_RANGE
+
+	# Single-target attacks REQUIRE an explicit target (set via Tab or
+	# click). No auto-targeting nearest -- you have to consciously pick
+	# who you're attacking. AoE abilities bypass this entirely and hit
+	# everything in range from _perform_attack's own AoE block.
+	if targeted_enemy == "":
+		return ""
+
+	var target_node = dummy if targeted_enemy == "dummy" else enemy2
+	var target_alive = dummy_alive if targeted_enemy == "dummy" else enemy2_alive
+
+	if not target_alive:
+		targeted_enemy = ""
+		return ""
+
+	var d = player.global_position.distance_to(target_node.global_position)
+	if d <= attack_range:
+		return targeted_enemy
+
+	return ""
 
 func _defeat_dummy() -> String:
-	return combat._defeat_dummy()
+	dummy_alive = false
+	if targeted_enemy == "dummy":
+		targeted_enemy = ""
+	quest_system.on_enemy_killed()
+	dummy.visible = false
+	dummy_health_bar_bg.visible = false
+	dummy_health_bar_fill.visible = false
+	dummy_action_bar_bg.visible = false
+	dummy_action_bar_fill.visible = false
+	dummy_name_label.visible = false
+
+	var total_damage_dealt = 0
+	for wc in dummy_damage_by_weapon_class.keys():
+		total_damage_dealt += dummy_damage_by_weapon_class[wc]
+
+	var xp_summary_parts: Array = []
+
+	if total_damage_dealt > 0:
+		for wc in dummy_damage_by_weapon_class.keys():
+			var damage_share = float(dummy_damage_by_weapon_class[wc]) / float(total_damage_dealt)
+			var share_xp = int(round(DUMMY_KILL_XP * damage_share))
+			if share_xp <= 0:
+				continue
+
+			if wc == "One Hand" or wc == "Two Hand" or wc == "Brass Knuckles":
+				var weapon_type_xp_type = _get_weapon_xp_type(wc)
+				_add_skill_xp(weapon_type_xp_type, share_xp)
+				_add_skill_xp("Martial XP", int(round(share_xp * MARTIAL_XP_RATE)))
+				xp_summary_parts.append(str(share_xp) + " " + weapon_type_xp_type)
+			elif GameData.chrome_gunner_weapons.has(wc):
+				var ranged_type_xp_type = _get_weapon_xp_type(wc)
+				if ranged_type_xp_type != "":
+					_add_skill_xp(ranged_type_xp_type, share_xp)
+					xp_summary_parts.append(str(share_xp) + " " + ranged_type_xp_type)
+				else:
+					xp_summary_parts.append(str(share_xp) + " Ranged Weapon")
+				_add_skill_xp("Ranged Weapon", share_xp)
+			else:
+				# Bare-handed or an unrecognized weapon class -- Unarmed
+				# XP is the base/default for the Attack ability.
+				_add_skill_xp("Unarmed XP", share_xp)
+				_add_skill_xp("Martial XP", int(round(share_xp * MARTIAL_XP_RATE)))
+				xp_summary_parts.append(str(share_xp) + " Unarmed XP")
+
+	if xp_summary_parts.size() > 0:
+		_show_xp_gain_message("You've gained " + ", ".join(xp_summary_parts) + "!")
+
+	dummy_damage_by_weapon_class = {}
+
+	var dropped_items = _roll_loot("Dummy")
+	_update_inventory_display()
+
+	var cogs_dropped = randi_range(COGS_MIN_DROP, COGS_MAX_DROP)
+	cogs += cogs_dropped
+	_update_cogs_display()
+
+	var defeat_message = "The dummy has been defeated!\n"
+	if dropped_items.size() > 0:
+		defeat_message += "Loot: "
+		for i in range(dropped_items.size()):
+			defeat_message += dropped_items[i]
+			if i < dropped_items.size() - 1:
+				defeat_message += ", "
+		defeat_message += ", " + str(cogs_dropped) + " Cogs"
+	else:
+		defeat_message += "Loot: " + str(cogs_dropped) + " Cogs"
+
+	dummy_respawn_timer.start()
+
+	return defeat_message
+
+func _on_dummy_respawn() -> void:
+	dummy_current_health = dummy_max_health
+	dummy_current_action = dummy_max_action
+	dummy_alive = true
+	dummy_damage_debuff = 0.0
+	dummy_accuracy_debuff = 0.0
+	dummy_attack_speed_debuff = 0.0
+	dummy_bleed_ticks_remaining = 0
+	dummy_bleed_damage_per_tick = 0
+	dummy_taunted_until_msec = 0
+	dummy_damage_by_weapon_class = {}
+	dummy.visible = true
+	dummy_health_bar_bg.visible = true
+	dummy_health_bar_fill.visible = true
+	dummy_action_bar_bg.visible = true
+	dummy_action_bar_fill.visible = true
+	dummy_name_label.visible = true
+	_show_combat_message("The dummy has respawned.")
 
 func _defeat_enemy2() -> String:
-	return combat._defeat_enemy2()
+	enemy2_alive = false
+	if targeted_enemy == "enemy2":
+		targeted_enemy = ""
+	quest_system.on_enemy_killed()
+	enemy2.visible = false
+	enemy2_health_bar_bg.visible = false
+	enemy2_health_bar_fill.visible = false
+	enemy2_action_bar_bg.visible = false
+	enemy2_action_bar_fill.visible = false
+	enemy2_name_label.visible = false
+
+	var total_damage_dealt2 = 0
+	for wc in enemy2_damage_by_weapon_class.keys():
+		total_damage_dealt2 += enemy2_damage_by_weapon_class[wc]
+
+	var xp_summary_parts2: Array = []
+
+	if total_damage_dealt2 > 0:
+		for wc in enemy2_damage_by_weapon_class.keys():
+			var damage_share2 = float(enemy2_damage_by_weapon_class[wc]) / float(total_damage_dealt2)
+			var share_xp2 = int(round(ENEMY2_KILL_XP * damage_share2))
+			if share_xp2 <= 0:
+				continue
+
+			if wc == "One Hand" or wc == "Two Hand" or wc == "Brass Knuckles":
+				var weapon_type_xp_type2 = _get_weapon_xp_type(wc)
+				_add_skill_xp(weapon_type_xp_type2, share_xp2)
+				_add_skill_xp("Martial XP", int(round(share_xp2 * MARTIAL_XP_RATE)))
+				xp_summary_parts2.append(str(share_xp2) + " " + weapon_type_xp_type2)
+			elif GameData.chrome_gunner_weapons.has(wc):
+				var ranged_type_xp_type2 = _get_weapon_xp_type(wc)
+				if ranged_type_xp_type2 != "":
+					_add_skill_xp(ranged_type_xp_type2, share_xp2)
+					xp_summary_parts2.append(str(share_xp2) + " " + ranged_type_xp_type2)
+				else:
+					xp_summary_parts2.append(str(share_xp2) + " Ranged Weapon")
+				_add_skill_xp("Ranged Weapon", share_xp2)
+			else:
+				_add_skill_xp("Unarmed XP", share_xp2)
+				_add_skill_xp("Martial XP", int(round(share_xp2 * MARTIAL_XP_RATE)))
+				xp_summary_parts2.append(str(share_xp2) + " Unarmed XP")
+
+	if xp_summary_parts2.size() > 0:
+		_show_xp_gain_message("You've gained " + ", ".join(xp_summary_parts2) + "!")
+
+	enemy2_damage_by_weapon_class = {}
+
+	var dropped_items = _roll_loot("Enemy2")
+	_update_inventory_display()
+
+	var cogs_dropped = randi_range(COGS_MIN_DROP, COGS_MAX_DROP)
+	cogs += cogs_dropped
+	_update_cogs_display()
+
+	var defeat_message = enemy2_name + " has been defeated!\n"
+	if dropped_items.size() > 0:
+		defeat_message += "Loot: "
+		for i in range(dropped_items.size()):
+			defeat_message += dropped_items[i]
+			if i < dropped_items.size() - 1:
+				defeat_message += ", "
+		defeat_message += ", " + str(cogs_dropped) + " Cogs"
+	else:
+		defeat_message += "Loot: " + str(cogs_dropped) + " Cogs"
+
+	enemy2_respawn_timer.start()
+
+	return defeat_message
+
+func _on_enemy2_respawn() -> void:
+	enemy2_current_health = enemy2_max_health
+	enemy2_current_action = enemy2_max_action
+	enemy2_alive = true
+	enemy2_damage_debuff = 0.0
+	enemy2_accuracy_debuff = 0.0
+	enemy2_attack_speed_debuff = 0.0
+	enemy2_bleed_ticks_remaining = 0
+	enemy2_bleed_damage_per_tick = 0
+	enemy2_taunted_until_msec = 0
+	enemy2_damage_by_weapon_class = {}
+	enemy2.visible = true
+	enemy2_health_bar_bg.visible = true
+	enemy2_health_bar_fill.visible = true
+	enemy2_action_bar_bg.visible = true
+	enemy2_action_bar_fill.visible = true
+	enemy2_name_label.visible = true
+	_show_combat_message(enemy2_name + " has respawned.")
 
 func _get_unlocked_classes() -> Array:
 	var unlocked = []
@@ -1858,7 +2622,7 @@ func _build_skill_info_text(profession_name: String, path_name: String) -> Strin
 
 	if unlocked < max_nodes:
 		if not _is_prereq_met(profession_name, path_data):
-			info += "\n\nLocked — requires " + path_data["requires"] + " first."
+			info += "\n\nLocked -- requires " + path_data["requires"] + " first."
 		else:
 			var costs = _get_box_cost(path_data)
 			var xp_cost = costs["xp_cost"]
@@ -1951,7 +2715,7 @@ func _on_message_clear_timer_timeout() -> void:
 
 # Separate display slot, positioned directly below the main combat
 # message, so "the dummy hits you" text never competes with (and
-# silently overwrites) "you hit the dummy" text — they're two
+# silently overwrites) "you hit the dummy" text -- they're two
 # different channels now instead of one shared label.
 func _setup_enemy_combat_message_label() -> void:
 	enemy_combat_message_label = Label.new()
@@ -1978,12 +2742,12 @@ func _show_xp_gain_message(text: String) -> void:
 func _on_xp_gain_clear_timer_timeout() -> void:
 	xp_gain_label.text = ""
 
-# Entry requirements for Elite Professions — each entry must reference
+# Entry requirements for Elite Professions -- each entry must reference
 
 # Returns a list of human-readable "Profession - Box" strings for any
 # prereq not yet owned. Empty array means the profession is open to
 # select. Professions with no entry in GameData.ELITE_PROFESSION_PREREQS (the
-# four base professions) always return empty — no gating on them.
+# four base professions) always return empty -- no gating on them.
 func _get_missing_elite_prereqs(profession_name: String) -> Array:
 	var missing: Array = []
 	for prereq in GameData.ELITE_PROFESSION_PREREQS.get(profession_name, []):
@@ -1995,9 +2759,16 @@ func _get_missing_elite_prereqs(profession_name: String) -> Array:
 
 # Reverse of the above: given a base profession and one of its boxes
 # (e.g. "Chrome Gunner", "Rifles IV"), returns which Elite Profession(s)
-# require that specific box — used to show "leads to X" labels on the
+# require that specific box -- used to show "leads to X" labels on the
 # BASE profession's own tree, same idea as SWG showing which advanced
 # professions a given box feeds into.
+func _get_elites_requiring(profession_name: String, box_name: String) -> Array:
+	var result: Array = []
+	for elite_name in GameData.ELITE_PROFESSION_PREREQS.keys():
+		for prereq in GameData.ELITE_PROFESSION_PREREQS[elite_name]:
+			if prereq["profession"] == profession_name and prereq["box"] == box_name:
+				result.append(elite_name)
+	return result
 
 func _on_choose_profession_pressed() -> void:
 	var selection = profession_options_list.get_selected_items()
@@ -2107,7 +2878,7 @@ func _setup_health_bars() -> void:
 	player_action_bar_bg.position = Vector2(0, HUD_BAR_HEIGHT + HUD_BAR_GAP)
 	player_action_bar_fill.position = Vector2(0, HUD_BAR_HEIGHT + HUD_BAR_GAP)
 
-	# EnemyHUD mirrors PlayerHUD's bar layout — no name label, just the
+	# EnemyHUD mirrors PlayerHUD's bar layout -- no name label, just the
 	# health/action bars for whichever enemy is currently tracked.
 	enemy_hud_health_bar_bg.position = Vector2.ZERO
 	enemy_hud_health_bar_fill.position = Vector2.ZERO
@@ -2116,7 +2887,7 @@ func _setup_health_bars() -> void:
 	enemy_hud.visible = false
 
 	# Numeric "current / max" readouts overlaid on top of the PlayerHUD
-	# and EnemyHUD bars only — the floating world-space bars above
+	# and EnemyHUD bars only -- the floating world-space bars above
 	# enemy heads stay plain, unlabeled bars.
 	for label in [player_hud_health_label, player_hud_action_label, enemy_hud_health_label, enemy_hud_action_label]:
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -2137,6 +2908,30 @@ func _setup_health_bars() -> void:
 	enemy2_name_label.text = enemy2_name
 	enemy2_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	enemy2_name_label.custom_minimum_size = Vector2(NAME_LABEL_WIDTH, 0)
+
+	# Target indicator -- a single amber border drawn around both world-
+	# space bars (health + action together) when that enemy is targeted.
+	# Built as a hollow Polygon2D using a Line2D loop so we don't have
+	# to fiddle with StyleBox on Polygon2D nodes.
+	dummy_target_indicator = _make_target_indicator()
+	get_node("World/YSortLayer").add_child(dummy_target_indicator)
+
+	enemy2_target_indicator = _make_target_indicator()
+	get_node("World/YSortLayer").add_child(enemy2_target_indicator)
+
+func _make_target_indicator() -> Line2D:
+	var line = Line2D.new()
+	line.default_color = Color(0.95, 0.75, 0.2)
+	line.width = 2.0
+	line.closed = true
+	line.points = PackedVector2Array([
+		Vector2(-3.0, -3.0),
+		Vector2(HEALTH_BAR_WIDTH + 3.0, -3.0),
+		Vector2(HEALTH_BAR_WIDTH + 3.0, HEALTH_BAR_HEIGHT * 2 + ACTION_BAR_GAP + 3.0),
+		Vector2(-3.0, HEALTH_BAR_HEIGHT * 2 + ACTION_BAR_GAP + 3.0)
+	])
+	line.visible = false
+	return line
 
 func _process(_delta: float) -> void:
 	_update_health_bars()
@@ -2186,6 +2981,10 @@ func _update_health_bars() -> void:
 		var dummy_action_pct = clamp(float(dummy_current_action) / float(dummy_max_action), 0.0, 1.0)
 		dummy_action_bar_fill.polygon = _make_bar_polygon(HEALTH_BAR_WIDTH * dummy_action_pct, HEALTH_BAR_HEIGHT)
 
+		if dummy_target_indicator:
+			dummy_target_indicator.visible = (targeted_enemy == "dummy")
+			dummy_target_indicator.position = dummy_bar_position
+
 	if enemy2_alive:
 		var enemy2_bar_position = enemy2.global_position + Vector2(-HEALTH_BAR_WIDTH / 2, -60)
 		enemy2_health_bar_bg.position = enemy2_bar_position
@@ -2205,11 +3004,20 @@ func _update_health_bars() -> void:
 		var enemy2_action_pct = clamp(float(enemy2_current_action) / float(enemy2_max_action), 0.0, 1.0)
 		enemy2_action_bar_fill.polygon = _make_bar_polygon(HEALTH_BAR_WIDTH * enemy2_action_pct, HEALTH_BAR_HEIGHT)
 
+		if enemy2_target_indicator:
+			enemy2_target_indicator.visible = (targeted_enemy == "enemy2")
+			enemy2_target_indicator.position = enemy2_bar_position
+
+	if dummy_target_indicator and not dummy_alive:
+		dummy_target_indicator.visible = false
+	if enemy2_target_indicator and not enemy2_alive:
+		enemy2_target_indicator.visible = false
+
 	_update_enemy_hud()
 
 # Mirrors the player's fixed HUD bars, but for whichever enemy is
 # currently nearest to the player (alive). Hides itself entirely when
-# no enemies are alive. This is separate from — and doesn't replace —
+# no enemies are alive. This is separate from -- and doesn't replace --
 # the floating health/action bars each enemy shows above its own head.
 func _update_enemy_hud() -> void:
 	var tracked_id = _get_tracked_enemy_id()
@@ -2246,27 +3054,78 @@ func _update_enemy_hud() -> void:
 	enemy_hud_action_label.text = str(current_action) + " / " + str(max_action)
 	enemy_hud_action_label.size = Vector2(HUD_BAR_WIDTH, HUD_BAR_HEIGHT)
 
-# Picks whichever alive enemy is nearest to the player AND within
-# MELEE_RANGE (the same range that gates actually being able to attack),
-# for display in the fixed EnemyHUD panel. Returns "" if no enemy is
-# alive and in range — this also doubles as a rough "you're close
-# enough to attack" indicator for now.
-func _get_tracked_enemy_id() -> String:
-	var candidates = []
+func _cycle_target() -> void:
+	var ids: Array = []
+	if dummy_alive:
+		ids.append("dummy")
+	if enemy2_alive:
+		ids.append("enemy2")
+	if ids.size() == 0:
+		targeted_enemy = ""
+		_show_combat_message("No enemies to target.")
+		return
+	var current_index = ids.find(targeted_enemy)
+	if current_index == -1 or current_index >= ids.size() - 1:
+		targeted_enemy = ids[0]
+	else:
+		targeted_enemy = ids[current_index + 1]
+	var target_name = "Training Dummy" if targeted_enemy == "dummy" else "Rust Marauder"
+	_show_combat_message("Target: " + target_name)
 
+func _try_click_target(world_pos: Vector2) -> void:
+	var clicked: String = ""
+	var closest_dist = INF
+	if dummy_alive:
+		var d = world_pos.distance_to(dummy.global_position)
+		if d <= ENEMY_CLICK_RADIUS and d < closest_dist:
+			closest_dist = d
+			clicked = "dummy"
+	if enemy2_alive:
+		var d2 = world_pos.distance_to(enemy2.global_position)
+		if d2 <= ENEMY_CLICK_RADIUS and d2 < closest_dist:
+			closest_dist = d2
+			clicked = "enemy2"
+	if clicked != "":
+		targeted_enemy = clicked
+		var target_name = "Training Dummy" if targeted_enemy == "dummy" else "Rust Marauder"
+		_show_combat_message("Target: " + target_name)
+
+func _get_tracked_enemy_id() -> String:
+	# Prefer the explicitly targeted enemy -- that's what the player
+	# is looking at and expecting to see health bars for.
+	if targeted_enemy != "":
+		var target_alive = dummy_alive if targeted_enemy == "dummy" else enemy2_alive
+		if target_alive:
+			return targeted_enemy
+		else:
+			targeted_enemy = ""
+
+	# No target set -- show nearest alive enemy as a passive indicator.
+	var weapon_class = crafted_item_class.get(equipped_weapon_name, "")
+	var track_range: float
+	if weapon_class == "Pistol":
+		track_range = ENGAGE_RANGE_PISTOL
+	elif weapon_class == "Sniper Rifle":
+		track_range = ENGAGE_RANGE_SNIPER
+	elif GameData.rifle_weapons.has(weapon_class):
+		track_range = ENGAGE_RANGE_RIFLE
+	elif weapon_class == "Shotgun":
+		track_range = ENGAGE_RANGE_SHOTGUN
+	elif GameData.heavy_weapon_types.has(weapon_class):
+		track_range = ENGAGE_RANGE_HEAVY
+	else:
+		track_range = MELEE_RANGE
+	var candidates = []
 	if dummy_alive:
 		var dummy_distance = player.global_position.distance_to(dummy.global_position)
-		if dummy_distance <= MELEE_RANGE:
+		if dummy_distance <= track_range:
 			candidates.append(["dummy", dummy_distance])
-
 	if enemy2_alive:
 		var enemy2_distance = player.global_position.distance_to(enemy2.global_position)
-		if enemy2_distance <= MELEE_RANGE:
+		if enemy2_distance <= track_range:
 			candidates.append(["enemy2", enemy2_distance])
-
 	if candidates.size() == 0:
 		return ""
-
 	candidates.sort_custom(func(a, b): return a[1] < b[1])
 	return candidates[0][0]
 
@@ -2350,7 +3209,7 @@ func _on_player_regen_tick() -> void:
 		blood_bag_bonus_amount = 0
 		_show_combat_message("Your Blood Bag boost has worn off.")
 
-	# Bleed (Pressure Enforcer Master ability) — same once-per-second
+	# Bleed (Pressure Enforcer Master ability) -- same once-per-second
 	# tick cadence as the Apothecary HoTs above, just damage instead of
 	# healing, and applied to whichever enemy has it active.
 	if dummy_alive and dummy_bleed_ticks_remaining > 0:
@@ -2455,7 +3314,7 @@ func _grant_starting_weapon(weapon_name: String, quality: int) -> void:
 	if recipe == null:
 		return
 
-	# Unique per grant, same rule as crafted items — even a starting
+	# Unique per grant, same rule as crafted items -- even a starting
 	# weapon has its own generated stats and shouldn't stack/share an
 	# identity with another copy of the same weapon name.
 	var item_key = _generate_unique_resource_name()
@@ -2508,7 +3367,7 @@ func _attempt_forage() -> void:
 
 	_scavenge_dumpster()
 
-# Fixed, guaranteed-drop scavenge point (a Dumpster) — unlike the herb
+# Fixed, guaranteed-drop scavenge point (a Dumpster) -- unlike the herb
 # patch's probability-tiered loot, this always gives the same kind of
 # find (Plastic + a flat Cogs amount), matching a simple "always has
 # something in it" scavenge spot rather than a rare-resource patch.
@@ -2525,28 +3384,19 @@ func _scavenge_dumpster() -> void:
 
 	_add_to_inventory("Plastic", plastic_amount)
 	cogs += randi_range(DUMPSTER_COGS_MIN, DUMPSTER_COGS_MAX)
-
-	# On top of the guaranteed Plastic + Cogs, every scavenge also rolls
-	# the tiered Dumpster loot table for a chance at Torn Cloth/
-	# Antiseptic Moss/Healroot/Bloomwort — these used to only come from
-	# the (now-removed) herb patch, so this is their only source now.
-	var bonus_items = _roll_loot("Dumpster")
-
 	_update_inventory_display()
 	_update_cogs_display()
 
 	_add_skill_xp("Scavenging XP", FORAGE_XP)
 	_show_xp_gain_message("You've gained " + str(FORAGE_XP) + " Scavenging XP!")
 
-	var result_message = "You scavenge and find: " + str(plastic_amount) + " Plastic, " + str(DUMPSTER_COGS_MIN) + " Cogs"
-	for bonus_item in bonus_items:
-		result_message += ", " + bonus_item
-	_show_combat_message(result_message)
+	_show_combat_message("You scavenge and find: " + str(plastic_amount) + " Plastic, " + str(DUMPSTER_COGS_MIN) + " Cogs")
 
 	dumpster_available = false
 	dumpster.visible = false
 	dumpster_cooldown_timer.wait_time = DUMPSTER_RESPAWN_TIME
 	dumpster_cooldown_timer.start()
+	quest_system.on_dumpster_looted()
 
 func _on_dumpster_cooldown_finished() -> void:
 	dumpster_available = true
@@ -2621,7 +3471,7 @@ func _attempt_use_bandage() -> void:
 # Adrenaline Shot and Empty IV Bag, which are plain single-use items
 # rather than Charges-tracked ones like Crate of Bandages.
 # Scales a consumable's effect by its Quality stat (0-1000 scale),
-# from a minimum at Quality 0 up to a maximum at Quality 1000 — e.g.
+# from a minimum at Quality 0 up to a maximum at Quality 1000 -- e.g.
 # a rough Syringe gives a weaker Adrenaline Shot than a well-made one.
 # Linear for now; easy to curve later if a flat scale doesn't feel
 # right in practice.
@@ -2675,7 +3525,7 @@ func _attempt_iv_drip() -> void:
 	_consume_one_bandage_charge()
 	iv_drip_ticks_remaining = IV_DRIP_DURATION_TICKS
 	iv_drip_ready_at_msec = now_msec + IV_DRIP_COOLDOWN_MSEC
-	_show_combat_message("You apply an IV Drip — healing " + str(IV_DRIP_HEAL_PER_TICK) + " HP/sec for " + str(IV_DRIP_DURATION_TICKS) + " seconds.")
+	_show_combat_message("You apply an IV Drip -- healing " + str(IV_DRIP_HEAL_PER_TICK) + " HP/sec for " + str(IV_DRIP_DURATION_TICKS) + " seconds.")
 
 func _attempt_healing_vapor() -> void:
 	if not professions_unlocked.get("Apothecary", false):
@@ -2699,7 +3549,7 @@ func _attempt_healing_vapor() -> void:
 		return
 
 	_consume_one_bandage_charge()
-	# AoE heal — only the player is a valid target right now since
+	# AoE heal -- only the player is a valid target right now since
 	# there are no other in-scene allies yet. Once co-op players or
 	# companions exist, extend this to heal everyone in range.
 	var missing_health = player_max_health - player_current_health
@@ -2744,7 +3594,7 @@ func _attempt_adrenaline_boost() -> void:
 	adrenaline_boost_bonus_amount = bonus_amount
 	adrenaline_boost_expires_at_unix = now_unix + ADRENALINE_BOOST_DURATION_SEC
 	adrenaline_boost_ready_at_unix = now_unix + ADRENALINE_BOOST_COOLDOWN_SEC
-	_show_combat_message("You inject an Adrenaline Shot — +" + str(bonus_amount) + " Max Action for 10 minutes!")
+	_show_combat_message("You inject an Adrenaline Shot -- +" + str(bonus_amount) + " Max Action for 10 minutes!")
 
 func _attempt_blood_bag() -> void:
 	if not professions_unlocked.get("Apothecary", false):
@@ -2768,7 +3618,7 @@ func _attempt_blood_bag() -> void:
 		_show_combat_message("You need an Empty IV Bag to use Blood Bag!")
 		return
 
-	# Defensive: same non-stacking safeguard as Adrenaline Boost — revert
+	# Defensive: same non-stacking safeguard as Adrenaline Boost -- revert
 	# any still-active bonus first so old and new can never both apply.
 	if blood_bag_bonus_amount > 0:
 		player_max_health -= blood_bag_bonus_amount
@@ -2781,7 +3631,7 @@ func _attempt_blood_bag() -> void:
 	blood_bag_bonus_amount = bonus_amount
 	blood_bag_expires_at_unix = now_unix + BLOOD_BAG_DURATION_SEC
 	blood_bag_ready_at_unix = now_unix + BLOOD_BAG_COOLDOWN_SEC
-	_show_combat_message("You use Blood Bag — +" + str(bonus_amount) + " Max Health for 10 minutes!")
+	_show_combat_message("You use Blood Bag -- +" + str(bonus_amount) + " Max Health for 10 minutes!")
 
 func _on_bandage_cooldown_finished() -> void:
 	bandage_ready = true
@@ -2796,7 +3646,7 @@ func _on_bandage_cooldown_finished() -> void:
 func _layout_hud() -> void:
 	var viewport_size = get_viewport_rect().size
 
-	# Force Top-Left anchoring explicitly — if ActionBar's anchors were
+	# Force Top-Left anchoring explicitly -- if ActionBar's anchors were
 	# ever set to something else (in the editor or by a previous run),
 	# Godot's own anchor system can silently reposition it after this
 	# function sets .position, undoing this calculation entirely.
@@ -2808,7 +3658,7 @@ func _layout_hud() -> void:
 	# ActionBar's real size comes from its 8 child buttons; if this
 	# runs before that layout settles, size can read as (0,0) or a
 	# stale value, which would silently break everything below. This
-	# is defensive — the real fix is re-running via size_changed below.
+	# is defensive -- the real fix is re-running via size_changed below.
 	var action_bar_size = action_bar.size
 	if action_bar_size.x < 10 or action_bar_size.y < 10:
 		action_bar_size = Vector2(700, 40)
@@ -2829,6 +3679,21 @@ func _layout_hud() -> void:
 	var action_bar_right_edge = action_bar_position.x + action_bar_size.x
 	enemy_hud.position = Vector2(action_bar_right_edge - HUD_BAR_WIDTH, hud_y)
 
+func _is_ability_learned(ability_name: String) -> bool:
+	var ability = GameData.ability_definitions[ability_name]
+	var required_profession = ability["requires_profession"]
+
+	if not professions_unlocked.get(required_profession, false):
+		return false
+
+	var required_box = ability["requires_box"]
+	if required_box != "":
+		var box_data = GameData.novice_professions[required_profession]["paths"][required_box]
+		if box_data["unlocked_nodes"] < 1:
+			return false
+
+	return true
+
 func _trigger_slot(slot: ActionBarSlot) -> void:
 	if slot.assigned_ability != "":
 		_use_ability_by_name(slot.assigned_ability)
@@ -2836,6 +3701,8 @@ func _trigger_slot(slot: ActionBarSlot) -> void:
 func _use_ability_by_name(ability_name: String) -> void:
 	if ability_name == "Attack":
 		_attempt_attack()
+	elif ability_name == "Ranged Attack":
+		_attempt_ranged_attack()
 	elif ability_name == "Apply Bandage":
 		_attempt_use_bandage()
 	elif ability_name == "IV Drip":
@@ -2852,11 +3719,11 @@ func _use_ability_by_name(ability_name: String) -> void:
 		else:
 			active_survey_tool = ability_name
 			survey_book_ui.visible = true
-			survey_book_ui._refresh_survey_book()
+			_refresh_survey_book()
 	elif ability_name == "Rusty Crafting Kit":
 		crafting_book_ui.visible = not crafting_book_ui.visible
 		if crafting_book_ui.visible:
-			crafting_book_ui._refresh_crafting_book()
+			_refresh_crafting_book()
 	elif GameData.ability_definitions.has(ability_name):
 		_attempt_ability(ability_name)
 	else:
@@ -2880,7 +3747,7 @@ func _attempt_talk_to_trainer() -> void:
 	active_trainer_index = nearest_index
 	trainer_ui.visible = true
 	trainer_dialogue_state = "GREETING"
-	trainer_ui._refresh_trainer_dialogue()
+	_refresh_trainer_dialogue()
 
 func _get_nearest_trainer_in_range() -> int:
 	var nearest_index = -1
@@ -2898,14 +3765,150 @@ func _get_nearest_trainer_in_range() -> int:
 # --- Trainer Dialogue (popup, SWG-style) ---
 # Replaces the old Tree/Button pane. Rather than a static UI layout that
 # can overflow with long labels, this drives a single Panel through three
-# states — GREETING, SKILL_LIST, CONFIRM — clearing and rebuilding the
+# states -- GREETING, SKILL_LIST, CONFIRM -- clearing and rebuilding the
 # option buttons in trainer_options each time the state changes.
 
-# --- Trainer Dialogue ---
-# Now lives in TrainerDialogue.gd, attached directly to the TrainerUI
-# scene node (see that file for why this one's different from the
-# other panels). Cross-calls into it use the trainer_ui reference
-# below, same pattern as ability_book_ui/survey_book_ui/etc.
+func _clear_trainer_options() -> void:
+	for child in trainer_options.get_children():
+		child.queue_free()
+
+func _add_trainer_option(label_text: String, callback: Callable) -> void:
+	var btn = Button.new()
+	btn.text = label_text
+	btn.focus_mode = Control.FOCUS_NONE
+	btn.pressed.connect(callback)
+	trainer_options.add_child(btn)
+
+func _refresh_trainer_dialogue() -> void:
+	_clear_trainer_options()
+
+	if active_trainer_index == -1:
+		return
+
+	match trainer_dialogue_state:
+		"GREETING":
+			_show_trainer_greeting()
+		"SKILL_LIST":
+			_show_trainer_skill_list()
+		"CONFIRM":
+			_show_trainer_confirm()
+
+func _show_trainer_greeting() -> void:
+	var trainer_name = trainers[active_trainer_index]["name"]
+	train_info_label.text = trainer_name + "\n\n\"I can teach you what I know, if you're interested.\""
+
+	_add_trainer_option("I'm interested in learning a skill.", _on_trainer_option_start_learning)
+	_add_trainer_option("Stop Conversing", _on_trainer_option_stop_conversing)
+
+func _on_trainer_option_start_learning() -> void:
+	trainer_dialogue_state = "SKILL_LIST"
+	_refresh_trainer_dialogue()
+
+func _on_trainer_option_stop_conversing() -> void:
+	trainer_ui.visible = false
+	active_trainer_index = -1
+
+func _show_trainer_skill_list() -> void:
+	var this_trainer_profession = trainers[active_trainer_index]["profession"]
+
+	if not professions_unlocked.get(this_trainer_profession, false):
+		train_info_label.text = "What would you like to learn?"
+
+		var cost_text: String
+		if has_chosen_starting_profession:
+			cost_text = str(PROFESSION_ENTRY_COST) + " " + _points_pool_label(this_trainer_profession) + ", " + str(ADDITIONAL_PROFESSION_COGS_COST) + " Cogs"
+		else:
+			cost_text = str(PROFESSION_ENTRY_COST) + " " + _points_pool_label(this_trainer_profession) + " (Free starting profession!)"
+
+		_add_trainer_option("Learn " + this_trainer_profession + " (" + cost_text + ")", _make_trainer_confirm_callback(this_trainer_profession, "LEARN_PROFESSION"))
+		_add_trainer_option("Back", _on_trainer_option_back_to_greeting)
+		return
+
+	var anything_shown = false
+
+	for path_name in GameData.novice_professions[this_trainer_profession]["paths"].keys():
+		var path_data = GameData.novice_professions[this_trainer_profession]["paths"][path_name]
+		var unlocked = path_data["unlocked_nodes"]
+		var max_nodes = path_data.get("max_nodes", NODES_PER_PATH)
+
+		if unlocked >= max_nodes:
+			continue
+
+		if not _is_prereq_met(this_trainer_profession, path_data):
+			continue
+
+		var costs = _get_box_cost(path_data)
+		var xp_type = path_data["xp_type"]
+		var current_xp = xp_pools[xp_type]
+
+		if current_xp < costs["xp_cost"]:
+			continue
+		if _get_points_available(this_trainer_profession) < costs["point_cost"]:
+			continue
+		if cogs < costs["cogs_cost"]:
+			continue
+
+		var display_text = _get_talent_box_label(this_trainer_profession, path_name) + " (" + str(unlocked) + "/" + str(max_nodes) + ")"
+		_add_trainer_option(display_text, _make_trainer_confirm_callback(this_trainer_profession, path_name))
+		anything_shown = true
+
+	if anything_shown:
+		train_info_label.text = "What would you like to learn?"
+	else:
+		train_info_label.text = "Nothing available to train right now.\nEarn more XP, Points, or Cogs."
+
+	_add_trainer_option("Back", _on_trainer_option_back_to_greeting)
+
+func _on_trainer_option_back_to_greeting() -> void:
+	trainer_dialogue_state = "GREETING"
+	_refresh_trainer_dialogue()
+
+# Returns a Callable bound to a specific profession/path so each skill-list
+# button opens the confirm screen for that exact entry, without needing a
+# Tree's selected-item metadata to look up afterward.
+func _make_trainer_confirm_callback(profession_name: String, path_name: String) -> Callable:
+	return func():
+		selected_profession = profession_name
+		selected_path = path_name
+		trainer_dialogue_state = "CONFIRM"
+		_refresh_trainer_dialogue()
+
+func _show_trainer_confirm() -> void:
+	if selected_path == "LEARN_PROFESSION":
+		if has_chosen_starting_profession:
+			train_info_label.text = "This will cost " + str(ADDITIONAL_PROFESSION_COGS_COST) + " Cogs. Are you sure?"
+		else:
+			train_info_label.text = "This is your free starting profession. Are you sure?"
+	else:
+		train_info_label.text = _build_trainer_confirm_text(selected_profession, selected_path)
+
+	_add_trainer_option("Yes", _on_trainer_confirm_yes)
+	_add_trainer_option("No", _on_trainer_confirm_no)
+
+# Lean, SWG-style confirm line for the trainer popup -- just the cogs cost,
+# no rank/node/XP detail. (The Talent Viewer's _build_skill_info_text still
+# shows the full breakdown elsewhere -- this is a separate, simpler string
+# used only for this one screen.)
+func _build_trainer_confirm_text(profession_name: String, path_name: String) -> String:
+	var path_data = GameData.novice_professions[profession_name]["paths"][path_name]
+	var costs = _get_box_cost(path_data)
+	return "This skill will cost " + str(costs["cogs_cost"]) + " Cogs. Are you sure?"
+
+func _on_trainer_confirm_yes() -> void:
+	if selected_path == "LEARN_PROFESSION":
+		_learn_trainer_profession()
+		trainer_result_text = train_result_label.text
+	else:
+		_on_spend_point_pressed()
+		trainer_result_text = skill_result_label.text
+
+	trainer_dialogue_state = "GREETING"
+	_refresh_trainer_dialogue()
+	_show_train_result(trainer_result_text)
+
+func _on_trainer_confirm_no() -> void:
+	trainer_dialogue_state = "SKILL_LIST"
+	_refresh_trainer_dialogue()
 
 func _learn_trainer_profession() -> void:
 	if active_trainer_index == -1:
@@ -2913,12 +3916,12 @@ func _learn_trainer_profession() -> void:
 	var this_trainer_profession = trainers[active_trainer_index]["profession"]
 
 	if professions_unlocked.get(this_trainer_profession, false):
-		trainer_ui._show_train_result("You've already learned " + this_trainer_profession + "!")
+		_show_train_result("You've already learned " + this_trainer_profession + "!")
 		return
 
 	if not has_chosen_starting_profession:
 		if _get_points_available(this_trainer_profession) < PROFESSION_ENTRY_COST:
-			trainer_ui._show_train_result("Not enough " + _points_pool_label(this_trainer_profession) + "! Need " + str(PROFESSION_ENTRY_COST) + ".")
+			_show_train_result("Not enough " + _points_pool_label(this_trainer_profession) + "! Need " + str(PROFESSION_ENTRY_COST) + ".")
 			return
 
 		_spend_points(this_trainer_profession, PROFESSION_ENTRY_COST)
@@ -2926,14 +3929,14 @@ func _learn_trainer_profession() -> void:
 		has_chosen_starting_profession = true
 		_grant_novice_unlock(this_trainer_profession)
 		_grant_profession_starting_kit(this_trainer_profession)
-		trainer_ui._show_train_result("You are now a " + this_trainer_profession + "!")
+		_show_train_result("You are now a " + this_trainer_profession + "!")
 	else:
 		if _get_points_available(this_trainer_profession) < PROFESSION_ENTRY_COST:
-			trainer_ui._show_train_result("Not enough " + _points_pool_label(this_trainer_profession) + "! Need " + str(PROFESSION_ENTRY_COST) + ".")
+			_show_train_result("Not enough " + _points_pool_label(this_trainer_profession) + "! Need " + str(PROFESSION_ENTRY_COST) + ".")
 			return
 
 		if cogs < ADDITIONAL_PROFESSION_COGS_COST:
-			trainer_ui._show_train_result("Not enough Cogs! Need " + str(ADDITIONAL_PROFESSION_COGS_COST) + ", have " + str(cogs) + ".")
+			_show_train_result("Not enough Cogs! Need " + str(ADDITIONAL_PROFESSION_COGS_COST) + ", have " + str(cogs) + ".")
 			return
 
 		_spend_points(this_trainer_profession, PROFESSION_ENTRY_COST)
@@ -2941,7 +3944,7 @@ func _learn_trainer_profession() -> void:
 		_update_cogs_display()
 		professions_unlocked[this_trainer_profession] = true
 		_grant_novice_unlock(this_trainer_profession)
-		trainer_ui._show_train_result("You have learned " + this_trainer_profession + "!")
+		_show_train_result("You have learned " + this_trainer_profession + "!")
 
 	_refresh_skill_tree_ui()
 
@@ -2957,11 +3960,11 @@ func _grant_novice_unlock(profession_name: String) -> void:
 		_update_inventory_display()
 
 # Grants the one-time starting weapons + 100 Cogs bonus. Only ever
-# called for the very first profession a player picks — subsequent
+# called for the very first profession a player picks -- subsequent
 # additional professions get their Novice abilities (via
 # _grant_novice_unlock) but no repeat weapon/cogs kit.
 # Every new character starts with 2 Crates of Bandages, independent of
-# profession — each is its own generated instance with a full 5
+# profession -- each is its own generated instance with a full 5
 # Charges, exactly like one fresh off the crafting bench.
 func _grant_starting_bandages() -> void:
 	for i in range(2):
@@ -2993,27 +3996,63 @@ func _grant_profession_starting_kit(profession_name: String) -> void:
 	_update_cogs_display()
 	_update_inventory_display()
 
+func _show_train_result(text: String) -> void:
+	train_result_label.text = text
+	var timer = get_tree().create_timer(4.0)
+	timer.timeout.connect(func():
+		if train_result_label.text == text:
+			train_result_label.text = ""
+	)
+
 # --- Talent Tree Viewer ---
 # A testing/reference-only overlay for visualizing the skill trees.
 # Fully built here in code (no manual scene
 # nodes needed) so it can be dropped in and iterated on freely.
 # Toggle with the "talent_view" input action (map a key to it in
 # Project Settings > Input Map). This does NOT replace the real
-# functional Skill UI (skill_ui/skill_tree) — it's a separate visual
+# functional Skill UI (skill_ui/skill_tree) -- it's a separate visual
 # reference layered on top of the same underlying data.
 
 var talent_ui: Control
 var ability_book_ui: Control
+var ability_book_list_container: VBoxContainer
 var inventory_book_ui: Control
+var inventory_book_list_container: VBoxContainer
+var inventory_book_stats_label: Label
 var crafting_book_ui: Control
+var crafting_book_list_container: VBoxContainer
+var crafting_book_details_label: Label
+var crafting_book_craft_button: Button
+var crafting_book_result_label: Label
+var crafting_assembly_recipe_index: int = -1
+var crafting_assembly_selections: Dictionary = {}
+var crafting_book_back_button: Button
 var crafting_result_ui: Control
+var crafting_result_label: Label
+var crafting_result_mod_slots_label: Label
 var survey_book_ui: Control
+var survey_book_list_container: VBoxContainer
+var survey_book_scan_label: Label
+var survey_book_sample_button: Button
+var survey_book_message_label: Label
 # Path to the existing drag-source script, reused so abilities dragged
-# from the Ability Book work identically to the old fixed menu — if
+# from the Ability Book work identically to the old fixed menu -- if
 # this path is wrong for your project, this is the one line to fix.
 const ABILITY_DRAG_SOURCE_SCRIPT_PATH = "res://scenes/ability_drag_source.gd"
+var talent_grid_container: HBoxContainer
+var talent_details_label: Label
+var talent_learned_label: Label
+var talent_master_container: Panel
+var talent_novice_container: Panel
+var talent_points_label: Label
+var talent_requirements_container: VBoxContainer
+var talent_requirements_line: ColorRect
+var talent_column_labels_container: HBoxContainer
+var talent_prereq_line: ColorRect
+var talent_prereq_container: VBoxContainer
+var current_talent_profession: String = ""
 
-# Skill box colors. TALENT_OWNED_COLOR is a softened version of #870146 —
+# Skill box colors. TALENT_OWNED_COLOR is a softened version of #870146 --
 # easier on the eyes for a color you'll be staring at a lot. To use
 # the exact original hex instead, swap the line below for:
 #   const TALENT_OWNED_COLOR = Color("870146")
@@ -3024,7 +4063,91 @@ func _get_talent_box_label(profession_name: String, path_name: String) -> String
 	return GameData.TALENT_BOX_DISPLAY_NAMES.get(profession_name, {}).get(path_name, path_name)
 
 
+# Display text for a single box (left "Unlockable" panel) -- just the
+# ability/weapon name, flat stat lines, or a not-yet-designed fallback
+# for any profession not built out yet. No tier name, no path name.
+func _get_talent_box_display(profession_name: String, path_name: String) -> String:
+	var reward = GameData.TALENT_SKILL_REWARDS.get(profession_name, {}).get(path_name, null)
+	if reward == null:
+		return "Not yet designed"
 
+	match reward.get("type", ""):
+		"ability":
+			return reward["name"]
+		"weapon":
+			return "Weapon Cert - " + reward["name"]
+		"novice_grants":
+			return "\n".join(reward["names"])
+		"passive":
+			var lines: Array = []
+			for stat_pair in reward["stats"]:
+				lines.append("+" + str(stat_pair[1]) + " " + stat_pair[0])
+			if reward.has("ability"):
+				lines.append(reward["ability"])
+			if reward.has("abilities"):
+				for granted_ability in reward["abilities"]:
+					lines.append(granted_ability)
+			if reward.has("weapon"):
+				lines.append("Weapon Cert - " + reward["weapon"])
+			if reward.has("weapons"):
+				for granted_weapon in reward["weapons"]:
+					lines.append("Weapon Cert - " + granted_weapon)
+			if lines.size() == 0:
+				return "Reserved for future stats"
+			return "\n".join(lines)
+		_:
+			return "Not yet designed"
+
+# Whole-profession summary (right "Learned" panel) -- lists every
+# learned ability by name, then combined totals for passive stats
+# (e.g. two owned Martial Training ranks that both grant One Hand Speed =
+# one combined "+4 One Hand Speed" line, not two separate "+2" lines).
+# Pending/undesigned boxes are skipped entirely.
+func _get_talent_learned_summary(profession_name: String) -> String:
+	var ability_lines: Array = []
+	var passive_totals: Dictionary = {}
+
+	for path_name in GameData.novice_professions[profession_name]["paths"].keys():
+		var path_data = GameData.novice_professions[profession_name]["paths"][path_name]
+		var owned = path_data["unlocked_nodes"] >= path_data.get("max_nodes", NODES_PER_PATH)
+		if not owned:
+			continue
+
+		var reward = GameData.TALENT_SKILL_REWARDS.get(profession_name, {}).get(path_name, null)
+		if reward == null:
+			continue
+
+		match reward.get("type", ""):
+			"ability":
+				ability_lines.append(reward["name"])
+			"weapon":
+				ability_lines.append("Weapon Cert - " + reward["name"])
+			"novice_grants":
+				ability_lines.append_array(reward["names"])
+			"passive":
+				for stat_pair in reward["stats"]:
+					var stat_name = stat_pair[0]
+					var amount = stat_pair[1]
+					passive_totals[stat_name] = passive_totals.get(stat_name, 0) + amount
+				if reward.has("ability"):
+					ability_lines.append(reward["ability"])
+				if reward.has("abilities"):
+					ability_lines.append_array(reward["abilities"])
+				if reward.has("weapon"):
+					ability_lines.append("Weapon Cert - " + reward["weapon"])
+				if reward.has("weapons"):
+					for granted_weapon in reward["weapons"]:
+						ability_lines.append("Weapon Cert - " + granted_weapon)
+
+	var lines: Array = []
+	lines.append_array(ability_lines)
+	for stat_name in passive_totals.keys():
+		lines.append("+" + str(passive_totals[stat_name]) + " " + stat_name)
+
+	if lines.size() == 0:
+		return "Nothing learned yet."
+
+	return "\n".join(lines)
 
 func _make_flat_style(color: Color) -> StyleBoxFlat:
 	var style = StyleBoxFlat.new()
@@ -3053,77 +4176,1022 @@ func _make_talent_bar(bar_text: String, color: Color, bar_position: Vector2, bar
 	panel.add_child(label)
 	return label
 
+func _build_talent_ui() -> void:
+	talent_ui = Control.new()
+	talent_ui.name = "TalentUI"
+	talent_ui.anchor_right = 1
+	talent_ui.anchor_bottom = 1
+	talent_ui.visible = false
+	talent_ui.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	$UILayer.add_child(talent_ui)
 
+	var backdrop = ColorRect.new()
+	backdrop.color = Color(0, 0, 0, 0.6)
+	backdrop.anchor_right = 1
+	backdrop.anchor_bottom = 1
+	backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	talent_ui.add_child(backdrop)
 
+	var main_panel = Panel.new()
+	main_panel.position = Vector2(460, 195)
+	main_panel.size = Vector2(1070, 740)
+	main_panel.add_theme_stylebox_override("panel", _make_flat_style(Color(0.043, 0.086, 0.086)))
+	talent_ui.add_child(main_panel)
 
+	var title_label = Label.new()
+	title_label.text = "SKILLS (testing only)"
+	title_label.position = Vector2(20, 8)
+	title_label.modulate = Color(0.6, 0.9, 0.9)
+	main_panel.add_child(title_label)
 
+	var close_button = Button.new()
+	close_button.text = "X"
+	close_button.position = Vector2(1030, 6)
+	close_button.custom_minimum_size = Vector2(30, 30)
+	close_button.focus_mode = Control.FOCUS_NONE
+	close_button.pressed.connect(func(): talent_ui.visible = false)
+	main_panel.add_child(close_button)
+
+	var profession_scroll = ScrollContainer.new()
+	profession_scroll.position = Vector2(12, 40)
+	profession_scroll.size = Vector2(220, 600)
+	main_panel.add_child(profession_scroll)
+
+	var profession_list = VBoxContainer.new()
+	profession_list.custom_minimum_size = Vector2(210, 0)
+	profession_list.add_theme_constant_override("separation", 4)
+	profession_scroll.add_child(profession_list)
+
+	# Basic professions first, then Elite -- Elite membership is
+	# determined by GameData.ELITE_PROFESSION_PREREQS, so this list stays in
+	# sync automatically if more Elite Professions are added later.
+	var basic_header = Label.new()
+	basic_header.text = "Basic"
+	basic_header.custom_minimum_size = Vector2(210, 0)
+	basic_header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	basic_header.modulate = Color(0.6, 0.9, 0.9)
+	basic_header.add_theme_font_size_override("font_size", 15)
+	profession_list.add_child(basic_header)
+
+	for profession_name in GameData.novice_professions.keys():
+		if GameData.ELITE_PROFESSION_PREREQS.has(profession_name):
+			continue
+		var p_button = Button.new()
+		p_button.text = profession_name
+		p_button.focus_mode = Control.FOCUS_NONE
+		p_button.custom_minimum_size = Vector2(210, 30)
+		p_button.pressed.connect(_talent_select_profession.bind(profession_name))
+		profession_list.add_child(p_button)
+
+	# Spacer between the Basic and Elite groups -- more breathing room
+	# than the list's normal 4px separation.
+	var group_spacer = Control.new()
+	group_spacer.custom_minimum_size = Vector2(210, 20)
+	profession_list.add_child(group_spacer)
+
+	var elite_header = Label.new()
+	elite_header.text = "Elite"
+	elite_header.custom_minimum_size = Vector2(210, 0)
+	elite_header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	elite_header.modulate = Color(0.6, 0.9, 0.9)
+	elite_header.add_theme_font_size_override("font_size", 15)
+	profession_list.add_child(elite_header)
+
+	for profession_name in GameData.novice_professions.keys():
+		if not GameData.ELITE_PROFESSION_PREREQS.has(profession_name):
+			continue
+		var p_button = Button.new()
+		p_button.text = profession_name
+		p_button.focus_mode = Control.FOCUS_NONE
+		p_button.custom_minimum_size = Vector2(210, 30)
+		p_button.pressed.connect(_talent_select_profession.bind(profession_name))
+		profession_list.add_child(p_button)
+
+	# For Elite Professions, shows which base profession(s) must be
+	# mastered to enter this one -- same idea as SWG's blue prereq names
+	# stacked above the Master box in the elite profession tree view.
+	# Shows which Elite Profession(s) require mastering THIS profession
+	# (i.e. this box's "Master" rank) -- e.g. selecting Apothecary shows
+	# "Leads to: Toxinsmith" here, with a short line connecting down to
+	# the Master box below. Empty/hidden for professions nothing
+	# requires yet. Populated in _refresh_talent_grid().
+	talent_requirements_container = VBoxContainer.new()
+	talent_requirements_container.position = Vector2(250, 36)
+	talent_requirements_container.size = Vector2(800, 20)
+	talent_requirements_container.add_theme_constant_override("separation", 2)
+	main_panel.add_child(talent_requirements_container)
+
+	# Short vertical connector from the label above down toward the
+	# Master box -- same visual idea as SWG's line from the prereq names
+	# down to Master Artisan. Deliberately stops a few px short so it
+	# doesn't touch the box. Centered under the label; only shown when
+	# the label has text.
+	talent_requirements_line = ColorRect.new()
+	talent_requirements_line.position = Vector2(649, 56)
+	talent_requirements_line.size = Vector2(2, 14)
+	talent_requirements_line.color = Color(0.5, 0.75, 1.0)
+	main_panel.add_child(talent_requirements_line)
+
+	talent_master_container = Panel.new()
+	talent_master_container.position = Vector2(250, 74)
+	talent_master_container.size = Vector2(800, 36)
+	talent_master_container.add_theme_stylebox_override("panel", _make_flat_style(Color(0, 0, 0, 0)))
+	main_panel.add_child(talent_master_container)
+
+	# Column-header row -- sits directly above the skill grid, one label
+	# per column, aligned to that column's width so it lines up exactly
+	# with the column beneath it. Shows which Elite Profession(s)
+	# require that column's Rank IV -- e.g. "Sniper" appears above the
+	# Rifles column, matching SWG's "Chef"/"Tailor"/"Merchant" row
+	# above its base-profession columns. Rebuilt per-profession in
+	# _refresh_talent_grid(); empty labels take up the same width so
+	# columns without a linked Elite Profession just show blank space.
+	talent_column_labels_container = HBoxContainer.new()
+	talent_column_labels_container.position = Vector2(250, 122)
+	talent_column_labels_container.size = Vector2(800, 30)
+	talent_column_labels_container.add_theme_constant_override("separation", 14)
+	main_panel.add_child(talent_column_labels_container)
+
+	talent_grid_container = HBoxContainer.new()
+	talent_grid_container.position = Vector2(250, 164)
+	talent_grid_container.size = Vector2(800, 330)
+	talent_grid_container.add_theme_constant_override("separation", 14)
+	main_panel.add_child(talent_grid_container)
+
+	# Novice bar -- sits directly under the first row of skills, just
+	# like Master sits above the last row. Functional and clickable,
+	# same pattern as Master: auto-granted on entering the profession.
+	# Positioned at grid_top(164) + actual column height(324, now that
+	# each column has 4 tiers (4*70 + 4*6 separation gaps, the last gap
+	# being before the tree-name label) + the tree-name label itself
+	# (~20px)) + 12px gap, matching Master's 12px gap above the grid.
+	talent_novice_container = Panel.new()
+	talent_novice_container.position = Vector2(250, 500)
+	talent_novice_container.size = Vector2(800, 32)
+	talent_novice_container.add_theme_stylebox_override("panel", _make_flat_style(Color(0, 0, 0, 0)))
+	main_panel.add_child(talent_novice_container)
+
+	# Below Novice: for Elite Professions only, shows which base
+	# profession(s) this one requires, with a short connector line
+	# leading down to the text (opposite direction from the "leads to"
+	# line above Master) -- e.g. below Sniper's Novice box, a line then
+	# "Chrome Gunner". Empty/hidden for the four base professions.
+	# Populated in _refresh_talent_grid().
+	talent_prereq_line = ColorRect.new()
+	talent_prereq_line.position = Vector2(649, 538)
+	talent_prereq_line.size = Vector2(2, 10)
+	talent_prereq_line.color = Color(0.5, 0.75, 1.0)
+	main_panel.add_child(talent_prereq_line)
+
+	talent_prereq_container = VBoxContainer.new()
+	talent_prereq_container.position = Vector2(250, 550)
+	talent_prereq_container.size = Vector2(800, 30)
+	talent_prereq_container.add_theme_constant_override("separation", 2)
+	main_panel.add_child(talent_prereq_container)
+
+	# Bottom message frame, split evenly: left shows what the selected
+	# box grants, right shows everything already learned in the
+	# currently-viewed profession.
+	var grants_panel = Panel.new()
+	grants_panel.position = Vector2(250, 590)
+	grants_panel.size = Vector2(395, 110)
+	grants_panel.add_theme_stylebox_override("panel", _make_flat_style(Color(0.03, 0.06, 0.06)))
+	main_panel.add_child(grants_panel)
+
+	var grants_header = Label.new()
+	grants_header.text = "Unlockable"
+	grants_header.position = Vector2(10, 4)
+	grants_header.modulate = Color(0.6, 0.9, 0.9)
+	grants_panel.add_child(grants_header)
+
+	var grants_scroll = ScrollContainer.new()
+	grants_scroll.position = Vector2(10, 28)
+	grants_scroll.size = Vector2(375, 74)
+	grants_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	grants_panel.add_child(grants_scroll)
+
+	talent_details_label = Label.new()
+	talent_details_label.custom_minimum_size = Vector2(355, 0)
+	talent_details_label.autowrap_mode = TextServer.AUTOWRAP_WORD
+	talent_details_label.text = "Select a skill box to view details."
+	talent_details_label.modulate = Color(0.85, 0.95, 0.95)
+	grants_scroll.add_child(talent_details_label)
+
+	var learned_panel = Panel.new()
+	learned_panel.position = Vector2(655, 590)
+	learned_panel.size = Vector2(395, 110)
+	learned_panel.add_theme_stylebox_override("panel", _make_flat_style(Color(0.03, 0.06, 0.06)))
+	main_panel.add_child(learned_panel)
+
+	var learned_header = Label.new()
+	learned_header.text = "Learned"
+	learned_header.position = Vector2(10, 4)
+	learned_header.modulate = Color(0.6, 0.9, 0.9)
+	learned_panel.add_child(learned_header)
+
+	var learned_scroll = ScrollContainer.new()
+	learned_scroll.position = Vector2(10, 28)
+	learned_scroll.size = Vector2(375, 74)
+	learned_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	learned_panel.add_child(learned_scroll)
+
+	talent_learned_label = Label.new()
+	talent_learned_label.custom_minimum_size = Vector2(355, 0)
+	talent_learned_label.autowrap_mode = TextServer.AUTOWRAP_WORD
+	talent_learned_label.text = ""
+	talent_learned_label.modulate = Color(0.85, 0.95, 0.95)
+	learned_scroll.add_child(talent_learned_label)
+
+	talent_points_label = Label.new()
+	talent_points_label.position = Vector2(250, 708)
+	talent_points_label.size = Vector2(800, 22)
+	talent_points_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	talent_points_label.add_theme_font_size_override("font_size", 16)
+	talent_points_label.add_theme_color_override("font_color", Color(1.0, 0.85, 0.4))
+	talent_points_label.text = "Militant Points: --   |   Engineer Points: --"
+	main_panel.add_child(talent_points_label)
+
+# Groups a profession's raw path names (e.g. "One Hand I", "One Hand II",
+# "One Hand III") into ordered columns by their shared base name, so each
+# weapon/skill line renders as one vertical column of tiers -- matching
+# the grid layout. Paths with no I/II/III suffix (like Scanning)
+# become their own single-row column.
+func _group_talent_paths(profession_name: String) -> Array:
+	var columns: Array = []
+	var lookup: Dictionary = {}
+
+	for path_name in GameData.novice_professions[profession_name]["paths"].keys():
+		if path_name == "Master" or path_name == "Novice":
+			continue
+
+		var base_name = path_name
+		var tier = 1
+
+		if path_name.ends_with(" IV"):
+			tier = 4
+			base_name = path_name.substr(0, path_name.length() - 3)
+		elif path_name.ends_with(" III"):
+			tier = 3
+			base_name = path_name.substr(0, path_name.length() - 4)
+		elif path_name.ends_with(" II"):
+			tier = 2
+			base_name = path_name.substr(0, path_name.length() - 3)
+		elif path_name.ends_with(" I"):
+			tier = 1
+			base_name = path_name.substr(0, path_name.length() - 2)
+
+		if not lookup.has(base_name):
+			var entry = {"base": base_name, "tiers": {}}
+			columns.append(entry)
+			lookup[base_name] = entry
+
+		lookup[base_name]["tiers"][tier] = path_name
+
+	return columns
+
+# A profession name styled and colored like the plain requirement/
+# prereq labels, but clickable -- jumps straight to that profession's
+# tree. Used everywhere a profession name shows up as a "leads to" or
+# "requires" indicator (above Master, above a column, below Novice).
+func _make_profession_link_button(profession_name: String) -> Button:
+	var btn = Button.new()
+	btn.text = profession_name
+	btn.focus_mode = Control.FOCUS_NONE
+	btn.custom_minimum_size = Vector2(0, 16)
+	var empty_style = StyleBoxEmpty.new()
+	btn.add_theme_stylebox_override("normal", empty_style)
+	btn.add_theme_stylebox_override("hover", empty_style)
+	btn.add_theme_stylebox_override("pressed", empty_style)
+	btn.add_theme_stylebox_override("focus", empty_style)
+	btn.add_theme_color_override("font_color", Color(0.5, 0.75, 1.0))
+	btn.add_theme_color_override("font_hover_color", Color(0.75, 0.9, 1.0))
+	btn.add_theme_color_override("font_pressed_color", Color(0.75, 0.9, 1.0))
+	btn.add_theme_font_size_override("font_size", 12)
+	btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	btn.pressed.connect(_talent_select_profession.bind(profession_name))
+	return btn
+
+func _talent_select_profession(profession_name: String) -> void:
+	_refresh_talent_grid(profession_name)
+
+func _talent_select_node(profession_name: String, path_name: String) -> void:
+	talent_details_label.text = _get_talent_box_display(profession_name, path_name)
+
+func _refresh_talent_grid(profession_name: String) -> void:
+	current_talent_profession = profession_name
+
+	# "Leads to: X" -- shows which Elite Profession(s) require mastering
+	# THIS profession (i.e. its own Master box), with a connector line
+	# down to the Master box (not touching it). This is the reverse of
+	# a prereq list: a base profession's tree shows what it leads to,
+	# not what leads to it (Apothecary's tree shows "Toxinsmith", not
+	# the other way around).
+	for child in talent_requirements_container.get_children():
+		child.queue_free()
+
+	var elites_requiring_master = _get_elites_requiring(profession_name, "Master")
+	if elites_requiring_master.size() > 0:
+		for elite_name in elites_requiring_master:
+			var link_btn = _make_profession_link_button(elite_name)
+			link_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+			talent_requirements_container.add_child(link_btn)
+		talent_requirements_line.visible = true
+	else:
+		talent_requirements_line.visible = false
+
+	# Below Novice: for Elite Professions, shows which base
+	# profession(s) are required to enter this one -- the forward
+	# direction of GameData.ELITE_PROFESSION_PREREQS, deduped by profession
+	# (Sniper needs two different Chrome Gunner boxes but should only
+	# show "Chrome Gunner" once; Toxinsmith needs two different
+	# professions, so both show, each on its own line).
+	for child in talent_prereq_container.get_children():
+		child.queue_free()
+
+	var required_profession_names: Array = []
+	for prereq in GameData.ELITE_PROFESSION_PREREQS.get(profession_name, []):
+		if not required_profession_names.has(prereq["profession"]):
+			required_profession_names.append(prereq["profession"])
+	if required_profession_names.size() > 0:
+		for required_profession_name in required_profession_names:
+			var prereq_link_btn = _make_profession_link_button(required_profession_name)
+			prereq_link_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+			talent_prereq_container.add_child(prereq_link_btn)
+		talent_prereq_line.visible = true
+	else:
+		talent_prereq_line.visible = false
+
+	for child in talent_grid_container.get_children():
+		child.queue_free()
+
+	for child in talent_master_container.get_children():
+		child.queue_free()
+
+	var master_path_data = GameData.novice_professions[profession_name]["paths"].get("Master", null)
+	if master_path_data != null:
+		var master_owned = master_path_data["unlocked_nodes"] >= master_path_data.get("max_nodes", NODES_PER_PATH)
+		var master_color = Color(0.85, 0.7, 0.2) if master_owned else Color(0.35, 0.28, 0.08)
+
+		var master_btn = Button.new()
+		master_btn.text = "Master " + profession_name
+		master_btn.anchor_right = 1
+		master_btn.anchor_bottom = 1
+		master_btn.focus_mode = Control.FOCUS_NONE
+		var master_style = _make_flat_style(master_color)
+		master_btn.add_theme_stylebox_override("normal", master_style)
+		master_btn.add_theme_stylebox_override("hover", master_style)
+		master_btn.add_theme_stylebox_override("pressed", master_style)
+		master_btn.add_theme_stylebox_override("focus", master_style)
+		master_btn.pressed.connect(_talent_select_node.bind(profession_name, "Master"))
+		talent_master_container.add_child(master_btn)
+
+	for child in talent_novice_container.get_children():
+		child.queue_free()
+
+	var novice_path_data = GameData.novice_professions[profession_name]["paths"].get("Novice", null)
+	if novice_path_data != null:
+		var novice_owned = novice_path_data["unlocked_nodes"] >= novice_path_data.get("max_nodes", NODES_PER_PATH)
+		var novice_color = TALENT_OWNED_COLOR if novice_owned else TALENT_UNLEARNED_COLOR
+
+		var novice_btn = Button.new()
+		novice_btn.text = "Novice " + profession_name
+		novice_btn.anchor_right = 1
+		novice_btn.anchor_bottom = 1
+		novice_btn.focus_mode = Control.FOCUS_NONE
+		var novice_style = _make_flat_style(novice_color)
+		novice_btn.add_theme_stylebox_override("normal", novice_style)
+		novice_btn.add_theme_stylebox_override("hover", novice_style)
+		novice_btn.add_theme_stylebox_override("pressed", novice_style)
+		novice_btn.add_theme_stylebox_override("focus", novice_style)
+		novice_btn.pressed.connect(_talent_select_node.bind(profession_name, "Novice"))
+		talent_novice_container.add_child(novice_btn)
+
+	talent_points_label.text = "Militant Points: " + str(militant_points_available) + "   |   Engineer Points: " + str(engineer_points_available)
+	talent_details_label.text = "Select a skill box to view details."
+	talent_learned_label.text = _get_talent_learned_summary(profession_name)
+
+	for child in talent_column_labels_container.get_children():
+		child.queue_free()
+
+	var columns = _group_talent_paths(profession_name)
+
+	# Column-header row, built in lockstep with the grid below so each
+	# label lines up with its column. Shows "Leads to: X" (or just X,
+	# kept short since horizontal space is tight) for any column whose
+	# Rank IV is a listed Elite Profession prereq -- e.g. "Sniper" sits
+	# above the Rifles column. Blank labels still take up the column's
+	# width so unlinked columns just show empty space, keeping every
+	# column's Rank IV box aligned regardless of which ones have a label.
+	for column in columns:
+		var top_tier_keys = column["tiers"].keys()
+		top_tier_keys.sort()
+		var top_tier_path_name = column["tiers"][top_tier_keys[-1]]
+		var elites_requiring_column = _get_elites_requiring(profession_name, top_tier_path_name)
+
+		var col_label_box = VBoxContainer.new()
+		col_label_box.custom_minimum_size = Vector2(180, 30)
+		col_label_box.add_theme_constant_override("separation", 2)
+		talent_column_labels_container.add_child(col_label_box)
+
+		for elite_name in elites_requiring_column:
+			var col_link_btn = _make_profession_link_button(elite_name)
+			col_link_btn.custom_minimum_size = Vector2(180, 15)
+			col_label_box.add_child(col_link_btn)
+
+	for column in columns:
+		var col_box = VBoxContainer.new()
+		col_box.custom_minimum_size = Vector2(180, 0)
+		col_box.add_theme_constant_override("separation", 6)
+		talent_grid_container.add_child(col_box)
+
+		var tier_keys = column["tiers"].keys()
+		tier_keys.sort()
+
+		# The "next up" box is the lowest-tier one that isn't owned yet
+		# and whose prereq is already met -- i.e. the one box in this
+		# column you'd actually train next. Only this box gets an XP
+		# progress bar, same as SWG only highlighting your next skill.
+		var next_path_name = ""
+		if professions_unlocked.get(profession_name, false):
+			for tier in tier_keys:
+				var candidate_path_name = column["tiers"][tier]
+				var candidate_path_data = GameData.novice_professions[profession_name]["paths"][candidate_path_name]
+				var candidate_owned = candidate_path_data["unlocked_nodes"] >= candidate_path_data.get("max_nodes", NODES_PER_PATH)
+				if not candidate_owned and _is_prereq_met(profession_name, candidate_path_data):
+					next_path_name = candidate_path_name
+					break
+
+		tier_keys.reverse()
+
+		for tier in tier_keys:
+			var path_name = column["tiers"][tier]
+			var path_data = GameData.novice_professions[profession_name]["paths"][path_name]
+
+			var owned = path_data["unlocked_nodes"] >= path_data.get("max_nodes", NODES_PER_PATH)
+
+			var box_color: Color
+			if owned:
+				box_color = TALENT_OWNED_COLOR
+			else:
+				box_color = TALENT_UNLEARNED_COLOR
+
+			var style = _make_flat_style(box_color)
+
+			var btn = Button.new()
+			btn.text = _get_talent_box_label(profession_name, path_name)
+			btn.custom_minimum_size = Vector2(170, 70)
+			btn.focus_mode = Control.FOCUS_NONE
+			btn.add_theme_stylebox_override("normal", style)
+			btn.add_theme_stylebox_override("hover", style)
+			btn.add_theme_stylebox_override("pressed", style)
+			btn.add_theme_stylebox_override("focus", style)
+			btn.pressed.connect(_talent_select_node.bind(profession_name, path_name))
+			col_box.add_child(btn)
+
+			if path_name == next_path_name:
+				var xp_type = path_data["xp_type"]
+				var xp_cost = _get_box_cost(path_data)["xp_cost"]
+				var current_xp = xp_pools[xp_type]
+				var progress_fraction = clamp(float(current_xp) / float(max(xp_cost, 1)), 0.0, 1.0)
+
+				const PROGRESS_BAR_HEIGHT = 9.0
+
+				var progress_track = ColorRect.new()
+				progress_track.color = Color(0, 0, 0, 0.45)
+				progress_track.anchor_left = 0.0
+				progress_track.anchor_right = 1.0
+				progress_track.anchor_top = 1.0
+				progress_track.anchor_bottom = 1.0
+				progress_track.offset_top = -PROGRESS_BAR_HEIGHT
+				progress_track.offset_bottom = 0.0
+				progress_track.mouse_filter = Control.MOUSE_FILTER_IGNORE
+				btn.add_child(progress_track)
+
+				var progress_fill = ColorRect.new()
+				progress_fill.color = Color(0.3, 1.0, 0.4) if progress_fraction >= 1.0 else Color(1.0, 0.85, 0.3)
+				progress_fill.anchor_left = 0.0
+				progress_fill.anchor_right = progress_fraction
+				progress_fill.anchor_top = 1.0
+				progress_fill.anchor_bottom = 1.0
+				progress_fill.offset_top = -PROGRESS_BAR_HEIGHT
+				progress_fill.offset_bottom = 0.0
+				progress_fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
+				btn.add_child(progress_fill)
+
+		# Tree-name label -- sits below the Rank I box (the last one
+		# added above, since tiers render highest-to-lowest top-to-
+		# bottom) so it's still obvious which weapon/skill line this
+		# column represents now that the boxes themselves have
+		# flavorful names instead of "Blade I/II/III/IV".
+		var tree_label = Label.new()
+		tree_label.text = column["base"]
+		tree_label.custom_minimum_size = Vector2(170, 0)
+		tree_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		tree_label.modulate = Color(0.6, 0.75, 0.75)
+		tree_label.add_theme_font_size_override("font_size", 13)
+		col_box.add_child(tree_label)
 
 # --- Ability Book ---
 # A testing/reference-quality replacement for the old fixed 8-button
 # AbilityMenu, which could only ever show 6 hardcoded abilities and
 # had no way to display anything added later (Cleave, Subdue, all of
 # Chrome Gunner's abilities, etc.). This scans GameData.ability_definitions
-# directly, so any future ability shows up automatically — nothing
+# directly, so any future ability shows up automatically -- nothing
 # to remember to wire up by hand. Fully built here in code, same
 # approach as the Talent Viewer.
 
-# Talent Viewer now lives in its own script (TalentViewer.gd, Pass 2 of
-# splitting main.gd apart) — this just instantiates it, gives it a
-# back-reference to main for the handful of things it still shares
-# with other systems, adds it to the scene, and tells it to build its
-# UI. See TalentViewer.gd for everything else.
-func _build_talent_ui() -> void:
-	talent_ui = preload("res://scenes/TalentViewer.gd").new()
-	talent_ui.main = self
-	$UILayer.add_child(talent_ui)
-	talent_ui._build_talent_ui()
-
-# Ability Book now lives in its own script (AbilityBook.gd) — same
-# pattern as TalentViewer.gd.
 func _build_ability_book_ui() -> void:
-	ability_book_ui = preload("res://scenes/AbilityBook.gd").new()
-	ability_book_ui.main = self
+	ability_book_ui = Control.new()
+	ability_book_ui.name = "AbilityBookUI"
+	ability_book_ui.anchor_right = 1
+	ability_book_ui.anchor_bottom = 1
+	ability_book_ui.visible = false
+	ability_book_ui.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	$UILayer.add_child(ability_book_ui)
-	ability_book_ui._build_ability_book_ui()
 
-func _refresh_ability_book() -> void:
-	ability_book_ui._refresh_ability_book()
+	var backdrop = ColorRect.new()
+	backdrop.color = Color(0, 0, 0, 0.6)
+	backdrop.anchor_right = 1
+	backdrop.anchor_bottom = 1
+	backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ability_book_ui.add_child(backdrop)
+
+	var main_panel = Panel.new()
+	main_panel.position = Vector2(660, 230)
+	main_panel.size = Vector2(600, 620)
+	main_panel.add_theme_stylebox_override("panel", _make_flat_style(Color(0.043, 0.086, 0.086)))
+	ability_book_ui.add_child(main_panel)
+
+	var title_label = Label.new()
+	title_label.text = "Ability Book"
+	title_label.position = Vector2(20, 8)
+	title_label.modulate = Color(0.6, 0.9, 0.9)
+	main_panel.add_child(title_label)
+
+	var close_button = Button.new()
+	close_button.text = "X"
+	close_button.position = Vector2(560, 6)
+	close_button.custom_minimum_size = Vector2(30, 30)
+	close_button.focus_mode = Control.FOCUS_NONE
+	close_button.pressed.connect(func(): ability_book_ui.visible = false)
+	main_panel.add_child(close_button)
+
+	var hint_label = Label.new()
+	hint_label.text = "Click to use once. Drag onto an action bar slot to assign it."
+	hint_label.position = Vector2(20, 36)
+	hint_label.modulate = Color(0.7, 0.75, 0.75)
+	hint_label.add_theme_font_size_override("font_size", 12)
+	main_panel.add_child(hint_label)
+
+	var list_scroll = ScrollContainer.new()
+	list_scroll.position = Vector2(20, 64)
+	list_scroll.size = Vector2(560, 540)
+	list_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	main_panel.add_child(list_scroll)
+
+	ability_book_list_container = VBoxContainer.new()
+	ability_book_list_container.custom_minimum_size = Vector2(540, 0)
+	ability_book_list_container.add_theme_constant_override("separation", 4)
+	list_scroll.add_child(ability_book_list_container)
 
 func _make_ability_book_button(ability_name: String) -> Button:
-	return ability_book_ui._make_ability_book_button(ability_name)
+	var btn = Button.new()
+	btn.text = ability_name
+	btn.custom_minimum_size = Vector2(540, 34)
+	btn.focus_mode = Control.FOCUS_NONE
+	btn.pressed.connect(_use_ability_by_name.bind(ability_name))
+
+	var drag_script = load(ABILITY_DRAG_SOURCE_SCRIPT_PATH)
+	if drag_script == null:
+		push_warning("Ability Book: could not load drag script at " + ABILITY_DRAG_SOURCE_SCRIPT_PATH + " -- dragging will not work until this path is fixed.")
+	else:
+		btn.set_script(drag_script)
+		btn.set("ability_name", ability_name)
+
+	return btn
+
+func _refresh_ability_book() -> void:
+	for child in ability_book_list_container.get_children():
+		child.queue_free()
+
+	var available_names: Array = ["Attack"]
+
+	if professions_unlocked.get("Apothecary", false):
+		available_names.append("Apply Bandage")
+		if _get_apothecary_rank_unlocked("Healing II"):
+			available_names.append("IV Drip")
+		if _get_apothecary_rank_unlocked("Healing IV"):
+			available_names.append("Healing Vapor")
+		if _get_apothecary_rank_unlocked("Stims I"):
+			available_names.append("Adrenaline Boost")
+		if _get_apothecary_rank_unlocked("Stims III"):
+			available_names.append("Blood Bag")
+
+	for profession_name in GameData.novice_professions.keys():
+		if not professions_unlocked.get(profession_name, false):
+			continue
+
+		for ability_name in GameData.ability_definitions.keys():
+			var ability_data = GameData.ability_definitions[ability_name]
+			if ability_data.get("requires_profession", "") != profession_name:
+				continue
+			if _is_ability_learned(ability_name):
+				available_names.append(ability_name)
+
+	available_names.sort()
+
+	for ability_name in available_names:
+		ability_book_list_container.add_child(_make_ability_book_button(ability_name))
 
 # --- Inventory Book ---
 # A testing/reference UI for inventory, styled the same way as the
 # Talent Viewer and Ability Book (fully built in code, scrollable, no
-# fixed slot count). Clicking any item shows its actual stats — this
+# fixed slot count). Clicking any item shows its actual stats -- this
 # works generically for resources, crafted weapons, and tools alike,
 # since they all already share the same inventory_stats dictionary.
 
-# Inventory Book now lives in its own script (InventoryBook.gd) — same
-# pattern as TalentViewer.gd.
 func _build_inventory_book_ui() -> void:
-	inventory_book_ui = preload("res://scenes/InventoryBook.gd").new()
-	inventory_book_ui.main = self
+	inventory_book_ui = Control.new()
+	inventory_book_ui.name = "InventoryBookUI"
+	inventory_book_ui.anchor_right = 1
+	inventory_book_ui.anchor_bottom = 1
+	inventory_book_ui.visible = false
+	inventory_book_ui.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	$UILayer.add_child(inventory_book_ui)
-	inventory_book_ui._build_inventory_book_ui()
+
+	var backdrop = ColorRect.new()
+	backdrop.color = Color(0, 0, 0, 0.6)
+	backdrop.anchor_right = 1
+	backdrop.anchor_bottom = 1
+	backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	inventory_book_ui.add_child(backdrop)
+
+	var main_panel = Panel.new()
+	main_panel.position = Vector2(510, 215)
+	main_panel.size = Vector2(900, 650)
+	main_panel.add_theme_stylebox_override("panel", _make_flat_style(Color(0.043, 0.086, 0.086)))
+	inventory_book_ui.add_child(main_panel)
+
+	var title_label = Label.new()
+	title_label.text = "Inventory"
+	title_label.position = Vector2(20, 8)
+	title_label.modulate = Color(0.6, 0.9, 0.9)
+	main_panel.add_child(title_label)
+
+	var close_button = Button.new()
+	close_button.text = "X"
+	close_button.position = Vector2(860, 6)
+	close_button.custom_minimum_size = Vector2(30, 30)
+	close_button.focus_mode = Control.FOCUS_NONE
+	close_button.pressed.connect(func(): inventory_book_ui.visible = false)
+	main_panel.add_child(close_button)
+
+	# Left panel -- details for whichever item was last clicked.
+	var details_panel = Panel.new()
+	details_panel.position = Vector2(20, 50)
+	details_panel.size = Vector2(320, 560)
+	details_panel.add_theme_stylebox_override("panel", _make_flat_style(Color(0.03, 0.06, 0.06)))
+	main_panel.add_child(details_panel)
+
+	var details_header = Label.new()
+	details_header.text = "Details"
+	details_header.position = Vector2(10, 4)
+	details_header.modulate = Color(0.6, 0.9, 0.9)
+	details_panel.add_child(details_header)
+
+	var details_scroll = ScrollContainer.new()
+	details_scroll.position = Vector2(10, 28)
+	details_scroll.size = Vector2(300, 522)
+	details_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	details_panel.add_child(details_scroll)
+
+	inventory_book_stats_label = Label.new()
+	inventory_book_stats_label.custom_minimum_size = Vector2(285, 0)
+	inventory_book_stats_label.autowrap_mode = TextServer.AUTOWRAP_WORD
+	inventory_book_stats_label.text = "Select an item to view its details."
+	inventory_book_stats_label.modulate = Color(0.85, 0.95, 0.95)
+	details_scroll.add_child(inventory_book_stats_label)
+
+	# Right panel -- scrollable list of every item currently held.
+	var list_panel = Panel.new()
+	list_panel.position = Vector2(360, 50)
+	list_panel.size = Vector2(520, 560)
+	list_panel.add_theme_stylebox_override("panel", _make_flat_style(Color(0.03, 0.06, 0.06)))
+	main_panel.add_child(list_panel)
+
+	var list_header = Label.new()
+	list_header.text = "Items"
+	list_header.position = Vector2(10, 4)
+	list_header.modulate = Color(0.6, 0.9, 0.9)
+	list_panel.add_child(list_header)
+
+	var list_scroll = ScrollContainer.new()
+	list_scroll.position = Vector2(10, 28)
+	list_scroll.size = Vector2(500, 522)
+	list_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	list_panel.add_child(list_scroll)
+
+	inventory_book_list_container = VBoxContainer.new()
+	inventory_book_list_container.custom_minimum_size = Vector2(485, 0)
+	inventory_book_list_container.add_theme_constant_override("separation", 4)
+	list_scroll.add_child(inventory_book_list_container)
+
+func _format_quantity_tiered(qty: int) -> String:
+	if qty < 1000:
+		return str(qty)
+	return str(int(qty / 1000)) + "k"
+
+# Builds the label text for one inventory slot. Resources show a
+# tiered quantity (1-999 plain, 1000+ as "10k"/"23k"/etc). Items with
+# a Charges stat show that instead. Everything else (unique crafted
+# equipment) shows just its name -- no "(1)" clutter, since each craft
+# is its own slot now. Genuinely stacked non-resource items (like loot
+# that dropped together and shares an ID) still show a plain count.
+func _get_inventory_slot_label(item_key: String) -> String:
+	var display_name = _get_inventory_display_name(item_key)
+	var qty = inventory.get(item_key, 0)
+	var stats = inventory_stats.get(item_key, {})
+
+	if resource_subclass_of.has(item_key):
+		return display_name + " (" + _format_quantity_tiered(qty) + ")"
+	elif stats.has("Charges"):
+		return display_name + " (" + str(stats["Charges"]) + " charges)"
+	elif qty > 1:
+		return display_name + " (" + str(qty) + ")"
+	else:
+		return display_name
+
+func _is_equippable_item(item_key: String) -> bool:
+	var item_class = crafted_item_class.get(item_key, "")
+	return item_class != "" and item_class != "Component" and item_class != "Medicine" and item_class != "Tool"
+
+func _on_inventory_book_item_double_clicked(item_key: String) -> void:
+	if not _is_equippable_item(item_key):
+		return
+
+	if equipped_weapon_name == item_key:
+		equipped_weapon_name = ""
+	else:
+		equipped_weapon_name = item_key
+
+	_refresh_inventory_book()
 
 func _refresh_inventory_book() -> void:
-	inventory_book_ui._refresh_inventory_book()
+	for child in inventory_book_list_container.get_children():
+		child.queue_free()
+
+	inventory_book_stats_label.text = "Select an item to view its details."
+
+	for item_key in inventory.keys():
+		if inventory[item_key] <= 0:
+			continue
+
+		var display_name = _get_inventory_display_name(item_key)
+
+		var btn = Button.new()
+		btn.text = _get_inventory_slot_label(item_key)
+		btn.custom_minimum_size = Vector2(480, 32)
+		btn.focus_mode = Control.FOCUS_NONE
+		btn.pressed.connect(_select_inventory_book_item.bind(item_key))
+		btn.gui_input.connect(func(event):
+			if event is InputEventMouseButton and event.pressed and event.double_click:
+				_on_inventory_book_item_double_clicked(item_key)
+		)
+
+		# Equipped item gets a visible border so it's obvious which
+		# weapon is currently active, without needing a separate
+		# Equip window at all -- double-click toggles it on/off.
+		if item_key == equipped_weapon_name:
+			var equipped_style = _make_flat_style(Color(0.15, 0.15, 0.15))
+			equipped_style.border_width_left = 3
+			equipped_style.border_width_top = 3
+			equipped_style.border_width_right = 3
+			equipped_style.border_width_bottom = 3
+			equipped_style.border_color = Color(0.95, 0.75, 0.2)
+			btn.add_theme_stylebox_override("normal", equipped_style)
+			btn.add_theme_stylebox_override("hover", equipped_style)
+			btn.add_theme_stylebox_override("pressed", equipped_style)
+			btn.add_theme_stylebox_override("focus", equipped_style)
+
+		# Drag-and-drop uses the item's display name (e.g. "Mineral
+		# Survey Tool"), not its internal instance key -- raw resources
+		# have randomly-generated instance keys, but _use_ability_by_name
+		# (called on drop) dispatches based on the recognizable display
+		# name instead.
+		var drag_script = load(ABILITY_DRAG_SOURCE_SCRIPT_PATH)
+		if drag_script != null:
+			btn.set_script(drag_script)
+			btn.set("ability_name", display_name)
+
+		inventory_book_list_container.add_child(btn)
+
+# Real functional effect text for consumables whose Quality actually
+# drives something (Adrenaline Shot, Empty IV Bag) -- shown in the
+# Inventory Book instead of just hiding Quality with nothing to
+# replace it. Returns [] for anything not specifically handled here.
+func _get_consumable_effect_lines(base_name: String, quality: int) -> Array:
+	match base_name:
+		"Adrenaline Shot":
+			var action_amount = _scale_by_quality(quality, ADRENALINE_BOOST_MIN_ACTION, ADRENALINE_BOOST_MAX_ACTION)
+			return ["Max Action +" + str(action_amount), "10 min duration"]
+		"Empty IV Bag":
+			var heal_amount = _scale_by_quality(quality, BLOOD_BAG_MIN_HEAL, BLOOD_BAG_MAX_HEAL)
+			return ["Max Health +" + str(heal_amount), "10 min duration"]
+		"Crate of Bandages":
+			return ["Heal +" + str(BANDAGE_HEAL_AMOUNT)]
+		_:
+			return []
+
+func _select_inventory_book_item(item_key: String) -> void:
+	var display_name = _get_inventory_display_name(item_key)
+	var qty = inventory.get(item_key, 0)
+	var stats = inventory_stats.get(item_key, {})
+
+	var lines: Array = []
+	lines.append(display_name)
+
+	# For raw resources, the inventory key IS the resource's unique
+	# generated name (e.g. "Thaliryxqven") -- show it as its own line,
+	# since it's meaningful identity info, not just internal plumbing.
+	if resource_subclass_of.has(item_key):
+		lines.append(item_key)
+
+	lines.append("Quantity: " + str(qty))
+	lines.append("")
+
+	if stats.size() == 0:
+		lines.append("No additional stats.")
+	else:
+		var is_resource = resource_subclass_of.has(item_key)
+		var stat_lines: Array = []
+
+		var base_name = consumable_base_name.get(item_key, "")
+		stat_lines.append_array(_get_consumable_effect_lines(base_name, stats.get("Quality", 500)))
+
+		for stat_name in stats.keys():
+			if stat_name == "Quality" and not is_resource:
+				continue
+			stat_lines.append(stat_name + ": " + _format_number(stats[stat_name]))
+
+		if stat_lines.size() == 0:
+			lines.append("No additional stats.")
+		else:
+			lines.append_array(stat_lines)
+
+	inventory_book_stats_label.text = "\n".join(lines)
 
 # --- Crafting Book ---
-# The recipe list + Assembly screen now live in their own script
-# (CraftingBook.gd) — same pattern as TalentViewer.gd. The shared
-# collapsible-category header system below (also used by the Survey
-# Book) stays here in main.gd.
+# A testing/reference UI for crafting, styled like the Talent Viewer,
+# Ability Book, and Inventory Book -- fully built in code. Unlike those
+# three, this one stays fully FUNCTIONAL: the Craft button reuses the
+# existing _on_craft_pressed() logic unchanged, so quality calculation,
+# resource consumption, and everything else keeps working exactly as
+# before.
+#
+# NOTE: there's currently no "recipe unlock" system anywhere in the
+# game -- every recipe in the `GameData.recipes` array is always craftable
+# regardless of profession or skill. This shows ALL of them for now.
+# True recipe-gating (e.g. tied to Scrap Tinkerer skills, as mentioned
+# earlier for Weapon Cert tier-2 items) would need to be built as its
+# own feature before this list could reflect "learned" recipes only.
+
+const MELEE_WEAPON_CLASSES = ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick"]
+const RANGED_WEAPON_CLASSES = ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"]
+
+# Returns {"class": ..., "type": ..., "subclass": ...}. "type" and
+# "subclass" come back as "" when they wouldn't add a meaningful
+# extra level (e.g. Tools have no sub-type, and most ranged weapons'
+# item_subclass just repeats item_class).
+func _categorize_recipe_for_book(recipe: Dictionary) -> Dictionary:
+	var item_class = recipe.get("item_class", "")
+	var item_subclass = recipe.get("item_subclass", "")
+
+	if MELEE_WEAPON_CLASSES.has(item_class):
+		return {"class": "Melee Weapon", "type": item_class, "subclass": item_subclass}
+	elif RANGED_WEAPON_CLASSES.has(item_class):
+		var subclass_value = "" if item_subclass == item_class else item_subclass
+		return {"class": "Ranged Weapon", "type": item_class, "subclass": subclass_value}
+	elif item_class == "Tool":
+		return {"class": "Tool", "type": "", "subclass": ""}
+	elif item_class == "Medicine":
+		return {"class": "Medicine", "type": "", "subclass": ""}
+	elif item_class == "Component":
+		return {"class": "Component", "type": "", "subclass": ""}
+	else:
+		return {"class": "Material", "type": "", "subclass": ""}
 
 func _build_crafting_book_ui() -> void:
-	crafting_book_ui = preload("res://scenes/CraftingBook.gd").new()
-	crafting_book_ui.main = self
+	crafting_book_ui = Control.new()
+	crafting_book_ui.name = "CraftingBookUI"
+	crafting_book_ui.anchor_right = 1
+	crafting_book_ui.anchor_bottom = 1
+	crafting_book_ui.visible = false
+	crafting_book_ui.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	$UILayer.add_child(crafting_book_ui)
-	crafting_book_ui._build_crafting_book_ui()
 
-func _refresh_crafting_book() -> void:
-	crafting_book_ui._refresh_crafting_book()
+	var backdrop = ColorRect.new()
+	backdrop.color = Color(0, 0, 0, 0.6)
+	backdrop.anchor_right = 1
+	backdrop.anchor_bottom = 1
+	backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	crafting_book_ui.add_child(backdrop)
+
+	var main_panel = Panel.new()
+	main_panel.position = Vector2(460, 165)
+	main_panel.size = Vector2(1000, 750)
+	main_panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	main_panel.add_theme_stylebox_override("panel", _make_flat_style(Color(0.043, 0.086, 0.086)))
+	crafting_book_ui.add_child(main_panel)
+
+	var title_label = Label.new()
+	title_label.text = "Crafting"
+	title_label.position = Vector2(20, 8)
+	title_label.modulate = Color(0.6, 0.9, 0.9)
+	main_panel.add_child(title_label)
+
+	var close_button = Button.new()
+	close_button.text = "X"
+	close_button.position = Vector2(960, 6)
+	close_button.custom_minimum_size = Vector2(30, 30)
+	close_button.focus_mode = Control.FOCUS_NONE
+	close_button.pressed.connect(func(): crafting_book_ui.visible = false)
+	main_panel.add_child(close_button)
+
+	# Left panel -- ingredient breakdown for the selected recipe, plus
+	# the actual Craft button and result message.
+	var details_panel = Panel.new()
+	details_panel.position = Vector2(20, 50)
+	details_panel.size = Vector2(380, 660)
+	details_panel.add_theme_stylebox_override("panel", _make_flat_style(Color(0.03, 0.06, 0.06)))
+	main_panel.add_child(details_panel)
+
+	var details_header = Label.new()
+	details_header.text = "Ingredients"
+	details_header.position = Vector2(10, 4)
+	details_header.modulate = Color(0.6, 0.9, 0.9)
+	details_panel.add_child(details_header)
+
+	var details_scroll = ScrollContainer.new()
+	details_scroll.position = Vector2(10, 28)
+	details_scroll.size = Vector2(360, 520)
+	details_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	details_panel.add_child(details_scroll)
+
+	crafting_book_details_label = Label.new()
+	crafting_book_details_label.custom_minimum_size = Vector2(345, 0)
+	crafting_book_details_label.autowrap_mode = TextServer.AUTOWRAP_WORD
+	crafting_book_details_label.text = "Select a recipe to view what it takes to craft."
+	crafting_book_details_label.modulate = Color(0.85, 0.95, 0.95)
+	details_scroll.add_child(crafting_book_details_label)
+
+	crafting_book_craft_button = Button.new()
+	crafting_book_craft_button.text = "Choose Resources"
+	crafting_book_craft_button.position = Vector2(10, 558)
+	crafting_book_craft_button.custom_minimum_size = Vector2(360, 36)
+	crafting_book_craft_button.focus_mode = Control.FOCUS_NONE
+	crafting_book_craft_button.pressed.connect(_enter_crafting_assembly)
+	details_panel.add_child(crafting_book_craft_button)
+
+	crafting_book_result_label = Label.new()
+	crafting_book_result_label.position = Vector2(10, 600)
+	crafting_book_result_label.size = Vector2(360, 56)
+	crafting_book_result_label.autowrap_mode = TextServer.AUTOWRAP_WORD
+	crafting_book_result_label.text = ""
+	crafting_book_result_label.modulate = Color(0.9, 0.85, 0.6)
+	details_panel.add_child(crafting_book_result_label)
+
+	# Right panel -- scrollable Class > Type > Subclass > Recipe list.
+	var list_panel = Panel.new()
+	list_panel.position = Vector2(420, 50)
+	list_panel.size = Vector2(560, 660)
+	list_panel.add_theme_stylebox_override("panel", _make_flat_style(Color(0.03, 0.06, 0.06)))
+	main_panel.add_child(list_panel)
+
+	crafting_book_back_button = Button.new()
+	crafting_book_back_button.text = "< Back to Schematics"
+	crafting_book_back_button.position = Vector2(10, 4)
+	crafting_book_back_button.custom_minimum_size = Vector2(150, 24)
+	crafting_book_back_button.focus_mode = Control.FOCUS_NONE
+	crafting_book_back_button.visible = false
+	crafting_book_back_button.pressed.connect(_exit_crafting_assembly)
+	list_panel.add_child(crafting_book_back_button)
+
+	var list_header = Label.new()
+	list_header.text = "Schematics"
+	list_header.position = Vector2(10, 4)
+	list_header.modulate = Color(0.6, 0.9, 0.9)
+	list_panel.add_child(list_header)
+
+	var list_scroll = ScrollContainer.new()
+	list_scroll.position = Vector2(10, 28)
+	list_scroll.size = Vector2(540, 622)
+	list_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	list_panel.add_child(list_scroll)
+
+	crafting_book_list_container = VBoxContainer.new()
+	crafting_book_list_container.custom_minimum_size = Vector2(525, 0)
+	crafting_book_list_container.add_theme_constant_override("separation", 2)
+	list_scroll.add_child(crafting_book_list_container)
 
 # Persists which category headers are currently collapsed, keyed by a
 # unique path string per book so Crafting and Survey book state never
@@ -3157,33 +5225,595 @@ func _make_crafting_book_header(text: String, indent: int, color: Color, categor
 	header.pressed.connect(_toggle_book_category.bind(category_key, refresh_callback))
 	return header
 
+func _refresh_crafting_book() -> void:
+	for child in crafting_book_list_container.get_children():
+		child.queue_free()
+
+	crafting_book_details_label.text = "Select a recipe to view what it takes to craft."
+	crafting_book_result_label.text = ""
+	selected_recipe_index = -1
+	crafting_assembly_recipe_index = -1
+	crafting_assembly_selections.clear()
+	crafting_book_back_button.visible = false
+	crafting_book_craft_button.text = "Choose Resources"
+	if crafting_book_craft_button.pressed.is_connected(_execute_assembly_craft):
+		crafting_book_craft_button.pressed.disconnect(_execute_assembly_craft)
+	if not crafting_book_craft_button.pressed.is_connected(_enter_crafting_assembly):
+		crafting_book_craft_button.pressed.connect(_enter_crafting_assembly)
+
+	# Build nested Class -> Type -> Subclass -> [recipe_index] groups.
+	var grouped: Dictionary = {}
+	for i in range(GameData.recipes.size()):
+		var recipe = GameData.recipes[i]
+		if recipe.has("requires_profession") and not professions_unlocked.get(recipe["requires_profession"], false):
+			continue
+
+		var cat = _categorize_recipe_for_book(recipe)
+		if not grouped.has(cat["class"]):
+			grouped[cat["class"]] = {}
+		var type_key = cat["type"] if cat["type"] != "" else "_flat_"
+		if not grouped[cat["class"]].has(type_key):
+			grouped[cat["class"]][type_key] = {}
+		var subclass_key = cat["subclass"] if cat["subclass"] != "" else "_flat_"
+		if not grouped[cat["class"]][type_key].has(subclass_key):
+			grouped[cat["class"]][type_key][subclass_key] = []
+		grouped[cat["class"]][type_key][subclass_key].append(i)
+
+	var class_order = ["Melee Weapon", "Ranged Weapon", "Tool", "Component", "Medicine", "Material"]
+	for class_name_key in class_order:
+		if not grouped.has(class_name_key):
+			continue
+
+		var class_category_key = "craft:" + class_name_key
+		crafting_book_list_container.add_child(_make_crafting_book_header(class_name_key, 0, Color(0.85, 0.7, 0.3), class_category_key, _refresh_crafting_book))
+
+		if book_category_collapsed.get(class_category_key, false):
+			continue
+
+		var type_keys = grouped[class_name_key].keys()
+		type_keys.sort()
+		for type_key in type_keys:
+			var type_category_key = class_category_key + "/" + type_key
+			if type_key != "_flat_":
+				crafting_book_list_container.add_child(_make_crafting_book_header(type_key, 1, Color(0.7, 0.85, 0.85), type_category_key, _refresh_crafting_book))
+				if book_category_collapsed.get(type_category_key, false):
+					continue
+
+			var subclass_keys = grouped[class_name_key][type_key].keys()
+			subclass_keys.sort()
+			for subclass_key in subclass_keys:
+				var indent = 1 if type_key == "_flat_" else 2
+				var subclass_category_key = type_category_key + "/" + subclass_key
+				if subclass_key != "_flat_":
+					crafting_book_list_container.add_child(_make_crafting_book_header(subclass_key, indent, Color(0.6, 0.75, 0.75), subclass_category_key, _refresh_crafting_book))
+					if book_category_collapsed.get(subclass_category_key, false):
+						continue
+
+				var recipe_indices = grouped[class_name_key][type_key][subclass_key]
+				var button_indent = indent if subclass_key == "_flat_" else indent + 1
+				for recipe_index in recipe_indices:
+					var btn = Button.new()
+					btn.text = "  ".repeat(button_indent) + GameData.recipes[recipe_index]["name"]
+					btn.custom_minimum_size = Vector2(510, 30)
+					btn.focus_mode = Control.FOCUS_NONE
+					btn.pressed.connect(_select_crafting_book_recipe.bind(recipe_index))
+					crafting_book_list_container.add_child(btn)
+
+# Builds the "Hilt: 2 Metal, 1 Torn Cloth" style breakdown, grouped by
+# slot_names when a recipe has them (weapons), or a flat list when it
+# doesn't (tools, medicine, simple materials).
+func _get_ingredient_breakdown_text(recipe: Dictionary) -> String:
+	var lines: Array = []
+
+	if recipe.has("item_class") and recipe.has("item_subclass"):
+		lines.append(recipe["item_class"] + " (" + recipe["item_subclass"] + ")")
+		lines.append("")
+
+	if recipe.has("slot_names"):
+		for requirement_key in recipe["requires"].keys():
+			var needed = recipe["requires"][requirement_key]
+			var slot_label = recipe["slot_names"].get(requirement_key, requirement_key)
+			lines.append(slot_label)
+			lines.append("  " + str(needed) + " " + requirement_key)
+			lines.append("")
+	else:
+		lines.append("Requires:")
+		for requirement_key in recipe["requires"].keys():
+			var needed = recipe["requires"][requirement_key]
+			lines.append("  " + str(needed) + " " + requirement_key)
+
+	return "\n".join(lines)
+
+func _select_crafting_book_recipe(recipe_index: int) -> void:
+	selected_recipe_index = recipe_index
+	crafting_book_result_label.text = ""
+	crafting_book_details_label.text = _get_ingredient_breakdown_text(GameData.recipes[recipe_index])
+
+# Finds the first inventory stack matching a requirement, used to
+# pre-select a sensible default when entering Assembly for a slot.
+func _find_first_matching_instance(requirement_key: String) -> String:
+	for instance_name in inventory.keys():
+		if inventory[instance_name] > 0 and _matches_requirement(instance_name, requirement_key):
+			return instance_name
+	return ""
+
+# Switches the right panel from the schematic browser into the
+# Assembly step for the currently selected recipe -- this is where the
+# player picks exactly which resource stack fills each slot and sees
+# a live projected-quality preview before committing, similar in
+# spirit to SWG's assembly screen (not its exact formulas or look).
+func _enter_crafting_assembly() -> void:
+	if selected_recipe_index == -1:
+		crafting_book_result_label.text = "Select a recipe first!"
+		return
+
+	crafting_assembly_recipe_index = selected_recipe_index
+	crafting_assembly_selections.clear()
+
+	var recipe = GameData.recipes[crafting_assembly_recipe_index]
+	for requirement_key in recipe["requires"].keys():
+		var default_instance = _find_first_matching_instance(requirement_key)
+		if default_instance != "":
+			crafting_assembly_selections[requirement_key] = default_instance
+
+	crafting_book_back_button.visible = true
+	_refresh_crafting_assembly_view()
+
+func _exit_crafting_assembly() -> void:
+	_refresh_crafting_book()
+
+func _select_assembly_instance(requirement_key: String, instance_name: String) -> void:
+	crafting_assembly_selections[requirement_key] = instance_name
+	_refresh_crafting_assembly_view()
+
+# Rebuilds the right panel's contents as the per-slot resource picker,
+# and the left panel's contents as the live projected-quality preview.
+func _refresh_crafting_assembly_view() -> void:
+	for child in crafting_book_list_container.get_children():
+		child.queue_free()
+
+	var recipe = GameData.recipes[crafting_assembly_recipe_index]
+
+	var recipe_title = _make_plain_header(recipe["name"], 0, Color(0.85, 0.7, 0.3))
+	crafting_book_list_container.add_child(recipe_title)
+
+	for requirement_key in recipe["requires"].keys():
+		var needed = recipe["requires"][requirement_key]
+		var slot_label = recipe.get("slot_names", {}).get(requirement_key, requirement_key)
+
+		crafting_book_list_container.add_child(_make_plain_header(slot_label + " (needs " + str(needed) + " " + requirement_key + ")", 1, Color(0.7, 0.85, 0.85)))
+
+		var found_any = false
+		for instance_name in inventory.keys():
+			if inventory[instance_name] <= 0:
+				continue
+			if not _matches_requirement(instance_name, requirement_key):
+				continue
+
+			found_any = true
+			var is_selected = crafting_assembly_selections.get(requirement_key, "") == instance_name
+
+			var btn = Button.new()
+			btn.text = "  " + _get_leaf_label(instance_name) + " (" + str(inventory[instance_name]) + " available)" + (" [SELECTED]" if is_selected else "")
+			btn.custom_minimum_size = Vector2(510, 28)
+			btn.focus_mode = Control.FOCUS_NONE
+			var btn_color = TALENT_OWNED_COLOR if is_selected else TALENT_UNLEARNED_COLOR
+			var btn_style = _make_flat_style(btn_color)
+			btn.add_theme_stylebox_override("normal", btn_style)
+			btn.add_theme_stylebox_override("hover", btn_style)
+			btn.add_theme_stylebox_override("pressed", btn_style)
+			btn.add_theme_stylebox_override("focus", btn_style)
+			btn.pressed.connect(_select_assembly_instance.bind(requirement_key, instance_name))
+			crafting_book_list_container.add_child(btn)
+
+		if not found_any:
+			var none_label = Label.new()
+			none_label.text = "  (none available)"
+			none_label.modulate = Color(0.7, 0.3, 0.3)
+			crafting_book_list_container.add_child(none_label)
+
+	crafting_book_craft_button.text = "Assemble"
+	if crafting_book_craft_button.pressed.is_connected(_enter_crafting_assembly):
+		crafting_book_craft_button.pressed.disconnect(_enter_crafting_assembly)
+	if not crafting_book_craft_button.pressed.is_connected(_execute_assembly_craft):
+		crafting_book_craft_button.pressed.connect(_execute_assembly_craft)
+
+	_update_assembly_preview()
+
+# Live preview of what the current resource selections would produce
+# -- our own version of "see how resources affect the build" before
+# committing, not a copy of any specific game's exact formula/look.
+func _update_assembly_preview() -> void:
+	var recipe = GameData.recipes[crafting_assembly_recipe_index]
+
+	var lines: Array = []
+	lines.append(recipe["name"])
+	lines.append("")
+
+	var all_slots_filled = true
+
+	for requirement_key in recipe["requires"].keys():
+		var needed = recipe["requires"][requirement_key]
+		var slot_label = recipe.get("slot_names", {}).get(requirement_key, requirement_key)
+		var instance_name = crafting_assembly_selections.get(requirement_key, "")
+
+		if instance_name == "":
+			lines.append(slot_label + ": (none selected)")
+			all_slots_filled = false
+			continue
+
+		var available = inventory.get(instance_name, 0)
+
+		lines.append(slot_label + " <- " + _get_leaf_label(instance_name))
+		if available < needed:
+			lines.append("  NOT ENOUGH (" + str(available) + " / " + str(needed) + ")")
+			all_slots_filled = false
+
+	lines.append("")
+
+	if not all_slots_filled:
+		lines.append("Fill every slot with enough of the right resource before assembling.")
+
+	crafting_book_details_label.text = "\n".join(lines)
+
+# Commits the craft using the SPECIFIC resource stacks chosen in
+# Assembly, rather than auto-picking from inventory like the old
+# flow -- this is the actual "Assemble" action.
+func _execute_assembly_craft() -> void:
+	var recipe = GameData.recipes[crafting_assembly_recipe_index]
+
+	if recipe.has("requires_profession") and not professions_unlocked.get(recipe["requires_profession"], false):
+		crafting_book_result_label.text = "You haven't learned this pattern!"
+		return
+
+	var total_weighted = 0.0
+	var total_weight = 0
+
+	for requirement_key in recipe["requires"].keys():
+		var needed = recipe["requires"][requirement_key]
+		var instance_name = crafting_assembly_selections.get(requirement_key, "")
+
+		if instance_name == "":
+			crafting_book_result_label.text = "Every slot needs a resource selected first!"
+			return
+
+		var available = inventory.get(instance_name, 0)
+		if available < needed:
+			crafting_book_result_label.text = "Not enough " + _get_leaf_label(instance_name) + " for that slot!"
+			return
+
+	for requirement_key in recipe["requires"].keys():
+		var needed = recipe["requires"][requirement_key]
+		var instance_name = crafting_assembly_selections[requirement_key]
+
+		var counts_toward_quality = not recipe.has("quality_ingredients") or recipe["quality_ingredients"].has(requirement_key)
+		if counts_toward_quality:
+			var stack_score = _get_weighted_stack_score(instance_name, requirement_key, recipe)
+			total_weighted += stack_score * needed
+			total_weight += needed
+
+		inventory[instance_name] -= needed
+
+	var base_quality = 50
+	if total_weight > 0:
+		base_quality = round(total_weighted / total_weight)
+
+	var finalize_result = _finalize_crafted_item(recipe, base_quality)
+	var result_text = finalize_result["text"]
+	var crafted_item_key = finalize_result["item_key"]
+	crafting_book_result_label.text = result_text
+
+	var article = _get_article(recipe["output"])
+	_show_combat_message("You have successfully crafted " + article + " " + recipe["output"] + "!")
+
+	_exit_crafting_assembly()
+	_show_crafting_result_popup(crafted_item_key)
+
 # --- Completed Item Popup ---
-# Shows the finished item right after Assemble, with its full stats —
+# Shows the finished item right after Assemble, with its full stats --
 # separate from the Crafting Book itself so it reads as a clear
 # "here's what you made" moment rather than just more list text.
 # Includes a placeholder Mod Slots section now specifically so the
 # layout already has a home for that feature when it's built later,
 # rather than needing this window redesigned at that point.
 
-# Completed Item Popup now lives in its own script
-# (CraftingResultPopup.gd) — same pattern as TalentViewer.gd.
 func _build_crafting_result_ui() -> void:
-	crafting_result_ui = preload("res://scenes/CraftingResultPopup.gd").new()
-	crafting_result_ui.main = self
+	crafting_result_ui = Control.new()
+	crafting_result_ui.name = "CraftingResultUI"
+	crafting_result_ui.anchor_right = 1
+	crafting_result_ui.anchor_bottom = 1
+	crafting_result_ui.visible = false
+	crafting_result_ui.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	$UILayer.add_child(crafting_result_ui)
-	crafting_result_ui._build_crafting_result_ui()
+
+	var backdrop = ColorRect.new()
+	backdrop.color = Color(0, 0, 0, 0.65)
+	backdrop.anchor_right = 1
+	backdrop.anchor_bottom = 1
+	backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	crafting_result_ui.add_child(backdrop)
+
+	var main_panel = Panel.new()
+	main_panel.position = Vector2(760, 290)
+	main_panel.size = Vector2(400, 500)
+	main_panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	main_panel.add_theme_stylebox_override("panel", _make_flat_style(Color(0.043, 0.086, 0.086)))
+	crafting_result_ui.add_child(main_panel)
+
+	var title_label = Label.new()
+	title_label.text = "Item Crafted!"
+	title_label.position = Vector2(20, 10)
+	title_label.modulate = Color(0.6, 0.9, 0.9)
+	title_label.add_theme_font_size_override("font_size", 18)
+	main_panel.add_child(title_label)
+
+	var close_button = Button.new()
+	close_button.text = "X"
+	close_button.position = Vector2(360, 8)
+	close_button.custom_minimum_size = Vector2(30, 30)
+	close_button.focus_mode = Control.FOCUS_NONE
+	close_button.pressed.connect(func(): crafting_result_ui.visible = false)
+	main_panel.add_child(close_button)
+
+	var stats_scroll = ScrollContainer.new()
+	stats_scroll.position = Vector2(15, 46)
+	stats_scroll.size = Vector2(370, 300)
+	stats_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	main_panel.add_child(stats_scroll)
+
+	crafting_result_label = Label.new()
+	crafting_result_label.custom_minimum_size = Vector2(355, 0)
+	crafting_result_label.autowrap_mode = TextServer.AUTOWRAP_WORD
+	crafting_result_label.text = ""
+	crafting_result_label.modulate = Color(0.85, 0.95, 0.95)
+	stats_scroll.add_child(crafting_result_label)
+
+	var mod_slots_header = Label.new()
+	mod_slots_header.text = "Mod Slots"
+	mod_slots_header.position = Vector2(15, 356)
+	mod_slots_header.modulate = Color(0.6, 0.9, 0.9)
+	main_panel.add_child(mod_slots_header)
+
+	var mod_slots_panel = Panel.new()
+	mod_slots_panel.position = Vector2(15, 380)
+	mod_slots_panel.size = Vector2(370, 90)
+	mod_slots_panel.add_theme_stylebox_override("panel", _make_flat_style(Color(0.03, 0.06, 0.06)))
+	main_panel.add_child(mod_slots_panel)
+
+	crafting_result_mod_slots_label = Label.new()
+	crafting_result_mod_slots_label.position = Vector2(10, 8)
+	crafting_result_mod_slots_label.size = Vector2(350, 74)
+	crafting_result_mod_slots_label.autowrap_mode = TextServer.AUTOWRAP_WORD
+	crafting_result_mod_slots_label.text = "No mod slots installed yet. Adding item mods is a planned feature."
+	crafting_result_mod_slots_label.modulate = Color(0.6, 0.6, 0.6)
+	mod_slots_panel.add_child(crafting_result_mod_slots_label)
+
+	var continue_button = Button.new()
+	continue_button.text = "Continue"
+	continue_button.position = Vector2(15, 460)
+	continue_button.custom_minimum_size = Vector2(370, 30)
+	continue_button.focus_mode = Control.FOCUS_NONE
+	continue_button.pressed.connect(func(): crafting_result_ui.visible = false)
+	main_panel.add_child(continue_button)
+
+func _show_crafting_result_popup(item_key: String) -> void:
+	var display_name = _get_inventory_display_name(item_key)
+	var stats = inventory_stats.get(item_key, {})
+
+	var lines: Array = []
+	lines.append(display_name)
+	lines.append("")
+
+	var stat_lines: Array = []
+	for stat_name in stats.keys():
+		if stat_name == "Quality":
+			continue
+		stat_lines.append(stat_name + ": " + _format_number(stats[stat_name]))
+
+	if stat_lines.size() == 0:
+		lines.append("No additional stats.")
+	else:
+		lines.append_array(stat_lines)
+
+	crafting_result_label.text = "\n".join(lines)
+	crafting_result_ui.visible = true
 
 # --- Survey Book ---
 # A testing/reference UI for surveying, styled like the other books.
 # Deliberately does NOT show resource stats (Conductivity, Toughness,
-# etc.) anywhere on this screen — those stay exclusive to the
+# etc.) anywhere on this screen -- those stay exclusive to the
 # Inventory Book and Crafting Book, per request. This only shows
 # concentration %, matching what a real survey tool would tell you.
 
-# Survey Book now lives in its own script (SurveyBook.gd) — same
-# pattern as TalentViewer.gd.
 func _build_survey_book_ui() -> void:
-	survey_book_ui = preload("res://scenes/SurveyBook.gd").new()
-	survey_book_ui.main = self
+	survey_book_ui = Control.new()
+	survey_book_ui.name = "SurveyBookUI"
+	survey_book_ui.anchor_right = 1
+	survey_book_ui.anchor_bottom = 1
+	survey_book_ui.visible = false
+	survey_book_ui.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	$UILayer.add_child(survey_book_ui)
-	survey_book_ui._build_survey_book_ui()
+
+	var backdrop = ColorRect.new()
+	backdrop.color = Color(0, 0, 0, 0.6)
+	backdrop.anchor_right = 1
+	backdrop.anchor_bottom = 1
+	backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	survey_book_ui.add_child(backdrop)
+
+	var main_panel = Panel.new()
+	main_panel.position = Vector2(510, 215)
+	main_panel.size = Vector2(900, 650)
+	main_panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	main_panel.add_theme_stylebox_override("panel", _make_flat_style(Color(0.043, 0.086, 0.086)))
+	survey_book_ui.add_child(main_panel)
+
+	var title_label = Label.new()
+	title_label.text = "Survey"
+	title_label.position = Vector2(20, 8)
+	title_label.modulate = Color(0.6, 0.9, 0.9)
+	main_panel.add_child(title_label)
+
+	var close_button = Button.new()
+	close_button.text = "X"
+	close_button.position = Vector2(860, 6)
+	close_button.custom_minimum_size = Vector2(30, 30)
+	close_button.focus_mode = Control.FOCUS_NONE
+	close_button.pressed.connect(func(): survey_book_ui.visible = false)
+	main_panel.add_child(close_button)
+
+	# Left panel -- concentration reading and Sample button. No stats.
+	var details_panel = Panel.new()
+	details_panel.position = Vector2(20, 50)
+	details_panel.size = Vector2(320, 560)
+	details_panel.add_theme_stylebox_override("panel", _make_flat_style(Color(0.03, 0.06, 0.06)))
+	main_panel.add_child(details_panel)
+
+	var details_header = Label.new()
+	details_header.text = "Scan Result"
+	details_header.position = Vector2(10, 4)
+	details_header.modulate = Color(0.6, 0.9, 0.9)
+	details_panel.add_child(details_header)
+
+	survey_book_scan_label = Label.new()
+	survey_book_scan_label.position = Vector2(10, 30)
+	survey_book_scan_label.size = Vector2(300, 100)
+	survey_book_scan_label.autowrap_mode = TextServer.AUTOWRAP_WORD
+	survey_book_scan_label.text = "Select a resource to scan it."
+	survey_book_scan_label.modulate = Color(0.85, 0.95, 0.95)
+	details_panel.add_child(survey_book_scan_label)
+
+	survey_book_sample_button = Button.new()
+	survey_book_sample_button.text = "Sample"
+	survey_book_sample_button.position = Vector2(10, 140)
+	survey_book_sample_button.custom_minimum_size = Vector2(300, 36)
+	survey_book_sample_button.focus_mode = Control.FOCUS_NONE
+	survey_book_sample_button.pressed.connect(_on_sample_pressed)
+	details_panel.add_child(survey_book_sample_button)
+
+	survey_book_message_label = Label.new()
+	survey_book_message_label.position = Vector2(10, 184)
+	survey_book_message_label.size = Vector2(300, 80)
+	survey_book_message_label.autowrap_mode = TextServer.AUTOWRAP_WORD
+	survey_book_message_label.text = ""
+	survey_book_message_label.modulate = Color(0.9, 0.85, 0.6)
+	details_panel.add_child(survey_book_message_label)
+
+	# Right panel -- scrollable Class > Subclass > active resource list.
+	var list_panel = Panel.new()
+	list_panel.position = Vector2(360, 50)
+	list_panel.size = Vector2(520, 560)
+	list_panel.add_theme_stylebox_override("panel", _make_flat_style(Color(0.03, 0.06, 0.06)))
+	main_panel.add_child(list_panel)
+
+	var list_header = Label.new()
+	list_header.text = "Active Resources"
+	list_header.position = Vector2(10, 4)
+	list_header.modulate = Color(0.6, 0.9, 0.9)
+	list_panel.add_child(list_header)
+
+	var list_scroll = ScrollContainer.new()
+	list_scroll.position = Vector2(10, 28)
+	list_scroll.size = Vector2(500, 522)
+	list_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	list_panel.add_child(list_scroll)
+
+	survey_book_list_container = VBoxContainer.new()
+	survey_book_list_container.custom_minimum_size = Vector2(485, 0)
+	survey_book_list_container.add_theme_constant_override("separation", 2)
+	list_scroll.add_child(survey_book_list_container)
+
+func _refresh_survey_book() -> void:
+	for child in survey_book_list_container.get_children():
+		child.queue_free()
+
+	survey_book_scan_label.text = "Select a resource to scan it."
+	survey_book_message_label.text = ""
+
+	var tree_data: Dictionary = {}
+	for instance_name in active_resources:
+		var subclass_name = resource_subclass_of[instance_name]
+		var class_name_for_resource = resource_class_lookup[subclass_name]
+		if not tree_data.has(class_name_for_resource):
+			tree_data[class_name_for_resource] = {}
+		if not tree_data[class_name_for_resource].has(subclass_name):
+			tree_data[class_name_for_resource][subclass_name] = []
+		tree_data[class_name_for_resource][subclass_name].append(instance_name)
+
+	var unlocked_classes = []
+	if active_survey_tool != "" and tool_class_access.has(active_survey_tool):
+		unlocked_classes = tool_class_access[active_survey_tool]
+	else:
+		unlocked_classes = _get_unlocked_classes()
+
+	var class_names_sorted = []
+	for class_name_key in tree_data.keys():
+		if unlocked_classes.has(class_name_key):
+			class_names_sorted.append(class_name_key)
+	class_names_sorted.sort()
+
+	for class_name_key in class_names_sorted:
+		var class_category_key = "survey:" + class_name_key
+		survey_book_list_container.add_child(_make_crafting_book_header(class_name_key, 0, Color(0.85, 0.7, 0.3), class_category_key, _refresh_survey_book))
+
+		if book_category_collapsed.get(class_category_key, false):
+			continue
+
+		var subclass_names_sorted = tree_data[class_name_key].keys()
+		subclass_names_sorted.sort()
+
+		for subclass_name in subclass_names_sorted:
+			if gem_gated_subclasses.has(subclass_name) and not _is_gem_scanning_unlocked():
+				continue
+
+			var subclass_category_key = class_category_key + "/" + subclass_name
+			survey_book_list_container.add_child(_make_crafting_book_header(subclass_name, 1, Color(0.7, 0.85, 0.85), subclass_category_key, _refresh_survey_book))
+
+			if book_category_collapsed.get(subclass_category_key, false):
+				continue
+
+			var instances = tree_data[class_name_key][subclass_name]
+			instances.sort_custom(func(a, b): return resource_type_of[a] < resource_type_of[b])
+
+			for instance_name in instances:
+				var btn = Button.new()
+				btn.text = "    " + _get_leaf_label(instance_name)
+				btn.custom_minimum_size = Vector2(470, 28)
+				btn.focus_mode = Control.FOCUS_NONE
+				btn.pressed.connect(_select_survey_book_resource.bind(instance_name))
+				survey_book_list_container.add_child(btn)
+
+# Scans a resource -- same math as the old resource_tree selection
+# (nearest-hotspot concentration, Scanning XP, skill bonuses), just
+# without ever displaying resource_stats anywhere on this screen.
+func _select_survey_book_resource(instance_name: String) -> void:
+	if not resource_hotspots.has(instance_name):
+		resource_hotspot_centers[instance_name] = player.global_position
+		resource_hotspots[instance_name] = _generate_hotspot_set(resource_hotspot_centers[instance_name])
+
+	var distance = _get_nearest_hotspot_distance(instance_name)
+	var proximity = 1.0 - clamp(distance / MAX_CONCENTRATION_RANGE, 0.0, 1.0)
+	var concentration = int(round(100 * proximity))
+	concentration = max(concentration, 1)
+
+	var scanning_nodes = _get_scrap_tinkerer_rank_count("Scanning")
+	var mastery_nodes = _get_scrap_tinkerer_rank_count("Fabrication Mastery")
+	concentration += (scanning_nodes * 5) + (mastery_nodes * 2)
+	concentration = min(concentration, 100)
+
+	current_scan_resource = instance_name
+	current_scan_concentration = concentration
+
+	_add_skill_xp("Scanning", 5)
+
+	survey_book_scan_label.text = _get_resource_display_label(instance_name) + ": " + str(concentration) + "% concentration"
+	survey_book_message_label.text = ""
+
+	# Keep the old survey_ui's labels in sync too, since they share
+	# the same current_scan_resource/current_scan_concentration state.
+	scan_result_label.text = survey_book_scan_label.text
+	var stats_text = ""
+	var stats = resource_stats[instance_name]
+	for stat_name in stats.keys():
+		stats_text += stat_name + ": " + _format_number(stats[stat_name]) + "   "
+	resource_stats_label.text = stats_text

@@ -38,6 +38,28 @@ const RANGED_WEAPON_CLASSES = ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotg
 # "subclass" come back as "" when they wouldn't add a meaningful
 # extra level (e.g. Tools have no sub-type, and most ranged weapons'
 # item_subclass just repeats item_class).
+# Checks whether a recipe can currently be crafted. "requires_profession"
+# alone (e.g. Med Crafting Kit, or the Ordnance Specialist launchers)
+# just needs that profession unlocked at all. An optional
+# "requires_box" alongside it narrows that down to a specific rank
+# within that profession (e.g. "Crafting II" — Workbench Basics/Fine
+# Tuning/Quality Assembly aren't separate professions, just Scrap
+# Tinkerer's own Crafting column ranks).
+func _recipe_is_unlocked(recipe: Dictionary) -> bool:
+	if not recipe.has("requires_profession"):
+		return true
+
+	var profession_name = recipe["requires_profession"]
+	if not main.professions_unlocked.get(profession_name, false):
+		return false
+
+	if recipe.has("requires_box"):
+		var box_data = GameData.novice_professions[profession_name]["paths"][recipe["requires_box"]]
+		if box_data["unlocked_nodes"] < 1:
+			return false
+
+	return true
+
 func _categorize_recipe_for_book(recipe: Dictionary) -> Dictionary:
 	var item_class = recipe.get("item_class", "")
 	var item_subclass = recipe.get("item_subclass", "")
@@ -187,7 +209,7 @@ func _refresh_crafting_book() -> void:
 	var grouped: Dictionary = {}
 	for i in range(GameData.recipes.size()):
 		var recipe = GameData.recipes[i]
-		if recipe.has("requires_profession") and not main.professions_unlocked.get(recipe["requires_profession"], false):
+		if not _recipe_is_unlocked(recipe):
 			continue
 
 		var cat = _categorize_recipe_for_book(recipe)
@@ -404,7 +426,7 @@ func _update_assembly_preview() -> void:
 func _execute_assembly_craft() -> void:
 	var recipe = GameData.recipes[crafting_assembly_recipe_index]
 
-	if recipe.has("requires_profession") and not main.professions_unlocked.get(recipe["requires_profession"], false):
+	if not _recipe_is_unlocked(recipe):
 		crafting_book_result_label.text = "You haven't learned this pattern!"
 		return
 

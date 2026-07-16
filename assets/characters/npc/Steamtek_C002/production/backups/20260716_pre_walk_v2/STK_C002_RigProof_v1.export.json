@@ -1,0 +1,30 @@
+{
+  "source_blend": "C:\\My Game\\Steamtek-RPG\\assets\\characters\\npc\\Steamtek_C002\\blender\\Steamtek_C002_DetailedPrototype_v1_2.blend",
+  "output_glb": "C:\\Users\\bdjos\\Documents\\Codex\\2026-07-10\\steampunk-alleyway-map-chatgpt-conversation-6a5068ff\\character_3d_pipeline\\STK_C002_RigProof_v1.glb",
+  "armature": "Armature",
+  "bone_count": 706,
+  "mesh_count": 74,
+  "actions": [
+    {
+      "name": "STK_IDLE",
+      "frame_start": 1.0,
+      "frame_end": 8.0
+    },
+    {
+      "name": "STK_WALK",
+      "frame_start": 1.0,
+      "frame_end": 8.0
+    }
+  ],
+  "export_kwargs": {
+    "filepath": "C:\\Users\\bdjos\\Documents\\Codex\\2026-07-10\\steampunk-alleyway-map-chatgpt-conversation-6a5068ff\\character_3d_pipeline\\STK_C002_RigProof_v1.glb",
+    "export_format": "GLB",
+    "use_selection": true,
+    "export_animations": true,
+    "export_skins": true,
+    "export_morph": true,
+    "export_yup": true,
+    "export_apply": false,
+    "export_animation_mode": "ACTIONS"
+  }
+}

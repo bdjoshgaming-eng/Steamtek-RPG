@@ -1,19 +1,19 @@
 extends Node
 
 # ============================================================
-# GameData.gd — autoload singleton
+# GameData.gd -- autoload singleton
 # ============================================================
 # Pulled out of main.gd (Pass 1 of splitting the file apart) so the
-# huge static data tables — recipes, professions, abilities, weapon
-# certs, elite prereqs, and display-name lookups — live in one place
+# huge static data tables -- recipes, professions, abilities, weapon
+# certs, elite prereqs, and display-name lookups -- live in one place
 # separate from all the runtime game logic. Everything here is still
 # read AND written at runtime exactly like before (e.g.
 # GameData.novice_professions[...]["unlocked_nodes"] += 1 still works
-# the same way it did as a plain script variable) — this is a location
+# the same way it did as a plain script variable) -- this is a location
 # change, not a behavior change.
 #
 # Every reference to these identifiers throughout main.gd (and any
-# other script) must be prefixed with "GameData." — e.g.
+# other script) must be prefixed with "GameData." -- e.g.
 # `novice_professions` became `GameData.novice_professions`.
 #
 # Setup required once in the Godot editor:
@@ -30,6 +30,7 @@ var recipes = [
 		"output": "Piston Blade",
 		"item_class": "Sword",
 		"item_subclass": "1 Handed",
+		"requires_profession": "Scrap Tinkerer",
 		"weapon_categorical_stats": {"Damage Type": "Slashing", "Wound Type": "Bleed"},
 		"weapon_stat_ranges": {"Speed": [2.8, 1.8], "Damage Rating": [8, 16], "Accuracy": [55, 75]}
 	},
@@ -41,6 +42,7 @@ var recipes = [
 		"output": "Piston Greatblade",
 		"item_class": "Sword",
 		"item_subclass": "2 Handed",
+		"requires_profession": "Scrap Tinkerer",
 		"weapon_categorical_stats": {"Damage Type": "Slashing", "Wound Type": "Bleed"},
 		"weapon_stat_ranges": {"Speed": [4.0, 3.0], "Damage Rating": [18, 32], "Accuracy": [40, 60]}
 	},
@@ -52,6 +54,7 @@ var recipes = [
 		"output": "Pressure Maul",
 		"item_class": "Hammer",
 		"item_subclass": "2 Handed",
+		"requires_profession": "Scrap Tinkerer",
 		"weapon_categorical_stats": {"Damage Type": "Blunt", "Wound Type": "Crush"},
 		"weapon_stat_ranges": {"Speed": [4.5, 3.2], "Damage Rating": [20, 36], "Accuracy": [35, 55]}
 	},
@@ -63,6 +66,7 @@ var recipes = [
 		"output": "Arc Rod",
 		"item_class": "Stun Stick",
 		"item_subclass": "1 Handed",
+		"requires_profession": "Scrap Tinkerer",
 		"weapon_categorical_stats": {"Damage Type": "Blunt", "Wound Type": "Stun"},
 		"weapon_stat_ranges": {"Speed": [2.4, 1.6], "Damage Rating": [6, 14], "Accuracy": [55, 75]}
 	},
@@ -74,6 +78,7 @@ var recipes = [
 		"output": "Riveted Knuckles",
 		"item_class": "Brass Knuckles",
 		"item_subclass": "1 Handed",
+		"requires_profession": "Scrap Tinkerer",
 		"weapon_categorical_stats": {"Damage Type": "Unarmed", "Wound Type": "Bruise"},
 		"weapon_stat_ranges": {"Speed": [1.8, 1.0], "Damage Rating": [5, 12], "Accuracy": [65, 85]}
 	},
@@ -131,41 +136,52 @@ var recipes = [
 		"name": "Antiseptic Salve",
 		"requires": {"Antiseptic Moss": 2, "Spring Water": 1},
 		"output": "Antiseptic Salve",
-		"item_class": "Medicine"
+		"item_class": "Medicine",
+		"requires_profession": "Apothecary",
+		"requires_box": "Medicine Crafting I"
 	},
 	{
 		"name": "Vitality Tonic",
 		"requires": {"Bloomwort": 1, "Torn Cloth": 5},
 		"output": "Vitality Tonic",
-		"item_class": "Medicine"
+		"item_class": "Medicine",
+		"requires_profession": "Apothecary",
+		"requires_box": "Medicine Crafting I"
 	},
 	{
 		"name": "Syringe",
 		"requires": {"Plastic": 2},
 		"output": "Syringe",
-		"item_class": "Component"
+		"item_class": "Component",
+		"requires_profession": "Apothecary",
+		"requires_box": "Medicine Crafting II"
 	},
 	{
 		"name": "Adrenaline Shot",
 		"requires": {"Syringe": 1, "Water": 2, "Healroot": 1},
 		"quality_ingredients": ["Water", "Healroot"],
 		"output": "Adrenaline Shot",
-		"item_class": "Medicine"
+		"item_class": "Medicine",
+		"requires_profession": "Apothecary",
+		"requires_box": "Medicine Crafting II"
 	},
 	{
 		"name": "Empty IV Bag",
 		"requires": {"Plastic": 3},
 		"output": "Empty IV Bag",
-		"item_class": "Component"
+		"item_class": "Component",
+		"requires_profession": "Apothecary",
+		"requires_box": "Medicine Crafting II"
 	},
 	{
-		"name": "Brass-and-Steel Pistol",
+		"name": "Rusty Pistol",
 		"requires": {"Gunmetal Steel": 4, "Copper": 2},
 		"slot_names": {"Gunmetal Steel": "Frame", "Copper": "Trigger"},
 		"stat_weights": {"Gunmetal Steel": {"Toughness": 0.5, "Pliability": 0.5}},
-		"output": "Brass-and-Steel Pistol",
+		"output": "Rusty Pistol",
 		"item_class": "Pistol",
 		"item_subclass": "Pistol",
+		"requires_profession": "Scrap Tinkerer",
 		"weapon_categorical_stats": {"Damage Type": "Kinetic", "Wound Type": "Puncture"},
 		"weapon_stat_ranges": {"Speed": [1.2, 0.6], "Damage Rating": [6, 14], "Range": [15, 25], "Ammo Capacity": [8, 15], "Reload Speed": [3.0, 1.5], "Accuracy": [65, 85]}
 	},
@@ -177,6 +193,7 @@ var recipes = [
 		"output": "Pneumatic Rifle",
 		"item_class": "Assault Rifle",
 		"item_subclass": "Assault Rifle",
+		"requires_profession": "Scrap Tinkerer",
 		"weapon_categorical_stats": {"Damage Type": "Kinetic", "Wound Type": "Puncture"},
 		"weapon_stat_ranges": {"Speed": [0.4, 0.15], "Damage Rating": [8, 18], "Range": [40, 70], "Ammo Capacity": [20, 35], "Reload Speed": [3.5, 2.0], "Accuracy": [45, 65]}
 	},
@@ -188,6 +205,7 @@ var recipes = [
 		"output": "Pneumatic Longrifle",
 		"item_class": "Sniper Rifle",
 		"item_subclass": "Sniper Rifle",
+		"requires_profession": "Scrap Tinkerer",
 		"weapon_categorical_stats": {"Damage Type": "Kinetic", "Wound Type": "Puncture"},
 		"weapon_stat_ranges": {"Speed": [3.0, 1.8], "Damage Rating": [30, 55], "Range": [100, 160], "Ammo Capacity": [4, 8], "Reload Speed": [4.0, 2.5], "Accuracy": [70, 90]}
 	},
@@ -199,8 +217,9 @@ var recipes = [
 		"output": "Pressure Scattergun",
 		"item_class": "Shotgun",
 		"item_subclass": "Shotgun",
+		"requires_profession": "Scrap Tinkerer",
 		"weapon_categorical_stats": {"Damage Type": "Kinetic", "Wound Type": "Laceration"},
-		"weapon_stat_ranges": {"Speed": [1.8, 1.0], "Damage Rating": [25, 45], "Range": [8, 15], "Ammo Capacity": [4, 8], "Reload Speed": [4.0, 2.5], "Accuracy": [40, 60]}
+		"weapon_stat_ranges": {"Speed": [3.5, 2.5], "Damage Rating": [22, 38], "Range": [8, 15], "Ammo Capacity": [4, 8], "Reload Speed": [5.0, 3.5], "Accuracy": [35, 55]}
 	},
 	{
 		"name": "Canister Launcher",
@@ -210,6 +229,7 @@ var recipes = [
 		"output": "Canister Launcher",
 		"item_class": "Grenade Launcher",
 		"item_subclass": "Grenade Launcher",
+		"requires_profession": "Ordnance Specialist",
 		"weapon_categorical_stats": {"Damage Type": "Explosive", "Wound Type": "Blast"},
 		"weapon_stat_ranges": {"Speed": [3.5, 2.2], "Damage Rating": [50, 90], "Range": [30, 60], "Ammo Capacity": [1, 4], "Reload Speed": [5.0, 3.0], "Accuracy": [35, 55]}
 	},
@@ -221,6 +241,7 @@ var recipes = [
 		"output": "Oil Burner",
 		"item_class": "Flame Thrower",
 		"item_subclass": "Flame Thrower",
+		"requires_profession": "Ordnance Specialist",
 		"weapon_categorical_stats": {"Damage Type": "Incendiary", "Wound Type": "Burn"},
 		"weapon_stat_ranges": {"Speed": [0.3, 0.1], "Damage Rating": [5, 10], "Range": [5, 12], "Ammo Capacity": [50, 100], "Reload Speed": [4.5, 3.0], "Accuracy": [50, 70]}
 	},
@@ -232,6 +253,8 @@ var recipes = [
 		"output": "Hydraulic Saber",
 		"item_class": "Sword",
 		"item_subclass": "1 Handed",
+		"requires_profession": "Scrap Tinkerer",
+		"requires_box": "Crafting I",
 		"weapon_categorical_stats": {"Damage Type": "Slashing", "Wound Type": "Bleed"},
 		"weapon_stat_ranges": {"Speed": [2.4, 1.5], "Damage Rating": [14, 26], "Accuracy": [60, 80]}
 	},
@@ -243,6 +266,8 @@ var recipes = [
 		"output": "Compression Sledge",
 		"item_class": "Hammer",
 		"item_subclass": "2 Handed",
+		"requires_profession": "Scrap Tinkerer",
+		"requires_box": "Crafting I",
 		"weapon_categorical_stats": {"Damage Type": "Blunt", "Wound Type": "Crush"},
 		"weapon_stat_ranges": {"Speed": [3.6, 2.4], "Damage Rating": [30, 50], "Accuracy": [40, 60]}
 	},
@@ -254,6 +279,8 @@ var recipes = [
 		"output": "Pneumatic Knuckles",
 		"item_class": "Brass Knuckles",
 		"item_subclass": "1 Handed",
+		"requires_profession": "Scrap Tinkerer",
+		"requires_box": "Crafting I",
 		"weapon_categorical_stats": {"Damage Type": "Unarmed", "Wound Type": "Bruise"},
 		"weapon_stat_ranges": {"Speed": [1.5, 0.8], "Damage Rating": [9, 18], "Accuracy": [70, 90]}
 	},
@@ -265,17 +292,21 @@ var recipes = [
 		"output": "Steam Baton",
 		"item_class": "Baton",
 		"item_subclass": "1 Handed",
+		"requires_profession": "Scrap Tinkerer",
+		"requires_box": "Crafting I",
 		"weapon_categorical_stats": {"Damage Type": "Blunt", "Wound Type": "Bruise"},
 		"weapon_stat_ranges": {"Speed": [2.2, 1.4], "Damage Rating": [12, 22], "Accuracy": [60, 80]}
 	},
 	{
-		"name": "Vented Longrifle",
+		"name": "Vented Long-Rifle",
 		"requires": {"Gunmetal Steel": 12, "Copper": 4, "Quartz": 3},
 		"slot_names": {"Gunmetal Steel": "Frame", "Copper": "Trigger", "Quartz": "Scope"},
 		"stat_weights": {"Gunmetal Steel": {"Toughness": 0.5, "Pliability": 0.5}},
-		"output": "Vented Longrifle",
+		"output": "Vented Long-Rifle",
 		"item_class": "Sniper Rifle",
 		"item_subclass": "Sniper Rifle",
+		"requires_profession": "Scrap Tinkerer",
+		"requires_box": "Crafting II",
 		"weapon_categorical_stats": {"Damage Type": "Kinetic", "Wound Type": "Puncture"},
 		"weapon_stat_ranges": {"Speed": [2.6, 1.5], "Damage Rating": [45, 75], "Range": [120, 190], "Ammo Capacity": [5, 10], "Reload Speed": [3.5, 2.2], "Accuracy": [75, 95]}
 	},
@@ -287,8 +318,23 @@ var recipes = [
 		"output": "Double-Bore Scattergun",
 		"item_class": "Shotgun",
 		"item_subclass": "Shotgun",
+		"requires_profession": "Scrap Tinkerer",
+		"requires_box": "Crafting II",
 		"weapon_categorical_stats": {"Damage Type": "Kinetic", "Wound Type": "Laceration"},
-		"weapon_stat_ranges": {"Speed": [2.2, 1.3], "Damage Rating": [35, 60], "Range": [10, 18], "Ammo Capacity": [2, 4], "Reload Speed": [4.5, 3.0], "Accuracy": [45, 65]}
+		"weapon_stat_ranges": {"Speed": [4.5, 3.2], "Damage Rating": [35, 60], "Range": [10, 18], "Ammo Capacity": [2, 4], "Reload Speed": [6.0, 4.5], "Accuracy": [35, 55]}
+	},
+	{
+		"name": "Copper Lined Gun",
+		"requires": {"Gunmetal Steel": 6, "Copper": 4, "Titanium": 1},
+		"slot_names": {"Gunmetal Steel": "Frame", "Copper": "Lining", "Titanium": "Barrel Coating"},
+		"stat_weights": {"Gunmetal Steel": {"Toughness": 0.5, "Pliability": 0.5}},
+		"output": "Copper Lined Gun",
+		"item_class": "Pistol",
+		"item_subclass": "Pistol",
+		"requires_profession": "Scrap Tinkerer",
+		"requires_box": "Crafting II",
+		"weapon_categorical_stats": {"Damage Type": "Kinetic", "Wound Type": "Puncture"},
+		"weapon_stat_ranges": {"Speed": [1.0, 0.5], "Damage Rating": [10, 22], "Range": [20, 32], "Ammo Capacity": [10, 18], "Reload Speed": [2.5, 1.2], "Accuracy": [70, 90]}
 	},
 	{
 		"name": "Pressure-Fed Launcher",
@@ -298,6 +344,7 @@ var recipes = [
 		"output": "Pressure-Fed Launcher",
 		"item_class": "Grenade Launcher",
 		"item_subclass": "Grenade Launcher",
+		"requires_profession": "Ordnance Specialist",
 		"weapon_categorical_stats": {"Damage Type": "Explosive", "Wound Type": "Blast"},
 		"weapon_stat_ranges": {"Speed": [3.0, 1.8], "Damage Rating": [65, 105], "Range": [35, 65], "Ammo Capacity": [2, 5], "Reload Speed": [4.5, 2.8], "Accuracy": [40, 60]}
 	},
@@ -305,25 +352,36 @@ var recipes = [
 		"name": "Mineral Survey Tool",
 		"requires": {"Metal": 5},
 		"output": "Mineral Survey Tool",
-		"item_class": "Tool"
+		"item_class": "Tool",
+		"requires_profession": "Scrap Tinkerer"
 	},
 	{
 		"name": "Flora Tool",
 		"requires": {"Metal": 5},
 		"output": "Flora Tool",
-		"item_class": "Tool"
+		"item_class": "Tool",
+		"requires_profession": "Scrap Tinkerer"
 	},
 	{
-		"name": "Steam and Oil Sniffer",
+		"name": "Liquid and Chem Tool",
 		"requires": {"Metal": 5},
-		"output": "Steam and Oil Sniffer",
-		"item_class": "Tool"
+		"output": "Liquid and Chem Tool",
+		"item_class": "Tool",
+		"requires_profession": "Scrap Tinkerer"
 	},
 	{
 		"name": "Rusty Crafting Kit",
 		"requires": {"Black Iron": 5, "Copper": 2},
 		"output": "Rusty Crafting Kit",
-		"item_class": "Tool"
+		"item_class": "Tool",
+		"requires_profession": "Scrap Tinkerer"
+	},
+	{
+		"name": "Med Crafting Kit",
+		"requires": {"Black Iron": 5, "Copper": 2},
+		"output": "Med Crafting Kit",
+		"item_class": "Tool",
+		"requires_profession": "Apothecary"
 	},
 	{
 		"name": "Weapon Muzzle",
@@ -332,6 +390,8 @@ var recipes = [
 		"output": "Weapon Muzzle",
 		"item_class": "Component",
 		"item_subclass": "Muzzle",
+		"requires_profession": "Scrap Tinkerer",
+		"requires_box": "Crafting III",
 		"weapon_stat_ranges": {"Damage Rating Bonus": [2, 6], "Range Bonus": [2, 8]}
 	}
 ]
@@ -339,20 +399,35 @@ var recipes = [
 
 # --- Weapon Certification Requirements ---
 # Tier-2 weapons deal half damage until the matching Rank II
-# certification box is owned — gives "Weapon Cert" real mechanical
+# certification box is owned -- gives "Weapon Cert" real mechanical
 # weight instead of being purely cosmetic.
 const WEAPON_CERT_REQUIREMENTS: Dictionary = {
+	"Piston Blade": {"profession": "Pressure Enforcer", "box": "Novice"},
+	"Piston Greatblade": {"profession": "Pressure Enforcer", "box": "Novice"},
+	"Pressure Maul": {"profession": "Pressure Enforcer", "box": "Novice"},
+	"Arc Rod": {"profession": "Pressure Enforcer", "box": "Novice"},
+	"Riveted Knuckles": {"profession": "Pressure Enforcer", "box": "Novice"},
 	"Hydraulic Saber": {"profession": "Pressure Enforcer", "box": "One Hand III"},
 	"Steam Baton": {"profession": "Pressure Enforcer", "box": "One Hand III"},
 	"Compression Sledge": {"profession": "Pressure Enforcer", "box": "Two Hand III"},
 	"Pneumatic Knuckles": {"profession": "Pressure Enforcer", "box": "Unarmed III"},
-	"Vented Longrifle": {"profession": "Chrome Gunner", "box": "Rifles II"},
-	"Double-Bore Scattergun": {"profession": "Chrome Gunner", "box": "Shotguns II"}
-	# Pressure-Fed Launcher's cert requirement was removed here — its
-	# "Heavy Weapons II" box no longer exists now that the Heavy Weapons
-	# tree was retired in favor of Pistols. It's fully effective/
-	# uncertified-penalty-free until it gets a new home (see
-	# Ordinance Specialist below).
+	"Rusty Pistol": {"profession": "Chrome Gunner", "box": "Novice"},
+	# Pneumatic Rifle is both Chrome Gunner's novice rifle AND
+	# Apothecary's starting weapon -- certified via either profession's
+	# Novice box, so a fresh Apothecary isn't penalized for using their
+	# own starting gear.
+	"Pneumatic Rifle": [
+		{"profession": "Chrome Gunner", "box": "Novice"},
+		{"profession": "Apothecary", "box": "Novice"}
+	],
+	"Pneumatic Longrifle": {"profession": "Chrome Gunner", "box": "Novice"},
+	"Pressure Scattergun": {"profession": "Chrome Gunner", "box": "Novice"},
+	"Vented Long-Rifle": {"profession": "Chrome Gunner", "box": "Rifles III"},
+	"Double-Bore Scattergun": {"profession": "Chrome Gunner", "box": "Shotguns III"},
+	"Copper Lined Gun": {"profession": "Chrome Gunner", "box": "Pistols III"},
+	"Canister Launcher": {"profession": "Ordnance Specialist", "box": "Novice"},
+	"Oil Burner": {"profession": "Ordnance Specialist", "box": "Novice"},
+	"Pressure-Fed Launcher": {"profession": "Ordnance Specialist", "box": "Novice"}
 }
 
 
@@ -497,7 +572,7 @@ var novice_professions: Dictionary = {
 	# Placeholder skeletons only, matching the base four professions'
 	# shape exactly (Novice, 4 ranked columns, Master) so they show up
 	# correctly in the Talent Viewer and are functionally purchasable
-	# node-by-node — but no TALENT_SKILL_REWARDS entries exist for any
+	# node-by-node -- but no TALENT_SKILL_REWARDS entries exist for any
 	# of these yet, so every box just displays "Not yet designed" /
 	# "Reserved for future stats" until they're actually designed.
 	# Entry into each is gated by ELITE_PROFESSION_PREREQS below.
@@ -647,9 +722,9 @@ const ELITE_PROFESSION_PREREQS: Dictionary = {
 # --- Talent Box Display Names ---
 
 # Structured "what this box grants" data. No tier/rank names appear in
-# the UI anywhere — only ability/weapon names and flat, numeric stat
+# the UI anywhere -- only ability/weapon names and flat, numeric stat
 # numbers (e.g. "+5 Attack Speed", not "+5% Attack Speed").
-# Cosmetic display names only — the underlying path_name keys (used for
+# Cosmetic display names only -- the underlying path_name keys (used for
 # prereqs, weapon certs, ability requires_box, TALENT_SKILL_REWARDS,
 # save data, etc.) are untouched. Kept deliberately plain/grounded for
 # now; the flashier naming is reserved for future advanced/elite
@@ -709,43 +784,43 @@ const TALENT_SKILL_REWARDS: Dictionary = {
 		"Novice": {"type": "novice_grants", "names": ["Aimed Shot", "Scatter Blast", "Suppressing Fire"]},
 		"Pistols I": {"type": "passive", "stats": []},
 		"Pistols II": {"type": "passive", "stats": []},
-		"Pistols III": {"type": "passive", "stats": []},
+		"Pistols III": {"type": "weapon", "name": "Copper Lined Gun"},
 		"Pistols IV": {"type": "passive", "stats": []},
 		"Shotguns I": {"type": "ability", "name": "Point-Blank Burst"},
-		"Shotguns II": {"type": "weapon", "name": "Double-Bore Scattergun"},
-		"Shotguns III": {"type": "ability", "name": "Buckshot Barrage"},
+		"Shotguns II": {"type": "passive", "stats": []},
+		"Shotguns III": {"type": "weapon", "name": "Double-Bore Scattergun"},
 		"Rifles I": {"type": "ability", "name": "Piercing Round"},
-		"Rifles II": {"type": "weapon", "name": "Vented Longrifle"},
-		"Rifles III": {"type": "ability", "name": "Suppressive Volley"},
+		"Rifles II": {"type": "passive", "stats": []},
+		"Rifles III": {"type": "weapon", "name": "Vented Long-Rifle"},
 		"Ranged Training I": {"type": "passive", "stats": [["Attack Speed", 5], ["Crit Chance", 3]]},
 		"Ranged Training II": {"type": "passive", "stats": [["Attack Speed", 5], ["Crit Chance", 3]]},
 		"Ranged Training III": {"type": "passive", "stats": [["Attack Speed", 5], ["Crit Chance", 3]]},
 		"Master": {"type": "ability", "name": "Bleeding"}
 	},
 	"Scrap Tinkerer": {
-		"Novice": {"type": "novice_grants", "names": ["Mineral Survey Tool", "Flora Tool", "Steam and Oil Sniffer", "Rusty Crafting Kit"]},
+		"Novice": {"type": "novice_grants", "names": ["Mineral Survey Tool", "Flora Tool", "Liquid and Chem Tool", "Rusty Crafting Kit"]},
 		"Scanning I": {"type": "passive", "stats": [["Scan Concentration", 5]]},
 		"Scanning II": {"type": "passive", "stats": [["Scan Concentration", 5]]},
 		"Scanning III": {"type": "passive", "stats": [["Scan Concentration", 5]]},
 		"Sampling I": {"type": "passive", "stats": [["Sample Speed", 10]]},
 		"Sampling II": {"type": "passive", "stats": [["Sample Speed", 10]]},
 		"Sampling III": {"type": "passive", "stats": [["Sample Speed", 10]]},
-		"Crafting I": {"type": "passive", "stats": [["Crafting Quality", 3]]},
-		"Crafting II": {"type": "passive", "stats": [["Crafting Quality", 3]]},
-		"Crafting III": {"type": "passive", "stats": [["Crafting Quality", 3]]},
+		"Crafting I": {"type": "passive", "stats": [["Crafting Quality", 3]], "recipe_unlocks": ["Hydraulic Saber", "Steam Baton", "Compression Sledge", "Pneumatic Knuckles"]},
+		"Crafting II": {"type": "passive", "stats": [["Crafting Quality", 3]], "recipe_unlocks": ["Vented Long-Rifle", "Double-Bore Scattergun", "Copper Lined Gun"]},
+		"Crafting III": {"type": "passive", "stats": [["Crafting Quality", 3]], "recipe_unlocks": ["Weapon Muzzle"]},
 		"Fabrication Mastery I": {"type": "passive", "stats": [["Scan Concentration", 2], ["Sample Speed", 5], ["Crafting Quality", 1]]},
 		"Fabrication Mastery II": {"type": "passive", "stats": [["Scan Concentration", 2], ["Sample Speed", 5], ["Crafting Quality", 1]]},
 		"Fabrication Mastery III": {"type": "passive", "stats": [["Scan Concentration", 2], ["Sample Speed", 5], ["Crafting Quality", 1]]},
 		"Master": {"type": "ability", "name": "Overclock"}
 	},
 	"Apothecary": {
-		"Novice": {"type": "novice_grants", "names": ["Apply Bandage"]},
+		"Novice": {"type": "novice_grants", "names": ["Apply Bandage", "Weapon Cert - Pneumatic Rifle", "Med Crafting Kit"]},
 		"Healing I": {"type": "passive", "stats": [["Healing Speed", 2], ["Healing Knowledge", 2]]},
 		"Healing II": {"type": "passive", "stats": [["Wound Care", 4]], "ability": "IV Drip"},
 		"Healing III": {"type": "passive", "stats": [["Wound Care", 4]]},
 		"Healing IV": {"type": "passive", "stats": [["Wound Care", 2]], "ability": "Healing Vapor"},
-		"Medicine Crafting I": {"type": "passive", "stats": [["Medicinal Knowledge", 4]]},
-		"Medicine Crafting II": {"type": "passive", "stats": [["Medicinal Knowledge", 4]]},
+		"Medicine Crafting I": {"type": "passive", "stats": [["Medicinal Knowledge", 4]], "recipe_unlocks": ["Antiseptic Salve", "Vitality Tonic"]},
+		"Medicine Crafting II": {"type": "passive", "stats": [["Medicinal Knowledge", 4]], "recipe_unlocks": ["Syringe", "Adrenaline Shot", "Empty IV Bag"]},
 		"Medicine Crafting III": {"type": "passive", "stats": [["Medicinal Knowledge", 4]]},
 		"Medicine Crafting IV": {"type": "passive", "stats": [["Medicine Potency", 2]]},
 		"Medical Foraging I": {"type": "passive", "stats": [["Foraging Chance", 1]]},

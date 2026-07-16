@@ -1,0 +1,64 @@
+{
+  "module_id": "SMV4_W101_FrontPlain",
+  "contract_id": "environment_off_axis_60_v4",
+  "camera_profile": "environment_fixed_off_axis_60_v2",
+  "render_size": [
+    640,
+    512
+  ],
+  "transparent": true,
+  "construction_world_step_front": [
+    1.0,
+    1.732051,
+    0.0
+  ],
+  "storey_height_blender_units": 1.396974619,
+  "anchors_pixels_y_down": {
+    "left": [
+      163.233,
+      413.89
+    ],
+    "right": [
+      476.768,
+      323.381
+    ],
+    "top_left": [
+      163.233,
+      194.89
+    ],
+    "top_right": [
+      476.768,
+      104.381
+    ]
+  },
+  "measured_front_delta": [
+    313.535,
+    -90.51
+  ],
+  "measured_storey_delta": [
+    -0.0,
+    -219.0
+  ],
+  "contract_front_delta": [
+    313.53399658203125,
+    -90.50900268554688
+  ],
+  "contract_storey_delta": [
+    0.0,
+    -219.0
+  ],
+  "art_direction": {
+    "style": "neo-industrial neo-punk",
+    "materials": [
+      "dark textured masonry",
+      "gunmetal",
+      "copper"
+    ],
+    "accents": [
+      "cyan",
+      "magenta"
+    ],
+    "victorian_ornament": false
+  },
+  "godot_scene": "SMV4_W101_FrontPlain_HD.tscn"
+}

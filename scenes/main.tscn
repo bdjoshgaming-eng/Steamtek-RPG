@@ -15,7 +15,6 @@
 [ext_resource type="PackedScene" uid="uid://ctf8wv81w77fl" path="res://scenes/effects/surface/FX003_RainMist.tscn" id="9_2f3dj"]
 [ext_resource type="PackedScene" uid="uid://dwdnqdwdkd0ia" path="res://assets/characters/player/Steamtek_C001/animations/walk/godot/Steamtek_C001_WalkVisual.tscn" id="11_jkv2x"]
 [ext_resource type="PackedScene" path="res://scenes/characters/npc/Steamtek_C002_NPC.tscn" id="12_jbj1t"]
-[ext_resource type="PackedScene" uid="uid://16to7u7qk0b1" path="res://scenes/levels/apartment/Apartment_Exterior_Working.tscn" id="15_muem4"]
 [ext_resource type="PackedScene" uid="uid://bb158t3te0x61" path="res://scenes/props/surface/P001_Street_Lamp.tscn" id="16_jbj1t"]
 [ext_resource type="Script" uid="uid://ty5kstb4j6n8" path="res://scenes/TrainerDialogue.gd" id="18_dp3eg"]
 
@@ -245,14 +244,19 @@ position = Vector2(453, 205)
 [node name="Buildings" type="Node2D" parent="World/YSortLayer" unique_id=985447406]
 y_sort_enabled = true
 
-[node name="Steamtek_Modular_BuildWorkspace" parent="World/YSortLayer/Buildings" unique_id=781370522 instance=ExtResource("15_muem4")]
-
 [node name="Interactables" type="Node2D" parent="World/YSortLayer" unique_id=1508044679]
 
 [node name="Dumpster" type="Node2D" parent="World/YSortLayer/Interactables" unique_id=1542370767]
 unique_name_in_owner = true
 
 [node name="DumpsterVisual" type="Polygon2D" parent="World/YSortLayer/Interactables/Dumpster" unique_id=830085733]
+unique_name_in_owner = true
+
+[node name="QuestBook" type="Node2D" parent="World/YSortLayer/Interactables" unique_id=1846728479]
+unique_name_in_owner = true
+position = Vector2(-250, 0)
+
+[node name="QuestBookVisual" type="Polygon2D" parent="World/YSortLayer/Interactables/QuestBook" unique_id=393875380]
 unique_name_in_owner = true
 
 [node name="Harvesters" type="Node2D" parent="World/YSortLayer" unique_id=420743345]

@@ -1,0 +1,22 @@
+{
+  "source_blend": "C:\\Users\\bdjos\\Documents\\Codex\\2026-07-10\\steampunk-alleyway-map-chatgpt-conversation-6a5068ff\\character_3d_pipeline\\Steamtek_C002_DetailedPrototype_v1_3.blend",
+  "output_blend": "C:\\Users\\bdjos\\Documents\\Codex\\2026-07-10\\steampunk-alleyway-map-chatgpt-conversation-6a5068ff\\character_3d_pipeline\\Steamtek_C002_DetailedPrototype_v1_3.blend",
+  "armature": "Armature",
+  "bone_count": 706,
+  "mesh_count": 294,
+  "action": "STK_WALK",
+  "previous_frame_range": [
+    1.0,
+    8.0
+  ],
+  "frame_range": [
+    1.0,
+    24.0
+  ],
+  "frame_count": 24,
+  "fps": 24,
+  "duration_seconds": 1.0,
+  "root_motion": false,
+  "geometry_changed": false,
+  "materials_changed": false
+}

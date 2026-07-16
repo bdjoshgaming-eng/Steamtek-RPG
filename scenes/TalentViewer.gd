@@ -4,7 +4,7 @@ extends Control
 # TalentViewer.gd
 # ============================================================
 # The Talent Viewer panel, pulled out of main.gd (Pass 2 of splitting
-# the file apart — see GameData.gd for Pass 1). This script is
+# the file apart -- see GameData.gd for Pass 1). This script is
 # attached to the TalentUI Control node itself, instantiated and added
 # to the scene by main.gd's _build_talent_ui(), which also sets `main`
 # below before calling build().
@@ -44,7 +44,7 @@ func _get_elites_requiring(profession_name: String, box_name: String) -> Array:
 				result.append(elite_name)
 	return result
 
-# Display text for a single box (left "Unlockable" panel) — just the
+# Display text for a single box (left "Unlockable" panel) -- just the
 # ability/weapon name, flat stat lines, or a not-yet-designed fallback
 # for any profession not built out yet. No tier name, no path name.
 func _get_talent_box_display(profession_name: String, path_name: String) -> String:
@@ -73,13 +73,16 @@ func _get_talent_box_display(profession_name: String, path_name: String) -> Stri
 			if reward.has("weapons"):
 				for granted_weapon in reward["weapons"]:
 					lines.append("Weapon Cert - " + granted_weapon)
+			if reward.has("recipe_unlocks"):
+				for recipe_name in reward["recipe_unlocks"]:
+					lines.append("Recipe: " + recipe_name)
 			if lines.size() == 0:
 				return "Reserved for future stats"
 			return "\n".join(lines)
 		_:
 			return "Not yet designed"
 
-# Whole-profession summary (right "Learned" panel) — lists every
+# Whole-profession summary (right "Learned" panel) -- lists every
 # learned ability by name, then combined totals for passive stats
 # (e.g. two owned Martial Training ranks that both grant One Hand Speed =
 # one combined "+4 One Hand Speed" line, not two separate "+2" lines).
@@ -174,7 +177,7 @@ func _build_talent_ui() -> void:
 	profession_list.add_theme_constant_override("separation", 4)
 	profession_scroll.add_child(profession_list)
 
-	# Basic professions first, then Elite — Elite membership is
+	# Basic professions first, then Elite -- Elite membership is
 	# determined by GameData.ELITE_PROFESSION_PREREQS, so this list stays in
 	# sync automatically if more Elite Professions are added later.
 	var basic_header = Label.new()
@@ -195,7 +198,7 @@ func _build_talent_ui() -> void:
 		p_button.pressed.connect(_talent_select_profession.bind(profession_name))
 		profession_list.add_child(p_button)
 
-	# Spacer between the Basic and Elite groups — more breathing room
+	# Spacer between the Basic and Elite groups -- more breathing room
 	# than the list's normal 4px separation.
 	var group_spacer = Control.new()
 	group_spacer.custom_minimum_size = Vector2(210, 20)
@@ -220,10 +223,10 @@ func _build_talent_ui() -> void:
 		profession_list.add_child(p_button)
 
 	# For Elite Professions, shows which base profession(s) must be
-	# mastered to enter this one — same idea as SWG's blue prereq names
+	# mastered to enter this one -- same idea as SWG's blue prereq names
 	# stacked above the Master box in the elite profession tree view.
 	# Shows which Elite Profession(s) require mastering THIS profession
-	# (i.e. this box's "Master" rank) — e.g. selecting Apothecary shows
+	# (i.e. this box's "Master" rank) -- e.g. selecting Apothecary shows
 	# "Leads to: Toxinsmith" here, with a short line connecting down to
 	# the Master box below. Empty/hidden for professions nothing
 	# requires yet. Populated in _refresh_talent_grid().
@@ -234,7 +237,7 @@ func _build_talent_ui() -> void:
 	main_panel.add_child(talent_requirements_container)
 
 	# Short vertical connector from the label above down toward the
-	# Master box — same visual idea as SWG's line from the prereq names
+	# Master box -- same visual idea as SWG's line from the prereq names
 	# down to Master Artisan. Deliberately stops a few px short so it
 	# doesn't touch the box. Centered under the label; only shown when
 	# the label has text.
@@ -250,10 +253,10 @@ func _build_talent_ui() -> void:
 	talent_master_container.add_theme_stylebox_override("panel", main._make_flat_style(Color(0, 0, 0, 0)))
 	main_panel.add_child(talent_master_container)
 
-	# Column-header row — sits directly above the skill grid, one label
+	# Column-header row -- sits directly above the skill grid, one label
 	# per column, aligned to that column's width so it lines up exactly
 	# with the column beneath it. Shows which Elite Profession(s)
-	# require that column's Rank IV — e.g. "Sniper" appears above the
+	# require that column's Rank IV -- e.g. "Sniper" appears above the
 	# Rifles column, matching SWG's "Chef"/"Tailor"/"Merchant" row
 	# above its base-profession columns. Rebuilt per-profession in
 	# _refresh_talent_grid(); empty labels take up the same width so
@@ -270,7 +273,7 @@ func _build_talent_ui() -> void:
 	talent_grid_container.add_theme_constant_override("separation", 14)
 	main_panel.add_child(talent_grid_container)
 
-	# Novice bar — sits directly under the first row of skills, just
+	# Novice bar -- sits directly under the first row of skills, just
 	# like Master sits above the last row. Functional and clickable,
 	# same pattern as Master: auto-granted on entering the profession.
 	# Positioned at grid_top(164) + actual column height(324, now that
@@ -286,7 +289,7 @@ func _build_talent_ui() -> void:
 	# Below Novice: for Elite Professions only, shows which base
 	# profession(s) this one requires, with a short connector line
 	# leading down to the text (opposite direction from the "leads to"
-	# line above Master) — e.g. below Sniper's Novice box, a line then
+	# line above Master) -- e.g. below Sniper's Novice box, a line then
 	# "Chrome Gunner". Empty/hidden for the four base professions.
 	# Populated in _refresh_talent_grid().
 	talent_prereq_line = ColorRect.new()
@@ -360,13 +363,13 @@ func _build_talent_ui() -> void:
 	talent_points_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	talent_points_label.add_theme_font_size_override("font_size", 16)
 	talent_points_label.add_theme_color_override("font_color", Color(1.0, 0.85, 0.4))
-	talent_points_label.text = "Militant Points: —   |   Engineer Points: —"
+	talent_points_label.text = "Militant Points: --   |   Engineer Points: --"
 	main_panel.add_child(talent_points_label)
 
 
 # Groups a profession's raw path names (e.g. "One Hand I", "One Hand II",
 # "One Hand III") into ordered columns by their shared base name, so each
-# weapon/skill line renders as one vertical column of tiers — matching
+# weapon/skill line renders as one vertical column of tiers -- matching
 # the grid layout. Paths with no I/II/III suffix (like Scanning)
 # become their own single-row column.
 func _group_talent_paths(profession_name: String) -> Array:
@@ -403,7 +406,7 @@ func _group_talent_paths(profession_name: String) -> Array:
 	return columns
 
 # A profession name styled and colored like the plain requirement/
-# prereq labels, but clickable — jumps straight to that profession's
+# prereq labels, but clickable -- jumps straight to that profession's
 # tree. Used everywhere a profession name shows up as a "leads to" or
 # "requires" indicator (above Master, above a column, below Novice).
 func _make_profession_link_button(profession_name: String) -> Button:
@@ -433,7 +436,7 @@ func _talent_select_node(profession_name: String, path_name: String) -> void:
 func _refresh_talent_grid(profession_name: String) -> void:
 	current_talent_profession = profession_name
 
-	# "Leads to: X" — shows which Elite Profession(s) require mastering
+	# "Leads to: X" -- shows which Elite Profession(s) require mastering
 	# THIS profession (i.e. its own Master box), with a connector line
 	# down to the Master box (not touching it). This is the reverse of
 	# a prereq list: a base profession's tree shows what it leads to,
@@ -453,7 +456,7 @@ func _refresh_talent_grid(profession_name: String) -> void:
 		talent_requirements_line.visible = false
 
 	# Below Novice: for Elite Professions, shows which base
-	# profession(s) are required to enter this one — the forward
+	# profession(s) are required to enter this one -- the forward
 	# direction of GameData.ELITE_PROFESSION_PREREQS, deduped by profession
 	# (Sniper needs two different Chrome Gunner boxes but should only
 	# show "Chrome Gunner" once; Toxinsmith needs two different
@@ -531,7 +534,7 @@ func _refresh_talent_grid(profession_name: String) -> void:
 	# Column-header row, built in lockstep with the grid below so each
 	# label lines up with its column. Shows "Leads to: X" (or just X,
 	# kept short since horizontal space is tight) for any column whose
-	# Rank IV is a listed Elite Profession prereq — e.g. "Sniper" sits
+	# Rank IV is a listed Elite Profession prereq -- e.g. "Sniper" sits
 	# above the Rifles column. Blank labels still take up the column's
 	# width so unlinked columns just show empty space, keeping every
 	# column's Rank IV box aligned regardless of which ones have a label.
@@ -561,7 +564,7 @@ func _refresh_talent_grid(profession_name: String) -> void:
 		tier_keys.sort()
 
 		# The "next up" box is the lowest-tier one that isn't owned yet
-		# and whose prereq is already met — i.e. the one box in this
+		# and whose prereq is already met -- i.e. the one box in this
 		# column you'd actually train next. Only this box gets an XP
 		# progress bar, same as SWG only highlighting your next skill.
 		var next_path_name = ""
@@ -631,7 +634,7 @@ func _refresh_talent_grid(profession_name: String) -> void:
 				progress_fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
 				btn.add_child(progress_fill)
 
-		# Tree-name label — sits below the Rank I box (the last one
+		# Tree-name label -- sits below the Rank I box (the last one
 		# added above, since tiers render highest-to-lowest top-to-
 		# bottom) so it's still obvious which weapon/skill line this
 		# column represents now that the boxes themselves have

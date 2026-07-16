@@ -161,7 +161,11 @@ theme_override_font_sizes/font_size = 17
 [node name="RainOverlay" parent="." instance=ExtResource("4_rain")]
 
 [node name="Camera2D" parent="YSortLayer/Player" index="2"]
-zoom = Vector2(1, 1)
+zoom = Vector2(1.2, 1.2)
+limit_left = 0
+limit_top = 0
+limit_right = 1604
+limit_bottom = 981
 position_smoothing_enabled = true
 position_smoothing_speed = 7.0
 

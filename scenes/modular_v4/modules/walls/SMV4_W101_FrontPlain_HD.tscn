@@ -1,0 +1,28 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/modular_v4/production/SMV4_W101_FrontPlain_HD.png" id="1_tex"]
+
+[node name="SMV4_W101_FrontPlain_HD" type="Node2D"]
+metadata/contract_id = "environment_off_axis_60_v4"
+metadata/camera_profile = "environment_fixed_off_axis_60_v2"
+metadata/module_id = "SMV4_W101_FrontPlain"
+metadata/bay_step_front = Vector2(313.534, -90.509)
+metadata/storey_rise = Vector2(0.000, -219.000)
+
+[node name="Visual" type="Sprite2D" parent="."]
+texture = ExtResource("1_tex")
+centered = false
+position = Vector2(-163.233, -413.890)
+texture_filter = 1
+
+[node name="Snap_Left" type="Marker2D" parent="."]
+position = Vector2(0, 0)
+
+[node name="Snap_Right" type="Marker2D" parent="."]
+position = Vector2(313.534, -90.509)
+
+[node name="Snap_TopLeft" type="Marker2D" parent="."]
+position = Vector2(0.000, -219.000)
+
+[node name="Snap_TopRight" type="Marker2D" parent="."]
+position = Vector2(313.534, -309.509)

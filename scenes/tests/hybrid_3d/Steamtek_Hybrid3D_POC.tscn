@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://b7nc3hnibs08h"]
+
+[ext_resource type="Script" uid="uid://dqpseb05vc0tx" path="res://scenes/tests/hybrid_3d/steamtek_hybrid_3d_poc.gd" id="1_hybrid"]
+
+[node name="Steamtek_Hybrid3D_POC" type="Node3D" unique_id=977724301]
+script = ExtResource("1_hybrid")
