@@ -1,0 +1,26 @@
+gihub handoff and download
+
+upload 
+
+Set-Location "C:\My Game\Steamtek-RPG"
+
+git status
+
+git add .
+
+git commit -m "Update Steamtek project"
+
+git pull --rebase origin main
+
+git push origin main
+
+
+
+
+
+
+download
+
+Set-Location "C:\My Game\Steamtek-RPG"
+git pull origin main
+
