@@ -967,11 +967,9 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	if event.is_action_pressed("talent_view"):
 		talent_ui.visible = not talent_ui.visible
-		if talent_ui.visible:
-			var default_profession = current_talent_profession
-			if default_profession == "":
-				default_profession = GameData.novice_professions.keys()[0]
-			_refresh_talent_grid(default_profession)
+		if talent_ui.visible and keystone_viewer != null:
+			keystone_viewer._rebuild_graph()
+			keystone_viewer._refresh()
 
 func _generate_unique_resource_name() -> String:
 	var new_name = ""
@@ -1820,55 +1818,58 @@ func _load_game() -> void:
 # --- Combat ---
 
 func _attempt_attack() -> void:
-	_perform_attack(1.0, _get_dynamic_attack_action_cost(), "")
+	_perform_attack(1.0, _get_dynamic_attack_action_cost(), "Attack")
 
 func _attempt_ranged_attack() -> void:
-	var weapon_class = crafted_item_class.get(equipped_weapon_name, "")
-	if not GameData.chrome_gunner_weapons.has(weapon_class):
-		if equipped_weapon_name == "":
-			_show_combat_message("No weapon equipped! Ranged Attack needs a ranged weapon.")
-		else:
-			_show_combat_message("Ranged Attack only works with ranged weapons! Use a melee ability instead.")
-		return
-	_perform_attack(1.0, _get_dynamic_attack_action_cost(), "Ranged Attack")
+	# Legacy alias -- everything routes through the unified Attack now.
+	_attempt_attack()
 
 func _attempt_ability(ability_name: String) -> void:
 	var ability = GameData.ability_definitions[ability_name]
 	var weapon_class = crafted_item_class.get(equipped_weapon_name, "")
-	var weapon_subclass = crafted_item_subclass.get(equipped_weapon_name, "")
 
-	if ability.has("weapon_category"):
-		# Pressure Enforcer melee abilities: gated by the equipped
-		# weapon's actual One Hand/Two Hand/Unarmed category (subclass-
-		# aware), not just its item_class -- a "Sword" alone doesn't say
-		# whether it's one- or two-handed, so item_class matching isn't
-		# enough here. Bare hands resolve to "Unarmed" the same way a
-		# real Brass Knuckles weapon does.
-		var equipped_category = _get_pressure_weapon_type_label(weapon_class, weapon_subclass)
-		if equipped_category != ability["weapon_category"]:
-			_show_combat_message(ability_name + " only works with " + ability["weapon_category"] + " weapons.")
-			return
-	else:
-		# Every other ability (Chrome Gunner's ranged weapons, etc.) --
-		# item_class alone is unambiguous here, no subclass needed.
-		if not ability["weapons"].has(weapon_class):
-			_show_combat_message(ability_name + " only works with " + ", ".join(ability["weapons"]) + " weapons.")
-			return
+	# No more One Hand/Two Hand distinction -- an ability only cares
+	# about the equipped weapon's class (Sword/Axe/Hammer/etc), not
+	# whether that weapon happens to be 1- or 2-handed. Bare hands
+	# still resolve to Brass Knuckles for Unarmed abilities.
+	var effective_weapon_class = weapon_class
+	if effective_weapon_class == "" and ability["weapons"].has("Brass Knuckles"):
+		effective_weapon_class = "Brass Knuckles"
+
+	if not ability["weapons"].has(effective_weapon_class):
+		_show_combat_message(ability_name + " only works with " + ", ".join(ability["weapons"]) + " weapons.")
+		return
 
 	var required_box = ability["requires_box"]
 	var required_profession = ability["requires_profession"]
 
-	if required_box != "":
-		var _rp_data = GameData.novice_professions.get(required_profession, {})
+	if not professions_unlocked.get(required_profession, false):
+		_show_combat_message("You need to be a " + required_profession + " to use " + ability_name + "!")
+		return
+
+	var _rp_data = GameData.novice_professions.get(required_profession, {})
+
+	# Keystone-based professions (Street Thug): the ability is usable
+	# once its matching node has been purchased in any keystone --
+	# same check _is_ability_learned uses for the Ability Book/action
+	# bar, so a listed ability and an actually-usable one can never
+	# drift apart.
+	if _rp_data.has("keystones"):
+		var node_purchased = false
+		for ks_name in _rp_data["keystones"].keys():
+			var ks = _rp_data["keystones"][ks_name]
+			if ks["nodes"].has(ability_name) and ks["nodes"][ability_name].get("purchased", false):
+				node_purchased = true
+				break
+		if not node_purchased:
+			_show_combat_message("You haven't learned " + ability_name + " yet!")
+			return
+	elif required_box != "":
 		if not _rp_data.has("paths") or not _rp_data["paths"].has(required_box):
 			return
 		var box_data = _rp_data["paths"][required_box]
 		if box_data["unlocked_nodes"] < 1:
 			_show_combat_message("You haven't learned " + ability_name + " yet! Unlock " + required_box + " first.")
-			return
-	else:
-		if not professions_unlocked.get(required_profession, false):
-			_show_combat_message("You need to be a " + required_profession + " to use " + ability_name + "!")
 			return
 
 	_perform_attack(ability["damage_multiplier"], ability["action_cost"], ability_name)
@@ -1990,17 +1991,10 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 		_show_combat_message("You are defeated! Waiting to respawn...")
 		return
 
-	if ability_name == "":
-		# Plain "Attack" is the universal Unarmed action -- bare hands or
-		# an actual Brass Knuckles weapon only. Every other weapon type
-		# has its own dedicated ability instead (Quick Hit, Overhead
-		# Swing, the Chrome Gunner equivalents, etc.) -- equip one of
-		# those and use its named ability rather than generic Attack.
-		var attack_weapon_class = crafted_item_class.get(equipped_weapon_name, "")
-		if equipped_weapon_name != "" and attack_weapon_class != "Brass Knuckles":
-			_show_combat_message("Attack only works unarmed! Use a weapon-specific ability instead, or unequip your weapon.")
-			return
-	elif equipped_weapon_name == "":
+	# Bare-hands check: if nothing is equipped and the ability requires
+	# a specific weapon, block it. The universal "Attack" always works
+	# bare-handed (counts as Brass Knuckles).
+	if equipped_weapon_name == "" and ability_name != "Attack":
 		var allows_bare_handed = GameData.ability_definitions.has(ability_name) and GameData.ability_definitions[ability_name]["weapons"].has("Brass Knuckles")
 		if not allows_bare_handed:
 			_show_combat_message("No weapon equipped! Press I to equip one.")
@@ -2774,11 +2768,6 @@ func _on_choose_profession_pressed() -> void:
 		return
 
 	if not has_chosen_starting_profession:
-		if _get_points_available(chosen_profession) < PROFESSION_ENTRY_COST:
-			profession_select_result_label.text = "Not enough " + _points_pool_label(chosen_profession) + "! Need " + str(PROFESSION_ENTRY_COST) + "."
-			return
-
-		_spend_points(chosen_profession, PROFESSION_ENTRY_COST)
 		professions_unlocked[chosen_profession] = true
 		has_chosen_starting_profession = true
 		_grant_novice_unlock(chosen_profession)
@@ -4210,6 +4199,8 @@ func _make_talent_bar(bar_text: String, color: Color, bar_position: Vector2, bar
 	panel.add_child(label)
 	return label
 
+var keystone_viewer: Node = null
+
 func _build_talent_ui() -> void:
 	talent_ui = Control.new()
 	talent_ui.name = "TalentUI"
@@ -4219,231 +4210,12 @@ func _build_talent_ui() -> void:
 	talent_ui.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	$UILayer.add_child(talent_ui)
 
-	var backdrop = ColorRect.new()
-	backdrop.color = Color(0, 0, 0, 0.6)
-	backdrop.anchor_right = 1
-	backdrop.anchor_bottom = 1
-	backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	talent_ui.add_child(backdrop)
+	keystone_viewer = preload("res://scenes/KeystoneViewer.gd").new()
+	keystone_viewer.main = self
+	add_child(keystone_viewer)
+	keystone_viewer.setup(talent_ui)
 
-	var main_panel = Panel.new()
-	main_panel.position = Vector2(300, 195)
-	main_panel.size = Vector2(1340, 740)
-	main_panel.add_theme_stylebox_override("panel", _make_flat_style(Color(0.043, 0.086, 0.086)))
-	talent_ui.add_child(main_panel)
 
-	var title_label = Label.new()
-	title_label.text = "SKILLS (testing only)"
-	title_label.position = Vector2(20, 8)
-	title_label.modulate = Color(0.6, 0.9, 0.9)
-	main_panel.add_child(title_label)
-
-	var close_button = Button.new()
-	close_button.text = "X"
-	close_button.position = Vector2(1030, 6)
-	close_button.custom_minimum_size = Vector2(30, 30)
-	close_button.focus_mode = Control.FOCUS_NONE
-	close_button.pressed.connect(func(): talent_ui.visible = false)
-	main_panel.add_child(close_button)
-
-	var profession_scroll = ScrollContainer.new()
-	profession_scroll.position = Vector2(12, 40)
-	profession_scroll.size = Vector2(220, 600)
-	main_panel.add_child(profession_scroll)
-
-	var profession_list = VBoxContainer.new()
-	profession_list.custom_minimum_size = Vector2(210, 0)
-	profession_list.add_theme_constant_override("separation", 4)
-	profession_scroll.add_child(profession_list)
-
-	# Profession list grouped by tier using PROFESSION_TREE
-	var tier_labels = {1: "Base", 2: "Intermediate", 3: "Advanced", 4: "Elite", 5: "Mastery"}
-	var tiers_shown: Array = []
-
-	for tier in [1, 2, 3, 4, 5]:
-		var profs_in_tier: Array = []
-		for profession_name in GameData.novice_professions.keys():
-			var entry = GameData.PROFESSION_TREE.get(profession_name, {})
-			if entry.get("tier", 99) == tier:
-				profs_in_tier.append(profession_name)
-		if profs_in_tier.size() == 0:
-			continue
-
-		if tiers_shown.size() > 0:
-			var group_spacer = Control.new()
-			group_spacer.custom_minimum_size = Vector2(210, 12)
-			profession_list.add_child(group_spacer)
-
-		var tier_header = Label.new()
-		tier_header.text = tier_labels.get(tier, "Tier " + str(tier))
-		tier_header.custom_minimum_size = Vector2(210, 0)
-		tier_header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		tier_header.modulate = Color(0.6, 0.9, 0.9)
-		tier_header.add_theme_font_size_override("font_size", 15)
-		profession_list.add_child(tier_header)
-
-		for profession_name in profs_in_tier:
-			var p_button = Button.new()
-			p_button.text = profession_name
-			p_button.focus_mode = Control.FOCUS_NONE
-			p_button.custom_minimum_size = Vector2(210, 30)
-			p_button.pressed.connect(_talent_select_profession.bind(profession_name))
-			# Grey out professions not yet unlocked
-			if not professions_unlocked.get(profession_name, false):
-				p_button.modulate = Color(0.5, 0.5, 0.5)
-			profession_list.add_child(p_button)
-
-		tiers_shown.append(tier)
-
-	# For Elite Professions, shows which base profession(s) must be
-	# mastered to enter this one -- same idea as SWG's blue prereq names
-	# stacked above the Master box in the elite profession tree view.
-	# Shows which Elite Profession(s) require mastering THIS profession
-	# (i.e. this box's "Master" rank) -- e.g. selecting Apothecary shows
-	# "Leads to: Toxinsmith" here, with a short line connecting down to
-	# the Master box below. Empty/hidden for professions nothing
-	# requires yet. Populated in _refresh_talent_grid().
-	talent_requirements_container = VBoxContainer.new()
-	talent_requirements_container.position = Vector2(250, 36)
-	talent_requirements_container.size = Vector2(800, 20)
-	talent_requirements_container.add_theme_constant_override("separation", 2)
-	main_panel.add_child(talent_requirements_container)
-
-	# Short vertical connector from the label above down toward the
-	# Master box -- same visual idea as SWG's line from the prereq names
-	# down to Master Artisan. Deliberately stops a few px short so it
-	# doesn't touch the box. Centered under the label; only shown when
-	# the label has text.
-	talent_requirements_line = ColorRect.new()
-	talent_requirements_line.position = Vector2(649, 56)
-	talent_requirements_line.size = Vector2(2, 14)
-	talent_requirements_line.color = Color(0.5, 0.75, 1.0)
-	main_panel.add_child(talent_requirements_line)
-
-	talent_master_container = Panel.new()
-	talent_master_container.position = Vector2(250, 74)
-	talent_master_container.size = Vector2(800, 36)
-	talent_master_container.add_theme_stylebox_override("panel", _make_flat_style(Color(0, 0, 0, 0)))
-	main_panel.add_child(talent_master_container)
-
-	# Column-header row -- sits directly above the skill grid, one label
-	# per column, aligned to that column's width so it lines up exactly
-	# with the column beneath it. Shows which Elite Profession(s)
-	# require that column's Rank IV -- e.g. "Sniper" appears above the
-	# Rifles column, matching SWG's "Chef"/"Tailor"/"Merchant" row
-	# above its base-profession columns. Rebuilt per-profession in
-	# _refresh_talent_grid(); empty labels take up the same width so
-	# columns without a linked Elite Profession just show blank space.
-	talent_column_labels_container = HBoxContainer.new()
-	talent_column_labels_container.position = Vector2(250, 122)
-	talent_column_labels_container.size = Vector2(1050, 30)
-	talent_column_labels_container.add_theme_constant_override("separation", 14)
-	main_panel.add_child(talent_column_labels_container)
-
-	talent_grid_container = HBoxContainer.new()
-	talent_grid_container.position = Vector2(250, 164)
-	talent_grid_container.size = Vector2(1050, 330)
-	talent_grid_container.add_theme_constant_override("separation", 14)
-	main_panel.add_child(talent_grid_container)
-
-	# Novice bar -- sits directly under the first row of skills, just
-	# like Master sits above the last row. Functional and clickable,
-	# same pattern as Master: auto-granted on entering the profession.
-	# Positioned at grid_top(164) + actual column height(324, now that
-	# each column has 4 tiers (4*70 + 4*6 separation gaps, the last gap
-	# being before the tree-name label) + the tree-name label itself
-	# (~20px)) + 12px gap, matching Master's 12px gap above the grid.
-	talent_novice_container = Panel.new()
-	talent_novice_container.position = Vector2(250, 500)
-	talent_novice_container.size = Vector2(800, 32)
-	talent_novice_container.add_theme_stylebox_override("panel", _make_flat_style(Color(0, 0, 0, 0)))
-	main_panel.add_child(talent_novice_container)
-
-	# Below Novice: for Elite Professions only, shows which base
-	# profession(s) this one requires, with a short connector line
-	# leading down to the text (opposite direction from the "leads to"
-	# line above Master) -- e.g. below Sniper's Novice box, a line then
-	# "Chrome Gunner". Empty/hidden for the four base professions.
-	# Populated in _refresh_talent_grid().
-	talent_prereq_line = ColorRect.new()
-	talent_prereq_line.position = Vector2(649, 538)
-	talent_prereq_line.size = Vector2(2, 10)
-	talent_prereq_line.color = Color(0.5, 0.75, 1.0)
-	main_panel.add_child(talent_prereq_line)
-
-	talent_prereq_container = VBoxContainer.new()
-	talent_prereq_container.position = Vector2(250, 550)
-	talent_prereq_container.size = Vector2(800, 30)
-	talent_prereq_container.add_theme_constant_override("separation", 2)
-	main_panel.add_child(talent_prereq_container)
-
-	# Bottom message frame, split evenly: left shows what the selected
-	# box grants, right shows everything already learned in the
-	# currently-viewed profession.
-	var grants_panel = Panel.new()
-	grants_panel.position = Vector2(250, 590)
-	grants_panel.size = Vector2(395, 110)
-	grants_panel.add_theme_stylebox_override("panel", _make_flat_style(Color(0.03, 0.06, 0.06)))
-	main_panel.add_child(grants_panel)
-
-	var grants_header = Label.new()
-	grants_header.text = "Unlockable"
-	grants_header.position = Vector2(10, 4)
-	grants_header.modulate = Color(0.6, 0.9, 0.9)
-	grants_panel.add_child(grants_header)
-
-	var grants_scroll = ScrollContainer.new()
-	grants_scroll.position = Vector2(10, 28)
-	grants_scroll.size = Vector2(375, 74)
-	grants_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	grants_panel.add_child(grants_scroll)
-
-	talent_details_label = Label.new()
-	talent_details_label.custom_minimum_size = Vector2(355, 0)
-	talent_details_label.autowrap_mode = TextServer.AUTOWRAP_WORD
-	talent_details_label.text = "Select a skill box to view details."
-	talent_details_label.modulate = Color(0.85, 0.95, 0.95)
-	grants_scroll.add_child(talent_details_label)
-
-	var learned_panel = Panel.new()
-	learned_panel.position = Vector2(655, 590)
-	learned_panel.size = Vector2(395, 110)
-	learned_panel.add_theme_stylebox_override("panel", _make_flat_style(Color(0.03, 0.06, 0.06)))
-	main_panel.add_child(learned_panel)
-
-	var learned_header = Label.new()
-	learned_header.text = "Learned"
-	learned_header.position = Vector2(10, 4)
-	learned_header.modulate = Color(0.6, 0.9, 0.9)
-	learned_panel.add_child(learned_header)
-
-	var learned_scroll = ScrollContainer.new()
-	learned_scroll.position = Vector2(10, 28)
-	learned_scroll.size = Vector2(375, 74)
-	learned_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	learned_panel.add_child(learned_scroll)
-
-	talent_learned_label = Label.new()
-	talent_learned_label.custom_minimum_size = Vector2(355, 0)
-	talent_learned_label.autowrap_mode = TextServer.AUTOWRAP_WORD
-	talent_learned_label.text = ""
-	talent_learned_label.modulate = Color(0.85, 0.95, 0.95)
-	learned_scroll.add_child(talent_learned_label)
-
-	talent_points_label = Label.new()
-	talent_points_label.position = Vector2(250, 708)
-	talent_points_label.size = Vector2(800, 22)
-	talent_points_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	talent_points_label.add_theme_font_size_override("font_size", 16)
-	talent_points_label.add_theme_color_override("font_color", Color(1.0, 0.85, 0.4))
-	talent_points_label.text = "Militant Points: --   |   Engineer Points: --"
-	main_panel.add_child(talent_points_label)
-
-# Groups a profession's raw path names (e.g. "One Hand I", "One Hand II",
-# "One Hand III") into ordered columns by their shared base name, so each
-# weapon/skill line renders as one vertical column of tiers -- matching
-# the grid layout. Paths with no I/II/III suffix (like Scanning)
-# become their own single-row column.
 func _group_talent_paths(profession_name: String) -> Array:
 	var columns: Array = []
 	var lookup: Dictionary = {}

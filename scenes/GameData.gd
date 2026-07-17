@@ -426,27 +426,28 @@ const WEAPON_CERT_REQUIREMENTS: Dictionary = {
 
 # --- Ability Definitions ---
 var ability_definitions: Dictionary = {
-	"Quick Hit": {"weapons": ["Sword", "Axe", "Baton"], "weapon_category": "One Hand", "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Street Thug", "requires_box": "Novice"},
-	"Overhead Swing": {"weapons": ["Sword", "Axe", "Hammer"], "weapon_category": "Two Hand", "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Street Thug", "requires_box": "Novice"},
-	"Backhand": {"weapons": ["Brass Knuckles"], "weapon_category": "Unarmed", "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Street Thug", "requires_box": "Novice"},
-	"Slap": {"weapons": ["Brass Knuckles"], "weapon_category": "Unarmed", "action_cost": 50, "damage_multiplier": 1.25, "requires_profession": "Street Thug", "requires_box": "Melee II"},
-	"Thrust": {"weapons": ["Sword", "Axe", "Baton"], "weapon_category": "One Hand", "action_cost": 50, "damage_multiplier": 1.25, "requires_profession": "Street Thug", "requires_box": "Melee II"},
-	"Bludgeon": {"weapons": ["Sword", "Axe", "Hammer", "Stun Stick"], "weapon_category": "Two Hand", "action_cost": 50, "damage_multiplier": 1.25, "requires_profession": "Street Thug", "requires_box": "Melee II"},
-	"Roundhouse": {"weapons": ["Brass Knuckles"], "weapon_category": "Unarmed", "action_cost": 60, "damage_multiplier": 1.5, "aoe": true, "requires_profession": "Street Thug", "requires_box": "Master"},
-	"Flourish": {"weapons": ["Sword", "Axe", "Baton"], "weapon_category": "One Hand", "action_cost": 60, "damage_multiplier": 1.5, "aoe": true, "requires_profession": "Street Thug", "requires_box": "Master"},
-	"Power Swing": {"weapons": ["Sword", "Axe", "Hammer", "Stun Stick"], "weapon_category": "Two Hand", "action_cost": 60, "damage_multiplier": 1.5, "aoe": true, "requires_profession": "Street Thug", "requires_box": "Master"},
+	"Quick Hit": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Street Thug", "requires_box": "Novice"},
+	"Overhead Swing": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Street Thug", "requires_box": "Novice"},
+	"Bash": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Street Thug", "requires_box": "Novice"},
+	"Backhand": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Street Thug", "requires_box": "Novice"},
+	"Slap": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 50, "damage_multiplier": 1.25, "requires_profession": "Street Thug", "requires_box": "Melee II"},
+	"Thrust": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 50, "damage_multiplier": 1.25, "requires_profession": "Street Thug", "requires_box": "Melee II"},
+	"Bludgeon": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 50, "damage_multiplier": 1.25, "requires_profession": "Street Thug", "requires_box": "Melee II"},
+	"Roundhouse": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 60, "damage_multiplier": 1.5, "aoe": true, "requires_profession": "Street Thug", "requires_box": "Master"},
+	"Flourish": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 60, "damage_multiplier": 1.5, "aoe": true, "requires_profession": "Street Thug", "requires_box": "Master"},
+	"Power Swing": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 60, "damage_multiplier": 1.5, "aoe": true, "requires_profession": "Street Thug", "requires_box": "Master"},
 	"Subdue": {"weapons": ["Sword", "Axe", "Baton", "Hammer", "Brass Knuckles", "Stun Stick"], "action_cost": 30, "damage_multiplier": 0, "debuff": "damage", "debuff_amount": 0.10, "debuff_duration": 3.0, "requires_profession": "Street Thug", "requires_box": "Combat Training I"},
 	"Disorient": {"weapons": ["Sword", "Axe", "Baton", "Hammer", "Brass Knuckles", "Stun Stick"], "action_cost": 30, "damage_multiplier": 0, "debuff": "accuracy", "debuff_amount": 0.05, "debuff_duration": 3.0, "requires_profession": "Street Thug", "requires_box": "Combat Training II"},
 	"Bleed": {"weapons": ["Sword", "Axe", "Baton", "Hammer", "Brass Knuckles", "Stun Stick"], "action_cost": 30, "damage_multiplier": 0, "dot_damage_per_tick": 8, "dot_duration_ticks": 3, "requires_profession": "Street Thug", "requires_box": "Master"},
 	"Bruise": {"weapons": ["Sword", "Axe", "Baton", "Hammer", "Brass Knuckles", "Stun Stick"], "action_cost": 30, "damage_multiplier": 0, "debuff": "attack_speed", "debuff_amount": 0.20, "debuff_duration": 3.0, "requires_profession": "Street Thug", "requires_box": "Master"},
 	"Anger": {"weapons": ["Sword", "Axe", "Baton", "Hammer", "Brass Knuckles", "Stun Stick"], "action_cost": 30, "damage_multiplier": 0, "taunt_duration": 3.0, "requires_profession": "Street Thug", "requires_box": "Master"},
-	"Aimed Shot": {"weapons": ["Assault Rifle", "Sniper Rifle"], "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Street Thug", "requires_box": "Novice"},
-	"Scatter Blast": {"weapons": ["Shotgun"], "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Street Thug", "requires_box": "Novice"},
-	"Suppressing Fire": {"weapons": ["Grenade Launcher", "Flame Thrower"], "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Street Thug", "requires_box": "Novice"},
-	"Piercing Round": {"weapons": ["Assault Rifle", "Sniper Rifle"], "action_cost": 50, "damage_multiplier": 1.25, "requires_profession": "Street Thug", "requires_box": "Ranged III"},
-	"Point-Blank Burst": {"weapons": ["Shotgun"], "action_cost": 50, "damage_multiplier": 1.25, "requires_profession": "Street Thug", "requires_box": "Ranged II"},
-	"Suppressive Volley": {"weapons": ["Assault Rifle", "Sniper Rifle"], "action_cost": 60, "damage_multiplier": 1.5, "aoe": true, "requires_profession": "Street Thug", "requires_box": "Master"},
-	"Buckshot Barrage": {"weapons": ["Shotgun"], "action_cost": 60, "damage_multiplier": 1.5, "aoe": true, "requires_profession": "Street Thug", "requires_box": "Master"}
+	"Aimed Shot": {"weapons": ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"], "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Street Thug", "requires_box": "Novice"},
+	"Scatter Blast": {"weapons": ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"], "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Street Thug", "requires_box": "Novice"},
+	"Suppressing Fire": {"weapons": ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"], "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Street Thug", "requires_box": "Novice"},
+	"Piercing Round": {"weapons": ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"], "action_cost": 50, "damage_multiplier": 1.25, "requires_profession": "Street Thug", "requires_box": "Ranged III"},
+	"Point-Blank Burst": {"weapons": ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"], "action_cost": 50, "damage_multiplier": 1.25, "requires_profession": "Street Thug", "requires_box": "Ranged II"},
+	"Suppressive Volley": {"weapons": ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"], "action_cost": 60, "damage_multiplier": 1.5, "aoe": true, "requires_profession": "Street Thug", "requires_box": "Master"},
+	"Buckshot Barrage": {"weapons": ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"], "action_cost": 60, "damage_multiplier": 1.5, "aoe": true, "requires_profession": "Street Thug", "requires_box": "Master"}
 }
 
 
@@ -469,6 +470,7 @@ var novice_professions: Dictionary = {
 		"keystones": {
 			"Melee": {
 				"unlocked": false,
+				"xp_type": "Combat XP",
 				"xp_cost": 10,
 				"points_spent": 0,
 				"points_max": 10,
@@ -508,6 +510,7 @@ var novice_professions: Dictionary = {
 			},
 			"Ranged": {
 				"unlocked": false,
+				"xp_type": "Combat XP",
 				"xp_cost": 10,
 				"points_spent": 0,
 				"points_max": 10,
@@ -547,6 +550,7 @@ var novice_professions: Dictionary = {
 			},
 			"Crafting": {
 				"unlocked": false,
+				"xp_type": "Crafting XP",
 				"xp_cost": 10,
 				"points_spent": 0,
 				"points_max": 12,
@@ -575,6 +579,7 @@ var novice_professions: Dictionary = {
 			},
 			"Auxiliary": {
 				"unlocked": false,
+				"xp_type": "Combat XP",
 				"xp_cost": 10,
 				"points_spent": 0,
 				"points_max": 12,

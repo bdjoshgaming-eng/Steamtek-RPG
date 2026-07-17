@@ -1,0 +1,47 @@
+{
+  "schema": "SteamtekMeshyAcceptance-1",
+  "source": "C:\\My Game\\Steamtek-RPG\\assets\\characters\\humanoid\\incoming\\Protagonist Rigged GLB.glb",
+  "output": "C:\\My Game\\Steamtek-RPG\\assets\\characters\\humanoid\\base\\C001_Protagonist.glb",
+  "standard": {
+    "triangle_target": [
+      15000,
+      18000
+    ],
+    "lod1_target": [
+      8000,
+      10000
+    ],
+    "lod2_target": [
+      3000,
+      5000
+    ],
+    "material_maximum": 5,
+    "texture_target": [
+      2048,
+      2048
+    ],
+    "required_animations": [
+      "STK_IDLE",
+      "STK_WALK"
+    ]
+  },
+  "armatures": [],
+  "meshes": [],
+  "materials": [],
+  "textures": [],
+  "animations": [],
+  "sockets": [],
+  "errors": [
+    "The .glb begins with MESHY.AI instead of the required glTF header. This is a Meshy-wrapped/protected payload, not a standard GLB that Blender or Godot can import. Download or export the model from Meshy as a standard GLB, FBX, or glTF file."
+  ],
+  "warnings": [],
+  "passed": false,
+  "exported": false,
+  "file_size_bytes": 2618252,
+  "file_signature": {
+    "hex": "4D 45 53 48 59 2E 41 49 01 00 03 67 13 31 8C B2",
+    "ascii": "MESHY.AI...g.1..",
+    "is_standard_glb": false,
+    "is_meshy_wrapped": true
+  }
+}

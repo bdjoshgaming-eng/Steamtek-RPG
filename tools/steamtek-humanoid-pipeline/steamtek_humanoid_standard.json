@@ -1,0 +1,40 @@
+{
+  "schema_version": "2.0.0",
+  "standard_id": "Steamtek_Humanoid3D_v1",
+  "blender_version": "4.5",
+  "unit_scale_meters": 1.0,
+  "up_axis": "+Y in Godot / +Z in Blender",
+  "forward_axis": "-Z in Godot / -Y in Blender",
+  "target_height_meters": 1.8,
+  "required_semantics": [
+    "hips", "spine", "chest", "neck", "head",
+    "upper_arm.L", "forearm.L", "hand.L",
+    "upper_arm.R", "forearm.R", "hand.R",
+    "thigh.L", "shin.L", "foot.L",
+    "thigh.R", "shin.R", "foot.R"
+  ],
+  "animation_names": {
+    "idle": "STK_IDLE",
+    "walk": "STK_WALK",
+    "run": "STK_RUN",
+    "attack": "STK_ATTACK",
+    "hurt": "STK_HURT",
+    "death": "STK_DEATH"
+  },
+  "equipment_slots": {
+    "jacket": "skinned",
+    "shirt": "skinned",
+    "pants": "skinned",
+    "boots": "skinned",
+    "gloves": "skinned",
+    "helmet": "socket_head",
+    "weapon_main": "socket_hand_r",
+    "weapon_off": "socket_hand_l",
+    "backpack": "socket_back"
+  },
+  "godot_camera_contract": {
+    "projection": "orthographic",
+    "azimuth_degrees": 60.0,
+    "elevation_degrees": 30.0
+  }
+}

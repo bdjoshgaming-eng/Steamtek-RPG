@@ -1,0 +1,43 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://addons/steamtek_humanoid_runtime/steamtek_humanoid_character.gd" id="1_character"]
+[ext_resource type="Script" path="res://addons/steamtek_humanoid_runtime/steamtek_equipment_controller.gd" id="2_equipment"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_character"]
+radius = 0.35
+height = 1.8
+
+[node name="SteamtekModularHumanoid3D" type="CharacterBody3D"]
+script = ExtResource("1_character")
+animation_player_path = NodePath("AnimationPlayer")
+
+[node name="VisualRoot" type="Node3D" parent="."]
+
+[node name="Skeleton3D" type="Skeleton3D" parent="VisualRoot"]
+
+[node name="BodyRegions" type="Node3D" parent="VisualRoot/Skeleton3D"]
+
+[node name="BaseBody" type="MeshInstance3D" parent="VisualRoot/Skeleton3D/BodyRegions"]
+skeleton = NodePath("../..")
+
+[node name="SkinnedEquipment" type="Node3D" parent="VisualRoot"]
+
+[node name="Socket_Head" type="BoneAttachment3D" parent="VisualRoot/Skeleton3D"]
+
+[node name="Socket_Hand_R" type="BoneAttachment3D" parent="VisualRoot/Skeleton3D"]
+
+[node name="Socket_Hand_L" type="BoneAttachment3D" parent="VisualRoot/Skeleton3D"]
+
+[node name="Socket_Back" type="BoneAttachment3D" parent="VisualRoot/Skeleton3D"]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="EquipmentController" type="Node" parent="."]
+script = ExtResource("2_equipment")
+skeleton_path = NodePath("../VisualRoot/Skeleton3D")
+skinned_equipment_root_path = NodePath("../VisualRoot/SkinnedEquipment")
+body_regions_root_path = NodePath("../VisualRoot/Skeleton3D/BodyRegions")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_character")
