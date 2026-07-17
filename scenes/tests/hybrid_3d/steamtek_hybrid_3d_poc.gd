@@ -4,24 +4,28 @@ extends Node3D
 ## Live 3D character + locked orthographic camera + painted environment art in 3D.
 
 const WALK_SPEED := 4.2
+const RUN_SPEED := 6.4
 const MOVEMENT_ACCELERATION := 18.0
 const MOVEMENT_DECELERATION := 24.0
 # Fast enough to align the body with a new movement direction before the
 # first planted step reads, while still using continuous yaw interpolation.
-const TURN_RESPONSE := 24.0
-# C002's authored visual-forward axis is rotated from the movement root.
-# This measured correction aligns the rig with camera-relative travel.
-const MODEL_FORWARD_YAW_OFFSET := deg_to_rad(40.0)
+const TURN_RESPONSE := 36.0
+const TURN_SNAP_THRESHOLD := deg_to_rad(0.75)
+const LOCOMOTION_BLEND_SECONDS := 0.1
+# The production Meshy rig faces Godot's expected forward axis. Keep this neutral
+# until a movement review proves that a correction is needed.
+const MODEL_FORWARD_YAW_OFFSET := 0.0
+const CHARACTER_GROUND_OFFSET := 0.0
 const GRAVITY := 18.0
 const CAMERA_POSITION := Vector3(8.660254, 10.0, 15.0)
 const CAMERA_SIZE := 18.0
 const PAINTED_WALL_TEXTURE := "res://assets/modular_v2/apartment_exterior_v3/production/SMV3_FrontPlain.png"
-const DEFAULT_CHARACTER_SCENE := "res://assets/characters/npc/Steamtek_C002/production/STK_C002_RigProof_v1.glb"
+const DEFAULT_CHARACTER_SCENE := "res://assets/characters/humanoid/base/STK_C001_Protagonist/v01/STK_C001_Protagonist_RigAnim_v01.glb"
 
 ## Allows the proven hybrid controller to review replacement character meshes
 ## without overwriting or forking the movement/animation implementation.
 @export_file("*.glb") var character_scene_path := DEFAULT_CHARACTER_SCENE
-@export var character_instance_name := "STK_C002_RigProof"
+@export var character_instance_name := "STK_C001_Protagonist_RigAnim_v01"
 
 var player: CharacterBody3D
 var player_visual: Node3D
@@ -29,6 +33,7 @@ var camera: Camera3D
 var character_animation_player: AnimationPlayer
 var idle_animation := ""
 var walk_animation := ""
+var run_animation := ""
 var active_animation := ""
 var diagnostics_label: Label
 var force_stationary_walk := false
@@ -76,7 +81,9 @@ func _physics_process(delta: float) -> void:
 		_play_character_animation(walk_animation)
 	elif move_direction.length_squared() > 0.001:
 		move_direction = move_direction.normalized()
-		var target_velocity := move_direction * WALK_SPEED * input_strength
+		var wants_to_run := Input.is_key_pressed(KEY_SHIFT)
+		var movement_speed := RUN_SPEED if wants_to_run else WALK_SPEED
+		var target_velocity := move_direction * movement_speed * input_strength
 		player.velocity.x = move_toward(
 			player.velocity.x,
 			target_velocity.x,
@@ -95,18 +102,12 @@ func _physics_process(delta: float) -> void:
 			target_facing_yaw,
 			turn_weight
 		)
-		_play_character_animation(walk_animation)
+		if absf(angle_difference(player_visual.rotation.y, target_facing_yaw)) <= TURN_SNAP_THRESHOLD:
+			player_visual.rotation.y = target_facing_yaw
+		_play_character_animation(run_animation if wants_to_run else walk_animation)
 	else:
-		player.velocity.x = move_toward(
-			player.velocity.x,
-			0.0,
-			MOVEMENT_DECELERATION * delta
-		)
-		player.velocity.z = move_toward(
-			player.velocity.z,
-			0.0,
-			MOVEMENT_DECELERATION * delta
-		)
+		player.velocity.x = 0.0
+		player.velocity.z = 0.0
 		_play_character_animation(idle_animation)
 
 	if not player.is_on_floor():
@@ -315,19 +316,22 @@ func _build_player() -> void:
 
 	var character_instance := packed_character.instantiate()
 	character_instance.name = character_instance_name
+	character_instance.position.y = CHARACTER_GROUND_OFFSET
 	player_visual.add_child(character_instance)
 	character_animation_player = _find_animation_player(character_instance)
 	if character_animation_player == null:
-		push_error("No AnimationPlayer was imported from %s" % character_scene_path)
+		push_warning("Static character review: no AnimationPlayer imported from %s" % character_scene_path)
 		return
 
 	idle_animation = _find_animation_name("STK_IDLE")
 	walk_animation = _find_animation_name("STK_WALK")
-	if idle_animation.is_empty() or walk_animation.is_empty():
-		push_error("Required STK_IDLE/STK_WALK animations were not found. Imported: %s" % str(character_animation_player.get_animation_list()))
+	run_animation = _find_animation_name("STK_RUN")
+	if idle_animation.is_empty() or walk_animation.is_empty() or run_animation.is_empty():
+		push_error("Required STK_IDLE/STK_WALK/STK_RUN animations were not found. Imported: %s" % str(character_animation_player.get_animation_list()))
 		return
 	_configure_animation_loop(idle_animation)
 	_configure_animation_loop(walk_animation)
+	_configure_animation_loop(run_animation)
 	_print_imported_animation_report()
 	_play_character_animation(idle_animation)
 
@@ -355,7 +359,7 @@ func _find_animation_name(required_suffix: String) -> String:
 func _play_character_animation(animation_name: String) -> void:
 	if character_animation_player == null or animation_name.is_empty() or active_animation == animation_name:
 		return
-	character_animation_player.play(animation_name, 0.16)
+	character_animation_player.play(animation_name, LOCOMOTION_BLEND_SECONDS)
 	character_animation_player.speed_scale = 1.0
 	active_animation = animation_name
 
@@ -371,7 +375,7 @@ func _configure_animation_loop(animation_name: String) -> void:
 
 
 func _print_imported_animation_report() -> void:
-	for animation_name in [idle_animation, walk_animation]:
+	for animation_name in [idle_animation, walk_animation, run_animation]:
 		var animation := character_animation_player.get_animation(animation_name)
 		if animation == null:
 			continue
@@ -436,7 +440,7 @@ func _build_interface() -> void:
 
 	var label := Label.new()
 	label.position = Vector2(42, 38)
-	label.text = "STEAMTEK - LIVE 3D HYBRID PROOF\nWASD: move | SPACE: stationary walk | L: lighting review mode\nLocked camera: 60 deg azimuth / 30 deg elevation / orthographic\nTest: movement, occlusion, deformation, and material response"
+	label.text = "STEAMTEK - LIVE 3D HYBRID PROOF\nWASD: walk | SHIFT + WASD: run | SPACE: stationary walk | L: lighting review\nLocked camera: 60 deg azimuth / 30 deg elevation / orthographic\nTest: movement, occlusion, deformation, and material response"
 	label.add_theme_color_override("font_color", Color("d7e9ff"))
 	label.add_theme_font_size_override("font_size", 19)
 	canvas.add_child(label)

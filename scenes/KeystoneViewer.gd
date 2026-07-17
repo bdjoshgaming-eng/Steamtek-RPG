@@ -34,6 +34,7 @@ const COLORS = {
 	"Auxiliary": Color(0.95, 0.60, 0.05)
 }
 const CENTER_COLOR    = Color(0.30, 0.55, 1.00)
+const MASTERED_COLOR  = Color(1.00, 0.84, 0.25)
 const LOCKED_GREY     = Color(0.42, 0.42, 0.42)
 const OWNED_TAG_COLOR = Color(0.55, 0.95, 0.55)
 const ABILITY_TAG_COLOR = Color(1.00, 0.92, 0.55)
@@ -74,6 +75,18 @@ var tooltip_label: Label
 var selected_ks: String = ""
 var selected_node: String = ""
 var expanded: bool = false
+
+# --- Info pane ---
+# Which scope the side info pane is describing. "" or "Street Thug"
+# means the whole profession; a keystone name (e.g. "Melee") means just
+# that keystone. Updated whenever the player clicks the diamond, a
+# keystone, or a node. The pane is INFO ONLY -- buying still happens
+# through the existing node/keystone popups, unchanged.
+var info_focus: String = "Street Thug"
+var info_unlocked_title: Label
+var info_unlocked_label: Label
+var info_locked_title: Label
+var info_locked_label: Label
 
 func setup(parent: Control) -> void:
 	_build_ui(parent)
@@ -140,8 +153,96 @@ func _build_ui(parent: Control) -> void:
 	close_btn.pressed.connect(func(): parent.visible = false)
 	parent.add_child(close_btn)
 
+	_build_info_pane(parent)
 	_build_popup(parent)
 	_build_tooltip(parent)
+
+# Two side panels flanking the radial tree. LEFT = things you've
+# unlocked; RIGHT = things still available/locked. They sit in the
+# empty side margins so they never overlap the tree in the center.
+# Contents are scoped to info_focus (whole profession vs one keystone)
+# and rebuilt by _refresh_info_pane() on every graph rebuild.
+func _build_info_pane(parent: Control) -> void:
+	var panel_w = 430
+	var panel_top = 70
+	var panel_h = 940
+
+	# LEFT panel -- Unlocked
+	var left_bg = Panel.new()
+	left_bg.position = Vector2(14, panel_top)
+	left_bg.size = Vector2(panel_w, panel_h)
+	left_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var ls = StyleBoxFlat.new()
+	ls.bg_color = Color(0.05, 0.07, 0.06, 0.55)
+	ls.border_color = Color(0.35, 0.55, 0.40, 0.7)
+	ls.set_border_width_all(1)
+	ls.corner_radius_top_left = 8
+	ls.corner_radius_top_right = 8
+	ls.corner_radius_bottom_left = 8
+	ls.corner_radius_bottom_right = 8
+	left_bg.add_theme_stylebox_override("panel", ls)
+	parent.add_child(left_bg)
+
+	info_unlocked_title = Label.new()
+	info_unlocked_title.position = Vector2(30, panel_top + 12)
+	info_unlocked_title.size = Vector2(panel_w - 20, 26)
+	info_unlocked_title.add_theme_font_size_override("font_size", 18)
+	info_unlocked_title.add_theme_color_override("font_color", Color(0.55, 0.95, 0.6))
+	info_unlocked_title.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	parent.add_child(info_unlocked_title)
+
+	var left_scroll = ScrollContainer.new()
+	left_scroll.position = Vector2(30, panel_top + 44)
+	left_scroll.size = Vector2(panel_w - 26, panel_h - 56)
+	left_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	parent.add_child(left_scroll)
+
+	info_unlocked_label = Label.new()
+	info_unlocked_label.custom_minimum_size = Vector2(panel_w - 46, 0)
+	info_unlocked_label.autowrap_mode = TextServer.AUTOWRAP_WORD
+	info_unlocked_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	info_unlocked_label.add_theme_font_size_override("font_size", 14)
+	info_unlocked_label.add_theme_color_override("font_color", Color(0.82, 0.9, 0.84))
+	left_scroll.add_child(info_unlocked_label)
+
+	# RIGHT panel -- Unlockable / Locked
+	var right_x = 1920 - panel_w - 14
+	var right_bg = Panel.new()
+	right_bg.position = Vector2(right_x, panel_top)
+	right_bg.size = Vector2(panel_w, panel_h)
+	right_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var rs = StyleBoxFlat.new()
+	rs.bg_color = Color(0.07, 0.06, 0.05, 0.55)
+	rs.border_color = Color(0.55, 0.45, 0.30, 0.7)
+	rs.set_border_width_all(1)
+	rs.corner_radius_top_left = 8
+	rs.corner_radius_top_right = 8
+	rs.corner_radius_bottom_left = 8
+	rs.corner_radius_bottom_right = 8
+	right_bg.add_theme_stylebox_override("panel", rs)
+	parent.add_child(right_bg)
+
+	info_locked_title = Label.new()
+	info_locked_title.position = Vector2(right_x + 16, panel_top + 12)
+	info_locked_title.size = Vector2(panel_w - 20, 26)
+	info_locked_title.add_theme_font_size_override("font_size", 18)
+	info_locked_title.add_theme_color_override("font_color", Color(0.95, 0.8, 0.5))
+	info_locked_title.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	parent.add_child(info_locked_title)
+
+	var right_scroll = ScrollContainer.new()
+	right_scroll.position = Vector2(right_x + 16, panel_top + 44)
+	right_scroll.size = Vector2(panel_w - 26, panel_h - 56)
+	right_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	parent.add_child(right_scroll)
+
+	info_locked_label = Label.new()
+	info_locked_label.custom_minimum_size = Vector2(panel_w - 46, 0)
+	info_locked_label.autowrap_mode = TextServer.AUTOWRAP_WORD
+	info_locked_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	info_locked_label.add_theme_font_size_override("font_size", 14)
+	info_locked_label.add_theme_color_override("font_color", Color(0.9, 0.85, 0.78))
+	right_scroll.add_child(info_locked_label)
 
 func _build_popup(parent: Control) -> void:
 	popup_panel = Panel.new()
@@ -259,17 +360,166 @@ func _rebuild_graph() -> void:
 		child.queue_free()
 	_draw_graph()
 	_update_hud()
+	_refresh_info_pane()
+
+# ============================================================
+# INFO PANE (left = unlocked, right = unlockable/locked)
+# ============================================================
+
+# Rebuilds both side columns based on info_focus. When focus is the
+# whole profession, all four keystones are aggregated; when focus is a
+# single keystone, only that keystone's contents show.
+func _refresh_info_pane() -> void:
+	if info_unlocked_label == null:
+		return
+
+	var prof_data = GameData.novice_professions.get("Street Thug", {})
+	var keystones = prof_data.get("keystones", {})
+
+	var scope_ks: Array = []
+	var whole_profession = (info_focus == "" or info_focus == "Street Thug")
+	if whole_profession:
+		info_unlocked_title.text = "UNLOCKED -- STREET THUG"
+		info_locked_title.text = "AVAILABLE -- STREET THUG"
+		for ks_name in ["Melee", "Ranged", "Crafting", "Auxiliary"]:
+			if keystones.has(ks_name):
+				scope_ks.append(ks_name)
+	else:
+		info_unlocked_title.text = "UNLOCKED -- " + info_focus.to_upper()
+		info_locked_title.text = "AVAILABLE -- " + info_focus.to_upper()
+		if keystones.has(info_focus):
+			scope_ks.append(info_focus)
+
+	var unlocked_lines: Array = []
+	var locked_lines: Array = []
+
+	for ks_name in scope_ks:
+		var ks_data = keystones[ks_name]
+		var ks_unlocked = ks_data.get("unlocked", false)
+		var nodes = ks_data.get("nodes", {})
+
+		# Section header per keystone only when showing the whole profession.
+		if whole_profession:
+			unlocked_lines.append("[ " + ks_name + " ]")
+			locked_lines.append("[ " + ks_name + " ]")
+
+		if not ks_unlocked:
+			locked_lines.append("  Keystone locked (" + str(ks_data.get("xp_cost", 10)) + " " + ks_data.get("xp_type", "Combat XP") + ")")
+		# Abilities and stat totals
+		var stat_totals: Dictionary = {}
+		var stat_available: Dictionary = {}
+		for node_name in nodes.keys():
+			var nd = nodes[node_name]
+			var is_ability = nd.get("type", "") == "ability"
+			var purchased = nd.get("purchased", false)
+			if is_ability:
+				if purchased:
+					unlocked_lines.append("  Ability: " + nd.get("ability", node_name))
+				else:
+					locked_lines.append("  Ability: " + nd.get("ability", node_name))
+			else:
+				var stat = nd.get("stat", "")
+				var amt = nd.get("amount", 0)
+				if purchased:
+					stat_totals[stat] = stat_totals.get(stat, 0) + amt
+				else:
+					stat_available[stat] = stat_available.get(stat, 0) + amt
+		for stat in stat_totals.keys():
+			unlocked_lines.append("  +" + str(stat_totals[stat]) + " " + stat)
+		for stat in stat_available.keys():
+			locked_lines.append("  +" + str(stat_available[stat]) + " " + stat + " (available)")
+
+		# Weapon certs / recipes tied to this keystone
+		_append_cert_and_recipe_lines(ks_name, ks_data, unlocked_lines, locked_lines)
+
+		if whole_profession:
+			unlocked_lines.append("")
+			locked_lines.append("")
+
+	# Novice weapon certs aren't tied to any one keystone -- they come
+	# with the profession itself -- so they only show in the whole-
+	# profession view. A Novice cert is owned once Street Thug is learned.
+	if whole_profession:
+		var street_learned = main.professions_unlocked.get("Street Thug", false) if main != null else false
+		var novice_unlocked: Array = []
+		var novice_locked: Array = []
+		for weapon_name in GameData.WEAPON_CERT_REQUIREMENTS.keys():
+			var req = GameData.WEAPON_CERT_REQUIREMENTS[weapon_name]
+			if req.get("profession", "") != "Street Thug":
+				continue
+			if req.get("box", "") != "Novice":
+				continue
+			if street_learned:
+				novice_unlocked.append("  Cert: " + weapon_name)
+			else:
+				novice_locked.append("  Cert: " + weapon_name + " (learn Street Thug)")
+		if not novice_unlocked.is_empty():
+			unlocked_lines.append("[ Novice Certs ]")
+			unlocked_lines.append_array(novice_unlocked)
+		if not novice_locked.is_empty():
+			locked_lines.append("[ Novice Certs ]")
+			locked_lines.append_array(novice_locked)
+
+	if unlocked_lines.is_empty():
+		unlocked_lines.append("Nothing unlocked yet.")
+	if locked_lines.is_empty():
+		locked_lines.append("Nothing left to unlock here.")
+
+	info_unlocked_label.text = "\n".join(unlocked_lines)
+	info_locked_label.text = "\n".join(locked_lines)
+
+# Adds weapon-cert lines (Melee/Ranged keystones) and recipe lines
+# (Crafting keystone) to the unlocked/locked columns, reflecting the
+# same gating the combat and crafting code enforces: certs unlock at 5
+# points in the matching keystone, recipes at 6 points in Crafting.
+func _append_cert_and_recipe_lines(ks_name: String, ks_data: Dictionary, unlocked_lines: Array, locked_lines: Array) -> void:
+	var points_spent = ks_data.get("points_spent", 0)
+	var ks_unlocked = ks_data.get("unlocked", false)
+
+	if ks_name == "Melee" or ks_name == "Ranged":
+		var certs_met = points_spent >= 5
+		for weapon_name in GameData.WEAPON_CERT_REQUIREMENTS.keys():
+			var req = GameData.WEAPON_CERT_REQUIREMENTS[weapon_name]
+			if req.get("profession", "") != "Street Thug":
+				continue
+			# Novice certs belong to the profession-wide view, not a keystone.
+			if req.get("keystone", "") != ks_name:
+				continue
+			if certs_met:
+				unlocked_lines.append("  Cert: " + weapon_name)
+			else:
+				locked_lines.append("  Cert: " + weapon_name + " (5 pts)")
+
+	if ks_name == "Crafting":
+		var recipes_met = ks_unlocked and points_spent >= 6
+		var novice_met = ks_unlocked
+		for recipe in GameData.recipes:
+			if recipe.get("requires_profession", "") != "Street Thug":
+				continue
+			var box = recipe.get("requires_box", "Novice")
+			var rname = recipe.get("name", "?")
+			if box == "Novice":
+				if novice_met:
+					unlocked_lines.append("  Recipe: " + rname)
+				else:
+					locked_lines.append("  Recipe: " + rname + " (unlock Crafting)")
+			else:
+				if recipes_met:
+					unlocked_lines.append("  Recipe: " + rname)
+				else:
+					locked_lines.append("  Recipe: " + rname + " (6 pts)")
 
 func _toggle_expanded() -> void:
 	expanded = not expanded
+	info_focus = "Street Thug"
 	_hide_tooltip()
 	_rebuild_graph()
 
 func _orbit_radius(node_count: int) -> float:
 	return max(120.0, 120.0 + max(0, node_count - 10) * 6.0)
 
-# Splits a node name like "Accuracy 3" into category "Accuracy".
-# Ability nodes are grouped under "Abilities" instead.
+# Splits a node name like "Melee Accuracy 3" into category
+# "Melee Accuracy". Ability nodes are grouped under "Abilities" instead.
 func _node_category(node_name: String, node_data: Dictionary) -> String:
 	if node_data.get("type", "") == "ability":
 		return "Abilities"
@@ -308,6 +558,23 @@ func _is_profession_mastered(profession_name: String) -> bool:
 			return false
 	return true
 
+# Distinct from _is_profession_mastered above: this only checks that
+# every keystone has been unlocked, not that every point in it has
+# been spent. Unlocking all four is what should reveal the Enforcer /
+# Specialist advancement paths as available; full mastery (every point
+# spent) is the separate, later milestone that changes the Street Thug
+# diamond's own visual state.
+func _all_keystones_unlocked(profession_name: String) -> bool:
+	var prof_data = GameData.novice_professions.get(profession_name, {})
+	var keystones = prof_data.get("keystones", {})
+	if keystones.is_empty():
+		return false
+	for ks_name in keystones.keys():
+		var ks = keystones[ks_name]
+		if not ks.get("unlocked", false):
+			return false
+	return true
+
 func _draw_graph() -> void:
 	var prof_data = GameData.novice_professions.get("Street Thug", {})
 	var keystones = prof_data.get("keystones", {})
@@ -325,10 +592,12 @@ func _draw_graph() -> void:
 			combat_spent += ks.get("points_spent", 0)
 			combat_max += ks.get("points_max", 0)
 
+	var street_thug_mastered = _is_profession_mastered("Street Thug")
+	var street_thug_all_unlocked = _all_keystones_unlocked("Street Thug")
+
 	if not expanded:
-		var street_thug_mastered = _is_profession_mastered("Street Thug")
-		_draw_advancement_branch(street_thug_mastered)
-		_diamond(CENTER, CENTER_SIZE, CENTER_COLOR, "STREET\nTHUG", combat_spent, combat_max, crafting_spent, crafting_max)
+		_draw_advancement_branch(street_thug_all_unlocked)
+		_diamond(CENTER, CENTER_SIZE, CENTER_COLOR, "STREET\nTHUG", combat_spent, combat_max, crafting_spent, crafting_max, street_thug_mastered)
 		return
 
 	var diamond_corners = {
@@ -338,7 +607,7 @@ func _draw_graph() -> void:
 		"Auxiliary": CENTER + Vector2( CENTER_SIZE * 0.75,  CENTER_SIZE * 0.35)
 	}
 
-	_diamond(CENTER, CENTER_SIZE, CENTER_COLOR, "STREET\nTHUG", combat_spent, combat_max, crafting_spent, crafting_max)
+	_diamond(CENTER, CENTER_SIZE, CENTER_COLOR, "STREET\nTHUG", combat_spent, combat_max, crafting_spent, crafting_max, street_thug_mastered)
 
 	for ks_name in KS_OFFSETS.keys():
 		if not keystones.has(ks_name):
@@ -349,7 +618,8 @@ func _draw_graph() -> void:
 		var ks_unlocked = ks_data.get("unlocked", false)
 		var corner = diamond_corners.get(ks_name, CENTER)
 
-		_line(corner, ks_pos, col, 4.0, 0.65 if ks_unlocked else 0.35)
+		var diamond_line_end = _clip_toward(ks_pos, corner, KS_RADIUS)
+		_line(corner, diamond_line_end, col, 4.0, 0.65 if ks_unlocked else 0.35)
 
 		var nodes = ks_data.get("nodes", {})
 		var node_names = nodes.keys()
@@ -384,7 +654,8 @@ func _draw_graph() -> void:
 			var start_angle = current_angle
 			for node_name in group["members"]:
 				var node_pos = ks_pos + Vector2(cos(current_angle), sin(current_angle)) * orbit_radius
-				_line(ks_pos, node_pos, col, 2.0, 0.55 if ks_unlocked else 0.25)
+				var stat_line_start = _clip_toward(ks_pos, node_pos, KS_RADIUS)
+				_line(stat_line_start, node_pos, col, 2.0, 0.55 if ks_unlocked else 0.25)
 				current_angle += per_node_angle
 			var end_angle = current_angle - per_node_angle
 			var mid_angle = (start_angle + end_angle) / 2.0
@@ -410,9 +681,15 @@ func _draw_graph() -> void:
 				var next_i = (i + 1) % ability_vertex_positions.size()
 				_line(ability_vertex_positions[i], ability_vertex_positions[next_i], ABILITY_TAG_COLOR, 2.5, 0.65 if ks_unlocked else 0.3)
 
-		# Keystone hex drawn on top of the triangle edges and ring lines,
-		# centered inside the ability triangle, under all the nodes.
-		_keystone_hex(ks_pos, KS_RADIUS, col, ks_name, ks_data)
+		# Melee and Ranged have an embedded ability triangle, so the hex
+		# shape is dropped -- the triangle itself is the visual center
+		# of the cluster, with only the label/status text remaining.
+		# Crafting and Auxiliary have no triangle and keep the full
+		# keystone hex as their visual anchor.
+		if ability_group != null:
+			_keystone_label_only(ks_pos, KS_RADIUS, col, ks_name, ks_data)
+		else:
+			_keystone_hex(ks_pos, KS_RADIUS, col, ks_name, ks_data)
 
 		# Ability nodes drawn last so they sit on top of everything.
 		if ability_group != null:
@@ -430,12 +707,12 @@ func _draw_graph() -> void:
 				current_angle += per_node_angle
 			current_angle += CATEGORY_GAP
 
-func _draw_advancement_branch(street_thug_mastered: bool) -> void:
+func _draw_advancement_branch(all_keystones_unlocked: bool) -> void:
 	var top_vertex = CENTER + Vector2(0, -CENTER_SIZE)
 	for profession_name in NEXT_TIER_OFFSETS.keys():
 		var box_pos = CENTER + NEXT_TIER_OFFSETS[profession_name]
-		_line(top_vertex, box_pos, CENTER_COLOR, 3.0, 0.7 if street_thug_mastered else 0.3)
-		_advancement_box(box_pos, profession_name, street_thug_mastered)
+		_line(top_vertex, box_pos, CENTER_COLOR, 3.0, 0.7 if all_keystones_unlocked else 0.3)
+		_advancement_box(box_pos, profession_name, all_keystones_unlocked)
 
 func _advancement_box(pos: Vector2, profession_name: String, unlocked: bool) -> void:
 	var display_color = CENTER_COLOR if unlocked else LOCKED_GREY
@@ -488,9 +765,9 @@ func _advancement_box(pos: Vector2, profession_name: String, unlocked: bool) -> 
 	btn.modulate.a = 0.0
 	var tip = profession_name + "\n"
 	if unlocked:
-		tip += "Street Thug is mastered -- " + profession_name + " is available to train at a trainer NPC."
+		tip += "All four Street Thug keystones are unlocked -- " + profession_name + " is available to train at a trainer NPC."
 	else:
-		tip += "Requires a mastered Street Thug (every keystone fully spent)."
+		tip += "Requires all four Street Thug keystones unlocked (Melee, Ranged, Crafting, Auxiliary)."
 	btn.mouse_entered.connect(func(): _show_tooltip(tip, pos))
 	btn.mouse_exited.connect(_hide_tooltip)
 	btn.pressed.connect(func(): _on_next_profession_clicked(profession_name, unlocked))
@@ -500,12 +777,21 @@ func _on_next_profession_clicked(profession_name: String, unlocked: bool) -> voi
 	popup_title.text = profession_name.to_upper()
 	popup_title.modulate = CENTER_COLOR
 	if unlocked:
-		popup_body.text = "Street Thug has been mastered!\n\n" + profession_name + " is available to train at a trainer NPC.\n\n(Its own talent tree will appear here in a future update.)"
+		popup_body.text = "All four Street Thug keystones have been unlocked!\n\n" + profession_name + " is available to train at a trainer NPC.\n\n(Its own talent tree will appear here in a future update.)"
 	else:
-		popup_body.text = "Master every keystone in Street Thug -- spend all points in Melee, Ranged, Crafting, and Auxiliary -- to unlock " + profession_name + "."
+		popup_body.text = "Unlock every keystone in Street Thug -- Melee, Ranged, Crafting, and Auxiliary -- to unlock " + profession_name + "."
 	popup_cost_label.text = ""
 	popup_buy_btn.visible = false
 	popup_panel.visible = true
+
+## Returns the point starting at anchor, offset toward target by
+## distance. Used so connector lines stop at a keystone's radius
+## instead of running all the way into its exact center point.
+func _clip_toward(anchor: Vector2, target: Vector2, distance: float) -> Vector2:
+	var dir = target - anchor
+	if dir.length() <= 0.001:
+		return anchor
+	return anchor + dir.normalized() * distance
 
 func _line(from: Vector2, to: Vector2, color: Color, width: float, alpha: float) -> void:
 	var l = Line2D.new()
@@ -527,7 +813,9 @@ func _category_label(pos: Vector2, text: String, color: Color, unlocked: bool) -
 	lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	canvas.add_child(lbl)
 
-func _diamond(pos: Vector2, size: float, color: Color, label: String, combat_spent: int, combat_max: int, crafting_spent: int, crafting_max: int) -> void:
+func _diamond(pos: Vector2, size: float, color: Color, label: String, combat_spent: int, combat_max: int, crafting_spent: int, crafting_max: int, mastered: bool) -> void:
+	var display_color = MASTERED_COLOR if mastered else color
+
 	var poly = Polygon2D.new()
 	poly.polygon = PackedVector2Array([
 		pos + Vector2(0, -size),
@@ -535,7 +823,7 @@ func _diamond(pos: Vector2, size: float, color: Color, label: String, combat_spe
 		pos + Vector2(0, size),
 		pos + Vector2(-size * 0.75, 0)
 	])
-	poly.color = Color(color.r, color.g, color.b, 0.18)
+	poly.color = Color(display_color.r, display_color.g, display_color.b, 0.26 if mastered else 0.18)
 	canvas.add_child(poly)
 
 	var outline = Line2D.new()
@@ -546,14 +834,14 @@ func _diamond(pos: Vector2, size: float, color: Color, label: String, combat_spe
 		pos + Vector2(-size * 0.75, 0),
 		pos + Vector2(0, -size)
 	])
-	outline.default_color = color
-	outline.width = 4.0
+	outline.default_color = display_color
+	outline.width = 5.0 if mastered else 4.0
 	canvas.add_child(outline)
 
 	var glow = Line2D.new()
 	glow.points = outline.points
-	glow.default_color = Color(color.r, color.g, color.b, 0.3)
-	glow.width = 10.0
+	glow.default_color = Color(display_color.r, display_color.g, display_color.b, 0.45 if mastered else 0.3)
+	glow.width = 16.0 if mastered else 10.0
 	canvas.add_child(glow)
 
 	var lbl = Label.new()
@@ -563,9 +851,21 @@ func _diamond(pos: Vector2, size: float, color: Color, label: String, combat_spe
 	lbl.position = pos - Vector2(80, 34)
 	lbl.size = Vector2(160, 48)
 	lbl.add_theme_font_size_override("font_size", 20)
-	lbl.add_theme_color_override("font_color", color.lightened(0.4))
+	lbl.add_theme_color_override("font_color", display_color.lightened(0.4))
 	lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	canvas.add_child(lbl)
+
+	if mastered:
+		var mastered_lbl = Label.new()
+		mastered_lbl.text = "MASTERED"
+		mastered_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		mastered_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		mastered_lbl.position = pos - Vector2(80, size + 46)
+		mastered_lbl.size = Vector2(160, 20)
+		mastered_lbl.add_theme_font_size_override("font_size", 13)
+		mastered_lbl.add_theme_color_override("font_color", MASTERED_COLOR)
+		mastered_lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		canvas.add_child(mastered_lbl)
 
 	var sub_lbl = Label.new()
 	var action_hint = "click to collapse" if expanded else "click to expand"
@@ -590,6 +890,8 @@ func _diamond(pos: Vector2, size: float, color: Color, label: String, combat_spe
 	btn.add_theme_stylebox_override("focus", blank)
 	btn.modulate.a = 0.0
 	var tip = "Street Thug -- base profession.\nCombat XP spent: " + str(combat_spent) + " / " + str(combat_max) + "\nCrafting XP spent: " + str(crafting_spent) + " / " + str(crafting_max)
+	if mastered:
+		tip += "\n\n[ MASTERED -- every keystone fully spent ]"
 	if expanded:
 		tip += "\n\nClick to collapse."
 	else:
@@ -622,6 +924,65 @@ func _keystone_hex(pos: Vector2, radius: float, color: Color, ks_name: String, k
 	glow.default_color = Color(display_color.r, display_color.g, display_color.b, 0.22 if unlocked else 0.08)
 	glow.width = 10.0
 	canvas.add_child(glow)
+
+	var lbl = Label.new()
+	lbl.text = ks_name.to_upper()
+	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	lbl.position = pos - Vector2(radius * 1.3, 26)
+	lbl.size = Vector2(radius * 2.6, 24)
+	lbl.add_theme_font_size_override("font_size", 18)
+	lbl.add_theme_color_override("font_color", color if unlocked else Color(0.65, 0.65, 0.65))
+	lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	canvas.add_child(lbl)
+
+	var status_lbl = Label.new()
+	var spent = ks_data.get("points_spent", 0)
+	var max_pts = ks_data.get("points_max", 10)
+	if unlocked:
+		status_lbl.text = "UNLOCKED -- " + str(spent) + "/" + str(max_pts) + " PTS"
+		status_lbl.add_theme_color_override("font_color", OWNED_TAG_COLOR)
+	else:
+		var xp_cost = ks_data.get("xp_cost", 10)
+		var xp_type = ks_data.get("xp_type", "Combat XP")
+		status_lbl.text = "LOCKED -- " + str(xp_cost) + " " + xp_type
+		status_lbl.add_theme_color_override("font_color", Color(0.8, 0.6, 0.6))
+	status_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	status_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	status_lbl.position = pos - Vector2(radius * 1.3, -2)
+	status_lbl.size = Vector2(radius * 2.6, 18)
+	status_lbl.add_theme_font_size_override("font_size", 11)
+	status_lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	canvas.add_child(status_lbl)
+
+	var btn = Button.new()
+	btn.position = pos - Vector2(radius, radius)
+	btn.size = Vector2(radius * 2, radius * 2)
+	btn.focus_mode = Control.FOCUS_NONE
+	var blank = StyleBoxEmpty.new()
+	btn.add_theme_stylebox_override("normal", blank)
+	btn.add_theme_stylebox_override("hover", blank)
+	btn.add_theme_stylebox_override("pressed", blank)
+	btn.add_theme_stylebox_override("focus", blank)
+	btn.modulate.a = 0.0
+	var node_count = ks_data.get("nodes", {}).size()
+	var tip = ks_name + " Keystone\n"
+	if unlocked:
+		tip += "Unlocked -- " + str(spent) + " / " + str(max_pts) + " points spent across " + str(node_count) + " nodes."
+	else:
+		tip += "Locked. Costs " + str(ks_data.get("xp_cost", 10)) + " " + ks_data.get("xp_type", "Combat XP") + " to unlock.\nOnce unlocked, spend up to " + str(max_pts) + " points across " + str(node_count) + " nodes."
+	btn.mouse_entered.connect(func(): _show_tooltip(tip, pos))
+	btn.mouse_exited.connect(_hide_tooltip)
+	btn.pressed.connect(func(): _on_keystone_clicked(ks_name))
+	canvas.add_child(btn)
+
+# Used for keystones that have an embedded ability triangle (Melee,
+# Ranged). No hex polygon/border/glow is drawn -- the triangle is the
+# visual anchor -- but the name/status text and click/tooltip target
+# are identical to _keystone_hex so the keystone is still fully
+# interactable from the middle of its triangle.
+func _keystone_label_only(pos: Vector2, radius: float, color: Color, ks_name: String, ks_data: Dictionary) -> void:
+	var unlocked = ks_data.get("unlocked", false)
 
 	var lbl = Label.new()
 	lbl.text = ks_name.to_upper()
@@ -906,6 +1267,8 @@ func _hex_points(center: Vector2, radius: float) -> PackedVector2Array:
 func _on_keystone_clicked(ks_name: String) -> void:
 	selected_ks = ks_name
 	selected_node = ""
+	info_focus = ks_name
+	_refresh_info_pane()
 	var prof_data = GameData.novice_professions.get("Street Thug", {})
 	var ks_data = prof_data.get("keystones", {}).get(ks_name, {})
 	var col = COLORS.get(ks_name, Color.WHITE)
@@ -935,6 +1298,8 @@ func _on_keystone_clicked(ks_name: String) -> void:
 func _on_node_clicked(ks_name: String, node_name: String) -> void:
 	selected_ks = ks_name
 	selected_node = node_name
+	info_focus = ks_name
+	_refresh_info_pane()
 	var prof_data = GameData.novice_professions.get("Street Thug", {})
 	var ks_data = prof_data.get("keystones", {}).get(ks_name, {})
 	var node_data = ks_data.get("nodes", {}).get(node_name, {})

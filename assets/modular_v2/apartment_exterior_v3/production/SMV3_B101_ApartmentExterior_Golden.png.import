@@ -3,19 +3,20 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://m1kf65x3f5ch"
-path="res://.godot/imported/SMV3_B101_ApartmentExterior_Golden.png-7f1568bd192090790d8eee3a6abeaf23.ctex"
+path.s3tc="res://.godot/imported/SMV3_B101_ApartmentExterior_Golden.png-7f1568bd192090790d8eee3a6abeaf23.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/modular_v2/apartment_exterior_v3/production/SMV3_B101_ApartmentExterior_Golden.png"
-dest_files=["res://.godot/imported/SMV3_B101_ApartmentExterior_Golden.png-7f1568bd192090790d8eee3a6abeaf23.ctex"]
+dest_files=["res://.godot/imported/SMV3_B101_ApartmentExterior_Golden.png-7f1568bd192090790d8eee3a6abeaf23.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -23,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
@@ -37,4 +38,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0

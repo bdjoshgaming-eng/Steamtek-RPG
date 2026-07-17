@@ -1,0 +1,59 @@
+STEAMTEK RPG - CLAUDE HANDOFF
+=============================
+
+>> See docs/claude handoffs/STEAMTEK_WORKFLOW.md for the session workflow
+   (batch fixes, stage features) that keeps usage down. Paste it or use its
+   tags at the start of a session.
+
+---------------------------------------------------------------
+PROJECT BASICS
+---------------------------------------------------------------
+- Steamtek RPG: co-op crafting action RPG / roguelite.
+- Engine: Godot 4, GDScript.
+- Repo: bdjoshgaming-eng/Steamtek-RPG
+- Local path: C:\My Game\Steamtek-RPG
+- Worked on across two machines (work PC + home PC).
+
+---------------------------------------------------------------
+HARD RULES FOR CODE (do not break)
+---------------------------------------------------------------
+- All .gd files: ASCII only. No em-dashes, no smart quotes. Non-ASCII
+  causes SILENT parse failures.
+- Tabs for indentation, never spaces.
+- Always deliver COMPLETE drop-in files, never diffs or partial snippets.
+  (Josh does not hand-edit code or markdown - Claude makes all changes.)
+- Within one chat session, don't re-upload a file unless it changed on
+  disk - Claude already has it after the first read.
+
+---------------------------------------------------------------
+KEY SYSTEMS (current state)
+---------------------------------------------------------------
+XP SYSTEM
+- Two base pools only: "Combat XP" and "Crafting XP". No Thug Points.
+- _add_skill_xp(pool, amount) applies XP, clamped to _get_xp_type_cap().
+- _resolve_xp_pool(source) maps a logical activity to its pool. This is
+  the SINGLE place to branch XP by specialization later.
+    Healing    -> Combat XP   (pre-specialization)
+    Scavenging -> Crafting XP
+- Crafting, scanning, sampling all award Crafting XP.
+- Kills award Combat XP (split by weapon-class damage share).
+
+KEYSTONE / TALENT SYSTEM (Street Thug)
+- Four keystones: Melee, Ranged, Crafting, Auxiliary.
+- Melee/Ranged: ability triangle in the center (no hex), stat ring outside.
+- Crafting/Auxiliary: hex + stat ring only, no abilities.
+- KeystoneViewer.gd renders the whole panel in code.
+- UNLOCK all 4 keystones -> Enforcer/Specialist advancement paths light up.
+- MASTER all 4 (every point spent) -> Street Thug diamond turns gold
+  ("MASTERED" state). These are two different milestones.
+
+---------------------------------------------------------------
+OPEN ITEMS / TODO
+---------------------------------------------------------------
+- Talent Viewer column swap: Martial Training <-> Unarmed (not yet done).
+- _resolve_xp_pool does not yet check WHICH specialization is active -
+  wire that in once specialization trees exist (TODO marked in main.gd).
+- Legacy pre-keystone arrays (skill_xp_thresholds, skill_point_costs,
+  skill_cogs_costs) may be dead code - candidate for cleanup pass.
+- ACTION_BAR_BOTTOM_MARGIN = 70 for embedded testing; drop to ~20-30
+  for final export.

@@ -1,0 +1,189 @@
+{
+  "schema": "SteamtekMeshyAcceptance-1",
+  "source": "C:\\Users\\bdjos\\.codex\\visualizations\\2026\\07\\17\\019f7111-aa7c-7282-9801-9c83a507076d\\meshy_rig_inspection\\Meshy_AI_Protagonist_18k_Game__biped_Meshy_AI_Meshy_Merged_Animations.glb",
+  "output": "C:\\Users\\bdjos\\.codex\\visualizations\\2026\\07\\17\\019f7111-aa7c-7282-9801-9c83a507076d\\meshy_rig_clean\\STK_C001_Protagonist_RigAnim_v01.glb",
+  "standard": {
+    "triangle_target": [
+      15000,
+      18000
+    ],
+    "lod1_target": [
+      8000,
+      10000
+    ],
+    "lod2_target": [
+      3000,
+      5000
+    ],
+    "material_maximum": 5,
+    "texture_target": [
+      2048,
+      2048
+    ],
+    "required_animations": [
+      "STK_IDLE",
+      "STK_WALK"
+    ]
+  },
+  "armatures": [
+    {
+      "name": "STK_C001_Protagonist_Rig",
+      "bone_count": 24,
+      "semantic_bones": {
+        "hips": "Hips",
+        "spine": "Spine",
+        "chest": "Spine01",
+        "neck": "neck",
+        "head": "Head",
+        "hand.L": "LeftHand",
+        "hand.R": "RightHand",
+        "foot.L": "LeftFoot",
+        "foot.R": "RightFoot"
+      },
+      "missing_semantics": [],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    }
+  ],
+  "meshes": [
+    {
+      "name": "STK_C001_Protagonist_Body",
+      "triangles": 18205,
+      "materials": [
+        "Material_0.001"
+      ],
+      "vertex_groups": 24,
+      "skinned": true,
+      "weights": {
+        "vertex_count": 20409,
+        "unweighted_vertices": 0,
+        "max_influences_per_vertex": 4
+      },
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    }
+  ],
+  "materials": [
+    "Material_0.001"
+  ],
+  "textures": [
+    {
+      "name": "Baked_BaseColor",
+      "width": 4096,
+      "height": 4096,
+      "source": "FILE",
+      "packed": true,
+      "filepath": ""
+    },
+    {
+      "name": "Baked_Emit",
+      "width": 4096,
+      "height": 4096,
+      "source": "FILE",
+      "packed": true,
+      "filepath": ""
+    },
+    {
+      "name": "Baked_MetallicRoughness",
+      "width": 4096,
+      "height": 4096,
+      "source": "FILE",
+      "packed": true,
+      "filepath": ""
+    }
+  ],
+  "animations": [
+    {
+      "name": "STK_IDLE",
+      "frame_start": 0.0,
+      "frame_end": 239.19998168945312
+    },
+    {
+      "name": "STK_RUN",
+      "frame_start": 0.0,
+      "frame_end": 15.199999809265137
+    },
+    {
+      "name": "STK_WALK",
+      "frame_start": 0.0,
+      "frame_end": 24.799999237060547
+    }
+  ],
+  "sockets": [
+    "SOCKET_Head",
+    "SOCKET_Hand_R",
+    "SOCKET_Hand_L",
+    "SOCKET_Back"
+  ],
+  "errors": [],
+  "warnings": [
+    "LOD0 triangle count 18205 is 205 triangles above the nominal target"
+  ],
+  "removed_helper_meshes": [
+    "Icosphere"
+  ],
+  "passed": true,
+  "exported": true,
+  "file_size_bytes": 56705196,
+  "file_signature": {
+    "hex": "67 6C 54 46 02 00 00 00 AC 40 61 03 6C DE 00 00",
+    "ascii": "glTF.....@a.l...",
+    "is_standard_glb": true,
+    "is_meshy_wrapped": false
+  },
+  "material_transfer": {
+    "source": "C:\\Users\\bdjos\\Downloads\\Meshy_AI_Protagonist_18k_Game__0717173225_texture.glb",
+    "material": "Material_0.001",
+    "target_meshes": [
+      "char1"
+    ],
+    "images": [
+      "Baked_BaseColor",
+      "Baked_Emit",
+      "Baked_MetallicRoughness"
+    ]
+  },
+  "scale_normalization": {
+    "armature": "STK_C001_Protagonist_Rig",
+    "original_armature_scale": [
+      0.009999999776482582,
+      0.009999999776482582,
+      0.009999999776482582
+    ],
+    "normalized_armature_scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "original_mesh_scales": {
+      "char1": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "normalized_mesh_scales": {
+      "char1": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "scaled_location_curves": 216,
+    "scaled_location_keys": 1470,
+    "changed": true
+  },
+  "triangle_count": 18205,
+  "renamed_animations": {
+    "Idle_3": "STK_IDLE",
+    "Running": "STK_RUN",
+    "Walking": "STK_WALK"
+  },
+  "blend_output": "C:\\Users\\bdjos\\.codex\\visualizations\\2026\\07\\17\\019f7111-aa7c-7282-9801-9c83a507076d\\meshy_rig_clean\\STK_C001_Protagonist_RigAnim_v01.blend"
+}

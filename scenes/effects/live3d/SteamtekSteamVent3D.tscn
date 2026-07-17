@@ -1,0 +1,68 @@
+[gd_scene load_steps=10 format=3]
+
+[sub_resource type="Gradient" id="SteamSpriteGradient"]
+offsets = PackedFloat32Array(0, 0.32, 0.72, 1)
+colors = PackedColorArray(0.78, 0.86, 0.88, 0.24, 0.72, 0.81, 0.84, 0.2, 0.55, 0.67, 0.72, 0.07, 0.42, 0.54, 0.6, 0)
+
+[sub_resource type="GradientTexture2D" id="SteamSprite"]
+gradient = SubResource("SteamSpriteGradient")
+width = 64
+height = 64
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="SteamMaterial"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
+albedo_color = Color(0.72, 0.82, 0.84, 0.28)
+albedo_texture = SubResource("SteamSprite")
+billboard_mode = 1
+
+[sub_resource type="QuadMesh" id="SteamPuffMesh"]
+material = SubResource("SteamMaterial")
+size = Vector2(0.58, 0.58)
+
+[sub_resource type="Gradient" id="SteamLifeGradient"]
+offsets = PackedFloat32Array(0, 0.18, 0.68, 1)
+colors = PackedColorArray(0.68, 0.78, 0.8, 0, 0.72, 0.82, 0.84, 0.38, 0.58, 0.7, 0.74, 0.18, 0.48, 0.6, 0.64, 0)
+
+[sub_resource type="GradientTexture1D" id="SteamColorRamp"]
+gradient = SubResource("SteamLifeGradient")
+
+[sub_resource type="Curve" id="SteamScaleCurve"]
+_data = [Vector2(0, 0.32), 0.0, 0.0, 0, 0, Vector2(0.45, 0.78), 0.8, 0.8, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="SteamScale"]
+curve = SubResource("SteamScaleCurve")
+
+[sub_resource type="ParticleProcessMaterial" id="SteamProcess"]
+emission_shape = 1
+emission_sphere_radius = 0.12
+direction = Vector3(0.18, 1, 0.05)
+spread = 28.0
+initial_velocity_min = 0.42
+initial_velocity_max = 0.9
+gravity = Vector3(0.16, 0.14, 0.04)
+angular_velocity_min = -24.0
+angular_velocity_max = 24.0
+scale_min = 0.5
+scale_max = 1.0
+scale_curve = SubResource("SteamScale")
+color_ramp = SubResource("SteamColorRamp")
+
+[node name="SteamtekSteamVent3D" type="Node3D"]
+editor_description = "Reusable restrained live-3D steam plume for pipes, grates, and roof vents."
+
+[node name="SteamPuffs" type="GPUParticles3D" parent="."]
+amount = 18
+lifetime = 2.7
+preprocess = 2.7
+randomness = 0.62
+visibility_aabb = AABB(-2, -0.5, -2, 4, 5, 4)
+local_coords = false
+process_material = SubResource("SteamProcess")
+draw_pass_1 = SubResource("SteamPuffMesh")

@@ -398,26 +398,30 @@ var recipes = [
 
 
 # --- Weapon Certification Requirements ---
-# Tier-2 weapons deal half damage until the matching Rank II
-# certification box is owned -- gives "Weapon Cert" real mechanical
-# weight instead of being purely cosmetic.
+# Novice-tier weapons are certified as soon as Street Thug is learned.
+# Advanced weapons require a points investment in the matching keystone
+# ("keystone" + "points_required"): spend that many points in the Melee
+# or Ranged keystone and every weapon of that type becomes certified.
+# Uncertified weapons deal half damage. The 5-point threshold is a
+# temporary blanket gate -- later these will be split out so individual
+# weapons certify at their own specific nodes/point counts.
 const WEAPON_CERT_REQUIREMENTS: Dictionary = {
 	"Piston Blade": {"profession": "Street Thug", "box": "Novice"},
 	"Piston Greatblade": {"profession": "Street Thug", "box": "Novice"},
 	"Pressure Maul": {"profession": "Street Thug", "box": "Novice"},
 	"Arc Rod": {"profession": "Street Thug", "box": "Novice"},
 	"Riveted Knuckles": {"profession": "Street Thug", "box": "Novice"},
-	"Hydraulic Saber": {"profession": "Street Thug", "box": "Melee II"},
-	"Steam Baton": {"profession": "Street Thug", "box": "Melee II"},
-	"Compression Sledge": {"profession": "Street Thug", "box": "Melee III"},
-	"Pneumatic Knuckles": {"profession": "Street Thug", "box": "Melee II"},
+	"Hydraulic Saber": {"profession": "Street Thug", "keystone": "Melee", "points_required": 5},
+	"Steam Baton": {"profession": "Street Thug", "keystone": "Melee", "points_required": 5},
+	"Compression Sledge": {"profession": "Street Thug", "keystone": "Melee", "points_required": 5},
+	"Pneumatic Knuckles": {"profession": "Street Thug", "keystone": "Melee", "points_required": 5},
 	"Rusty Pistol": {"profession": "Street Thug", "box": "Novice"},
 	"Pneumatic Rifle": {"profession": "Street Thug", "box": "Novice"},
 	"Pneumatic Longrifle": {"profession": "Street Thug", "box": "Novice"},
 	"Pressure Scattergun": {"profession": "Street Thug", "box": "Novice"},
-	"Vented Long-Rifle": {"profession": "Street Thug", "box": "Ranged III"},
-	"Double-Bore Scattergun": {"profession": "Street Thug", "box": "Ranged III"},
-	"Copper Lined Gun": {"profession": "Street Thug", "box": "Ranged III"},
+	"Vented Long-Rifle": {"profession": "Street Thug", "keystone": "Ranged", "points_required": 5},
+	"Double-Bore Scattergun": {"profession": "Street Thug", "keystone": "Ranged", "points_required": 5},
+	"Copper Lined Gun": {"profession": "Street Thug", "keystone": "Ranged", "points_required": 5},
 	"Canister Launcher": {"profession": "Ordnance Specialist", "box": "Novice"},
 	"Oil Burner": {"profession": "Ordnance Specialist", "box": "Novice"},
 	"Pressure-Fed Launcher": {"profession": "Ordnance Specialist", "box": "Novice"}
@@ -475,24 +479,24 @@ var novice_professions: Dictionary = {
 				"points_spent": 0,
 				"points_max": 10,
 				"nodes": {
-					# --- Accuracy nodes (5) ---
-					"Accuracy 1": {"type": "stat", "cost": 1, "stat": "Melee Accuracy", "amount": 3, "purchased": false},
-					"Accuracy 2": {"type": "stat", "cost": 1, "stat": "Melee Accuracy", "amount": 3, "purchased": false},
-					"Accuracy 3": {"type": "stat", "cost": 1, "stat": "Melee Accuracy", "amount": 3, "purchased": false},
-					"Accuracy 4": {"type": "stat", "cost": 1, "stat": "Melee Accuracy", "amount": 3, "purchased": false},
-					"Accuracy 5": {"type": "stat", "cost": 1, "stat": "Melee Accuracy", "amount": 3, "purchased": false},
-					# --- Speed nodes (5) ---
-					"Speed 1": {"type": "stat", "cost": 1, "stat": "Melee Speed", "amount": 3, "purchased": false},
-					"Speed 2": {"type": "stat", "cost": 1, "stat": "Melee Speed", "amount": 3, "purchased": false},
-					"Speed 3": {"type": "stat", "cost": 1, "stat": "Melee Speed", "amount": 3, "purchased": false},
-					"Speed 4": {"type": "stat", "cost": 1, "stat": "Melee Speed", "amount": 3, "purchased": false},
-					"Speed 5": {"type": "stat", "cost": 1, "stat": "Melee Speed", "amount": 3, "purchased": false},
-					# --- Crit Damage nodes (5) ---
-					"Crit Damage 1": {"type": "stat", "cost": 1, "stat": "Crit Damage", "amount": 3, "purchased": false},
-					"Crit Damage 2": {"type": "stat", "cost": 1, "stat": "Crit Damage", "amount": 3, "purchased": false},
-					"Crit Damage 3": {"type": "stat", "cost": 1, "stat": "Crit Damage", "amount": 3, "purchased": false},
-					"Crit Damage 4": {"type": "stat", "cost": 1, "stat": "Crit Damage", "amount": 3, "purchased": false},
-					"Crit Damage 5": {"type": "stat", "cost": 1, "stat": "Crit Damage", "amount": 3, "purchased": false},
+					# --- Melee Accuracy nodes (5) ---
+					"Melee Accuracy 1": {"type": "stat", "cost": 1, "stat": "Melee Accuracy", "amount": 3, "purchased": false},
+					"Melee Accuracy 2": {"type": "stat", "cost": 1, "stat": "Melee Accuracy", "amount": 3, "purchased": false},
+					"Melee Accuracy 3": {"type": "stat", "cost": 1, "stat": "Melee Accuracy", "amount": 3, "purchased": false},
+					"Melee Accuracy 4": {"type": "stat", "cost": 1, "stat": "Melee Accuracy", "amount": 3, "purchased": false},
+					"Melee Accuracy 5": {"type": "stat", "cost": 1, "stat": "Melee Accuracy", "amount": 3, "purchased": false},
+					# --- Melee Speed nodes (5) ---
+					"Melee Speed 1": {"type": "stat", "cost": 1, "stat": "Melee Speed", "amount": 3, "purchased": false},
+					"Melee Speed 2": {"type": "stat", "cost": 1, "stat": "Melee Speed", "amount": 3, "purchased": false},
+					"Melee Speed 3": {"type": "stat", "cost": 1, "stat": "Melee Speed", "amount": 3, "purchased": false},
+					"Melee Speed 4": {"type": "stat", "cost": 1, "stat": "Melee Speed", "amount": 3, "purchased": false},
+					"Melee Speed 5": {"type": "stat", "cost": 1, "stat": "Melee Speed", "amount": 3, "purchased": false},
+					# --- Melee Crit Damage nodes (5) ---
+					"Melee Crit Damage 1": {"type": "stat", "cost": 1, "stat": "Melee Crit Damage", "amount": 3, "purchased": false},
+					"Melee Crit Damage 2": {"type": "stat", "cost": 1, "stat": "Melee Crit Damage", "amount": 3, "purchased": false},
+					"Melee Crit Damage 3": {"type": "stat", "cost": 1, "stat": "Melee Crit Damage", "amount": 3, "purchased": false},
+					"Melee Crit Damage 4": {"type": "stat", "cost": 1, "stat": "Melee Crit Damage", "amount": 3, "purchased": false},
+					"Melee Crit Damage 5": {"type": "stat", "cost": 1, "stat": "Melee Crit Damage", "amount": 3, "purchased": false},
 					# --- Ability nodes (3, cost 2 each) ---
 					"Quick Hit": {
 						"type": "ability", "cost": 2, "ability": "Quick Hit", "purchased": false,
@@ -515,24 +519,24 @@ var novice_professions: Dictionary = {
 				"points_spent": 0,
 				"points_max": 10,
 				"nodes": {
-					# --- Accuracy nodes (5) ---
-					"Accuracy 1": {"type": "stat", "cost": 1, "stat": "Ranged Accuracy", "amount": 3, "purchased": false},
-					"Accuracy 2": {"type": "stat", "cost": 1, "stat": "Ranged Accuracy", "amount": 3, "purchased": false},
-					"Accuracy 3": {"type": "stat", "cost": 1, "stat": "Ranged Accuracy", "amount": 3, "purchased": false},
-					"Accuracy 4": {"type": "stat", "cost": 1, "stat": "Ranged Accuracy", "amount": 3, "purchased": false},
-					"Accuracy 5": {"type": "stat", "cost": 1, "stat": "Ranged Accuracy", "amount": 3, "purchased": false},
-					# --- Speed nodes (5) ---
-					"Speed 1": {"type": "stat", "cost": 1, "stat": "Ranged Speed", "amount": 3, "purchased": false},
-					"Speed 2": {"type": "stat", "cost": 1, "stat": "Ranged Speed", "amount": 3, "purchased": false},
-					"Speed 3": {"type": "stat", "cost": 1, "stat": "Ranged Speed", "amount": 3, "purchased": false},
-					"Speed 4": {"type": "stat", "cost": 1, "stat": "Ranged Speed", "amount": 3, "purchased": false},
-					"Speed 5": {"type": "stat", "cost": 1, "stat": "Ranged Speed", "amount": 3, "purchased": false},
-					# --- Crit Damage nodes (5) ---
-					"Crit Damage 1": {"type": "stat", "cost": 1, "stat": "Crit Damage", "amount": 3, "purchased": false},
-					"Crit Damage 2": {"type": "stat", "cost": 1, "stat": "Crit Damage", "amount": 3, "purchased": false},
-					"Crit Damage 3": {"type": "stat", "cost": 1, "stat": "Crit Damage", "amount": 3, "purchased": false},
-					"Crit Damage 4": {"type": "stat", "cost": 1, "stat": "Crit Damage", "amount": 3, "purchased": false},
-					"Crit Damage 5": {"type": "stat", "cost": 1, "stat": "Crit Damage", "amount": 3, "purchased": false},
+					# --- Ranged Accuracy nodes (5) ---
+					"Ranged Accuracy 1": {"type": "stat", "cost": 1, "stat": "Ranged Accuracy", "amount": 3, "purchased": false},
+					"Ranged Accuracy 2": {"type": "stat", "cost": 1, "stat": "Ranged Accuracy", "amount": 3, "purchased": false},
+					"Ranged Accuracy 3": {"type": "stat", "cost": 1, "stat": "Ranged Accuracy", "amount": 3, "purchased": false},
+					"Ranged Accuracy 4": {"type": "stat", "cost": 1, "stat": "Ranged Accuracy", "amount": 3, "purchased": false},
+					"Ranged Accuracy 5": {"type": "stat", "cost": 1, "stat": "Ranged Accuracy", "amount": 3, "purchased": false},
+					# --- Ranged Speed nodes (5) ---
+					"Ranged Speed 1": {"type": "stat", "cost": 1, "stat": "Ranged Speed", "amount": 3, "purchased": false},
+					"Ranged Speed 2": {"type": "stat", "cost": 1, "stat": "Ranged Speed", "amount": 3, "purchased": false},
+					"Ranged Speed 3": {"type": "stat", "cost": 1, "stat": "Ranged Speed", "amount": 3, "purchased": false},
+					"Ranged Speed 4": {"type": "stat", "cost": 1, "stat": "Ranged Speed", "amount": 3, "purchased": false},
+					"Ranged Speed 5": {"type": "stat", "cost": 1, "stat": "Ranged Speed", "amount": 3, "purchased": false},
+					# --- Ranged Crit Damage nodes (5) ---
+					"Ranged Crit Damage 1": {"type": "stat", "cost": 1, "stat": "Ranged Crit Damage", "amount": 3, "purchased": false},
+					"Ranged Crit Damage 2": {"type": "stat", "cost": 1, "stat": "Ranged Crit Damage", "amount": 3, "purchased": false},
+					"Ranged Crit Damage 3": {"type": "stat", "cost": 1, "stat": "Ranged Crit Damage", "amount": 3, "purchased": false},
+					"Ranged Crit Damage 4": {"type": "stat", "cost": 1, "stat": "Ranged Crit Damage", "amount": 3, "purchased": false},
+					"Ranged Crit Damage 5": {"type": "stat", "cost": 1, "stat": "Ranged Crit Damage", "amount": 3, "purchased": false},
 					# --- Ability nodes (3, cost 2 each) ---
 					"Aimed Shot": {
 						"type": "ability", "cost": 2, "ability": "Aimed Shot", "purchased": false,

@@ -1,0 +1,31 @@
+{
+  "schema": "SteamtekLive3DScaleContract-1",
+  "status": "locked",
+  "approved_date": "2026-07-17",
+  "unit_meters_per_godot_unit": 1.0,
+  "character": {
+    "reference_id": "STK_C001_Protagonist",
+    "root_scale": [1.0, 1.0, 1.0],
+    "rescale_to_fit_environment": false
+  },
+  "camera": {
+    "projection": "orthographic",
+    "azimuth_degrees": 60.0,
+    "elevation_degrees": 30.0,
+    "roll_degrees": 0.0,
+    "runtime_rotation_enabled": false,
+    "reference_orthographic_size": 8.5,
+    "orthographic_size_is_scene_framing": true
+  },
+  "apartment_reference": {
+    "door_width_m": 1.2,
+    "door_height_m": 2.2,
+    "storey_height_m": 3.2,
+    "two_storey_facade_height_m": 6.4,
+    "footprint_width_m": 10.0,
+    "footprint_depth_m": 7.0,
+    "service_alley_clear_width_m": 3.5
+  },
+  "gameplay_clearance_override_percent": [10, 20],
+  "reference_scene": "res://scenes/tests/hybrid_3d/Steamtek_ApartmentAlley_DimensionalBlockout_v01.tscn"
+}

@@ -1,13 +1,13 @@
 [gd_scene load_steps=3 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/characters/templates/Steamtek_HumanoidCharacter3D.tscn" id="1_template"]
-[ext_resource type="PackedScene" path="res://assets/characters/player/VesperKane_3D/production_appearance_v01/STK_C001_VesperKane_ProductionAppearance_v01.glb" id="2_vesper"]
+[ext_resource type="PackedScene" uid="uid://cda2y3gb3iapa" path="res://assets/characters/humanoid/base/STK_C001_Protagonist/v01/STK_C001_Protagonist_RigAnim_v01.glb" id="2_protagonist"]
 
 [node name="VesperKane_PlayerCharacter_v01" instance=ExtResource("1_template")]
-character_scene = ExtResource("2_vesper")
-character_instance_name = "STK_C001_VesperKane_ProductionAppearance_v01"
-model_forward_yaw_offset_degrees = 40.0
+character_scene = ExtResource("2_protagonist")
+character_instance_name = "STK_C001_Protagonist_RigAnim_v01"
+model_forward_yaw_offset_degrees = 0.0
 
-[node name="STK_C001_VesperKane_ProductionAppearance_v01" parent="VisualPivot" index="0" instance=ExtResource("2_vesper")]
+[node name="STK_C001_Protagonist_RigAnim_v01" parent="VisualPivot" index="0" instance=ExtResource("2_protagonist")]
 
 [editable path="VisualPivot"]

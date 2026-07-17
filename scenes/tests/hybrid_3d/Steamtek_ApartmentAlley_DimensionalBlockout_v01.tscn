@@ -1,0 +1,151 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://scenes/tests/hybrid_3d/steamtek_apartment_alley_dimensional_blockout.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/characters/player/VesperKane_PlayerCharacter_v01.tscn" id="2_character"]
+[ext_resource type="PackedScene" path="res://scenes/interactions/SteamtekZoneDoor3D.tscn" id="3_zone_door"]
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/materials/apartment_v01/STK_MAT_ApartmentFacade_HandPainted_v02.png" id="4_facade"]
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/materials/apartment_v01/STK_MAT_WetConcrete_HandPainted_v01.png" id="5_ground"]
+[ext_resource type="PackedScene" path="res://scenes/effects/live3d/SteamtekRainVolume3D.tscn" id="6_rain"]
+[ext_resource type="PackedScene" path="res://scenes/effects/live3d/SteamtekSteamVent3D.tscn" id="7_steam"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SkyMaterial"]
+sky_top_color = Color(0.002, 0.006, 0.014, 1)
+sky_horizon_color = Color(0.015, 0.025, 0.045, 1)
+ground_bottom_color = Color(0.001, 0.002, 0.006, 1)
+ground_horizon_color = Color(0.01, 0.018, 0.03, 1)
+
+[sub_resource type="Sky" id="Sky"]
+sky_material = SubResource("SkyMaterial")
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 2
+sky = SubResource("Sky")
+ambient_light_source = 3
+ambient_light_color = Color(0.16, 0.24, 0.38, 1)
+ambient_light_energy = 0.48
+tonemap_mode = 2
+
+[sub_resource type="LabelSettings" id="LabelSettings"]
+font_size = 19
+font_color = Color(0.84, 0.92, 1, 1)
+outline_size = 5
+outline_color = Color(0.004, 0.008, 0.016, 0.92)
+
+[node name="Steamtek_ApartmentAlley_DimensionalBlockout_v01" type="Node3D"]
+editor_description = "Dimensionally authoritative live-3D apartment/alley shell. One Godot unit equals one meter; C001 remains at scale 1."
+script = ExtResource("1_script")
+facade_albedo = ExtResource("4_facade")
+ground_albedo = ExtResource("5_ground")
+metadata/status = "approved_live_3d_scale_authority"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/scale_contract = "SteamtekLive3DScaleContract-1"
+metadata/approved_date = "2026-07-17"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment")
+
+[node name="MoonKey" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-52, -38, 0)
+light_color = Color(0.5, 0.68, 1, 1)
+light_energy = 1.15
+shadow_enabled = true
+
+[node name="DoorAmber" type="OmniLight3D" parent="."]
+position = Vector3(-3.4, 2.1, -1.5)
+light_color = Color(1, 0.38, 0.09, 1)
+light_energy = 1.6
+omni_range = 4.8
+shadow_enabled = true
+
+[node name="AlleyMagenta" type="OmniLight3D" parent="."]
+position = Vector3(5.8, 2.8, -6.5)
+light_color = Color(1, 0.03, 0.48, 1)
+light_energy = 1.5
+omni_range = 5.5
+shadow_enabled = true
+
+[node name="Architecture" type="Node3D" parent="."]
+
+[node name="ApartmentDoorInteraction" parent="." instance=ExtResource("3_zone_door")]
+position = Vector3(-3.4, 1.1, -2.05)
+interaction_prompt = "Enter apartment"
+target_scene_path = "res://scenes/levels/apartment_3d/ApartmentInterior_TransitionTest_v01.tscn"
+target_spawn_id = "InteriorEntrySpawn"
+
+[node name="ExteriorReturnSpawn" type="Marker3D" parent="."]
+position = Vector3(-3.4, 0, -0.9)
+
+[node name="VesperKane_PlayerCharacter_v01" parent="." instance=ExtResource("2_character")]
+position = Vector3(-2.6, 0, 1.2)
+
+[node name="CameraRig" type="Node3D" parent="."]
+
+[node name="SteamtekRainVolume3D" parent="CameraRig" instance=ExtResource("6_rain")]
+position = Vector3(0, 6.8, 0)
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig"]
+position = Vector3(8.66, 6.77, 5)
+projection = 1
+size = 8.5
+current = true
+
+[node name="WeatherEffects" type="Node3D" parent="."]
+
+[node name="RoofVentSteam" parent="WeatherEffects" instance=ExtResource("7_steam")]
+position = Vector3(-0.5, 6.9, -6.7)
+
+[node name="AlleyPipeSteam" parent="WeatherEffects" instance=ExtResource("7_steam")]
+position = Vector3(4.32, 1.46, -8.4)
+scale = Vector3(0.72, 0.72, 0.72)
+
+[node name="TransitionUI" type="CanvasLayer" parent="."]
+
+[node name="Instructions" type="Label" parent="TransitionUI"]
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 990.0
+offset_bottom = 120.0
+text = "STEAMTEK — DIMENSIONAL APARTMENT + ALLEY GATE\nWASD: walk  |  SHIFT + WASD: run\nDoor 2.2 m  |  Storeys 3.2 m  |  Building 6.4 m  |  Alley 3.5 m"
+label_settings = SubResource("LabelSettings")
+
+[node name="Status" type="Label" parent="TransitionUI"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -650.0
+offset_top = -72.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "LIVE 3D SCALE AUTHORITY\nFuture environment artwork must fit this shell; C001 stays unchanged."
+label_settings = SubResource("LabelSettings")
+horizontal_alignment = 2
+
+[node name="InteractionPrompt" type="Label" parent="TransitionUI"]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -220.0
+offset_top = -94.0
+offset_right = 220.0
+offset_bottom = -48.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "[ E ]  Enter apartment"
+label_settings = SubResource("LabelSettings")
+horizontal_alignment = 1
+
+[node name="Fade" type="ColorRect" parent="TransitionUI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)

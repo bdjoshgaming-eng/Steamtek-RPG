@@ -1,0 +1,165 @@
+STEAMTEK PRACTICAL HANDOFF
+Date: 2026-07-17
+Repository: C:\My Game\Steamtek-RPG
+Purpose: Continue the approved live-3D character and dimensional apartment/alley workflow without repeating earlier experiments.
+
+
+CURRENT PROJECT DIRECTION
+
+Steamtek is a neo-industrial cyberpunk-steampunk isometric RPG. The surface world is intentionally compact—apartment, alley, street, and bar—while most gameplay occurs underground in the silo. The target presentation is a high-fidelity 2.5D hybrid: live 3D characters, effects, collision, and transitions are viewed through a locked isometric-style camera, while environment art may use hand-painted textures and carefully layered visual assets. The palette is dark steel, concrete, copper, cyan, magenta, and amber, with rain, steam, and wet surfaces. Avoid ornate Victorian steampunk styling.
+
+IMPORTANT CORRECTION: modular_v1 is not the project standard. Do not describe it as the standard and do not rebuild current work around it. The current authority is the approved live-3D scale and camera contract. Reusable packed scenes such as rain and steam effects are ordinary reusable Godot components; they do not make the environment part of modular_v1 or impose a modular snap system.
+
+The user is not an artist and needs a workflow that is repeatable, beginner-friendly, and resistant to manual rework. Environment art should fit the measured live-3D shell. Never resize the approved protagonist to compensate for old artwork. Old apartment imagery may remain only as a visual or technical reference when explicitly labeled as not to scale.
+
+
+APPROVED CHARACTER PIPELINE
+
+The Meshy-to-Godot bridge successfully delivered model files, but its warning about not finding an FBX was only an optional FBX follow-up failure; the extracted GLBs were real. Earlier imports caused Godot instability and were moved while the pipeline was recovered. A new Meshy protagonist was then validated first as a static GLB and later as a rigged and animated character. The current production character is not one of the deleted old test assets.
+
+Canonical clean rigged character:
+C:\My Game\Steamtek-RPG\assets\characters\humanoid\base\STK_C001_Protagonist\v01\STK_C001_Protagonist_RigAnim_v01.glb
+
+Associated clean source/intake records were produced from:
+C:\My Game\incoming\meshy_protagonist_rig_v01\clean\STK_C001_Protagonist_RigAnim_v01.blend
+C:\My Game\incoming\meshy_protagonist_rig_v01\clean\STK_C001_Protagonist_RigAnim_v01.glb
+C:\My Game\incoming\meshy_protagonist_rig_v01\clean\STK_C001_Protagonist_RigAnim_v01.intake.json
+
+Production Godot wrapper:
+C:\My Game\Steamtek-RPG\scenes\characters\player\VesperKane_PlayerCharacter_v01.tscn
+
+Shared controller:
+C:\My Game\Steamtek-RPG\scenes\characters\templates\steamtek_humanoid_character_3d.gd
+
+The clean character contains one skinned mesh, a 24-bone skeleton, equipment/socket structure, restored PBR material maps, and these animation clips:
+- STK_IDLE
+- STK_WALK
+- STK_RUN
+
+Movement supports WASD walking and Shift+WASD running. The controller includes immediate stopping, improved turning response, final-angle snapping, and short animation blends. The user confirmed that idle, walk, and run function technically. The user dislikes the stiff arms in idle and walk. That is deliberately deferred. The preferred later fix is to replace those two animation clips through Meshy while preserving the accepted rig, character, run animation, scale, sockets, and Godot wrapper. Do not rerig the character for this cosmetic animation issue.
+
+The static Meshy protagonist remains only as a fallback under:
+C:\My Game\Steamtek-RPG\assets\characters\humanoid\incoming\meshy_protagonist_static_v01
+
+Old GLB character experiments, rig-fit iterations, production-mesh proofs, modular-character tests, and retired test scenes were removed at the user's request. Do not restore them unless an explicit recovery need arises. The approved rigged production GLB is an intentional exception: it is the live production character, not an obsolete test GLB.
+
+
+LOCKED CAMERA AND SCALE CONTRACT
+
+Approved camera:
+- Projection: orthographic
+- Azimuth: 60 degrees
+- Elevation: 30 degrees
+- Roll: 0 degrees
+- Reference position: Vector3(8.66, 6.77, 5)
+- Close exploration orthographic size: 8.5
+
+Approved live-3D scale:
+- 1 Godot unit = 1 meter
+- Protagonist scale remains Vector3(1, 1, 1)
+- Door: 1.2 meters wide by 2.2 meters high
+- Storey: 3.2 meters
+- Two-storey facade: 6.4 meters
+- Reference apartment footprint: 10 by 7 meters
+- Service alley: 3.5 meters
+- Gameplay clearance may be widened by 10–20 percent only when documented
+- Environment and artwork fit the character; the character is never resized to fit old art
+
+Contracts:
+C:\My Game\Steamtek-RPG\docs\STEAMTEK_LIVE_3D_SCALE_CONTRACT.md
+C:\My Game\Steamtek-RPG\tools\Steamtek_Live3D_Scale_Contract.json
+C:\My Game\Steamtek-RPG\docs\STEAMTEK_ENVIRONMENT_CAMERA_CONTRACT.md
+
+Approved scenes carry metadata for:
+SteamtekLive3DScaleContract-1
+
+The user tested the character indoors and outdoors and approved the camera. The intended result is achievable for a non-artist because the project uses a hybrid similar in principle to isometric RPGs such as Shadowrun Returns: the player, collision, camera, transitions, lighting, and effects are live 3D, while environment surfaces can use hand-painted art. The user makes visual approvals rather than manually painting every asset.
+
+
+DIMENSIONAL APARTMENT AND ALLEY
+
+Legacy painted-card proof:
+C:\My Game\Steamtek-RPG\scenes\tests\hybrid_3d\Steamtek_ApartmentAlley_HybridCalibration_v01.tscn
+
+This scene is intentionally not a scale authority. It uses old apartment art and is marked:
+legacy_card_pipeline_proof_not_to_scale
+
+Authoritative measured exterior:
+C:\My Game\Steamtek-RPG\scenes\tests\hybrid_3d\Steamtek_ApartmentAlley_DimensionalBlockout_v01.tscn
+
+Runtime construction script:
+C:\My Game\Steamtek-RPG\scenes\tests\hybrid_3d\steamtek_apartment_alley_dimensional_blockout.gd
+
+The measured exterior contains the apartment facade, side and back walls, roof and parapets, windows, a correctly measured door, sidewalk, world floor, service alley, opposite wall, industrial trim, facade pipe, roof vent, puddles, drainage channel, and an alley steam pipe. A full invisible BuildingFootprintBlocker prevents the player from walking into the unmodeled building shell or beneath the roof.
+
+The dimensional exterior uses the reusable SteamtekZoneDoor3D interaction. The apartment entrance transitions to:
+C:\My Game\Steamtek-RPG\scenes\levels\apartment_3d\ApartmentInterior_TransitionTest_v01.tscn
+
+The apartment exit returns to the new dimensional exterior. Exterior and interior spawn markers are configured. The user tested the round trip and confirmed that it works.
+
+
+HAND-PAINTED MATERIAL PASS
+
+The first facade texture was judged too close to a photoreal material scan and is retained only as a fallback:
+C:\My Game\Steamtek-RPG\assets\environment\live3d\materials\apartment_v01\STK_MAT_ApartmentFacade_Albedo_v01.png
+
+Approved/current painterly facade texture:
+C:\My Game\Steamtek-RPG\assets\environment\live3d\materials\apartment_v01\STK_MAT_ApartmentFacade_HandPainted_v02.png
+
+The facade texture is mapped through a Godot StandardMaterial3D using world triplanar mapping. Window colors and live lighting were reduced from the earlier overly bright cyan/magenta treatment. Copper and steel trim, door lighting, pipe clamps, base courses, roof steel, and roof vent details are separate deterministic geometry. Windows remain simplified placeholders for a future glass pass.
+
+Current hand-painted wet concrete texture:
+C:\My Game\Steamtek-RPG\assets\environment\live3d\materials\apartment_v01\STK_MAT_WetConcrete_HandPainted_v01.png
+
+The wet concrete texture is neutral albedo with no baked cyan, magenta, amber, or reflection. It is applied with world triplanar mapping to the sidewalk, street/world ground, and alley using different material tint, metallic, and roughness settings. Glossy puddles are separate thin, non-colliding oval meshes so their reflection can be tuned without repainting the ground. The alley includes a drainage channel and metal grate. The user approved this ground pass.
+
+
+RAIN AND STEAM
+
+New reusable live-3D rain scene:
+C:\My Game\Steamtek-RPG\scenes\effects\live3d\SteamtekRainVolume3D.tscn
+
+New reusable live-3D steam scene:
+C:\My Game\Steamtek-RPG\scenes\effects\live3d\SteamtekSteamVent3D.tscn
+
+These are GPUParticles3D effects. They are not legacy Node2D overlays and are not connected to modular_v1. The rain volume is instanced beneath the moving camera rig so exterior rain follows the player without filling an enormous world volume. Steam is instanced at the roof vent and alley pipe. Both effects use restrained colors and modest particle counts intended for the locked camera.
+
+Status: the files and scene references passed static checks, but the user has not yet confirmed the rain and steam visually in a normal Godot F6 run. That is the immediate validation step. Do not use headless or command-line Godot for this project because repeated Godot 4.7 command-line runs crashed with signal 11/application memory errors. Let the user test through the normal editor.
+
+
+KNOWN ISSUES AND DEFERRED WORK
+
+1. Idle and walking arms are too stiff. Defer until the current environment path is farther along, then replace only those Meshy clips.
+2. Character stopping/turning drift was acknowledged as a later polish item. The controller already has immediate stopping and angle snapping, but final locomotion polish remains.
+3. Window glass is still placeholder-quality and needs a later restrained glass/material pass.
+4. Rain and steam require visual approval in the normal Godot editor.
+5. The authoritative apartment/alley remains a measured production blockout with developing art, not a finished level.
+6. The old Node2D/procedural V4 surface route cannot directly accept this live-3D character without breaking the approved system. Do not merge them casually.
+7. The worktree contains many intentional changes and deletions from the cleanup. Preserve unrelated user changes and do not use destructive Git recovery commands.
+
+
+EXACT NEXT ACTIONS
+
+1. In Godot, open:
+   res://scenes/tests/hybrid_3d/Steamtek_ApartmentAlley_DimensionalBlockout_v01.tscn
+2. Allow Godot to finish importing/scanning.
+3. Press F6 in the normal editor.
+4. Confirm that rain is visible but does not obscure the protagonist or facade.
+5. Walk and run around to confirm that the rain volume follows the camera/player.
+6. Inspect steam at the roof vent and alley pipe. It should drift upward gently and remain translucent.
+7. Confirm movement, collisions, apartment entrance, interior exit, and locked camera are unchanged.
+8. If the weather is too dense or too faint, tune particle amount, opacity, lifetime, and velocity inside the two reusable effect scenes—not in the environment geometry.
+9. After weather approval, proceed to the restrained window-glass treatment, then broader apartment/alley prop dressing. Keep the live-3D scale contract authoritative.
+
+
+WORKING RULES FOR THE NEXT SESSION
+
+- Do not call modular_v1 the standard.
+- Do not resize C001.
+- Do not restore retired GLB tests.
+- Do not use old apartment art to establish dimensions.
+- Do not run headless Godot.
+- Prefer reusable scenes and production paths over repeated manual setup.
+- Give the user short, direct Godot testing steps.
+- Treat screenshots and normal-editor F6 tests as the visual approval gate.
+

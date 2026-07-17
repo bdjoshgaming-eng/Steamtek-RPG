@@ -186,7 +186,7 @@ shape = SubResource("DoorBodyShape")
 [node name="ExitDoor" parent="." instance=ExtResource("3_zone_door")]
 position = Vector3(0, 1.15, 3.0)
 interaction_prompt = "Exit to alley"
-target_scene_path = "res://scenes/levels/surface_3d/ApartmentExterior_TransitionTest_v01.tscn"
+target_scene_path = "res://scenes/tests/hybrid_3d/Steamtek_ApartmentAlley_DimensionalBlockout_v01.tscn"
 target_spawn_id = "ExteriorReturnSpawn"
 
 [node name="InteriorEntrySpawn" type="Marker3D" parent="."]
@@ -211,7 +211,7 @@ offset_left = 24.0
 offset_top = 20.0
 offset_right = 760.0
 offset_bottom = 88.0
-text = "APARTMENT INTERIOR — TRANSITION SYSTEM TEST\nRoom architecture is graybox; walk to the door and press E to return."
+text = "APARTMENT INTERIOR — PRODUCTION CHARACTER TRANSITION TEST\nWASD: walk  |  SHIFT + WASD: run  |  Approach the door and press E to exit."
 label_settings = SubResource("LabelSettings")
 
 [node name="InteractionPrompt" type="Label" parent="TransitionUI"]

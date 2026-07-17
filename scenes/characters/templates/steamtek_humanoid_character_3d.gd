@@ -12,13 +12,18 @@ signal interaction_performed(target: Node)
 @export var character_instance_name := "SteamtekHumanoidVisual"
 @export var player_controlled := true
 @export var walk_speed := 4.2
+@export var run_speed := 6.4
 @export var movement_acceleration := 18.0
 @export var movement_deceleration := 24.0
-@export var turn_response := 24.0
+@export var stop_immediately := true
+@export var turn_response := 36.0
+@export var turn_snap_threshold_degrees := 0.75
+@export var locomotion_blend_seconds := 0.1
 @export var gravity_strength := 18.0
 @export var model_forward_yaw_offset_degrees := 40.0
 @export var idle_animation_key := "STK_IDLE"
 @export var walk_animation_key := "STK_WALK"
+@export var run_animation_key := "STK_RUN"
 @export var interaction_action := "interact"
 
 @onready var visual_pivot: Node3D = $VisualPivot
@@ -31,6 +36,7 @@ var character_instance: Node3D
 var animation_player: AnimationPlayer
 var idle_animation := ""
 var walk_animation := ""
+var run_animation := ""
 var active_animation := ""
 var target_facing_yaw := 0.0
 var focused_interactable: Area3D
@@ -51,16 +57,24 @@ func _physics_process(delta: float) -> void:
 	var move_direction := _camera_relative_direction(input_vector)
 	if move_direction.length_squared() > 0.001:
 		move_direction = move_direction.normalized()
-		var target_velocity := move_direction * walk_speed * clampf(input_vector.length(), 0.0, 1.0)
+		var wants_to_run := Input.is_key_pressed(KEY_SHIFT)
+		var movement_speed := run_speed if wants_to_run else walk_speed
+		var target_velocity := move_direction * movement_speed * clampf(input_vector.length(), 0.0, 1.0)
 		velocity.x = move_toward(velocity.x, target_velocity.x, movement_acceleration * delta)
 		velocity.z = move_toward(velocity.z, target_velocity.z, movement_acceleration * delta)
 		target_facing_yaw = atan2(move_direction.x, move_direction.z) + deg_to_rad(model_forward_yaw_offset_degrees)
 		var turn_weight := 1.0 - exp(-turn_response * delta)
 		visual_pivot.rotation.y = lerp_angle(visual_pivot.rotation.y, target_facing_yaw, turn_weight)
-		_play_animation(walk_animation)
+		if absf(angle_difference(visual_pivot.rotation.y, target_facing_yaw)) <= deg_to_rad(turn_snap_threshold_degrees):
+			visual_pivot.rotation.y = target_facing_yaw
+		_play_animation(run_animation if wants_to_run else walk_animation)
 	else:
-		velocity.x = move_toward(velocity.x, 0.0, movement_deceleration * delta)
-		velocity.z = move_toward(velocity.z, 0.0, movement_deceleration * delta)
+		if stop_immediately:
+			velocity.x = 0.0
+			velocity.z = 0.0
+		else:
+			velocity.x = move_toward(velocity.x, 0.0, movement_deceleration * delta)
+			velocity.z = move_toward(velocity.z, 0.0, movement_deceleration * delta)
 		_play_animation(idle_animation)
 
 	if not is_on_floor():
@@ -83,6 +97,10 @@ func play_idle() -> void:
 
 func play_walk() -> void:
 	_play_animation(walk_animation)
+
+
+func play_run() -> void:
+	_play_animation(run_animation)
 
 
 func get_character_animation_player() -> AnimationPlayer:
@@ -153,8 +171,15 @@ func _instantiate_character() -> void:
 		return
 	idle_animation = _find_animation_name(idle_animation_key)
 	walk_animation = _find_animation_name(walk_animation_key)
+	run_animation = _find_animation_name(run_animation_key)
 	_configure_loop(idle_animation)
 	_configure_loop(walk_animation)
+	_configure_loop(run_animation)
+	if idle_animation.is_empty() or walk_animation.is_empty() or run_animation.is_empty():
+		push_warning(
+			"Character is missing a required locomotion animation. Imported: %s"
+			% str(animation_player.get_animation_list())
+		)
 	_play_animation(idle_animation)
 
 
@@ -202,6 +227,6 @@ func _configure_loop(animation_name: String) -> void:
 func _play_animation(animation_name: String) -> void:
 	if animation_player == null or animation_name.is_empty() or active_animation == animation_name:
 		return
-	animation_player.play(animation_name, 0.16)
+	animation_player.play(animation_name, locomotion_blend_seconds)
 	animation_player.speed_scale = 1.0
 	active_animation = animation_name

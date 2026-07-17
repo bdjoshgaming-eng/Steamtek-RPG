@@ -1,0 +1,128 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://scenes/tests/hybrid_3d/steamtek_apartment_alley_hybrid_calibration.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/characters/player/VesperKane_PlayerCharacter_v01.tscn" id="2_character"]
+[ext_resource type="Texture2D" path="res://assets/modular_v2/apartment_exterior_v3/production/SMV3_B101_ApartmentExterior_Golden.png" id="3_apartment"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SkyMaterial"]
+sky_top_color = Color(0.002, 0.006, 0.014, 1)
+sky_horizon_color = Color(0.015, 0.025, 0.045, 1)
+ground_bottom_color = Color(0.001, 0.002, 0.006, 1)
+ground_horizon_color = Color(0.01, 0.018, 0.03, 1)
+
+[sub_resource type="Sky" id="Sky"]
+sky_material = SubResource("SkyMaterial")
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 2
+sky = SubResource("Sky")
+ambient_light_source = 3
+ambient_light_color = Color(0.18, 0.26, 0.4, 1)
+ambient_light_energy = 0.5
+tonemap_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="GroundMaterial"]
+albedo_color = Color(0.025, 0.035, 0.052, 1)
+metallic = 0.35
+roughness = 0.68
+
+[sub_resource type="BoxMesh" id="GroundMesh"]
+material = SubResource("GroundMaterial")
+size = Vector3(18, 0.2, 16)
+
+[sub_resource type="BoxShape3D" id="GroundShape"]
+size = Vector3(18, 0.2, 16)
+
+[sub_resource type="BoxShape3D" id="BuildingBackstopShape"]
+size = Vector3(9.0, 5.5, 0.5)
+
+[sub_resource type="LabelSettings" id="LabelSettings"]
+font_size = 19
+font_color = Color(0.84, 0.92, 1, 1)
+outline_size = 5
+outline_color = Color(0.004, 0.008, 0.016, 0.92)
+
+[node name="Steamtek_ApartmentAlley_HybridCalibration_v01" type="Node3D"]
+editor_description = "Legacy full-card technical proof only. The apartment artwork is not a production scale authority; do not resize C001 to match it."
+script = ExtResource("1_script")
+metadata/status = "legacy_card_pipeline_proof_not_to_scale"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment")
+
+[node name="CharacterKey" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-52, -38, 0)
+light_color = Color(0.58, 0.76, 1, 1)
+light_energy = 1.05
+shadow_enabled = true
+
+[node name="WarmRim" type="OmniLight3D" parent="."]
+position = Vector3(-3.5, 3.0, 1.5)
+light_color = Color(1, 0.38, 0.12, 1)
+light_energy = 3.0
+omni_range = 8.0
+shadow_enabled = true
+
+[node name="Floor" type="StaticBody3D" parent="."]
+position = Vector3(0, -0.1, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("GroundMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("GroundShape")
+
+[node name="PaintedApartmentCard" type="Sprite3D" parent="."]
+position = Vector3(0, 2.75, -3.6)
+pixel_size = 0.0025
+billboard = 1
+shaded = false
+alpha_cut = 2
+texture = ExtResource("3_apartment")
+
+[node name="BuildingBackstop" type="StaticBody3D" parent="."]
+position = Vector3(0, 2.75, -3.85)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Collision" type="CollisionShape3D" parent="BuildingBackstop"]
+shape = SubResource("BuildingBackstopShape")
+
+[node name="VesperKane_PlayerCharacter_v01" parent="." instance=ExtResource("2_character")]
+position = Vector3(0, 0, 2.3)
+
+[node name="CameraRig" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig"]
+position = Vector3(8.66, 6.77, 5)
+projection = 1
+size = 8.5
+current = true
+
+[node name="CalibrationUI" type="CanvasLayer" parent="."]
+
+[node name="Instructions" type="Label" parent="CalibrationUI"]
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 940.0
+offset_bottom = 112.0
+text = "STEAMTEK — LEGACY APARTMENT CARD TECHNICAL PROOF\nWASD: walk  |  SHIFT + WASD: run\nThis old building is intentionally NOT a production scale reference."
+label_settings = SubResource("LabelSettings")
+
+[node name="Status" type="Label" parent="CalibrationUI"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -620.0
+offset_top = -70.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "FULL PAINTED CARD — SCALE TEST ONLY\nOcclusion layers and interactive door follow after approval."
+label_settings = SubResource("LabelSettings")
+horizontal_alignment = 2

@@ -12,7 +12,7 @@ func _initialize() -> void:
 	await process_frame
 	var required_paths := [
 		"VesperKane_PlayerCharacter_v01",
-		"VesperKane_PlayerCharacter_v01/VisualPivot/STK_C001_VesperKane_ProductionAppearance_v01",
+		"VesperKane_PlayerCharacter_v01/VisualPivot/STK_C001_Protagonist_RigAnim_v01",
 		"VesperKane_PlayerCharacter_v01/VisualPivot/InteractionDetector/Collision",
 		"CameraRig/Camera3D", "Floor/Collision", "TestDoor/DoorBody/Collision",
 		"TestDoor/InteractionArea/Collision", "PlaytestUI/InteractionPrompt",

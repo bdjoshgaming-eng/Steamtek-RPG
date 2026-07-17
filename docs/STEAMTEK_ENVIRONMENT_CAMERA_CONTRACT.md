@@ -4,6 +4,11 @@ Status: **locked for future environment production**
 
 Approved: July 15, 2026
 
+Live-3D scale note: meter-based hybrid scenes are additionally governed by
+`docs/STEAMTEK_LIVE_3D_SCALE_CONTRACT.md`. The projected 2D basis below remains
+preserved for its original asset pipeline and must not be used to rescale the
+approved live-3D protagonist.
+
 ## Locked camera
 
 - Presentation: fixed orthographic 2.5D

@@ -1,9 +1,0 @@
-[gd_scene format=3]
-
-[ext_resource type="Script" path="res://scenes/tests/hybrid_3d/steamtek_hybrid_3d_poc.gd" id="1_hybrid"]
-
-[node name="VesperKane_ProductionMesh_v01" type="Node3D"]
-script = ExtResource("1_hybrid")
-character_scene_path = "res://assets/characters/player/VesperKane_3D/production_mesh_v01/STK_C001_VesperKane_ProductionMesh_v01.glb"
-character_instance_name = "STK_C001_VesperKane_ProductionMesh_v01"
-

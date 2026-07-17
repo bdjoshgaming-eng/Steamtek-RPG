@@ -1536,11 +1536,15 @@ func _finalize_crafted_item(recipe: Dictionary, base_quality: int) -> Dictionary
 	if recipe.has("max_charges"):
 		inventory_stats[item_key]["Charges"] = recipe["max_charges"]
 
-	_add_skill_xp("Crafting XP", 15)
-	
+	var crafting_xp_awarded = 15
+	_add_skill_xp("Crafting XP", crafting_xp_awarded)
 
 	if recipe.has("item_class") and recipe["item_class"] == "Medicine":
-		_add_skill_xp("Crafting XP", 15)
+		var medicine_bonus_xp = 15
+		_add_skill_xp("Crafting XP", medicine_bonus_xp)
+		crafting_xp_awarded += medicine_bonus_xp
+
+	_show_xp_gain_message("You've gained " + str(crafting_xp_awarded) + " Crafting XP!")
 
 	if recipe.has("item_class"):
 		crafted_item_class[item_key] = recipe["item_class"]
@@ -2085,18 +2089,31 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 		is_uncertified = true
 		for option in requirement_options:
 			var cert_prof_data = GameData.novice_professions.get(option["profession"], {})
-			# Keystone professions: certified if the profession is unlocked
-			# (keystone node purchase is the new cert mechanism, handled
-			# separately -- for now unlocking the profession is sufficient)
+			# Keystone professions (Street Thug).
 			if cert_prof_data.has("keystones"):
-				if professions_unlocked.get(option["profession"], false):
+				# Not certified at all until the profession is learned.
+				if not professions_unlocked.get(option["profession"], false):
+					continue
+				# Novice-tier weapon: certified as soon as the profession
+				# is learned, no points needed.
+				if option.get("box", "") == "Novice":
 					is_uncertified = false
 					break
+				# Keystone-gated weapon: certified once enough points have
+				# been spent in the matching keystone.
+				if option.has("keystone"):
+					var ks_name_req = option["keystone"]
+					var ks_data_req = cert_prof_data["keystones"].get(ks_name_req, {})
+					var points_needed = option.get("points_required", 5)
+					if ks_data_req.get("points_spent", 0) >= points_needed:
+						is_uncertified = false
+						break
 				continue
 			# Path-based professions: check the specific box
-			if not cert_prof_data.has("paths") or not cert_prof_data["paths"].has(option["box"]):
+			var box_name = option.get("box", "")
+			if box_name == "" or not cert_prof_data.has("paths") or not cert_prof_data["paths"].has(box_name):
 				continue
-			var cert_path_data = cert_prof_data["paths"][option["box"]]
+			var cert_path_data = cert_prof_data["paths"][box_name]
 			var cert_max = cert_path_data.get("max_nodes", NODES_PER_PATH)
 			if cert_path_data["unlocked_nodes"] >= cert_max:
 				is_uncertified = false
@@ -2449,6 +2466,25 @@ func _get_unlocked_classes() -> Array:
 
 # --- Skills ---
 
+# Maps a logical activity source to the XP pool it currently feeds.
+# Before the player specializes, sources like Healing and Scavenging
+# all funnel into the base Combat XP pool -- there is only one combat
+# progression track at that stage. Once specializations are unlocked,
+# this is the single place to branch a given source into its own XP
+# type (e.g. Healing -> "Medical XP" for a medic specialization).
+# Callers use the returned pool name for BOTH the _add_skill_xp call
+# and the on-screen message, so the label and the destination always
+# stay in sync automatically.
+func _resolve_xp_pool(source: String) -> String:
+	# TODO: branch by unlocked specialization once those trees exist.
+	match source:
+		"Healing":
+			return "Combat XP"
+		"Scavenging":
+			return "Crafting XP"
+		_:
+			return "Combat XP"
+
 func _add_skill_xp(xp_type: String, amount: int) -> void:
 	if not xp_pools.has(xp_type):
 		return
@@ -2502,6 +2538,8 @@ func _get_xp_type_cap(xp_type: String) -> int:
 		if prof_data.has("keystones"):
 			for ks_name in prof_data["keystones"].keys():
 				var ks = prof_data["keystones"][ks_name]
+				if ks.get("xp_type", "Combat XP") != xp_type:
+					continue
 				if ks.get("unlocked", false):
 					continue
 				var cost = ks.get("xp_cost", 10)
@@ -2520,7 +2558,13 @@ func _get_xp_type_cap(xp_type: String) -> int:
 		return int(lowest_ks_cost * 1.5)
 	if has_path_style:
 		return int(highest_path_cost * 1.5)
-	return int(skill_xp_thresholds[0] * 1.5)
+	# Nothing left to save toward -- every keystone (and path, if any)
+	# using this XP type is already unlocked. Falling back to the old
+	# pre-keystone skill_xp_thresholds[0] here used to collapse the cap
+	# to 1, silently freezing the pool forever. Once everything is
+	# unlocked there's no purchase left to scale a progress bar toward,
+	# so just stop capping.
+	return 999999999
 
 
 func _refresh_skill_tree_ui() -> void:
@@ -3371,8 +3415,9 @@ func _scavenge_dumpster() -> void:
 	_update_inventory_display()
 	_update_cogs_display()
 
-	_add_skill_xp("Crafting XP", FORAGE_XP)
-	_show_xp_gain_message("You've gained " + str(FORAGE_XP) + " Scavenging XP!")
+	var scavenging_xp_pool = _resolve_xp_pool("Scavenging")
+	_add_skill_xp(scavenging_xp_pool, FORAGE_XP)
+	_show_xp_gain_message("You've gained " + str(FORAGE_XP) + " " + scavenging_xp_pool + "!")
 
 	_show_combat_message("You scavenge and find: " + str(plastic_amount) + " Plastic, " + str(DUMPSTER_COGS_MIN) + " Cogs")
 
@@ -3440,8 +3485,9 @@ func _attempt_use_bandage() -> void:
 
 	_update_inventory_display()
 
-	_add_skill_xp("Combat XP", BANDAGE_HEALING_XP)
-	_show_xp_gain_message("You've gained " + str(BANDAGE_HEALING_XP) + " Healing XP!")
+	var healing_xp_pool = _resolve_xp_pool("Healing")
+	_add_skill_xp(healing_xp_pool, BANDAGE_HEALING_XP)
+	_show_xp_gain_message("You've gained " + str(BANDAGE_HEALING_XP) + " " + healing_xp_pool + "!")
 	_show_combat_message("You use a Crate of Bandages and heal " + str(heal_amount) + " HP! (-" + str(BANDAGE_ACTION_COST) + " Action)")
 
 	bandage_ready = false
@@ -5040,6 +5086,29 @@ func _make_crafting_book_header(text: String, indent: int, color: Color, categor
 	header.pressed.connect(_toggle_book_category.bind(category_key, refresh_callback))
 	return header
 
+# Determines whether a recipe is currently learned/craftable.
+# Street Thug recipes are gated by the Crafting keystone: the keystone
+# must be unlocked for Novice recipes, and 6 points must be spent in it
+# for every non-Novice recipe (blanket gate for now -- to be split out
+# per recipe later). Recipes for other professions keep the simpler
+# "is the profession unlocked" rule.
+func _is_recipe_learned(recipe: Dictionary) -> bool:
+	var prof = recipe.get("requires_profession", "")
+	if prof == "":
+		return true
+	if not professions_unlocked.get(prof, false):
+		return false
+	if prof == "Street Thug":
+		var street = GameData.novice_professions.get("Street Thug", {})
+		var crafting_ks = street.get("keystones", {}).get("Crafting", {})
+		if not crafting_ks.get("unlocked", false):
+			return false
+		var box = recipe.get("requires_box", "Novice")
+		if box == "Novice":
+			return true
+		return crafting_ks.get("points_spent", 0) >= 6
+	return true
+
 func _refresh_crafting_book() -> void:
 	for child in crafting_book_list_container.get_children():
 		child.queue_free()
@@ -5060,7 +5129,7 @@ func _refresh_crafting_book() -> void:
 	var grouped: Dictionary = {}
 	for i in range(GameData.recipes.size()):
 		var recipe = GameData.recipes[i]
-		if recipe.has("requires_profession") and not professions_unlocked.get(recipe["requires_profession"], false):
+		if not _is_recipe_learned(recipe):
 			continue
 
 		var cat = _categorize_recipe_for_book(recipe)
@@ -5277,7 +5346,7 @@ func _update_assembly_preview() -> void:
 func _execute_assembly_craft() -> void:
 	var recipe = GameData.recipes[crafting_assembly_recipe_index]
 
-	if recipe.has("requires_profession") and not professions_unlocked.get(recipe["requires_profession"], false):
+	if not _is_recipe_learned(recipe):
 		crafting_book_result_label.text = "You haven't learned this pattern!"
 		return
 

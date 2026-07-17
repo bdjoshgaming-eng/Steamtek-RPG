@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://cax6f1wxmyity"]
+
+[ext_resource type="PackedScene" uid="uid://k0v2md5ot7h5" path="res://assets/characters/humanoid/incoming/meshy_protagonist_static_v01/Meshy_AI_Protagonist_18k_Game__0717173225_texture.glb" id="1_e16p8"]
+
+[node name="Node3D" type="Node3D" unique_id=349010695]
+
+[node name="Meshy_AI_Protagonist_18k_Game__0717173225_texture" parent="." unique_id=1610526628 instance=ExtResource("1_e16p8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0)

@@ -1,0 +1,195 @@
+STEAMTEK CONVERSATION AND DECISION RECORD
+Date: 2026-07-17
+Scope: Detailed chronological record of the cross-PC character recovery, live-3D approval, measured environment, materials, weather effects, and user decisions.
+
+
+OPENING CONTEXT AND CORRECTION
+
+The session began with a detailed carryover summary describing Steamtek as a compact-surface, deep-silo, neo-industrial cyberpunk-steampunk isometric RPG. The summary described the art target as a high-fidelity 2.5D hybrid using modular painted/isometric environments, 3D characters and effects, and a locked 2:1-style camera. It also said the project had moved toward a stricter modular_v1 snap-system standard.
+
+The user immediately corrected that statement: modular_v1 is not the standard. This correction governs all later work. Older modular experiments may exist in the repository, but current character, camera, dimensional environment, material, rain, and steam decisions must not be presented as modular_v1 work. Reusable effects are allowed, but reusability is not the same as adopting a modular building standard.
+
+
+MESHY BRIDGE RECOVERY AND FILE-FORMAT CONFUSION
+
+The user reported that the Meshy bridge appeared to work. Its log showed a nominal GLB upload being treated as a ZIP container and extracted into:
+res://imported_models/Neo-Steampunk Protagonist Rigged
+
+The extraction produced:
+- Meshy_AI_Neo_Steampunk_Protago_biped_Animation_Walking_withSkin.glb
+- Meshy_AI_Neo_Steampunk_Protago_biped_Character_output.glb
+
+The bridge then warned that no FBX model was found and skipped its FBX-specific import step. The important interpretation was that the warning did not mean the extracted GLBs were missing. The bridge had delivered real model files, but an optional FBX branch did not run.
+
+Godot instability complicated inspection. The user moved the imported files because they appeared to make Godot crash and asked whether to return them, noting that their names would differ. A screenshot showed an FBX and multiple PNG texture maps with matching Godot .import records. The user initially planned to restore the FBX files under an incoming path, changed locations several times, and eventually placed them under:
+C:\My Game\Steamtek-RPG\assets\characters\humanoid\incoming
+
+The user also supplied a ZIP from Downloads containing the FBX package and asked whether FBX or GLB should be used. The discussion exposed a cross-PC disconnect: browser ChatGPT had recommended FBX after earlier GLB trouble, while this session had paused animation work and was trying to recover a clean character import. The decision was to validate a simple, texture-bearing GLB in a separate character-validation project first rather than mix more unstable files into the main project.
+
+The user supplied:
+C:\Users\bdjos\Downloads\Meshy_AI_Protagonist_18k_Game__0717173225_texture.glb
+
+It was placed under the character-validation project's assets/incoming directory. The user imported it and showed the character correctly visible in Godot in a T-pose with textures. This established that the Meshy model itself and basic Godot GLB import were viable.
+
+
+STATIC CHARACTER PROMOTION AND CLEANUP
+
+The imported static protagonist was placed in a dedicated subfolder and saved in a static review scene. The user asked for cleanup of old character GLB assets and later clarified that the new Meshy GLB had been saved. The old test GLBs and retired character test scenes were deleted because they were no longer useful. The user asked whether the retired scenes were needed; the answer was no for the current production path.
+
+There was brief confusion over a tests directory that did not appear in Godot's FileSystem dock. The user searched res://tools/steamtek-humanoid-pipeline/tests and res://scenes/tests but could not see the expected content. Guidance around rescanning was complicated by Godot 4.7's menu layout. Eventually the user confirmed that the relevant content appeared.
+
+A live 3D hybrid proof scene was run. It displayed the new Meshy static character under the locked camera with runtime lights and a painted wall. Animation telemetry correctly reported that it was waiting for imported animation data. This proved the static character's scale, visibility, materials, and basic hybrid presentation, while also confirming that the static file had no usable animation clips.
+
+
+RIG, ANIMATION, AND SHARED-SKELETON DISCUSSION
+
+The user asked whether animation would be done in Meshy. The decision was yes for fast animation sourcing, while Blender remains the fallback for cleanup, rig inspection, sockets, scale calibration, LOD work, or animation repair. The user asked whether a wire mesh was required. The clarification was that a visible wireframe is not a game requirement; what matters is a skinned polygon mesh bound to a skeleton.
+
+The user asked whether future characters and enemies with different appearances would use the same rig. The direction is to use a shared humanoid skeleton when body proportions are compatible because it permits animation reuse. Distinct creatures or strongly different silhouettes may require their own skeletons. Sharing a humanoid rig does not mean every character must look the same.
+
+In Meshy, the protagonist was rigged and animation actions were added. The user encountered repeated “Fail to add animation action” notifications for some attempts. Later screenshots showed three successfully added actions: Idle 3, Running, and Walking. The user asked whether to include running; the answer was yes, because the controller would need walk and run states. The download settings were configured for GLB with all added animations so the rig and clips remained together.
+
+The user then placed all three results into the intake workflow and supplied videos of the animations. A clean production package was created with:
+- STK_C001_Protagonist_RigAnim_v01.blend
+- STK_C001_Protagonist_RigAnim_v01.glb
+- STK_C001_Protagonist_RigAnim_v01.intake.json
+
+The user asked how to “promote” the character and whether all three files should be moved. The production Godot location was established under:
+C:\My Game\Steamtek-RPG\assets\characters\humanoid\base\STK_C001_Protagonist\v01
+
+The clean GLB became the game-consumed character. The Blender file is the editable DCC source and the JSON is the intake/traceability record. The user noted that the promotion appeared to have already been performed and asked to proceed.
+
+The project experienced another Godot 4.7 application crash with a referenced-memory error. The session continued without using headless/command-line Godot as an approval mechanism. Normal editor testing remained the user-facing validation method.
+
+The production wrapper was updated to reference the new clean rigged GLB. The imported character contained a skinned mesh, 24-bone skeleton, material textures, and animation clips renamed to STK_IDLE, STK_WALK, and STK_RUN. The controller gained walk/run state selection, Shift+WASD running, faster stopping and turning behavior, angle snapping, and short animation blends. The user confirmed that it looked and worked correctly.
+
+The user disliked the arm stiffness in idle and walking. The agreed decision was not to derail the current path. Later, the idle and walk animations can be replaced in Meshy while retaining the accepted rig, character mesh, materials, run clip, sockets, wrapper, camera, and controller. Rerigging is not necessary solely for this issue.
+
+
+LIVE-3D CAMERA AND PRESENTATION APPROVAL
+
+The user asked whether the test was using the chosen 60-degree camera. The approved camera was confirmed as orthographic with 60-degree azimuth and 30-degree elevation. The user tested both inside and outside and said it looked good.
+
+The user asked whether the live-3D protagonist, camera, collisions, and transitions were achievable for someone who is not an artist and whether the result was comparable to Shadowrun Returns and similar isometric 2.5D games. The answer was yes in production principle: Steamtek can use live 3D characters, movement, collision, transitions, lighting, rain, and steam, with hand-painted environment surfaces and carefully composed isometric presentation. The user is responsible for creative approval and testing, not for manually painting every environment asset.
+
+
+LEGACY APARTMENT PROOF AND SCALE AUTHORITY
+
+A hybrid apartment calibration scene used an older apartment render. The user correctly observed that it was old and not to scale and asked whether that was deliberate. It was deliberate: the scene was a pipeline and framing proof, not a dimensional authority. It was explicitly marked:
+legacy_card_pipeline_proof_not_to_scale
+
+The user also asked whether character drift while stopping and turning would be addressed later. The answer was yes. Some improvements were already added to the controller, but final locomotion polish remains deferred.
+
+A screenshot of the legacy apartment proof showed the character next to an attractively lit but dimensionally unreliable painted building. The session then moved to a measured dimensional apartment and alley blockout. Early screenshots exposed a roof/side-access problem where the character could walk beneath or behind an unmodeled portion of the shell. A full invisible building-footprint collision blocker was added to prevent entry from unmodeled sides and stop roof clipping.
+
+The user asked whether the measured building and alley were based on the chosen project vision and scale, and whether the scale matched other 2.5D isometric games. The answer was that the selected measurements are within credible game scale and work with the chosen locked camera. The user explicitly said to lock the system in.
+
+The resulting live-3D scale contract is:
+- 1 Godot unit equals 1 meter
+- C001 stays at scale 1
+- Door is 1.2 meters wide by 2.2 meters high
+- Storeys are 3.2 meters
+- Two-storey facade is 6.4 meters
+- Reference apartment footprint is 10 by 7 meters
+- Service alley is 3.5 meters
+- Documented gameplay-clearance widening may use 10–20 percent
+- Environment fits the character; the character is never resized to old artwork
+
+The camera contract is:
+- Orthographic projection
+- 60-degree azimuth
+- 30-degree elevation
+- Zero roll
+- Reference camera position Vector3(8.66, 6.77, 5)
+- Orthographic size 8.5 for close exploration
+
+The user repeatedly tested the blockout, approved the scale and camera, and asked to continue.
+
+
+LIVE 3D DOOR TRANSITIONS
+
+The measured exterior was connected to a separate apartment interior using a reusable SteamtekZoneDoor3D interaction. The exterior entrance targets the apartment interior and its InteriorEntrySpawn marker. The interior exit targets the new dimensional exterior and its ExteriorReturnSpawn marker. Fade and interaction-prompt UI are part of the transition path.
+
+The user tested the round trip and confirmed that it works. This established a functional live-3D exterior-to-interior transition under the approved camera and scale without relying on the legacy Node2D surface route.
+
+
+HAND-PAINTED ART DIRECTION IN THE LIVE-3D SHELL
+
+The user asked whether the environment work was based around the selected hand-painted asset style. The decision was yes: measured 3D geometry provides scale, collision, and lighting, while painterly textures and visual layers provide the final look. This is a hybrid rather than a choice between entirely painted 2D or entirely realistic 3D.
+
+An initial facade texture was generated but looked too much like a material scan. It was retained only as a fallback. A second version was generated with stronger hand-painted broad brushwork and neutral lighting. It became:
+STK_MAT_ApartmentFacade_HandPainted_v02.png
+
+It was applied through world-triplanar mapping. Separate geometry supplied window frames, door trim, base courses, facade pipe and clamps, roof steel, roof vent, amber door header light, and access panel. Live cyan, magenta, and amber light energy was reduced because the earlier result was too flat and neon-heavy. The later screenshot showed readable wall brushwork, better trim, and improved character lighting. The facade passed the first material gate, although windows remained placeholders.
+
+The next ground pass generated:
+STK_MAT_WetConcrete_HandPainted_v01.png
+
+The prompt required a seamless top-down painterly dark blue-gray industrial concrete albedo with broad brushwork, subtle cracks, patched areas, water staining, aggregate, muted copper grime, neutral lighting, and no baked neon, reflections, objects, text, Victorian ornament, or photographic scan look. The texture was copied into the project and assigned to the sidewalk, world ground, and alley via triplanar mapping. Separate material settings give those zones different wetness/readability.
+
+Puddles were created as shallow, non-colliding oval meshes with a glossy material. This deliberately keeps reflection control separate from the texture. An industrial drainage channel and grate were added to the alley. The user said the result was good.
+
+
+RAIN AND STEAM DECISION
+
+The user asked whether rain and steam are created as assets or through Godot scenes. The answer was mostly through Godot scenes: GPUParticles3D for rain and steam, with reusable vent/pipe geometry and optional small texture resources. This avoids hand-painted animation frames and permits later performance tuning.
+
+The user asked to proceed with rain and steam. Existing repository rain, splash, mist, and steam files were inspected. Those systems were legacy Node2D effects and were not appropriate for the approved live-3D path. New standalone packed 3D effect scenes were therefore created:
+
+res://scenes/effects/live3d/SteamtekRainVolume3D.tscn
+res://scenes/effects/live3d/SteamtekSteamVent3D.tscn
+
+During this work, the user asked whether any of it was “our modular tech.” The answer was explicitly no. The effects are reusable packed Godot scenes, but they do not rely on modular_v1, modular snap standards, modular geometry, or old modular tech. They are independent environmental effects that can be instanced in any live-3D level. The approved camera and live-3D scale contract remain authoritative.
+
+The rain uses GPUParticles3D streaks in a localized volume under the CameraRig. Because the rig follows the character, rain coverage moves with the camera instead of requiring a huge always-active emitter. The steam uses translucent billboarded puffs with gradual growth and fade. It is placed at the roof vent and a new alley steam pipe.
+
+The new files, references, and text formatting passed static checks. Godot was not launched through the command line because of the recurring crash history. At the close of the recorded work, the rain and steam still required normal-editor F6 visual confirmation from the user.
+
+
+FINAL STATE AT HANDOFF
+
+Approved and working:
+- New Meshy protagonist appearance
+- Clean rig and skeleton
+- Restored materials
+- Idle, walk, and run animation import
+- WASD walking and Shift+WASD running
+- Locked 60-degree azimuth / 30-degree elevation orthographic camera
+- Live-3D metric scale contract
+- Measured two-storey apartment and 3.5-meter alley
+- Building footprint collision protection
+- Exterior/interior door transition round trip
+- Hand-painted facade direction
+- Hand-painted wet concrete ground direction
+- Puddles and drainage details
+
+Added but awaiting visual approval:
+- Live-3D rain volume
+- Roof-vent steam
+- Alley-pipe steam
+
+Deferred:
+- Replace stiff-arm idle and walk clips
+- Final stop/turn locomotion polish
+- Final window glass treatment
+- Broader environment prop dressing
+- Larger surface route and silo content
+
+Non-negotiable continuation rules:
+- modular_v1 is not the standard
+- C001 remains at scale 1
+- Old apartment art is not a dimension source
+- Old retired character GLBs and tests stay retired
+- Production character GLB remains canonical
+- Environment artwork fits the measured shell
+- Use normal Godot editor testing, not headless Godot
+- Keep instructions direct and beginner-friendly
+
+
+NEXT SESSION START
+
+Open:
+res://scenes/tests/hybrid_3d/Steamtek_ApartmentAlley_DimensionalBlockout_v01.tscn
+
+Wait for import scanning to finish and press F6. Validate rain density, camera-follow coverage, steam visibility, protagonist readability, frame rate, collision, and the apartment transition. Tune only the reusable effect scenes if necessary. Once weather is approved, continue with restrained window glass and environment prop dressing while preserving the approved scale, camera, and character.
+

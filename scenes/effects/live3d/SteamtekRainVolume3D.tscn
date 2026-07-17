@@ -1,0 +1,45 @@
+[gd_scene load_steps=6 format=3]
+
+[sub_resource type="StandardMaterial3D" id="RainMaterial"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
+albedo_color = Color(0.58, 0.72, 0.82, 0.42)
+billboard_mode = 1
+
+[sub_resource type="QuadMesh" id="RainStreakMesh"]
+material = SubResource("RainMaterial")
+size = Vector2(0.018, 0.62)
+
+[sub_resource type="Gradient" id="RainColorGradient"]
+offsets = PackedFloat32Array(0, 0.18, 0.82, 1)
+colors = PackedColorArray(0.55, 0.7, 0.82, 0, 0.62, 0.76, 0.86, 0.5, 0.48, 0.62, 0.74, 0.28, 0.4, 0.52, 0.64, 0)
+
+[sub_resource type="GradientTexture1D" id="RainColorRamp"]
+gradient = SubResource("RainColorGradient")
+
+[sub_resource type="ParticleProcessMaterial" id="RainProcess"]
+emission_shape = 3
+emission_box_extents = Vector3(8.5, 0.35, 8.5)
+direction = Vector3(0.08, -1, 0.03)
+spread = 2.5
+initial_velocity_min = 12.0
+initial_velocity_max = 16.0
+gravity = Vector3(0.8, -3.0, 0.25)
+scale_min = 0.72
+scale_max = 1.18
+color_ramp = SubResource("RainColorRamp")
+
+[node name="SteamtekRainVolume3D" type="Node3D"]
+editor_description = "Reusable live-3D rain volume. Instance beneath a moving camera rig for localized exterior weather."
+
+[node name="RainStreaks" type="GPUParticles3D" parent="."]
+amount = 420
+lifetime = 1.15
+preprocess = 1.15
+randomness = 0.32
+visibility_aabb = AABB(-10, -12, -10, 20, 16, 20)
+local_coords = false
+process_material = SubResource("RainProcess")
+draw_pass_1 = SubResource("RainStreakMesh")

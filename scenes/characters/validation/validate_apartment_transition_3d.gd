@@ -1,6 +1,6 @@
 extends SceneTree
 
-const EXTERIOR := "res://scenes/levels/surface_3d/ApartmentExterior_TransitionTest_v01.tscn"
+const EXTERIOR := "res://scenes/tests/hybrid_3d/Steamtek_ApartmentAlley_DimensionalBlockout_v01.tscn"
 const INTERIOR := "res://scenes/levels/apartment_3d/ApartmentInterior_TransitionTest_v01.tscn"
 
 
@@ -9,7 +9,7 @@ func _initialize() -> void:
 	if exterior == null:
 		quit(2)
 		return
-	if not _verify_level(exterior, "ApartmentFacade/ApartmentDoor", INTERIOR, "ExteriorReturnSpawn"):
+	if not _verify_level(exterior, "ApartmentDoorInteraction", INTERIOR, "ExteriorReturnSpawn"):
 		quit(3)
 		return
 	exterior.queue_free()

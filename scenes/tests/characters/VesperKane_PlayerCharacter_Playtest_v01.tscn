@@ -130,7 +130,7 @@ offset_left = 24.0
 offset_top = 20.0
 offset_right = 650.0
 offset_bottom = 82.0
-text = "VESPER PRODUCTION CHARACTER PLAYTEST\nWASD: move  |  Approach the door and press E"
+text = "STEAMTEK PRODUCTION CHARACTER PLAYTEST\nWASD: walk  |  SHIFT + WASD: run  |  Approach the door and press E"
 label_settings = SubResource("LabelSettings")
 
 [node name="InteractionPrompt" type="Label" parent="PlaytestUI"]

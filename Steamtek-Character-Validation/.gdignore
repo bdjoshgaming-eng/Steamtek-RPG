@@ -1,0 +1,2 @@
+# Keep the main Steamtek-RPG Godot editor from importing this nested validation project.
+# Git still tracks the validation source files for repository backup.

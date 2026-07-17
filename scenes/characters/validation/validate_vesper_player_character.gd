@@ -24,7 +24,7 @@ func _initialize() -> void:
 		push_error("Vesper production character has no AnimationPlayer")
 		quit(4)
 		return
-	for required_animation in ["STK_IDLE", "STK_WALK"]:
+	for required_animation in ["STK_IDLE", "STK_WALK", "STK_RUN"]:
 		if not required_animation in player.get_animation_list():
 			push_error("Missing animation: %s" % required_animation)
 			quit(5)
@@ -37,4 +37,3 @@ func _initialize() -> void:
 	character.queue_free()
 	await process_frame
 	quit()
-

@@ -1,0 +1,16 @@
+STEAMTEK SUPERSEDED HANDOFF ARCHIVE
+Archived: 2026-07-17
+
+These documents were moved from the top-level docs folder because they are
+older Codex-generated handoffs or conversation summaries superseded by:
+
+- docs/STEAMTEK_HANDOFF_2026-07-17_LIVE3D_CHARACTER_ENVIRONMENT.txt
+- docs/STEAMTEK_CONVERSATION_DECISION_RECORD_2026-07-17.txt
+
+They are retained for recovery and historical reference. They are not the
+current project authority. In particular, older modular-character or modular
+environment language must not override the current correction that modular_v1
+is not the Steamtek standard.
+
+No contracts, art briefs, workflow documents, review notes, Claude-labeled
+files, or unrecognized documents were moved during this cleanup.

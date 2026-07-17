@@ -175,7 +175,7 @@ offset_left = 24.0
 offset_top = 20.0
 offset_right = 760.0
 offset_bottom = 88.0
-text = "APARTMENT EXTERIOR — TRANSITION SYSTEM TEST\nArchitecture is graybox; transition behavior is production infrastructure."
+text = "APARTMENT EXTERIOR — PRODUCTION CHARACTER TRANSITION TEST\nWASD: walk  |  SHIFT + WASD: run  |  Approach the apartment door and press E."
 label_settings = SubResource("LabelSettings")
 
 [node name="InteractionPrompt" type="Label" parent="TransitionUI"]
