@@ -17,7 +17,9 @@ signal equipment_error(message: String)
 var _equipped_nodes: Dictionary = {}
 var _equipped_items: Dictionary = {}
 
-const BONE_ALIASES := {
+# PackedStringArray construction is runtime-initialized in Godot 4.7, so this
+# read-only lookup cannot be declared as a compile-time constant.
+var BONE_ALIASES := {
 	"hips": PackedStringArray(["hips", "pelvis", "root"]),
 	"spine": PackedStringArray(["spine", "spine1", "spine2", "chest"]),
 	"head": PackedStringArray(["head"]),

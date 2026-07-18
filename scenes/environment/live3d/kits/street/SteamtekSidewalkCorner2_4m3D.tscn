@@ -1,0 +1,48 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_WetConcrete_Neutral_v01.tres" id="1_concrete"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="2_gunmetal"]
+
+[sub_resource type="BoxMesh" id="CornerMesh"]
+size = Vector3(2.4, 0.18, 2.4)
+
+[sub_resource type="BoxMesh" id="CornerInsetMesh"]
+size = Vector3(0.28, 0.025, 0.28)
+
+[node name="SteamtekSidewalkCorner2_4m3D" type="Node3D" groups=["steamtek_live3d_modular"]]
+editor_description = "Square 2.4 m raised sidewalk landing for street corners and intersection quadrants."
+metadata/module_system = "live3d_meter_v1"
+metadata/module_type = "street_sidewalk_corner_landing"
+metadata/status = "blockout_geometry_production_snap_contract"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/footprint_m = Vector2(2.4, 2.4)
+metadata/root_contract = "Root is tile center on finished sidewalk plane; slab extends downward"
+metadata/rotation_contract = "Yaw only: 0, 90, 180, or 270 degrees; never negative-scale mirror"
+
+[node name="CornerSlab" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.09, 0)
+mesh = SubResource("CornerMesh")
+material_override = ExtResource("1_concrete")
+
+[node name="ServiceInset" type="MeshInstance3D" parent="."]
+position = Vector3(0.72, 0.0125, 0.72)
+mesh = SubResource("CornerInsetMesh")
+material_override = ExtResource("2_gunmetal")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="SidewalkNegX" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-1.2, 0, 0)
+metadata/socket_role = "street_sidewalk_chain"
+
+[node name="SidewalkPosX" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(1.2, 0, 0)
+metadata/socket_role = "street_sidewalk_chain"
+
+[node name="SidewalkNegZ" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, -1.2)
+metadata/socket_role = "street_sidewalk_chain"
+
+[node name="SidewalkPosZ" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, 1.2)
+metadata/socket_role = "street_sidewalk_chain"

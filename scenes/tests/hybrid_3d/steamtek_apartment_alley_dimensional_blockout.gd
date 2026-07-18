@@ -29,8 +29,6 @@ var concrete_material: StandardMaterial3D
 var wall_material: StandardMaterial3D
 var trim_material: StandardMaterial3D
 var door_material: StandardMaterial3D
-var cyan_window_material: StandardMaterial3D
-var magenta_window_material: StandardMaterial3D
 var wet_ground_material: StandardMaterial3D
 var alley_ground_material: StandardMaterial3D
 var roof_material: StandardMaterial3D
@@ -73,8 +71,6 @@ func _create_materials() -> void:
 	trim_material = _material("CopperTrim", Color(0.18, 0.105, 0.065), 0.68, 0.4)
 	door_material = _material("ApartmentDoor", Color(0.095, 0.065, 0.045), 0.6, 0.42)
 	roof_material = _material("RoofSteel", Color(0.065, 0.075, 0.09), 0.52, 0.36)
-	cyan_window_material = _emissive_material("CyanWindow", Color(0.012, 0.055, 0.075), Color(0.015, 0.28, 0.42), 1.15)
-	magenta_window_material = _emissive_material("MagentaWindow", Color(0.075, 0.012, 0.045), Color(0.34, 0.015, 0.18), 1.0)
 	amber_emission_material = _emissive_material("AmberDoorLight", Color(0.12, 0.045, 0.012), Color(0.9, 0.22, 0.025), 1.25)
 	wet_ground_material = _material("WetStreet", Color(0.055, 0.07, 0.09), 0.28, 0.3)
 	alley_ground_material = _material("ServiceAlley", Color(0.075, 0.085, 0.1), 0.18, 0.46)
@@ -118,21 +114,8 @@ func _build_dimensional_shell() -> void:
 	_add_block("FrontParapet", Vector3(-1.0, BUILDING_HEIGHT + 0.42, -2.9), Vector3(10.3, 0.6, 0.25), wall_material, true)
 	_add_block("SideParapet", Vector3(4.1, BUILDING_HEIGHT + 0.42, -6.5), Vector3(0.25, 0.6, 7.3), wall_material, true)
 
-	# Windows are sized in meters and positioned per storey.
-	_add_block("FrontWindowLowerA", Vector3(-0.7, 1.75, -2.81), Vector3(1.6, 1.25, 0.08), cyan_window_material, false)
-	_add_block("FrontWindowLowerB", Vector3(1.8, 1.75, -2.81), Vector3(1.6, 1.25, 0.08), cyan_window_material, false)
-	_add_block("FrontWindowUpperA", Vector3(-3.4, 4.75, -2.81), Vector3(1.6, 1.25, 0.08), magenta_window_material, false)
-	_add_block("FrontWindowUpperB", Vector3(-0.7, 4.75, -2.81), Vector3(1.6, 1.25, 0.08), cyan_window_material, false)
-	_add_block("FrontWindowUpperC", Vector3(1.8, 4.75, -2.81), Vector3(1.6, 1.25, 0.08), cyan_window_material, false)
-	_add_block("SideWindowLower", Vector3(4.19, 1.75, -5.2), Vector3(0.08, 1.25, 1.6), magenta_window_material, false)
-	_add_block("SideWindowUpper", Vector3(4.19, 4.75, -7.5), Vector3(0.08, 1.25, 1.6), cyan_window_material, false)
-	_add_front_window_frame("FrontWindowLowerAFrame", -0.7, 1.75)
-	_add_front_window_frame("FrontWindowLowerBFrame", 1.8, 1.75)
-	_add_front_window_frame("FrontWindowUpperAFrame", -3.4, 4.75)
-	_add_front_window_frame("FrontWindowUpperBFrame", -0.7, 4.75)
-	_add_front_window_frame("FrontWindowUpperCFrame", 1.8, 4.75)
-	_add_side_window_frame("SideWindowLowerFrame", 1.75, -5.2)
-	_add_side_window_frame("SideWindowUpperFrame", 4.75, -7.5)
+	# Meter-scale window packed scenes are authored and placed in the .tscn.
+	# This keeps glass/frame variants reusable without changing the openings.
 
 	# Neo-industrial facade detailing remains deterministic geometry, allowing
 	# later texture replacement without changing scale, pivots, or collision.
@@ -241,20 +224,6 @@ func _add_collision_box(collision_name: String, center: Vector3, size: Vector3) 
 	collision.shape = shape
 	body.add_child(collision)
 	architecture.add_child(body)
-
-
-func _add_front_window_frame(frame_name: String, center_x: float, center_y: float) -> void:
-	_add_block(frame_name + "Top", Vector3(center_x, center_y + 0.69, -2.73), Vector3(1.82, 0.12, 0.13), trim_material, false)
-	_add_block(frame_name + "Bottom", Vector3(center_x, center_y - 0.69, -2.73), Vector3(1.82, 0.12, 0.13), trim_material, false)
-	_add_block(frame_name + "Left", Vector3(center_x - 0.85, center_y, -2.73), Vector3(0.12, 1.5, 0.13), trim_material, false)
-	_add_block(frame_name + "Right", Vector3(center_x + 0.85, center_y, -2.73), Vector3(0.12, 1.5, 0.13), trim_material, false)
-
-
-func _add_side_window_frame(frame_name: String, center_y: float, center_z: float) -> void:
-	_add_block(frame_name + "Top", Vector3(4.24, center_y + 0.69, center_z), Vector3(0.13, 0.12, 1.82), trim_material, false)
-	_add_block(frame_name + "Bottom", Vector3(4.24, center_y - 0.69, center_z), Vector3(0.13, 0.12, 1.82), trim_material, false)
-	_add_block(frame_name + "Front", Vector3(4.24, center_y, center_z + 0.85), Vector3(0.13, 1.5, 0.12), trim_material, false)
-	_add_block(frame_name + "Back", Vector3(4.24, center_y, center_z - 0.85), Vector3(0.13, 1.5, 0.12), trim_material, false)
 
 
 func _material(

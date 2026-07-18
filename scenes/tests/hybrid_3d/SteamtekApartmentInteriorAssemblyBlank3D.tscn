@@ -1,0 +1,17 @@
+[gd_scene format=3]
+
+[node name="SteamtekApartmentInteriorAssemblyBlank3D" type="Node3D"]
+editor_description = "Blank plug-and-play apartment interior workspace. Use Steamtek Live3D Builder with Interior Structure, Furniture, and Small Props profiles."
+metadata/status = "apartment_interior_blank_workspace_v01"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/structure_grid_m = 1.2
+metadata/furniture_grid_m = 0.3
+metadata/prop_grid_m = 0.1
+metadata/rotation_contract = "cardinal_y_only_no_negative_scale"
+
+[node name="Architecture" type="Node3D" parent="."]
+[node name="Furniture" type="Node3D" parent="."]
+[node name="Props" type="Node3D" parent="."]
+[node name="Lighting" type="Node3D" parent="."]
+[node name="Gameplay" type="Node3D" parent="."]
+

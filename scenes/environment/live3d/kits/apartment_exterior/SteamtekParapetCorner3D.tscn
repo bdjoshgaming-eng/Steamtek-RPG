@@ -1,0 +1,58 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_ApartmentFacade_Neutral_v01.tres" id="1_facade"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="2_gunmetal"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_AgedCopper_Base_v01.tres" id="3_copper"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_body"]
+size = Vector3(0.4, 0.45, 0.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_cap"]
+size = Vector3(0.5, 0.08, 0.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_edge"]
+size = Vector3(0.06, 0.28, 0.06)
+
+[node name="SteamtekParapetCorner3D" type="Node3D" groups=["steamtek_live3d_modular"]]
+metadata/module_system = "live3d_meter_v1"
+metadata/module_type = "parapet_outside_corner"
+metadata/footprint_m = Vector2(0.4, 0.4)
+metadata/root_contract = "Root is corner connector center on roof plane"
+metadata/rotation_contract = "Yaw only: 0, 90, 180, or 270 degrees"
+metadata/status = "blockout_geometry_production_snap_contract"
+
+[node name="Visual_Blockout" type="Node3D" parent="."]
+
+[node name="CornerBody" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 0.225, 0)
+mesh = SubResource("BoxMesh_body")
+material_override = ExtResource("1_facade")
+
+[node name="CornerCap" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 0.49, 0)
+mesh = SubResource("BoxMesh_cap")
+material_override = ExtResource("3_copper")
+
+[node name="OuterEdge" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0.2, 0.24, 0.2)
+mesh = SubResource("BoxMesh_edge")
+material_override = ExtResource("2_gunmetal")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="AttachNegX" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-0.2, 0, 0)
+metadata/socket_role = "parapet_corner_attachment"
+
+[node name="AttachPosX" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0.2, 0, 0)
+metadata/socket_role = "parapet_corner_attachment"
+
+[node name="AttachNegZ" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, -0.2)
+metadata/socket_role = "parapet_corner_attachment"
+
+[node name="AttachPosZ" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, 0.2)
+metadata/socket_role = "parapet_corner_attachment"
+

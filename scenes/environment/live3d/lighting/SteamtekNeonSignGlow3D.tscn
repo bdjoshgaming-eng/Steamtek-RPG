@@ -1,0 +1,58 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="1_gunmetal"]
+
+[sub_resource type="StandardMaterial3D" id="LensMaterial"]
+shading_mode = 0
+albedo_color = Color(0.62, 0.03, 0.52, 1)
+emission_enabled = true
+emission = Color(1, 0.04, 0.76, 1)
+emission_energy_multiplier = 1.8
+
+[sub_resource type="BoxMesh" id="BackingMesh"]
+material = ExtResource("1_gunmetal")
+size = Vector3(0.7, 0.3, 0.06)
+
+[sub_resource type="BoxMesh" id="GlowMesh"]
+material = SubResource("LensMaterial")
+size = Vector3(0.58, 0.18, 0.035)
+
+[node name="SteamtekNeonSignGlow3D" type="Node3D"]
+editor_description = "Modular restrained magenta sign-glow rig. Use behind or within authored sign fixtures; root origin is the wall contact plane."
+metadata/status = "lighting_contract_v1"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/front_axis = "+Z"
+metadata/light_role = "restrained_neon_bounce"
+metadata/facing_contract = "yaw_0_90_180_270_no_negative_scale"
+
+[node name="Fixture_Blockout" type="Node3D" parent="."]
+
+[node name="GlowBacking" type="MeshInstance3D" parent="Fixture_Blockout"]
+position = Vector3(0, 0, 0.03)
+mesh = SubResource("BackingMesh")
+
+[node name="GlowLens" type="MeshInstance3D" parent="Fixture_Blockout"]
+position = Vector3(0, 0, 0.08)
+mesh = SubResource("GlowMesh")
+
+[node name="LightRig" type="Node3D" parent="."]
+
+[node name="NeonBounce" type="OmniLight3D" parent="LightRig"]
+position = Vector3(0, 0, 0.22)
+light_color = Color(1, 0.04, 0.68, 1)
+light_energy = 1.35
+omni_range = 4.0
+shadow_enabled = false
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="FixtureMount" type="Marker3D" parent="Sockets"]
+metadata/socket_role = "wall_or_sign_mount"
+
+[node name="LightOrigin" type="Marker3D" parent="Sockets"]
+position = Vector3(0, 0, 0.22)
+metadata/socket_role = "light_origin"
+
+[node name="SignFace" type="Marker3D" parent="Sockets"]
+position = Vector3(0, 0, 0.1)
+metadata/socket_role = "sign_face"

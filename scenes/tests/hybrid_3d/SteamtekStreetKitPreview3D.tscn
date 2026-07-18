@@ -1,0 +1,156 @@
+[gd_scene load_steps=17 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/street/SteamtekDumpster3D.tscn" id="1_dumpster"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/street/SteamtekTrafficBarrier3D.tscn" id="2_barrier"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/street/SteamtekStreetDrain1m3D.tscn" id="3_drain"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/street/SteamtekFireHydrant3D.tscn" id="4_hydrant"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/street/SteamtekStreetBench3D.tscn" id="5_bench"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/street/SteamtekStreetSignPost3D.tscn" id="6_sign"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/street/SteamtekChainBollard3D.tscn" id="7_bollard"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/street/SteamtekParkingMeter3D.tscn" id="8_meter"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/street/SteamtekTrashClusterSmall3D.tscn" id="9_trash"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_RainPolishedStreet_Candidate_v01.tres" id="10_street"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_ApartmentFacade_Neutral_v01.tres" id="11_facade"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SkyMaterial"]
+sky_top_color = Color(0.012, 0.016, 0.024, 1)
+sky_horizon_color = Color(0.08, 0.09, 0.11, 1)
+ground_bottom_color = Color(0.008, 0.01, 0.014, 1)
+ground_horizon_color = Color(0.05, 0.055, 0.065, 1)
+
+[sub_resource type="Sky" id="Sky"]
+sky_material = SubResource("SkyMaterial")
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 2
+sky = SubResource("Sky")
+ambient_light_source = 3
+ambient_light_color = Color(0.56, 0.64, 0.78, 1)
+ambient_light_energy = 0.58
+tonemap_mode = 2
+
+[sub_resource type="BoxMesh" id="FloorMesh"]
+material = ExtResource("10_street")
+size = Vector3(13, 0.16, 9)
+
+[sub_resource type="BoxMesh" id="WallMesh"]
+material = ExtResource("11_facade")
+size = Vector3(13, 4, 0.2)
+
+[node name="SteamtekStreetKitPreview3D" type="Node3D"]
+editor_description = "Focused live-3D street and alley prop contract review. Primitive visuals are replaceable; roots, dimensions, and sockets are authoritative."
+metadata/status = "prop_contract_review_only"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/facing_contract = "root_rotation_no_negative_scale"
+metadata/art_direction = "neo_industrial_core_plus_rugged_masonry_and_wet_street_context"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment")
+
+[node name="NeutralKey" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-48, -36, 0)
+light_color = Color(0.82, 0.88, 1, 1)
+light_energy = 1.35
+shadow_enabled = true
+
+[node name="NeutralFill" type="OmniLight3D" parent="."]
+position = Vector3(3.5, 3.4, 2.8)
+light_color = Color(0.9, 0.93, 1, 1)
+light_energy = 0.48
+omni_range = 13.0
+
+[node name="Camera3D" type="Camera3D" parent="."]
+position = Vector3(8.66, 6.77, 5)
+rotation_degrees = Vector3(-30, 60, 0)
+projection = 1
+size = 12.5
+current = true
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.08, 0)
+mesh = SubResource("FloorMesh")
+
+[node name="ReviewWall" type="MeshInstance3D" parent="."]
+position = Vector3(0, 2, -4.2)
+mesh = SubResource("WallMesh")
+
+[node name="LargeProps" type="Node3D" parent="."]
+
+[node name="Dumpster" parent="LargeProps" instance=ExtResource("1_dumpster")]
+position = Vector3(-5, 0, -3)
+
+[node name="StreetBench" parent="LargeProps" instance=ExtResource("5_bench")]
+position = Vector3(-2.8, 0, -2.9)
+
+[node name="BarrierA" parent="LargeProps" instance=ExtResource("2_barrier")]
+position = Vector3(-0.65, 0, -2.8)
+
+[node name="BarrierB" parent="LargeProps" instance=ExtResource("2_barrier")]
+position = Vector3(0.55, 0, -2.8)
+
+[node name="StreetSign" parent="LargeProps" instance=ExtResource("6_sign")]
+position = Vector3(2.35, 0, -3)
+
+[node name="StreetFurniture" type="Node3D" parent="."]
+
+[node name="Hydrant" parent="StreetFurniture" instance=ExtResource("4_hydrant")]
+position = Vector3(4.2, 0, -2.9)
+
+[node name="BollardA" parent="StreetFurniture" instance=ExtResource("7_bollard")]
+position = Vector3(5.15, 0, -2.7)
+
+[node name="BollardB" parent="StreetFurniture" instance=ExtResource("7_bollard")]
+position = Vector3(5.75, 0, -2.7)
+
+[node name="ParkingMeter" parent="StreetFurniture" instance=ExtResource("8_meter")]
+position = Vector3(3.2, 0, -1.1)
+
+[node name="TrashCluster" parent="StreetFurniture" instance=ExtResource("9_trash")]
+position = Vector3(4.65, 0, -0.8)
+rotation_degrees = Vector3(0, 35, 0)
+
+[node name="GroundInfrastructure" type="Node3D" parent="."]
+
+[node name="DrainA" parent="GroundInfrastructure" instance=ExtResource("3_drain")]
+position = Vector3(-1.2, 0, -0.6)
+
+[node name="DrainBRotated" parent="GroundInfrastructure" instance=ExtResource("3_drain")]
+position = Vector3(0.3, 0, -0.2)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="LargeLabel" type="Label3D" parent="."]
+position = Vector3(-2.1, 2.75, -3)
+text = "DUMPSTER  |  BENCH  |  CHAINABLE BARRIERS  |  SIGN"
+font_size = 38
+outline_size = 8
+pixel_size = 0.005
+billboard = 1
+
+[node name="FurnitureLabel" type="Label3D" parent="."]
+position = Vector3(4.2, 2.35, -2.2)
+text = "HYDRANT  |  BOLLARDS  |  METER  |  TRASH"
+font_size = 38
+outline_size = 8
+pixel_size = 0.005
+billboard = 1
+
+[node name="DrainLabel" type="Label3D" parent="."]
+position = Vector3(-0.45, 0.75, -0.4)
+text = "1 m DRAINS - TWO AXES"
+font_size = 34
+outline_size = 8
+pixel_size = 0.005
+billboard = 1
+
+[node name="ReviewUI" type="CanvasLayer" parent="."]
+
+[node name="Title" type="Label" parent="ReviewUI"]
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 1400.0
+offset_bottom = 115.0
+text = "STEAMTEK LIVE-3D STREET KIT v2 - CONTRACT REVIEW\nNeo-industrial core + rugged masonry weight + wet street context\nOne Godot unit = one meter  |  Rotate roots; never negative-scale mirror."
+theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
+theme_override_colors/font_outline_color = Color(0.005, 0.008, 0.012, 0.95)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 19

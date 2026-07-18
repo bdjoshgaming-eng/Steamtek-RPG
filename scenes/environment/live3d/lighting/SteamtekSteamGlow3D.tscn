@@ -1,0 +1,64 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="1_gunmetal"]
+
+[sub_resource type="StandardMaterial3D" id="LensMaterial"]
+shading_mode = 0
+albedo_color = Color(0.22, 0.45, 0.52, 1)
+emission_enabled = true
+emission = Color(0.36, 0.72, 0.82, 1)
+emission_energy_multiplier = 1.1
+
+[sub_resource type="CylinderMesh" id="BaseMesh"]
+material = ExtResource("1_gunmetal")
+top_radius = 0.16
+bottom_radius = 0.2
+height = 0.1
+radial_segments = 24
+
+[sub_resource type="SphereMesh" id="LensMesh"]
+material = SubResource("LensMaterial")
+radius = 0.09
+height = 0.18
+radial_segments = 20
+rings = 12
+
+[node name="SteamtekSteamGlow3D" type="Node3D"]
+editor_description = "Low-energy steam accent glow for grates, pipe outlets, and roof vents. Root origin is the effect mount plane; +Y is up."
+metadata/status = "lighting_contract_v1"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/up_axis = "+Y"
+metadata/light_role = "subtle_steam_accent"
+metadata/facing_contract = "yaw_free_no_negative_scale"
+
+[node name="Fixture_Blockout" type="Node3D" parent="."]
+
+[node name="GlowBase" type="MeshInstance3D" parent="Fixture_Blockout"]
+position = Vector3(0, 0.05, 0)
+mesh = SubResource("BaseMesh")
+
+[node name="GlowLens" type="MeshInstance3D" parent="Fixture_Blockout"]
+position = Vector3(0, 0.16, 0)
+mesh = SubResource("LensMesh")
+
+[node name="LightRig" type="Node3D" parent="."]
+
+[node name="SteamAccent" type="OmniLight3D" parent="LightRig"]
+position = Vector3(0, 0.28, 0)
+light_color = Color(0.38, 0.7, 0.8, 1)
+light_energy = 0.85
+omni_range = 3.2
+shadow_enabled = false
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="FixtureMount" type="Marker3D" parent="Sockets"]
+metadata/socket_role = "effect_mount"
+
+[node name="LightOrigin" type="Marker3D" parent="Sockets"]
+position = Vector3(0, 0.28, 0)
+metadata/socket_role = "light_origin"
+
+[node name="SteamEffectMount" type="Marker3D" parent="Sockets"]
+position = Vector3(0, 0.18, 0)
+metadata/socket_role = "steam_effect"

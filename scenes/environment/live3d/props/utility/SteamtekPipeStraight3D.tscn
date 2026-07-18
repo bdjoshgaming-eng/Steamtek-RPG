@@ -1,0 +1,49 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="1_gunmetal"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_AgedCopper_Base_v01.tres" id="2_copper"]
+
+[sub_resource type="CylinderMesh" id="PipeMesh"]
+material = ExtResource("1_gunmetal")
+top_radius = 0.075
+bottom_radius = 0.075
+height = 0.88
+radial_segments = 24
+
+[sub_resource type="CylinderMesh" id="FlangeMesh"]
+material = ExtResource("2_copper")
+top_radius = 0.12
+bottom_radius = 0.12
+height = 0.06
+radial_segments = 24
+
+[node name="SteamtekPipeStraight3D" type="Node3D"]
+editor_description = "One-meter live-3D pipe wrapper. Visual_Blockout is replaceable; root, local Y axis, and SnapStart/SnapEnd markers are the reusable contract."
+metadata/status = "geometry_contract_blockout"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/length_m = 1.0
+metadata/primary_axis = "local_y"
+metadata/facing_contract = "rotate_root_no_negative_scale"
+
+[node name="Visual_Blockout" type="Node3D" parent="."]
+
+[node name="PipeBody" type="MeshInstance3D" parent="Visual_Blockout"]
+mesh = SubResource("PipeMesh")
+
+[node name="FlangeStart" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, -0.47, 0)
+mesh = SubResource("FlangeMesh")
+
+[node name="FlangeEnd" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 0.47, 0)
+mesh = SubResource("FlangeMesh")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="SnapStart" type="Marker3D" parent="Sockets"]
+position = Vector3(0, -0.5, 0)
+metadata/socket_role = "pipe_start"
+
+[node name="SnapEnd" type="Marker3D" parent="Sockets"]
+position = Vector3(0, 0.5, 0)
+metadata/socket_role = "pipe_end"

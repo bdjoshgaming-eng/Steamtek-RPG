@@ -5,16 +5,16 @@ transparency = 1
 shading_mode = 0
 vertex_color_use_as_albedo = true
 vertex_color_is_srgb = true
-albedo_color = Color(0.58, 0.72, 0.82, 0.42)
+albedo_color = Color(0.68, 0.75, 0.8, 0.3)
 billboard_mode = 1
 
 [sub_resource type="QuadMesh" id="RainStreakMesh"]
 material = SubResource("RainMaterial")
-size = Vector2(0.018, 0.62)
+size = Vector2(0.009, 0.38)
 
 [sub_resource type="Gradient" id="RainColorGradient"]
-offsets = PackedFloat32Array(0, 0.18, 0.82, 1)
-colors = PackedColorArray(0.55, 0.7, 0.82, 0, 0.62, 0.76, 0.86, 0.5, 0.48, 0.62, 0.74, 0.28, 0.4, 0.52, 0.64, 0)
+offsets = PackedFloat32Array(0, 0.22, 0.76, 1)
+colors = PackedColorArray(0.62, 0.7, 0.76, 0, 0.68, 0.76, 0.82, 0.42, 0.55, 0.64, 0.72, 0.2, 0.46, 0.54, 0.62, 0)
 
 [sub_resource type="GradientTexture1D" id="RainColorRamp"]
 gradient = SubResource("RainColorGradient")
@@ -22,23 +22,23 @@ gradient = SubResource("RainColorGradient")
 [sub_resource type="ParticleProcessMaterial" id="RainProcess"]
 emission_shape = 3
 emission_box_extents = Vector3(8.5, 0.35, 8.5)
-direction = Vector3(0.08, -1, 0.03)
-spread = 2.5
-initial_velocity_min = 12.0
-initial_velocity_max = 16.0
-gravity = Vector3(0.8, -3.0, 0.25)
-scale_min = 0.72
-scale_max = 1.18
+direction = Vector3(0.035, -1, 0.015)
+spread = 1.5
+initial_velocity_min = 14.0
+initial_velocity_max = 18.0
+gravity = Vector3(0.35, -2.0, 0.12)
+scale_min = 0.38
+scale_max = 1.12
 color_ramp = SubResource("RainColorRamp")
 
 [node name="SteamtekRainVolume3D" type="Node3D"]
-editor_description = "Reusable live-3D rain volume. Instance beneath a moving camera rig for localized exterior weather."
+editor_description = "Reusable fine live-3D rain volume. Instance beneath a moving camera rig for localized exterior weather; tuned to the approved thin, fast, restrained rain reference."
 
 [node name="RainStreaks" type="GPUParticles3D" parent="."]
-amount = 420
-lifetime = 1.15
-preprocess = 1.15
-randomness = 0.32
+amount = 720
+lifetime = 0.78
+preprocess = 0.78
+randomness = 0.48
 visibility_aabb = AABB(-10, -12, -10, 20, 16, 20)
 local_coords = false
 process_material = SubResource("RainProcess")

@@ -1,0 +1,56 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_WetConcrete_Neutral_v01.tres" id="1_concrete"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="2_gunmetal"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_slab"]
+size = Vector3(2.4, 0.2, 2.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_inset"]
+size = Vector3(2.16, 0.025, 2.16)
+
+[node name="SteamtekFloorTile3D" type="Node3D" groups=["steamtek_live3d_modular"]]
+metadata/module_system = "live3d_meter_v1"
+metadata/module_type = "floor_tile"
+metadata/footprint_m = Vector2(2.4, 2.4)
+metadata/root_contract = "Root is tile center on finished floor plane; slab extends downward"
+metadata/rotation_contract = "Yaw only: 0, 90, 180, or 270 degrees"
+metadata/status = "blockout_geometry_production_snap_contract"
+
+[node name="Visual_Blockout" type="Node3D" parent="."]
+
+[node name="StructuralSlab" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, -0.1, 0)
+mesh = SubResource("BoxMesh_slab")
+material_override = ExtResource("1_concrete")
+
+[node name="ServiceInset" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 0.0125, 0)
+mesh = SubResource("BoxMesh_inset")
+material_override = ExtResource("2_gunmetal")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="SnapNegX" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-1.2, 0, 0)
+metadata/socket_role = "floor_horizontal"
+
+[node name="SnapPosX" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(1.2, 0, 0)
+metadata/socket_role = "floor_horizontal"
+
+[node name="SnapNegZ" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, -1.2)
+metadata/socket_role = "floor_horizontal"
+
+[node name="SnapPosZ" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, 1.2)
+metadata/socket_role = "floor_horizontal"
+
+[node name="StoryDown" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+metadata/socket_role = "storey_vertical"
+
+[node name="StoryUp" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 3.2, 0)
+metadata/socket_role = "storey_vertical"
+

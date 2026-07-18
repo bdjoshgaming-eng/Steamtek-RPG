@@ -1,0 +1,83 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="1_gunmetal"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_AgedCopper_Base_v01.tres" id="2_copper"]
+
+[sub_resource type="CylinderMesh" id="PipeMesh"]
+material = ExtResource("1_gunmetal")
+top_radius = 0.075
+bottom_radius = 0.075
+height = 0.94
+radial_segments = 24
+
+[sub_resource type="SphereMesh" id="JointMesh"]
+material = ExtResource("1_gunmetal")
+radius = 0.125
+height = 0.25
+radial_segments = 24
+rings = 12
+
+[sub_resource type="CylinderMesh" id="FlangeMesh"]
+material = ExtResource("2_copper")
+top_radius = 0.12
+bottom_radius = 0.12
+height = 0.06
+radial_segments = 24
+
+[node name="SteamtekPipeCrossJunction3D" type="Node3D"]
+editor_description = "One-meter socket-span four-way junction for the live-3D utility pipe kit. Visual_Blockout is replaceable; root and four socket markers remain authoritative."
+metadata/status = "geometry_contract_blockout"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/socket_span_m = 0.5
+metadata/primary_axis = "local_y"
+metadata/facing_contract = "rotate_root_no_negative_scale"
+
+[node name="Visual_Blockout" type="Node3D" parent="."]
+
+[node name="VerticalPipe" type="MeshInstance3D" parent="Visual_Blockout"]
+mesh = SubResource("PipeMesh")
+
+[node name="HorizontalPipe" type="MeshInstance3D" parent="Visual_Blockout"]
+rotation_degrees = Vector3(0, 0, 90)
+mesh = SubResource("PipeMesh")
+
+[node name="JunctionBody" type="MeshInstance3D" parent="Visual_Blockout"]
+mesh = SubResource("JointMesh")
+
+[node name="FlangeStart" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, -0.5, 0)
+mesh = SubResource("FlangeMesh")
+
+[node name="FlangeEnd" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 0.5, 0)
+mesh = SubResource("FlangeMesh")
+
+[node name="FlangeLeft" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(-0.5, 0, 0)
+rotation_degrees = Vector3(0, 0, 90)
+mesh = SubResource("FlangeMesh")
+
+[node name="FlangeRight" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0.5, 0, 0)
+rotation_degrees = Vector3(0, 0, 90)
+mesh = SubResource("FlangeMesh")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="SnapStart" type="Marker3D" parent="Sockets"]
+position = Vector3(0, -0.5, 0)
+metadata/socket_role = "pipe_start"
+
+[node name="SnapEnd" type="Marker3D" parent="Sockets"]
+position = Vector3(0, 0.5, 0)
+metadata/socket_role = "pipe_end"
+
+[node name="SnapLeft" type="Marker3D" parent="Sockets"]
+position = Vector3(-0.5, 0, 0)
+rotation_degrees = Vector3(0, 0, 90)
+metadata/socket_role = "pipe_branch"
+
+[node name="SnapRight" type="Marker3D" parent="Sockets"]
+position = Vector3(0.5, 0, 0)
+rotation_degrees = Vector3(0, 0, -90)
+metadata/socket_role = "pipe_branch"

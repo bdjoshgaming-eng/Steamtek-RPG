@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "STK Road Marking Off White Base v01"
+albedo_color = Color(0.7, 0.72, 0.74, 1)
+metallic = 0.02
+roughness = 0.48

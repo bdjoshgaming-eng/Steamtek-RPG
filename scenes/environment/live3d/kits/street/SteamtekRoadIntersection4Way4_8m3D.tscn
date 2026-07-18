@@ -1,0 +1,39 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_RainPolishedStreet_Candidate_v01.tres" id="1_street"]
+
+[sub_resource type="BoxMesh" id="IntersectionMesh"]
+size = Vector3(4.8, 0.16, 4.8)
+
+[node name="SteamtekRoadIntersection4Way4_8m3D" type="Node3D" groups=["steamtek_live3d_modular"]]
+editor_description = "Four-way 4.8 m road intersection tile. Root is the finished road plane at tile center."
+metadata/module_system = "live3d_meter_v1"
+metadata/module_type = "street_road_intersection_4way"
+metadata/status = "blockout_geometry_production_snap_contract"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/footprint_m = Vector2(4.8, 4.8)
+metadata/root_contract = "Root is intersection center on finished road plane; structure extends downward"
+metadata/rotation_contract = "Yaw only: 0, 90, 180, or 270 degrees; never negative-scale mirror"
+
+[node name="IntersectionSurface" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.08, 0)
+mesh = SubResource("IntersectionMesh")
+material_override = ExtResource("1_street")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="RoadNegX" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-2.4, 0, 0)
+metadata/socket_role = "street_road_chain"
+
+[node name="RoadPosX" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(2.4, 0, 0)
+metadata/socket_role = "street_road_chain"
+
+[node name="RoadNegZ" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, -2.4)
+metadata/socket_role = "street_road_chain"
+
+[node name="RoadPosZ" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, 2.4)
+metadata/socket_role = "street_road_chain"

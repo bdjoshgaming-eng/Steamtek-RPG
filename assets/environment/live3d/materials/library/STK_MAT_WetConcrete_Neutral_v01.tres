@@ -1,0 +1,13 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/materials/apartment_v01/STK_MAT_WetConcrete_HandPainted_v01.png" id="1_albedo"]
+
+[resource]
+resource_name = "STK Wet Concrete Neutral v01"
+albedo_color = Color(0.72, 0.76, 0.82, 1)
+albedo_texture = ExtResource("1_albedo")
+metallic = 0.14
+roughness = 0.34
+uv1_scale = Vector3(0.32, 0.32, 0.32)
+uv1_triplanar = true
+uv1_world_triplanar = true

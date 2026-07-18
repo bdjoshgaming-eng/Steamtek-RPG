@@ -1,0 +1,63 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/apartment_interior_v01/STK_MAT_ApartmentInterior_WallPanels_HandPainted_v01.tres" id="1_wall"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="2_trim"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_AgedCopper_Base_v01.tres" id="3_copper"]
+
+[sub_resource type="BoxMesh" id="WallMesh"]
+material = ExtResource("1_wall")
+size = Vector3(1.2, 3.2, 0.16)
+
+[sub_resource type="BoxMesh" id="HorizontalTrimMesh"]
+material = ExtResource("2_trim")
+size = Vector3(1.2, 0.1, 0.22)
+
+[sub_resource type="BoxMesh" id="VerticalTrimMesh"]
+material = ExtResource("3_copper")
+size = Vector3(0.055, 3.0, 0.205)
+
+[sub_resource type="BoxShape3D" id="WallShape"]
+size = Vector3(1.2, 3.2, 0.16)
+
+[node name="SteamtekInteriorWallSolid1_2m3D" type="StaticBody3D" groups=["steamtek_live3d_modular"]]
+collision_layer = 1
+collision_mask = 0
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "apartment_interior_wall"
+metadata/module_dimensions_m = Vector3(1.2, 3.2, 0.16)
+metadata/grid_step_m = 1.2
+metadata/front_axis = "+Z"
+metadata/art_status = "hand_painted_production_candidate"
+
+[node name="WallPanel" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.6, 0)
+mesh = SubResource("WallMesh")
+
+[node name="BottomRail" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.08, 0.025)
+mesh = SubResource("HorizontalTrimMesh")
+
+[node name="TopRail" type="MeshInstance3D" parent="."]
+position = Vector3(0, 3.12, 0.025)
+mesh = SubResource("HorizontalTrimMesh")
+
+[node name="LeftStile" type="MeshInstance3D" parent="."]
+position = Vector3(-0.57, 1.6, 0.025)
+mesh = SubResource("VerticalTrimMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.6, 0)
+shape = SubResource("WallShape")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="WallLeft" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-0.6, 0, 0)
+metadata/socket_role = "interior_wall_chain"
+[node name="WallRight" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0.6, 0, 0)
+metadata/socket_role = "interior_wall_chain"
+[node name="WallPropCenter" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 1.65, 0.12)
+metadata/socket_role = "wall_prop_surface"
+

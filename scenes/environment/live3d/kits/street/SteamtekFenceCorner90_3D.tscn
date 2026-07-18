@@ -1,0 +1,80 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="1_gunmetal"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_AgedCopper_Base_v01.tres" id="2_copper"]
+
+[sub_resource type="BoxMesh" id="PostMesh"]
+size = Vector3(0.09, 1.8, 0.09)
+
+[sub_resource type="BoxMesh" id="HalfRailMesh"]
+size = Vector3(1.2, 0.07, 0.07)
+
+[sub_resource type="BoxMesh" id="PicketMesh"]
+size = Vector3(0.04, 1.18, 0.04)
+
+[node name="SteamtekFenceCorner90_3D" type="Node3D" groups=["steamtek_live3d_modular"]]
+editor_description = "Authored 90-degree fence corner with local +X and +Z arms. Root is ground contact at the corner post."
+metadata/module_system = "live3d_meter_v1"
+metadata/module_type = "street_fence_corner_90"
+metadata/status = "blockout_geometry_production_snap_contract"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/root_contract = "Root is ground contact at corner post; arms extend local +X and +Z"
+metadata/handedness_contract = "Authored right-angle corner; rotate root only, never negative-scale mirror"
+metadata/rotation_contract = "Yaw only: 0, 90, 180, or 270 degrees"
+
+[node name="CornerPost" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.9, 0)
+mesh = SubResource("PostMesh")
+material_override = ExtResource("1_gunmetal")
+
+[node name="EndPostX" type="MeshInstance3D" parent="."]
+position = Vector3(1.2, 0.9, 0)
+mesh = SubResource("PostMesh")
+material_override = ExtResource("1_gunmetal")
+
+[node name="EndPostZ" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.9, 1.2)
+mesh = SubResource("PostMesh")
+material_override = ExtResource("1_gunmetal")
+
+[node name="RailXLower" type="MeshInstance3D" parent="."]
+position = Vector3(0.6, 0.42, 0)
+mesh = SubResource("HalfRailMesh")
+material_override = ExtResource("2_copper")
+
+[node name="RailXUpper" type="MeshInstance3D" parent="."]
+position = Vector3(0.6, 1.4, 0)
+mesh = SubResource("HalfRailMesh")
+material_override = ExtResource("2_copper")
+
+[node name="RailZLower" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.42, 0.6)
+rotation_degrees = Vector3(0, 90, 0)
+mesh = SubResource("HalfRailMesh")
+material_override = ExtResource("2_copper")
+
+[node name="RailZUpper" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.4, 0.6)
+rotation_degrees = Vector3(0, 90, 0)
+mesh = SubResource("HalfRailMesh")
+material_override = ExtResource("2_copper")
+
+[node name="PicketX" type="MeshInstance3D" parent="."]
+position = Vector3(0.6, 0.91, 0)
+mesh = SubResource("PicketMesh")
+material_override = ExtResource("1_gunmetal")
+
+[node name="PicketZ" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.91, 0.6)
+mesh = SubResource("PicketMesh")
+material_override = ExtResource("1_gunmetal")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="FencePosX" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(1.2, 0, 0)
+metadata/socket_role = "street_fence_chain"
+
+[node name="FencePosZ" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, 1.2)
+metadata/socket_role = "street_fence_chain"

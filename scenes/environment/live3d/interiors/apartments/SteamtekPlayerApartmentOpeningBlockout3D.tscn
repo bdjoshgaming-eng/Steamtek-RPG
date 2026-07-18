@@ -1,0 +1,308 @@
+[gd_scene load_steps=28 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/neocyber/SteamtekDataTerminal3D.tscn" id="1_terminal"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/utility/SteamtekWallUtilityCabinet3D.tscn" id="2_cabinet"]
+
+[sub_resource type="StandardMaterial3D" id="FloorMaterial"]
+albedo_color = Color(0.145, 0.12, 0.09, 1)
+metallic = 0.18
+roughness = 0.72
+
+[sub_resource type="StandardMaterial3D" id="WallMaterial"]
+albedo_color = Color(0.105, 0.095, 0.075, 1)
+metallic = 0.28
+roughness = 0.78
+
+[sub_resource type="StandardMaterial3D" id="MetalMaterial"]
+albedo_color = Color(0.075, 0.09, 0.105, 1)
+metallic = 0.72
+roughness = 0.48
+
+[sub_resource type="StandardMaterial3D" id="MattressMaterial"]
+albedo_color = Color(0.24, 0.21, 0.17, 1)
+roughness = 0.92
+
+[sub_resource type="StandardMaterial3D" id="FabricMaterial"]
+albedo_color = Color(0.12, 0.16, 0.17, 1)
+roughness = 0.88
+
+[sub_resource type="StandardMaterial3D" id="WoodMaterial"]
+albedo_color = Color(0.17, 0.11, 0.065, 1)
+metallic = 0.08
+roughness = 0.82
+
+[sub_resource type="StandardMaterial3D" id="ScreenMaterial"]
+albedo_color = Color(0.015, 0.18, 0.21, 1)
+metallic = 0.25
+roughness = 0.24
+emission_enabled = true
+emission = Color(0.06, 0.74, 0.82, 1)
+emission_energy_multiplier = 1.65
+
+[sub_resource type="StandardMaterial3D" id="PaperMaterial"]
+albedo_color = Color(0.72, 0.61, 0.4, 1)
+roughness = 0.9
+emission_enabled = true
+emission = Color(0.35, 0.22, 0.08, 1)
+emission_energy_multiplier = 0.45
+
+[sub_resource type="StandardMaterial3D" id="RugMaterial"]
+albedo_color = Color(0.18, 0.075, 0.05, 1)
+roughness = 0.95
+
+[sub_resource type="BoxMesh" id="FloorMesh"]
+material = SubResource("FloorMaterial")
+size = Vector3(12, 0.16, 9.6)
+
+[sub_resource type="BoxShape3D" id="FloorShape"]
+size = Vector3(12, 0.16, 9.6)
+
+[sub_resource type="BoxMesh" id="BackWallMesh"]
+material = SubResource("WallMaterial")
+size = Vector3(12, 3.2, 0.25)
+
+[sub_resource type="BoxMesh" id="WestWallMesh"]
+material = SubResource("WallMaterial")
+size = Vector3(0.25, 3.2, 9.6)
+
+[sub_resource type="BoxMesh" id="PartitionLongMesh"]
+material = SubResource("WallMaterial")
+size = Vector3(2.4, 2.15, 0.18)
+
+[sub_resource type="BoxMesh" id="PartitionShortMesh"]
+material = SubResource("WallMaterial")
+size = Vector3(0.18, 2.15, 1.8)
+
+[sub_resource type="BoxMesh" id="BedFrameMesh"]
+material = SubResource("MetalMaterial")
+size = Vector3(2.2, 0.28, 1.15)
+
+[sub_resource type="BoxMesh" id="MattressMesh"]
+material = SubResource("MattressMaterial")
+size = Vector3(2, 0.18, 1)
+
+[sub_resource type="BoxMesh" id="PillowMesh"]
+material = SubResource("MattressMaterial")
+size = Vector3(0.48, 0.12, 0.34)
+
+[sub_resource type="BoxMesh" id="TableMesh"]
+material = SubResource("WoodMaterial")
+size = Vector3(1.6, 0.12, 0.8)
+
+[sub_resource type="BoxMesh" id="DeskMesh"]
+material = SubResource("MetalMaterial")
+size = Vector3(2.2, 0.12, 0.72)
+
+[sub_resource type="BoxMesh" id="FurnitureLegMesh"]
+material = SubResource("MetalMaterial")
+size = Vector3(0.12, 0.72, 0.12)
+
+[sub_resource type="BoxMesh" id="ScreenMesh"]
+material = SubResource("ScreenMaterial")
+size = Vector3(0.72, 0.48, 0.08)
+
+[sub_resource type="BoxMesh" id="CouchBaseMesh"]
+material = SubResource("FabricMaterial")
+size = Vector3(1.8, 0.42, 0.82)
+
+[sub_resource type="BoxMesh" id="CouchBackMesh"]
+material = SubResource("FabricMaterial")
+size = Vector3(1.8, 0.72, 0.22)
+
+[sub_resource type="BoxMesh" id="RugMesh"]
+material = SubResource("RugMaterial")
+size = Vector3(3.2, 0.025, 2.4)
+
+[sub_resource type="BoxMesh" id="NoteMesh"]
+material = SubResource("PaperMaterial")
+size = Vector3(0.24, 0.018, 0.17)
+
+[node name="SteamtekPlayerApartmentOpeningBlockout3D" type="Node3D" groups=["steamtek_live3d_interior"]]
+editor_description = "Screenshot-inspired starting apartment blockout: worn open-plan worker loft with a west wake point, quest note, functional workstation, storage, small dining and lounge zones, service alcove, and east exit. Geometry and furnishings are replaceable contract art."
+metadata/status = "opening_apartment_spatial_blockout_v01"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/opening_flow = "wake_west_find_note_cross_lived_in_room_exit_east"
+metadata/art_direction = "worn practical neo_industrial worker apartment; warm dirty ambient light and functional cyan screens; no decorative steampunk"
+metadata/room_size_m = Vector2(12, 9.6)
+metadata/travel_axis = "+X_west_to_east"
+
+[node name="Architecture" type="Node3D" parent="."]
+
+[node name="Floor" type="StaticBody3D" parent="Architecture"]
+position = Vector3(0, -0.08, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="Architecture/Floor"]
+mesh = SubResource("FloorMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Architecture/Floor"]
+shape = SubResource("FloorShape")
+
+[node name="SouthBackWall" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(0, 1.6, -4.8)
+mesh = SubResource("BackWallMesh")
+
+[node name="WestWall" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-6, 1.6, 0)
+mesh = SubResource("WestWallMesh")
+
+[node name="ServicePartitionLong" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-4.75, 1.075, -3.05)
+mesh = SubResource("PartitionLongMesh")
+
+[node name="ServicePartitionShort" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-3.55, 1.075, -3.85)
+mesh = SubResource("PartitionShortMesh")
+
+[node name="SleepZone" type="Node3D" parent="."]
+
+[node name="BedFrame" type="MeshInstance3D" parent="SleepZone"]
+position = Vector3(-4.35, 0.22, 2.55)
+mesh = SubResource("BedFrameMesh")
+
+[node name="Mattress" type="MeshInstance3D" parent="SleepZone"]
+position = Vector3(-4.35, 0.45, 2.55)
+mesh = SubResource("MattressMesh")
+
+[node name="Pillow" type="MeshInstance3D" parent="SleepZone"]
+position = Vector3(-5.02, 0.59, 2.55)
+mesh = SubResource("PillowMesh")
+
+[node name="BedsideTable" type="MeshInstance3D" parent="SleepZone"]
+position = Vector3(-3.15, 0.48, 2.35)
+scale = Vector3(0.42, 1, 0.6)
+mesh = SubResource("TableMesh")
+
+[node name="QuestNote" type="MeshInstance3D" parent="SleepZone/BedsideTable"]
+position = Vector3(0, 0.075, 0)
+mesh = SubResource("NoteMesh")
+
+[node name="WorkZone" type="Node3D" parent="."]
+
+[node name="Desk" type="MeshInstance3D" parent="WorkZone"]
+position = Vector3(-0.4, 0.78, -4.05)
+mesh = SubResource("DeskMesh")
+
+[node name="DeskLegLeft" type="MeshInstance3D" parent="WorkZone"]
+position = Vector3(-1.3, 0.36, -4.05)
+mesh = SubResource("FurnitureLegMesh")
+
+[node name="DeskLegRight" type="MeshInstance3D" parent="WorkZone"]
+position = Vector3(0.5, 0.36, -4.05)
+mesh = SubResource("FurnitureLegMesh")
+
+[node name="ScreenLeft" type="MeshInstance3D" parent="WorkZone"]
+position = Vector3(-0.85, 1.18, -3.92)
+rotation_degrees = Vector3(0, 0, -4)
+mesh = SubResource("ScreenMesh")
+
+[node name="ScreenRight" type="MeshInstance3D" parent="WorkZone"]
+position = Vector3(0.05, 1.22, -3.92)
+rotation_degrees = Vector3(0, 0, 5)
+mesh = SubResource("ScreenMesh")
+
+[node name="UtilityTerminal" parent="WorkZone" instance=ExtResource("1_terminal")]
+position = Vector3(1.55, 0.08, -3.85)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="StorageZone" type="Node3D" parent="."]
+
+[node name="CabinetA" parent="StorageZone" instance=ExtResource("2_cabinet")]
+position = Vector3(3.25, 0.08, -4.62)
+
+[node name="CabinetB" parent="StorageZone" instance=ExtResource("2_cabinet")]
+position = Vector3(4.15, 0.08, -4.62)
+
+[node name="DiningZone" type="Node3D" parent="."]
+
+[node name="DiningTable" type="MeshInstance3D" parent="DiningZone"]
+position = Vector3(-3.55, 0.78, -0.35)
+mesh = SubResource("TableMesh")
+
+[node name="TableLegLeft" type="MeshInstance3D" parent="DiningZone"]
+position = Vector3(-4.15, 0.36, -0.35)
+mesh = SubResource("FurnitureLegMesh")
+
+[node name="TableLegRight" type="MeshInstance3D" parent="DiningZone"]
+position = Vector3(-2.95, 0.36, -0.35)
+mesh = SubResource("FurnitureLegMesh")
+
+[node name="LoungeZone" type="Node3D" parent="."]
+
+[node name="Rug" type="MeshInstance3D" parent="LoungeZone"]
+position = Vector3(0.35, 0.02, 1.55)
+mesh = SubResource("RugMesh")
+
+[node name="CouchWestBase" type="MeshInstance3D" parent="LoungeZone"]
+position = Vector3(-0.35, 0.24, 1.95)
+rotation_degrees = Vector3(0, 90, 0)
+mesh = SubResource("CouchBaseMesh")
+
+[node name="CouchWestBack" type="MeshInstance3D" parent="LoungeZone"]
+position = Vector3(-0.75, 0.62, 1.95)
+rotation_degrees = Vector3(0, 90, 0)
+mesh = SubResource("CouchBackMesh")
+
+[node name="CouchNorthBase" type="MeshInstance3D" parent="LoungeZone"]
+position = Vector3(0.75, 0.24, 0.95)
+mesh = SubResource("CouchBaseMesh")
+
+[node name="CouchNorthBack" type="MeshInstance3D" parent="LoungeZone"]
+position = Vector3(0.75, 0.62, 0.55)
+mesh = SubResource("CouchBackMesh")
+
+[node name="CoffeeTable" type="MeshInstance3D" parent="LoungeZone"]
+position = Vector3(0.55, 0.34, 1.75)
+scale = Vector3(0.62, 0.45, 0.75)
+mesh = SubResource("TableMesh")
+
+[node name="OpeningMarkers" type="Node3D" parent="."]
+
+[node name="PlayerWake" type="Marker3D" parent="OpeningMarkers" groups=["steamtek_gameplay_point"]]
+position = Vector3(-4.3, 0.12, 2.45)
+rotation_degrees = Vector3(0, 90, 0)
+metadata/marker_role = "opening_player_wake"
+metadata/route_order = 1
+metadata/tutorial_pillar = "movement"
+
+[node name="QuestNoteInteraction" type="Marker3D" parent="OpeningMarkers" groups=["steamtek_gameplay_point", "steamtek_interactable_point", "steamtek_quest_point"]]
+position = Vector3(-3.15, 0.58, 2.35)
+metadata/marker_role = "opening_note"
+metadata/route_order = 2
+metadata/tutorial_pillar = "quests_and_interactables"
+metadata/quest_output = "reach_the_lantern"
+
+[node name="WorkstationInteraction" type="Marker3D" parent="OpeningMarkers" groups=["steamtek_gameplay_point", "steamtek_interactable_point"]]
+position = Vector3(-0.4, 0.18, -3.2)
+metadata/marker_role = "optional_apartment_terminal"
+metadata/tutorial_pillar = "exploration_and_interactables"
+
+[node name="ApartmentExitEast" type="Marker3D" parent="OpeningMarkers" groups=["steamtek_gameplay_point"]]
+position = Vector3(5.5, 0.18, 1.35)
+rotation_degrees = Vector3(0, 90, 0)
+metadata/marker_role = "apartment_exit_to_rain_alley"
+metadata/route_order = 3
+metadata/travel_axis = "+X_east"
+
+[node name="ReviewAnnotations" type="Node3D" parent="."]
+
+[node name="NoteLabel" type="Label3D" parent="ReviewAnnotations"]
+position = Vector3(-3.15, 1.1, 2.35)
+text = "QUEST NOTE"
+font_size = 36
+outline_size = 8
+modulate = Color(1, 0.72, 0.28, 1)
+pixel_size = 0.008
+billboard = 1
+no_depth_test = true
+
+[node name="ExitLabel" type="Label3D" parent="ReviewAnnotations"]
+position = Vector3(5.3, 1.2, 1.35)
+text = "EXIT EAST → RAIN ALLEY"
+font_size = 36
+outline_size = 8
+modulate = Color(0.18, 0.78, 0.94, 1)
+pixel_size = 0.008
+billboard = 1
+no_depth_test = true

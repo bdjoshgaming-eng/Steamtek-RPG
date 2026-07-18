@@ -1,0 +1,82 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="1_gunmetal"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_AgedCopper_Base_v01.tres" id="2_copper"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_RoofSteel_Base_v01.tres" id="3_roofsteel"]
+
+[sub_resource type="BoxMesh" id="BracketMesh"]
+material = ExtResource("1_gunmetal")
+size = Vector3(0.22, 0.26, 0.08)
+
+[sub_resource type="CylinderMesh" id="ArmMesh"]
+material = ExtResource("2_copper")
+top_radius = 0.035
+bottom_radius = 0.035
+height = 0.32
+radial_segments = 18
+
+[sub_resource type="BoxMesh" id="BodyMesh"]
+material = ExtResource("3_roofsteel")
+size = Vector3(0.22, 0.2, 0.42)
+
+[sub_resource type="CylinderMesh" id="LensMesh"]
+material = ExtResource("2_copper")
+top_radius = 0.07
+bottom_radius = 0.085
+height = 0.06
+radial_segments = 24
+
+[sub_resource type="BoxMesh" id="HoodMesh"]
+material = ExtResource("1_gunmetal")
+size = Vector3(0.28, 0.055, 0.28)
+
+[node name="SteamtekSecurityCamera3D" type="Node3D"]
+editor_description = "Wall security-camera contract without behavior scripts. Root origin is the wall contact plane; +Z is the default viewing direction."
+metadata/status = "geometry_contract_blockout"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/nominal_size_m = Vector3(0.35, 0.5, 0.75)
+metadata/front_axis = "+Z"
+metadata/facing_contract = "yaw_0_90_180_270_no_negative_scale"
+
+[node name="Visual_Blockout" type="Node3D" parent="."]
+
+[node name="WallBracket" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 0, 0.04)
+mesh = SubResource("BracketMesh")
+
+[node name="SupportArm" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 0, 0.24)
+rotation_degrees = Vector3(90, 0, 0)
+mesh = SubResource("ArmMesh")
+
+[node name="CameraBody" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, -0.04, 0.5)
+rotation_degrees = Vector3(-12, 0, 0)
+mesh = SubResource("BodyMesh")
+
+[node name="CameraLens" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, -0.085, 0.73)
+rotation_degrees = Vector3(90, 0, 0)
+mesh = SubResource("LensMesh")
+
+[node name="CameraHood" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 0.09, 0.54)
+rotation_degrees = Vector3(-12, 0, 0)
+mesh = SubResource("HoodMesh")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="WallMount" type="Marker3D" parent="Sockets"]
+metadata/socket_role = "wall_mount"
+
+[node name="AimPivot" type="Marker3D" parent="Sockets"]
+position = Vector3(0, -0.04, 0.36)
+metadata/socket_role = "aim_pivot"
+
+[node name="ViewOrigin" type="Marker3D" parent="Sockets"]
+position = Vector3(0, -0.085, 0.77)
+metadata/socket_role = "view_origin"
+
+[node name="PowerInput" type="Marker3D" parent="Sockets"]
+position = Vector3(0, -0.18, 0.04)
+metadata/socket_role = "electrical_input"

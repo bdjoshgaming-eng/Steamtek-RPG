@@ -20,6 +20,8 @@ config/icon="res://icon.svg"
 [autoload]
 
 GameData="*uid://cded03wngg40a"
+Combat="*uid://bditp72tvqcsa"
+CombatData="*uid://deysc73bwy2fp"
 
 [display]
 
@@ -30,7 +32,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/meshy-godot-plugin/plugin.cfg", "res://addons/steamtek_humanoid_runtime/plugin.cfg", "res://addons/steamtek_modular_snap/plugin.cfg")
+enabled=PackedStringArray("res://addons/meshy-godot-plugin/plugin.cfg", "res://addons/steamtek_humanoid_runtime/plugin.cfg", "res://addons/steamtek_live3d_builder/plugin.cfg", "res://addons/steamtek_modular_snap/plugin.cfg")
 
 [filesystem]
 

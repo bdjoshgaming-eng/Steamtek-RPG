@@ -1,0 +1,83 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="1_gunmetal"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_AgedCopper_Base_v01.tres" id="2_copper"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_RoofSteel_Base_v01.tres" id="3_roofsteel"]
+
+[sub_resource type="BoxMesh" id="FootMesh"]
+material = ExtResource("1_gunmetal")
+size = Vector3(0.42, 0.08, 0.32)
+
+[sub_resource type="BoxMesh" id="PostMesh"]
+material = ExtResource("1_gunmetal")
+size = Vector3(0.08, 0.88, 0.08)
+
+[sub_resource type="BoxMesh" id="BeamMesh"]
+material = ExtResource("2_copper")
+size = Vector3(1.2, 0.1, 0.1)
+
+[sub_resource type="BoxMesh" id="PanelMesh"]
+material = ExtResource("3_roofsteel")
+size = Vector3(0.78, 0.28, 0.055)
+
+[sub_resource type="BoxMesh" id="BoltMesh"]
+material = ExtResource("2_copper")
+size = Vector3(0.05, 0.05, 0.035)
+
+[node name="SteamtekTrafficBarrier3D" type="Node3D"]
+editor_description = "Chainable street barrier blockout. Root origin is the floor contact point; local X is the chaining axis and +Z is front."
+metadata/status = "geometry_contract_blockout"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/nominal_size_m = Vector3(1.2, 1.0, 0.4)
+metadata/primary_axis = "local_x"
+metadata/front_axis = "+Z"
+metadata/facing_contract = "yaw_0_90_180_270_no_negative_scale"
+
+[node name="Visual_Blockout" type="Node3D" parent="."]
+
+[node name="FootLeft" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(-0.48, 0.04, 0)
+mesh = SubResource("FootMesh")
+
+[node name="FootRight" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0.48, 0.04, 0)
+mesh = SubResource("FootMesh")
+
+[node name="PostLeft" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(-0.48, 0.5, 0)
+mesh = SubResource("PostMesh")
+
+[node name="PostRight" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0.48, 0.5, 0)
+mesh = SubResource("PostMesh")
+
+[node name="TopBeam" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 0.91, 0)
+mesh = SubResource("BeamMesh")
+
+[node name="WarningPanel" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 0.59, 0.055)
+mesh = SubResource("PanelMesh")
+
+[node name="BoltLeft" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(-0.32, 0.59, 0.102)
+mesh = SubResource("BoltMesh")
+
+[node name="BoltRight" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0.32, 0.59, 0.102)
+mesh = SubResource("BoltMesh")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="FloorMount" type="Marker3D" parent="Sockets"]
+metadata/socket_role = "floor_mount"
+
+[node name="SnapLeft" type="Marker3D" parent="Sockets"]
+position = Vector3(-0.6, 0, 0)
+rotation_degrees = Vector3(0, 0, 90)
+metadata/socket_role = "barrier_chain"
+
+[node name="SnapRight" type="Marker3D" parent="Sockets"]
+position = Vector3(0.6, 0, 0)
+rotation_degrees = Vector3(0, 0, -90)
+metadata/socket_role = "barrier_chain"

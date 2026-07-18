@@ -419,8 +419,6 @@ const HEAVY_OPTIMAL_MAX = 450.0
 # (Pressure Scattergun, Pneumatic Rifle) have their own Accuracy
 # ranges, so they'll land close to but not necessarily exactly 85% --
 # that variance across weapon types is expected, not a bug.
-const DUMMY_DEFENSE = -2.0
-const ENEMY2_DEFENSE = 16.0
 # Light Action cost for the basic Attack -- like walking burning a few
 # calories, not meant to be draining. Tune this one number to adjust.
 const BASIC_ATTACK_ACTION_COST = 20
@@ -516,64 +514,29 @@ var player_current_action: int = 850
 var player_alive: bool = true
 var player_spawn_position: Vector2 = Vector2.ZERO
 
-var dummy_attack_ready: bool = true
-const DUMMY_ATTACK_MIN_DAMAGE = 15
-const DUMMY_ATTACK_MAX_DAMAGE = 40
 const DUMMY_ATTACK_COOLDOWN = 2.5
 const ENEMY_ATTACK_RANGE = 180.0
 
 
-var dummy_name: String = "Scrap Thief"
-var dummy_difficulty: int = 5
-var dummy_max_health: int = 50
-var dummy_max_action: int = 50
-var dummy_current_action: int = 50
-var dummy_current_health: int = 50
-var dummy_alive: bool = true
-# Subdue (damage debuff) is fully functional -- reduces this enemy's
-# outgoing damage while active. Disorient (accuracy debuff) is tracked
-# here too but has no live effect yet, since there's no hit/miss combat
-# system for reduced accuracy to act on.
-var dummy_damage_debuff: float = 0.0
-var dummy_accuracy_debuff: float = 0.0
-# Bruise (attack-speed debuff) -- slows this enemy's own attack cadence
-# while active. Applied as a multiplier on the enemy's attack cooldown.
-var dummy_attack_speed_debuff: float = 0.0
-# Bleed (damage-over-time) -- ticks once per second alongside player
-# regen (see _on_player_regen_tick), dealing dot_damage_per_tick each
-# tick for dot_duration_ticks seconds.
-var dummy_bleed_ticks_remaining: int = 0
-var dummy_bleed_damage_per_tick: int = 0
-# Anger (taunt) -- tracks that this enemy has been provoked into
-# targeting the player. Right now the player is the only possible
-# target, so this has no visible effect yet; it's scaffolding for
-# when co-op/companion targets exist and taunt needs to redirect
-# an enemy away from them and onto the player.
-var dummy_taunted_until_msec: int = 0
-# Tracks cumulative damage dealt to this enemy broken down by weapon
-# class used, across the whole fight -- reset on respawn and after
-# granting kill XP. Lets kill XP be split proportionally across every
-# weapon type actually used, instead of all going to whatever's
-# equipped at the moment of the killing blow.
-var dummy_damage_by_weapon_class: Dictionary = {}
-
-var enemy2_name: String = "Rust Marauder"
-var enemy2_difficulty: int = 8
-var enemy2_max_health: int = 110
-var enemy2_current_health: int = 110
-var enemy2_alive: bool = true
-var enemy2_max_action: int = 80
-var enemy2_current_action: int = 80
-var enemy2_attack_ready: bool = true
-var enemy2_damage_debuff: float = 0.0
-var enemy2_accuracy_debuff: float = 0.0
-var enemy2_attack_speed_debuff: float = 0.0
-var enemy2_bleed_ticks_remaining: int = 0
-var enemy2_bleed_damage_per_tick: int = 0
-var enemy2_taunted_until_msec: int = 0
-var enemy2_damage_by_weapon_class: Dictionary = {}
-const ENEMY2_ATTACK_MIN_DAMAGE = 24
-const ENEMY2_ATTACK_MAX_DAMAGE = 64
+# ------------------------------------------------------------------
+# Enemy combat state (Phase 1: shared stat block).
+# The dummy and enemy2 test enemies each live as an entry in this
+# dictionary instead of loose dummy_*/enemy2_* variables. Each entry
+# holds identity (name, difficulty), live state (health/action, alive,
+# attack_ready), status trackers, and a nested "stats" block (the
+# 15-field combat stat schema -- defaults for now, populated by later
+# phases: CL derivation, armor, combat rolls). Filled once in _ready()
+# from CombatData.default_enemies().
+#
+# Status-tracker notes carried over from the old loose vars:
+#   damage_debuff        Subdue -- reduces this enemy's outgoing damage.
+#   accuracy_debuff      Disorient -- tracked; no live effect yet.
+#   attack_speed_debuff  Bruise -- multiplier on this enemy's attack cadence.
+#   bleed_*              Bleed DoT -- ticks with player regen.
+#   taunted_until_msec   Anger -- scaffolding for co-op aggro redirect.
+#   damage_by_weapon_class  cumulative damage per weapon class, for the
+#                        proportional kill-XP split; reset on respawn.
+var enemies: Dictionary = {}
 const ENEMY2_ATTACK_COOLDOWN = 2.5
 const ENEMY2_KILL_XP = 67
 
@@ -750,6 +713,9 @@ var selected_path: String = ""
 var selected_recipe_index: int = -1
 
 func _ready() -> void:
+	enemies = CombatData.default_enemies()
+	for _eid in enemies.keys():
+		_apply_cl_derivation(_eid)
 	if resource_hotspot_centers == null:
 		resource_hotspot_centers = {}
 
@@ -891,7 +857,7 @@ func _ready() -> void:
 	choose_profession_button.pressed.connect(_on_choose_profession_pressed)
 	choose_profession_button.focus_mode = Control.FOCUS_NONE
 
-	profession_select_ui.visible = not has_chosen_starting_profession
+	profession_select_ui.visible = false
 
 	survey_ui.visible = false
 	crafting_ui.visible = false
@@ -908,6 +874,18 @@ func _ready() -> void:
 	_build_crafting_book_ui()
 	_build_crafting_result_ui()
 	_build_survey_book_ui()
+
+	# Auto-assign Street Thug as the starting profession -- it is currently
+	# the only starting profession, so there is nothing to choose. Additional
+	# professions are still learned from trainers. A loaded save that already
+	# set a starting profession skips this.
+	if not has_chosen_starting_profession:
+		professions_unlocked["Street Thug"] = true
+		has_chosen_starting_profession = true
+		_grant_novice_unlock("Street Thug")
+		_grant_profession_starting_kit("Street Thug")
+		profession_select_ui.visible = false
+		_refresh_skill_tree_ui()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed:
@@ -1926,37 +1904,37 @@ func _get_total_passive_stat(profession_name: String, stat_name: String) -> floa
 func _apply_debuff(target_id: String, debuff_type: String, amount: float, duration: float) -> void:
 	if debuff_type == "damage":
 		if target_id == "dummy":
-			dummy_damage_debuff = amount
+			enemies["dummy"]["damage_debuff"] = amount
 		else:
-			enemy2_damage_debuff = amount
+			enemies["enemy2"]["damage_debuff"] = amount
 	elif debuff_type == "accuracy":
 		if target_id == "dummy":
-			dummy_accuracy_debuff = amount
+			enemies["dummy"]["accuracy_debuff"] = amount
 		else:
-			enemy2_accuracy_debuff = amount
+			enemies["enemy2"]["accuracy_debuff"] = amount
 	elif debuff_type == "attack_speed":
 		if target_id == "dummy":
-			dummy_attack_speed_debuff = amount
+			enemies["dummy"]["attack_speed_debuff"] = amount
 		else:
-			enemy2_attack_speed_debuff = amount
+			enemies["enemy2"]["attack_speed_debuff"] = amount
 
 	var timer = get_tree().create_timer(duration)
 	timer.timeout.connect(func():
 		if debuff_type == "damage":
 			if target_id == "dummy":
-				dummy_damage_debuff = 0.0
+				enemies["dummy"]["damage_debuff"] = 0.0
 			else:
-				enemy2_damage_debuff = 0.0
+				enemies["enemy2"]["damage_debuff"] = 0.0
 		elif debuff_type == "accuracy":
 			if target_id == "dummy":
-				dummy_accuracy_debuff = 0.0
+				enemies["dummy"]["accuracy_debuff"] = 0.0
 			else:
-				enemy2_accuracy_debuff = 0.0
+				enemies["enemy2"]["accuracy_debuff"] = 0.0
 		elif debuff_type == "attack_speed":
 			if target_id == "dummy":
-				dummy_attack_speed_debuff = 0.0
+				enemies["dummy"]["attack_speed_debuff"] = 0.0
 			else:
-				enemy2_attack_speed_debuff = 0.0
+				enemies["enemy2"]["attack_speed_debuff"] = 0.0
 	)
 
 # Applies Bleed (damage-over-time) to a target. Ticks once per second
@@ -1965,11 +1943,11 @@ func _apply_debuff(target_id: String, debuff_type: String, amount: float, durati
 # (IV Drip, Blood Bag), just damage instead of healing.
 func _apply_dot(target_id: String, damage_per_tick: int, duration_ticks: int) -> void:
 	if target_id == "dummy":
-		dummy_bleed_damage_per_tick = damage_per_tick
-		dummy_bleed_ticks_remaining = duration_ticks
+		enemies["dummy"]["bleed_damage_per_tick"] = damage_per_tick
+		enemies["dummy"]["bleed_ticks_remaining"] = duration_ticks
 	else:
-		enemy2_bleed_damage_per_tick = damage_per_tick
-		enemy2_bleed_ticks_remaining = duration_ticks
+		enemies["enemy2"]["bleed_damage_per_tick"] = damage_per_tick
+		enemies["enemy2"]["bleed_ticks_remaining"] = duration_ticks
 
 # Applies Anger (taunt) to a target for duration seconds. Currently the
 # player is the only attackable target either enemy can go after, so
@@ -1980,9 +1958,9 @@ func _apply_dot(target_id: String, damage_per_tick: int, duration_ticks: int) ->
 func _apply_taunt(target_id: String, duration: float) -> void:
 	var expires_at_msec = Time.get_ticks_msec() + int(duration * 1000.0)
 	if target_id == "dummy":
-		dummy_taunted_until_msec = expires_at_msec
+		enemies["dummy"]["taunted_until_msec"] = expires_at_msec
 	else:
-		enemy2_taunted_until_msec = expires_at_msec
+		enemies["enemy2"]["taunted_until_msec"] = expires_at_msec
 
 # Resolves a weapon class to its specific weapon-type XP pool. Returns
 # "" for a recognized category weapon that doesn't have its own
@@ -2023,10 +2001,6 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 	var base_damage = weapon_stats.get("Damage Rating", 5)
 	var speed = weapon_stats.get("Speed", 2.0)
 
-	var variance = base_damage * 0.2
-	var min_damage = max(1, int(base_damage - variance))
-	var max_damage = int(base_damage + variance)
-	var damage = randi_range(min_damage, max_damage)
 
 	var weapon_class = crafted_item_class.get(equipped_weapon_name, "")
 	var weapon_subclass = crafted_item_subclass.get(equipped_weapon_name, "")
@@ -2048,80 +2022,46 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 	var profession_name = "Street Thug"
 	var conditioning_paths = ["Combat Training I", "Combat Training II", "Combat Training III"]
 
-	var crit_hit = false
+	var conditioning_nodes = 0
+	var max_conditioning_nodes = 0
+	for path_name in conditioning_paths:
+		var _pdata = GameData.novice_professions[profession_name].get("paths", {})
+		var path_data = _pdata.get(path_name, null)
+		if path_data == null:
+			continue
+		conditioning_nodes += path_data["unlocked_nodes"]
+		max_conditioning_nodes += path_data.get("max_nodes", NODES_PER_PATH)
 
-	if profession_name != "":
-		var conditioning_nodes = 0
-		var max_conditioning_nodes = 0
-		for path_name in conditioning_paths:
-			var _pdata = GameData.novice_professions[profession_name].get("paths", {})
-			var path_data = _pdata.get(path_name, null)
-			if path_data == null:
-				continue
-			conditioning_nodes += path_data["unlocked_nodes"]
-			max_conditioning_nodes += path_data.get("max_nodes", NODES_PER_PATH)
+	var speed_bonus = 0.0
+	if GameData.pressure_enforcer_weapons.has(weapon_class) or equipped_weapon_name == "":
+		var weapon_type_label = _get_pressure_weapon_type_label(weapon_class, weapon_subclass)
+		if weapon_type_label != "":
+			var speed_stat_total = _get_total_passive_stat(profession_name, weapon_type_label + " Speed")
+			speed_bonus = speed_stat_total / 100.0
+	else:
+		speed_bonus = conditioning_nodes * 0.05
+	speed = speed * (1.0 - speed_bonus)
 
-		var speed_bonus = 0.0
-		if GameData.pressure_enforcer_weapons.has(weapon_class) or equipped_weapon_name == "":
-			var weapon_type_label = _get_pressure_weapon_type_label(weapon_class, weapon_subclass)
-			if weapon_type_label != "":
-				var speed_stat_total = _get_total_passive_stat(profession_name, weapon_type_label + " Speed")
-				speed_bonus = speed_stat_total / 100.0
-		else:
-			speed_bonus = conditioning_nodes * 0.05
-		speed = speed * (1.0 - speed_bonus)
+	# Central damage number: variance roll, crit, profession cert (1.10),
+	# and the uncertified-weapon 0.5 penalty all live in Combat.gd now, so
+	# the whole damage formula is tuned in one place. Returns the rolled
+	# damage plus the crit and uncertified flags this function still needs
+	# for the hit messages further down.
+	var weapon_damage_type = weapon_stats.get("Damage Type", "Kinetic")
+	var weapon_armor_pen = int(weapon_stats.get("Armor Penetration", 0))
 
-		var crit_chance = conditioning_nodes * 0.03
-		if randf() < crit_chance:
-			var crit_multiplier = 2.0 if conditioning_nodes >= max_conditioning_nodes else 1.5
-			damage = round(damage * crit_multiplier)
-			crit_hit = true
-
-	var certification_multiplier = 1.0
-	if profession_name != "" and professions_unlocked.get(profession_name, false):
-		certification_multiplier = 1.10
-
-	var weapon_cert_multiplier = 1.0
-	var weapon_cert_req = GameData.WEAPON_CERT_REQUIREMENTS.get(equipped_weapon_name, null)
-	var is_uncertified = false
-	if weapon_cert_req != null:
-		var requirement_options = weapon_cert_req if weapon_cert_req is Array else [weapon_cert_req]
-		is_uncertified = true
-		for option in requirement_options:
-			var cert_prof_data = GameData.novice_professions.get(option["profession"], {})
-			# Keystone professions (Street Thug).
-			if cert_prof_data.has("keystones"):
-				# Not certified at all until the profession is learned.
-				if not professions_unlocked.get(option["profession"], false):
-					continue
-				# Novice-tier weapon: certified as soon as the profession
-				# is learned, no points needed.
-				if option.get("box", "") == "Novice":
-					is_uncertified = false
-					break
-				# Keystone-gated weapon: certified once enough points have
-				# been spent in the matching keystone.
-				if option.has("keystone"):
-					var ks_name_req = option["keystone"]
-					var ks_data_req = cert_prof_data["keystones"].get(ks_name_req, {})
-					var points_needed = option.get("points_required", 5)
-					if ks_data_req.get("points_spent", 0) >= points_needed:
-						is_uncertified = false
-						break
-				continue
-			# Path-based professions: check the specific box
-			var box_name = option.get("box", "")
-			if box_name == "" or not cert_prof_data.has("paths") or not cert_prof_data["paths"].has(box_name):
-				continue
-			var cert_path_data = cert_prof_data["paths"][box_name]
-			var cert_max = cert_path_data.get("max_nodes", NODES_PER_PATH)
-			if cert_path_data["unlocked_nodes"] >= cert_max:
-				is_uncertified = false
-				break
-		if is_uncertified:
-			weapon_cert_multiplier = 0.5
-
-	damage = round(damage * damage_multiplier * certification_multiplier * weapon_cert_multiplier)
+	var attack_result = Combat.compute_player_attack_damage({
+		"base_damage": base_damage,
+		"damage_multiplier": damage_multiplier,
+		"conditioning_nodes": conditioning_nodes,
+		"max_conditioning_nodes": max_conditioning_nodes,
+		"profession_certified": professions_unlocked.get(profession_name, false),
+		"equipped_weapon_name": equipped_weapon_name,
+		"professions_unlocked": professions_unlocked
+	})
+	var damage = attack_result["damage"]
+	var crit_hit = attack_result["crit"]
+	var is_uncertified = attack_result["uncertified"]
 
 	# Hit-chance roll: our own formula, weapon Accuracy + player Accuracy
 	# bonus (Pressure Enforcer only, for now) vs a flat per-enemy Defense
@@ -2135,7 +2075,7 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 		if weapon_type_label_for_accuracy != "":
 			player_accuracy_bonus = _get_total_passive_stat(profession_name, weapon_type_label_for_accuracy + " Accuracy")
 
-	var target_defense = DUMMY_DEFENSE if target_id == "dummy" else ENEMY2_DEFENSE
+	var target_defense = enemies[target_id]["defense"]
 	var target_node_for_range = dummy if target_id == "dummy" else enemy2
 	var dist_to_target = player.global_position.distance_to(target_node_for_range.global_position)
 	var range_penalty = _get_range_accuracy_penalty(weapon_class, dist_to_target)
@@ -2146,7 +2086,7 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 		player_current_action -= action_cost
 
 	if randf() * 100.0 > hit_chance:
-		var miss_target_name = dummy_name if target_id == "dummy" else enemy2_name
+		var miss_target_name = enemies["dummy"]["name"] if target_id == "dummy" else enemies["enemy2"]["name"]
 		var miss_message = ""
 		if ability_name != "":
 			miss_message = ability_name + "! "
@@ -2164,7 +2104,7 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 		attack_cooldown_timer.start()
 		return
 
-	var target_name = dummy_name if target_id == "dummy" else enemy2_name
+	var target_name = enemies["dummy"]["name"] if target_id == "dummy" else enemies["enemy2"]["name"]
 
 	var is_aoe = false
 	if ability_name != "" and GameData.ability_definitions.has(ability_name):
@@ -2172,12 +2112,16 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 
 	var targets_to_hit: Array = []
 	if is_aoe:
-		if dummy_alive and player.global_position.distance_to(dummy.global_position) <= MELEE_RANGE:
+		if enemies["dummy"]["alive"] and player.global_position.distance_to(dummy.global_position) <= MELEE_RANGE:
 			targets_to_hit.append("dummy")
-		if enemy2_alive and player.global_position.distance_to(enemy2.global_position) <= MELEE_RANGE:
+		if enemies["enemy2"]["alive"] and player.global_position.distance_to(enemy2.global_position) <= MELEE_RANGE:
 			targets_to_hit.append("enemy2")
 	else:
 		targets_to_hit.append(target_id)
+
+	# Phase 4a: post-armor damage for the primary target (shown in the hit
+	# message). Each target is mitigated individually in the apply loop below.
+	var primary_damage = Combat.apply_typed_mitigation(damage, enemies[target_id]["resistances"], weapon_damage_type, weapon_armor_pen)
 
 	var hit_message = ""
 	if ability_name != "":
@@ -2186,9 +2130,9 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 		hit_message += "CRITICAL HIT! "
 
 	if is_aoe and targets_to_hit.size() > 1:
-		hit_message += "You hit all nearby enemies for " + str(int(damage)) + " damage each!"
+		hit_message += "You hit all nearby enemies for " + str(int(primary_damage)) + " damage each!"
 	else:
-		hit_message += "You hit " + target_name + " for " + str(int(damage)) + " damage!"
+		hit_message += "You hit " + target_name + " for " + str(int(primary_damage)) + " damage!"
 
 	if action_cost > 0:
 		hit_message += " (-" + str(action_cost) + " Action)"
@@ -2215,31 +2159,32 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 	var defeat_messages: Array = []
 
 	for hit_target_id in targets_to_hit:
+		var dealt = Combat.apply_typed_mitigation(damage, enemies[hit_target_id]["resistances"], weapon_damage_type, weapon_armor_pen)
 		if hit_target_id == "dummy":
-			dummy_current_health -= int(damage)
-			dummy_damage_by_weapon_class[xp_class_key] = dummy_damage_by_weapon_class.get(xp_class_key, 0) + int(damage)
+			enemies["dummy"]["current_health"] -= int(dealt)
+			enemies["dummy"]["damage_by_weapon_class"][xp_class_key] = enemies["dummy"]["damage_by_weapon_class"].get(xp_class_key, 0) + int(dealt)
 			if action_drain_amount > 0:
-				dummy_current_action = max(0, dummy_current_action - action_drain_amount)
+				enemies["dummy"]["current_action"] = max(0, enemies["dummy"]["current_action"] - action_drain_amount)
 			if debuff_type != "":
 				_apply_debuff("dummy", debuff_type, debuff_amount, debuff_duration)
 			if dot_duration_ticks > 0:
 				_apply_dot("dummy", dot_damage_per_tick, dot_duration_ticks)
 			if taunt_duration > 0.0:
 				_apply_taunt("dummy", taunt_duration)
-			if dummy_current_health <= 0 or dummy_current_action <= 0:
+			if enemies["dummy"]["current_health"] <= 0 or enemies["dummy"]["current_action"] <= 0:
 				defeat_messages.append(_defeat_dummy())
 		else:
-			enemy2_current_health -= int(damage)
-			enemy2_damage_by_weapon_class[xp_class_key] = enemy2_damage_by_weapon_class.get(xp_class_key, 0) + int(damage)
+			enemies["enemy2"]["current_health"] -= int(dealt)
+			enemies["enemy2"]["damage_by_weapon_class"][xp_class_key] = enemies["enemy2"]["damage_by_weapon_class"].get(xp_class_key, 0) + int(dealt)
 			if action_drain_amount > 0:
-				enemy2_current_action = max(0, enemy2_current_action - action_drain_amount)
+				enemies["enemy2"]["current_action"] = max(0, enemies["enemy2"]["current_action"] - action_drain_amount)
 			if debuff_type != "":
 				_apply_debuff("enemy2", debuff_type, debuff_amount, debuff_duration)
 			if dot_duration_ticks > 0:
 				_apply_dot("enemy2", dot_damage_per_tick, dot_duration_ticks)
 			if taunt_duration > 0.0:
 				_apply_taunt("enemy2", taunt_duration)
-			if enemy2_current_health <= 0 or enemy2_current_action <= 0:
+			if enemies["enemy2"]["current_health"] <= 0 or enemies["enemy2"]["current_action"] <= 0:
 				defeat_messages.append(_defeat_enemy2())
 
 	if action_drain_amount > 0:
@@ -2295,7 +2240,7 @@ func _get_nearest_enemy_in_range() -> String:
 		return ""
 
 	var target_node = dummy if targeted_enemy == "dummy" else enemy2
-	var target_alive = dummy_alive if targeted_enemy == "dummy" else enemy2_alive
+	var target_alive = enemies["dummy"]["alive"] if targeted_enemy == "dummy" else enemies["enemy2"]["alive"]
 
 	if not target_alive:
 		targeted_enemy = ""
@@ -2308,7 +2253,7 @@ func _get_nearest_enemy_in_range() -> String:
 	return ""
 
 func _defeat_dummy() -> String:
-	dummy_alive = false
+	enemies["dummy"]["alive"] = false
 	if targeted_enemy == "dummy":
 		targeted_enemy = ""
 	quest_system.on_enemy_killed()
@@ -2320,14 +2265,14 @@ func _defeat_dummy() -> String:
 	dummy_name_label.visible = false
 
 	var total_damage_dealt = 0
-	for wc in dummy_damage_by_weapon_class.keys():
-		total_damage_dealt += dummy_damage_by_weapon_class[wc]
+	for wc in enemies["dummy"]["damage_by_weapon_class"].keys():
+		total_damage_dealt += enemies["dummy"]["damage_by_weapon_class"][wc]
 
 	var xp_summary_parts: Array = []
 
 	if total_damage_dealt > 0:
-		for wc in dummy_damage_by_weapon_class.keys():
-			var damage_share = float(dummy_damage_by_weapon_class[wc]) / float(total_damage_dealt)
+		for wc in enemies["dummy"]["damage_by_weapon_class"].keys():
+			var damage_share = float(enemies["dummy"]["damage_by_weapon_class"][wc]) / float(total_damage_dealt)
 			var share_xp = int(round(DUMMY_KILL_XP * damage_share))
 			if share_xp <= 0:
 				continue
@@ -2338,7 +2283,7 @@ func _defeat_dummy() -> String:
 	if xp_summary_parts.size() > 0:
 		_show_xp_gain_message("You've gained " + ", ".join(xp_summary_parts) + "!")
 
-	dummy_damage_by_weapon_class = {}
+	enemies["dummy"]["damage_by_weapon_class"] = {}
 
 	var dropped_items = _roll_loot("Dummy")
 	_update_inventory_display()
@@ -2363,16 +2308,16 @@ func _defeat_dummy() -> String:
 	return defeat_message
 
 func _on_dummy_respawn() -> void:
-	dummy_current_health = dummy_max_health
-	dummy_current_action = dummy_max_action
-	dummy_alive = true
-	dummy_damage_debuff = 0.0
-	dummy_accuracy_debuff = 0.0
-	dummy_attack_speed_debuff = 0.0
-	dummy_bleed_ticks_remaining = 0
-	dummy_bleed_damage_per_tick = 0
-	dummy_taunted_until_msec = 0
-	dummy_damage_by_weapon_class = {}
+	enemies["dummy"]["current_health"] = enemies["dummy"]["max_health"]
+	enemies["dummy"]["current_action"] = enemies["dummy"]["max_action"]
+	enemies["dummy"]["alive"] = true
+	enemies["dummy"]["damage_debuff"] = 0.0
+	enemies["dummy"]["accuracy_debuff"] = 0.0
+	enemies["dummy"]["attack_speed_debuff"] = 0.0
+	enemies["dummy"]["bleed_ticks_remaining"] = 0
+	enemies["dummy"]["bleed_damage_per_tick"] = 0
+	enemies["dummy"]["taunted_until_msec"] = 0
+	enemies["dummy"]["damage_by_weapon_class"] = {}
 	dummy.visible = true
 	dummy_health_bar_bg.visible = true
 	dummy_health_bar_fill.visible = true
@@ -2382,7 +2327,7 @@ func _on_dummy_respawn() -> void:
 	_show_combat_message("The dummy has respawned.")
 
 func _defeat_enemy2() -> String:
-	enemy2_alive = false
+	enemies["enemy2"]["alive"] = false
 	if targeted_enemy == "enemy2":
 		targeted_enemy = ""
 	quest_system.on_enemy_killed()
@@ -2394,14 +2339,14 @@ func _defeat_enemy2() -> String:
 	enemy2_name_label.visible = false
 
 	var total_damage_dealt2 = 0
-	for wc in enemy2_damage_by_weapon_class.keys():
-		total_damage_dealt2 += enemy2_damage_by_weapon_class[wc]
+	for wc in enemies["enemy2"]["damage_by_weapon_class"].keys():
+		total_damage_dealt2 += enemies["enemy2"]["damage_by_weapon_class"][wc]
 
 	var xp_summary_parts2: Array = []
 
 	if total_damage_dealt2 > 0:
-		for wc in enemy2_damage_by_weapon_class.keys():
-			var damage_share2 = float(enemy2_damage_by_weapon_class[wc]) / float(total_damage_dealt2)
+		for wc in enemies["enemy2"]["damage_by_weapon_class"].keys():
+			var damage_share2 = float(enemies["enemy2"]["damage_by_weapon_class"][wc]) / float(total_damage_dealt2)
 			var share_xp2 = int(round(ENEMY2_KILL_XP * damage_share2))
 			if share_xp2 <= 0:
 				continue
@@ -2412,7 +2357,7 @@ func _defeat_enemy2() -> String:
 	if xp_summary_parts2.size() > 0:
 		_show_xp_gain_message("You've gained " + ", ".join(xp_summary_parts2) + "!")
 
-	enemy2_damage_by_weapon_class = {}
+	enemies["enemy2"]["damage_by_weapon_class"] = {}
 
 	var dropped_items = _roll_loot("Enemy2")
 	_update_inventory_display()
@@ -2421,7 +2366,7 @@ func _defeat_enemy2() -> String:
 	cogs += cogs_dropped
 	_update_cogs_display()
 
-	var defeat_message = enemy2_name + " has been defeated!\n"
+	var defeat_message = enemies["enemy2"]["name"] + " has been defeated!\n"
 	if dropped_items.size() > 0:
 		defeat_message += "Loot: "
 		for i in range(dropped_items.size()):
@@ -2437,23 +2382,23 @@ func _defeat_enemy2() -> String:
 	return defeat_message
 
 func _on_enemy2_respawn() -> void:
-	enemy2_current_health = enemy2_max_health
-	enemy2_current_action = enemy2_max_action
-	enemy2_alive = true
-	enemy2_damage_debuff = 0.0
-	enemy2_accuracy_debuff = 0.0
-	enemy2_attack_speed_debuff = 0.0
-	enemy2_bleed_ticks_remaining = 0
-	enemy2_bleed_damage_per_tick = 0
-	enemy2_taunted_until_msec = 0
-	enemy2_damage_by_weapon_class = {}
+	enemies["enemy2"]["current_health"] = enemies["enemy2"]["max_health"]
+	enemies["enemy2"]["current_action"] = enemies["enemy2"]["max_action"]
+	enemies["enemy2"]["alive"] = true
+	enemies["enemy2"]["damage_debuff"] = 0.0
+	enemies["enemy2"]["accuracy_debuff"] = 0.0
+	enemies["enemy2"]["attack_speed_debuff"] = 0.0
+	enemies["enemy2"]["bleed_ticks_remaining"] = 0
+	enemies["enemy2"]["bleed_damage_per_tick"] = 0
+	enemies["enemy2"]["taunted_until_msec"] = 0
+	enemies["enemy2"]["damage_by_weapon_class"] = {}
 	enemy2.visible = true
 	enemy2_health_bar_bg.visible = true
 	enemy2_health_bar_fill.visible = true
 	enemy2_action_bar_bg.visible = true
 	enemy2_action_bar_fill.visible = true
 	enemy2_name_label.visible = true
-	_show_combat_message(enemy2_name + " has respawned.")
+	_show_combat_message(enemies["enemy2"]["name"] + " has respawned.")
 
 func _get_unlocked_classes() -> Array:
 	var unlocked = []
@@ -2924,11 +2869,11 @@ func _setup_health_bars() -> void:
 	enemy_hud_health_label.position = Vector2.ZERO
 	enemy_hud_action_label.position = Vector2(0, HUD_BAR_HEIGHT + HUD_BAR_GAP)
 
-	dummy_name_label.text = dummy_name
+	dummy_name_label.text = enemies["dummy"]["name"]
 	dummy_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	dummy_name_label.custom_minimum_size = Vector2(NAME_LABEL_WIDTH, 0)
 
-	enemy2_name_label.text = enemy2_name
+	enemy2_name_label.text = enemies["enemy2"]["name"]
 	enemy2_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	enemy2_name_label.custom_minimum_size = Vector2(NAME_LABEL_WIDTH, 0)
 
@@ -2985,55 +2930,55 @@ func _update_health_bars() -> void:
 	player_hud_action_label.text = str(player_current_action) + " / " + str(player_max_action)
 	player_hud_action_label.size = Vector2(HUD_BAR_WIDTH, HUD_BAR_HEIGHT)
 
-	if dummy_alive:
+	if enemies["dummy"]["alive"]:
 		var dummy_bar_position = dummy.global_position + Vector2(-HEALTH_BAR_WIDTH / 2, -60)
 		dummy_health_bar_bg.position = dummy_bar_position
 		dummy_health_bar_fill.position = dummy_bar_position
 
 		var bar_center_x = dummy_bar_position.x + (HEALTH_BAR_WIDTH / 2)
 		dummy_name_label.position = Vector2(bar_center_x - (NAME_LABEL_WIDTH / 2), dummy_bar_position.y - 24)
-		dummy_name_label.modulate = _get_con_color(dummy_difficulty)
+		dummy_name_label.modulate = _get_con_color(enemies["dummy"]["difficulty"])
 
 		var dummy_action_bar_position = dummy_bar_position + Vector2(0, ACTION_BAR_GAP)
 		dummy_action_bar_bg.position = dummy_action_bar_position
 		dummy_action_bar_fill.position = dummy_action_bar_position
 
-		var dummy_health_pct = clamp(float(dummy_current_health) / float(dummy_max_health), 0.0, 1.0)
+		var dummy_health_pct = clamp(float(enemies["dummy"]["current_health"]) / float(enemies["dummy"]["max_health"]), 0.0, 1.0)
 		dummy_health_bar_fill.polygon = _make_bar_polygon(HEALTH_BAR_WIDTH * dummy_health_pct, HEALTH_BAR_HEIGHT)
 
-		var dummy_action_pct = clamp(float(dummy_current_action) / float(dummy_max_action), 0.0, 1.0)
+		var dummy_action_pct = clamp(float(enemies["dummy"]["current_action"]) / float(enemies["dummy"]["max_action"]), 0.0, 1.0)
 		dummy_action_bar_fill.polygon = _make_bar_polygon(HEALTH_BAR_WIDTH * dummy_action_pct, HEALTH_BAR_HEIGHT)
 
 		if dummy_target_indicator:
 			dummy_target_indicator.visible = (targeted_enemy == "dummy")
 			dummy_target_indicator.position = dummy_bar_position
 
-	if enemy2_alive:
+	if enemies["enemy2"]["alive"]:
 		var enemy2_bar_position = enemy2.global_position + Vector2(-HEALTH_BAR_WIDTH / 2, -60)
 		enemy2_health_bar_bg.position = enemy2_bar_position
 		enemy2_health_bar_fill.position = enemy2_bar_position
 
 		var enemy2_bar_center_x = enemy2_bar_position.x + (HEALTH_BAR_WIDTH / 2)
 		enemy2_name_label.position = Vector2(enemy2_bar_center_x - (NAME_LABEL_WIDTH / 2), enemy2_bar_position.y - 24)
-		enemy2_name_label.modulate = _get_con_color(enemy2_difficulty)
+		enemy2_name_label.modulate = _get_con_color(enemies["enemy2"]["difficulty"])
 
 		var enemy2_action_bar_position = enemy2_bar_position + Vector2(0, ACTION_BAR_GAP)
 		enemy2_action_bar_bg.position = enemy2_action_bar_position
 		enemy2_action_bar_fill.position = enemy2_action_bar_position
 
-		var enemy2_health_pct = clamp(float(enemy2_current_health) / float(enemy2_max_health), 0.0, 1.0)
+		var enemy2_health_pct = clamp(float(enemies["enemy2"]["current_health"]) / float(enemies["enemy2"]["max_health"]), 0.0, 1.0)
 		enemy2_health_bar_fill.polygon = _make_bar_polygon(HEALTH_BAR_WIDTH * enemy2_health_pct, HEALTH_BAR_HEIGHT)
 
-		var enemy2_action_pct = clamp(float(enemy2_current_action) / float(enemy2_max_action), 0.0, 1.0)
+		var enemy2_action_pct = clamp(float(enemies["enemy2"]["current_action"]) / float(enemies["enemy2"]["max_action"]), 0.0, 1.0)
 		enemy2_action_bar_fill.polygon = _make_bar_polygon(HEALTH_BAR_WIDTH * enemy2_action_pct, HEALTH_BAR_HEIGHT)
 
 		if enemy2_target_indicator:
 			enemy2_target_indicator.visible = (targeted_enemy == "enemy2")
 			enemy2_target_indicator.position = enemy2_bar_position
 
-	if dummy_target_indicator and not dummy_alive:
+	if dummy_target_indicator and not enemies["dummy"]["alive"]:
 		dummy_target_indicator.visible = false
-	if enemy2_target_indicator and not enemy2_alive:
+	if enemy2_target_indicator and not enemies["enemy2"]["alive"]:
 		enemy2_target_indicator.visible = false
 
 	_update_enemy_hud()
@@ -3057,15 +3002,15 @@ func _update_enemy_hud() -> void:
 	var max_action: int
 
 	if tracked_id == "dummy":
-		current_health = dummy_current_health
-		max_health = dummy_max_health
-		current_action = dummy_current_action
-		max_action = dummy_max_action
+		current_health = enemies["dummy"]["current_health"]
+		max_health = enemies["dummy"]["max_health"]
+		current_action = enemies["dummy"]["current_action"]
+		max_action = enemies["dummy"]["max_action"]
 	else:
-		current_health = enemy2_current_health
-		max_health = enemy2_max_health
-		current_action = enemy2_current_action
-		max_action = enemy2_max_action
+		current_health = enemies["enemy2"]["current_health"]
+		max_health = enemies["enemy2"]["max_health"]
+		current_action = enemies["enemy2"]["current_action"]
+		max_action = enemies["enemy2"]["max_action"]
 
 	var tracked_health_pct = clamp(float(current_health) / float(max_health), 0.0, 1.0)
 	enemy_hud_health_bar_fill.polygon = _make_bar_polygon(HUD_BAR_WIDTH * tracked_health_pct, HUD_BAR_HEIGHT)
@@ -3079,9 +3024,9 @@ func _update_enemy_hud() -> void:
 
 func _cycle_target() -> void:
 	var ids: Array = []
-	if dummy_alive:
+	if enemies["dummy"]["alive"]:
 		ids.append("dummy")
-	if enemy2_alive:
+	if enemies["enemy2"]["alive"]:
 		ids.append("enemy2")
 	if ids.size() == 0:
 		targeted_enemy = ""
@@ -3098,12 +3043,12 @@ func _cycle_target() -> void:
 func _try_click_target(world_pos: Vector2) -> void:
 	var clicked: String = ""
 	var closest_dist = INF
-	if dummy_alive:
+	if enemies["dummy"]["alive"]:
 		var d = world_pos.distance_to(dummy.global_position)
 		if d <= ENEMY_CLICK_RADIUS and d < closest_dist:
 			closest_dist = d
 			clicked = "dummy"
-	if enemy2_alive:
+	if enemies["enemy2"]["alive"]:
 		var d2 = world_pos.distance_to(enemy2.global_position)
 		if d2 <= ENEMY_CLICK_RADIUS and d2 < closest_dist:
 			closest_dist = d2
@@ -3117,7 +3062,7 @@ func _get_tracked_enemy_id() -> String:
 	# Prefer the explicitly targeted enemy -- that's what the player
 	# is looking at and expecting to see health bars for.
 	if targeted_enemy != "":
-		var target_alive = dummy_alive if targeted_enemy == "dummy" else enemy2_alive
+		var target_alive = enemies["dummy"]["alive"] if targeted_enemy == "dummy" else enemies["enemy2"]["alive"]
 		if target_alive:
 			return targeted_enemy
 		else:
@@ -3139,11 +3084,11 @@ func _get_tracked_enemy_id() -> String:
 	else:
 		track_range = MELEE_RANGE
 	var candidates = []
-	if dummy_alive:
+	if enemies["dummy"]["alive"]:
 		var dummy_distance = player.global_position.distance_to(dummy.global_position)
 		if dummy_distance <= track_range:
 			candidates.append(["dummy", dummy_distance])
-	if enemy2_alive:
+	if enemies["enemy2"]["alive"]:
 		var enemy2_distance = player.global_position.distance_to(enemy2.global_position)
 		if enemy2_distance <= track_range:
 			candidates.append(["enemy2", enemy2_distance])
@@ -3154,16 +3099,40 @@ func _get_tracked_enemy_id() -> String:
 
 # --- Enemy Attacks ---
 
+func _apply_cl_derivation(enemy_id: String) -> void:
+	# Fills an enemy's derived combat values from its hidden Combat Level.
+	# Health/action/damage/defense/armor come from the CL anchor table via
+	# Combat.derive_stats_from_cl(). Effective Health is Base Health seen
+	# through the derived armor (Phase 4a); current/max_health stay Base
+	# Health -- the raw pool combat depletes -- and armor mitigates each hit.
+	if not enemies.has(enemy_id):
+		return
+	var e = enemies[enemy_id]
+	var d = Combat.derive_stats_from_cl(e["cl"])
+	e["stats"]["base_health"] = d["health"]
+	e["stats"]["effective_health"] = Combat.effective_health(d["health"], d["armor"])
+	e["stats"]["defense"] = d["defense"]
+	e["stats"]["armor_rating"] = d["armor"]
+	e["max_health"] = d["health"]
+	e["current_health"] = d["health"]
+	e["max_action"] = d["action"]
+	e["current_action"] = d["action"]
+	e["defense"] = d["defense"]
+	e["armor_rating"] = d["armor"]
+	e["resistances"] = CombatData.new_resistances(d["armor"])
+	e["attack_min_damage"] = int(round(d["damage"] * 0.55))
+	e["attack_max_damage"] = int(round(d["damage"] * 1.45))
+
+
 func _check_dummy_attack() -> void:
-	if not dummy_alive or not player_alive or not dummy_attack_ready:
+	if not enemies["dummy"]["alive"] or not player_alive or not enemies["dummy"]["attack_ready"]:
 		return
 
 	var distance = dummy.global_position.distance_to(player.global_position)
 	if distance > ENEMY_ATTACK_RANGE:
 		return
 
-	var damage = randi_range(DUMMY_ATTACK_MIN_DAMAGE, DUMMY_ATTACK_MAX_DAMAGE)
-	damage = round(damage * (1.0 - dummy_damage_debuff))
+	var damage = Combat.compute_enemy_attack_damage(enemies["dummy"]["attack_min_damage"], enemies["dummy"]["attack_max_damage"], enemies["dummy"]["damage_debuff"])
 	player_current_health -= damage
 	player_current_health = max(player_current_health, 0)
 
@@ -3172,37 +3141,36 @@ func _check_dummy_attack() -> void:
 	if player_current_health <= 0:
 		_defeat_player()
 
-	dummy_attack_ready = false
-	dummy_attack_cooldown_timer.wait_time = DUMMY_ATTACK_COOLDOWN * (1.0 + dummy_attack_speed_debuff)
+	enemies["dummy"]["attack_ready"] = false
+	dummy_attack_cooldown_timer.wait_time = DUMMY_ATTACK_COOLDOWN * (1.0 + enemies["dummy"]["attack_speed_debuff"])
 	dummy_attack_cooldown_timer.start()
 
 func _on_dummy_attack_cooldown_finished() -> void:
-	dummy_attack_ready = true
+	enemies["dummy"]["attack_ready"] = true
 
 func _check_enemy2_attack() -> void:
-	if not enemy2_alive or not player_alive or not enemy2_attack_ready:
+	if not enemies["enemy2"]["alive"] or not player_alive or not enemies["enemy2"]["attack_ready"]:
 		return
 
 	var distance = enemy2.global_position.distance_to(player.global_position)
 	if distance > ENEMY_ATTACK_RANGE:
 		return
 
-	var damage = randi_range(ENEMY2_ATTACK_MIN_DAMAGE, ENEMY2_ATTACK_MAX_DAMAGE)
-	damage = round(damage * (1.0 - enemy2_damage_debuff))
+	var damage = Combat.compute_enemy_attack_damage(enemies["enemy2"]["attack_min_damage"], enemies["enemy2"]["attack_max_damage"], enemies["enemy2"]["damage_debuff"])
 	player_current_health -= damage
 	player_current_health = max(player_current_health, 0)
 
-	_show_enemy_combat_message(enemy2_name + " hits you for " + str(damage) + " damage!")
+	_show_enemy_combat_message(enemies["enemy2"]["name"] + " hits you for " + str(damage) + " damage!")
 
 	if player_current_health <= 0:
 		_defeat_player()
 
-	enemy2_attack_ready = false
-	enemy2_attack_cooldown_timer.wait_time = ENEMY2_ATTACK_COOLDOWN * (1.0 + enemy2_attack_speed_debuff)
+	enemies["enemy2"]["attack_ready"] = false
+	enemy2_attack_cooldown_timer.wait_time = ENEMY2_ATTACK_COOLDOWN * (1.0 + enemies["enemy2"]["attack_speed_debuff"])
 	enemy2_attack_cooldown_timer.start()
 
 func _on_enemy2_attack_cooldown_finished() -> void:
-	enemy2_attack_ready = true
+	enemies["enemy2"]["attack_ready"] = true
 
 func _defeat_player() -> void:
 	player_alive = false
@@ -3235,18 +3203,18 @@ func _on_player_regen_tick() -> void:
 	# Bleed (Pressure Enforcer Master ability) -- same once-per-second
 	# tick cadence as the Apothecary HoTs above, just damage instead of
 	# healing, and applied to whichever enemy has it active.
-	if dummy_alive and dummy_bleed_ticks_remaining > 0:
-		dummy_current_health -= dummy_bleed_damage_per_tick
-		dummy_bleed_ticks_remaining -= 1
-		_show_enemy_combat_message("Bleed deals " + str(dummy_bleed_damage_per_tick) + " damage to " + dummy_name + "!")
-		if dummy_current_health <= 0:
+	if enemies["dummy"]["alive"] and enemies["dummy"]["bleed_ticks_remaining"] > 0:
+		enemies["dummy"]["current_health"] -= enemies["dummy"]["bleed_damage_per_tick"]
+		enemies["dummy"]["bleed_ticks_remaining"] -= 1
+		_show_enemy_combat_message("Bleed deals " + str(enemies["dummy"]["bleed_damage_per_tick"]) + " damage to " + enemies["dummy"]["name"] + "!")
+		if enemies["dummy"]["current_health"] <= 0:
 			_show_combat_message(_defeat_dummy())
 
-	if enemy2_alive and enemy2_bleed_ticks_remaining > 0:
-		enemy2_current_health -= enemy2_bleed_damage_per_tick
-		enemy2_bleed_ticks_remaining -= 1
-		_show_enemy_combat_message("Bleed deals " + str(enemy2_bleed_damage_per_tick) + " damage to " + enemy2_name + "!")
-		if enemy2_current_health <= 0:
+	if enemies["enemy2"]["alive"] and enemies["enemy2"]["bleed_ticks_remaining"] > 0:
+		enemies["enemy2"]["current_health"] -= enemies["enemy2"]["bleed_damage_per_tick"]
+		enemies["enemy2"]["bleed_ticks_remaining"] -= 1
+		_show_enemy_combat_message("Bleed deals " + str(enemies["enemy2"]["bleed_damage_per_tick"]) + " damage to " + enemies["enemy2"]["name"] + "!")
+		if enemies["enemy2"]["current_health"] <= 0:
 			_show_combat_message(_defeat_enemy2())
 
 func _on_player_action_regen_tick() -> void:
@@ -3415,9 +3383,6 @@ func _scavenge_dumpster() -> void:
 	_update_inventory_display()
 	_update_cogs_display()
 
-	var scavenging_xp_pool = _resolve_xp_pool("Scavenging")
-	_add_skill_xp(scavenging_xp_pool, FORAGE_XP)
-	_show_xp_gain_message("You've gained " + str(FORAGE_XP) + " " + scavenging_xp_pool + "!")
 
 	_show_combat_message("You scavenge and find: " + str(plastic_amount) + " Plastic, " + str(DUMPSTER_COGS_MIN) + " Cogs")
 
@@ -3485,9 +3450,6 @@ func _attempt_use_bandage() -> void:
 
 	_update_inventory_display()
 
-	var healing_xp_pool = _resolve_xp_pool("Healing")
-	_add_skill_xp(healing_xp_pool, BANDAGE_HEALING_XP)
-	_show_xp_gain_message("You've gained " + str(BANDAGE_HEALING_XP) + " " + healing_xp_pool + "!")
 	_show_combat_message("You use a Crate of Bandages and heal " + str(heal_amount) + " HP! (-" + str(BANDAGE_ACTION_COST) + " Action)")
 
 	bandage_ready = false
@@ -3989,6 +3951,11 @@ func _learn_trainer_profession() -> void:
 		_show_train_result("You've already learned " + this_trainer_profession + "!")
 		return
 
+	# TODO(cleanup): dead since Street Thug is auto-assigned at startup --
+	# has_chosen_starting_profession is always true here, so this "first
+	# profession via trainer" branch (and the profession-select UI /
+	# _on_choose_profession_pressed that feed it) never runs. Remove in a
+	# later cleanup pass.
 	if not has_chosen_starting_profession:
 		if _get_points_available(this_trainer_profession) < PROFESSION_ENTRY_COST:
 			_show_train_result("Not enough " + _points_pool_label(this_trainer_profession) + "! Need " + str(PROFESSION_ENTRY_COST) + ".")
@@ -4029,11 +3996,6 @@ func _grant_novice_unlock(profession_name: String) -> void:
 	# itself is marked unlocked via professions_unlocked, and
 	# individual keystones are unlocked separately with XP.
 
-	if profession_name == "Street Thug":
-		_add_to_inventory("Mineral Survey Tool", 1)
-		_add_to_inventory("Rusty Crafting Kit", 1)
-		_update_inventory_display()
-
 # Grants the one-time starting weapons + 100 Cogs bonus. Only ever
 # called for the very first profession a player picks -- subsequent
 # additional professions get their Novice abilities (via
@@ -4052,13 +4014,13 @@ func _grant_starting_bandages() -> void:
 		inventory_stats[item_key]["Charges"] = 5
 	_update_inventory_display()
 
-func _grant_profession_starting_kit(profession_name: String) -> void:
-	match profession_name:
-		"Street Thug":
-			_grant_starting_weapon("Riveted Knuckles", 0)
-			_grant_starting_weapon("Rusty Pistol", 0)
-			_add_to_inventory("Mineral Survey Tool", 1)
-			_add_to_inventory("Rusty Crafting Kit", 1)
+func _grant_profession_starting_kit(_profession_name: String) -> void:
+	# Every new character gets the same base kit regardless of which
+	# profession they start as.
+	_grant_starting_weapon("Riveted Knuckles", 0)
+	_grant_starting_weapon("Rusty Pistol", 0)
+	_add_to_inventory("Mineral Survey Tool", 1)
+	_add_to_inventory("Rusty Crafting Kit", 1)
 
 	cogs += 100
 	_update_cogs_display()

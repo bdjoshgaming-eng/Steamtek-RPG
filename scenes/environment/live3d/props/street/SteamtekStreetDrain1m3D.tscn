@@ -1,0 +1,86 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="1_gunmetal"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_RoofSteel_Base_v01.tres" id="2_roofsteel"]
+
+[sub_resource type="BoxMesh" id="FrameMesh"]
+material = ExtResource("1_gunmetal")
+size = Vector3(1.0, 0.06, 0.5)
+
+[sub_resource type="BoxMesh" id="RecessMesh"]
+material = ExtResource("2_roofsteel")
+size = Vector3(0.9, 0.04, 0.4)
+
+[sub_resource type="BoxMesh" id="GrateBarMesh"]
+material = ExtResource("1_gunmetal")
+size = Vector3(0.045, 0.035, 0.36)
+
+[node name="SteamtekStreetDrain1m3D" type="Node3D"]
+editor_description = "One-meter chainable street-drain blockout. Root origin is the street surface at the footprint center; local X is the chaining axis."
+metadata/status = "geometry_contract_blockout"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/nominal_size_m = Vector3(1.0, 0.06, 0.5)
+metadata/primary_axis = "local_x"
+metadata/up_axis = "+Y"
+metadata/facing_contract = "yaw_0_90_180_270_no_negative_scale"
+
+[node name="Visual_Blockout" type="Node3D" parent="."]
+
+[node name="DrainFrame" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, -0.01, 0)
+mesh = SubResource("FrameMesh")
+
+[node name="DrainRecess" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 0.025, 0)
+mesh = SubResource("RecessMesh")
+
+[node name="GrateBar01" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(-0.4, 0.06, 0)
+mesh = SubResource("GrateBarMesh")
+
+[node name="GrateBar02" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(-0.3, 0.06, 0)
+mesh = SubResource("GrateBarMesh")
+
+[node name="GrateBar03" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(-0.2, 0.06, 0)
+mesh = SubResource("GrateBarMesh")
+
+[node name="GrateBar04" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(-0.1, 0.06, 0)
+mesh = SubResource("GrateBarMesh")
+
+[node name="GrateBar05" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 0.06, 0)
+mesh = SubResource("GrateBarMesh")
+
+[node name="GrateBar06" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0.1, 0.06, 0)
+mesh = SubResource("GrateBarMesh")
+
+[node name="GrateBar07" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0.2, 0.06, 0)
+mesh = SubResource("GrateBarMesh")
+
+[node name="GrateBar08" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0.3, 0.06, 0)
+mesh = SubResource("GrateBarMesh")
+
+[node name="GrateBar09" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0.4, 0.06, 0)
+mesh = SubResource("GrateBarMesh")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="GroundMount" type="Marker3D" parent="Sockets"]
+metadata/socket_role = "street_surface_mount"
+
+[node name="SnapLeft" type="Marker3D" parent="Sockets"]
+position = Vector3(-0.5, 0, 0)
+rotation_degrees = Vector3(0, 0, 90)
+metadata/socket_role = "drain_chain"
+
+[node name="SnapRight" type="Marker3D" parent="Sockets"]
+position = Vector3(0.5, 0, 0)
+rotation_degrees = Vector3(0, 0, -90)
+metadata/socket_role = "drain_chain"

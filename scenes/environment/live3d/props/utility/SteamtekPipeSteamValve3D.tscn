@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/utility/SteamtekPipeValve3D.tscn" id="1_valve"]
+[ext_resource type="PackedScene" path="res://scenes/effects/live3d/SteamtekSteamVent3D.tscn" id="2_steam"]
+
+[node name="SteamtekPipeSteamValve3D" type="Node3D"]
+editor_description = "One-meter steam-valve wrapper using the approved pipe valve and reusable steam effect. Root sockets remain authoritative."
+metadata/status = "geometry_contract_blockout"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/length_m = 1.0
+metadata/primary_axis = "local_y"
+metadata/facing_contract = "rotate_root_no_negative_scale"
+
+[node name="Visual_Blockout" type="Node3D" parent="."]
+
+[node name="BaseValve" parent="Visual_Blockout" instance=ExtResource("1_valve")]
+
+[node name="SteamEffect" parent="." instance=ExtResource("2_steam")]
+position = Vector3(0, 0, 0.38)
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="SnapStart" type="Marker3D" parent="Sockets"]
+position = Vector3(0, -0.5, 0)
+metadata/socket_role = "pipe_start"
+
+[node name="SnapEnd" type="Marker3D" parent="Sockets"]
+position = Vector3(0, 0.5, 0)
+metadata/socket_role = "pipe_end"
+
+[node name="SteamEffectMount" type="Marker3D" parent="Sockets"]
+position = Vector3(0, 0, 0.38)
+metadata/socket_role = "steam_effect"

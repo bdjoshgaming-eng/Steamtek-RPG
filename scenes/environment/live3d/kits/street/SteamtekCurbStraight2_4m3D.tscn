@@ -1,0 +1,41 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_WetConcrete_Neutral_v01.tres" id="1_concrete"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="2_gunmetal"]
+
+[sub_resource type="BoxMesh" id="CurbMesh"]
+size = Vector3(2.4, 0.18, 0.2)
+
+[node name="SteamtekCurbStraight2_4m3D" type="Node3D" groups=["steamtek_live3d_modular"]]
+editor_description = "Straight 2.4 m curb segment. Root is the road plane at curb center; curb rises 0.18 m."
+metadata/module_system = "live3d_meter_v1"
+metadata/module_type = "street_curb_straight"
+metadata/status = "blockout_geometry_production_snap_contract"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/nominal_size_m = Vector3(2.4, 0.18, 0.2)
+metadata/primary_axis = "local_x"
+metadata/root_contract = "Root is curb center on road plane; curb rises upward"
+metadata/rotation_contract = "Yaw only: 0, 90, 180, or 270 degrees; never negative-scale mirror"
+
+[node name="CurbBody" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.09, 0)
+mesh = SubResource("CurbMesh")
+material_override = ExtResource("1_concrete")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="ChainNegX" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-1.2, 0, 0)
+metadata/socket_role = "street_curb_chain"
+
+[node name="ChainPosX" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(1.2, 0, 0)
+metadata/socket_role = "street_curb_chain"
+
+[node name="RoadEdge" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, -0.1)
+metadata/socket_role = "street_curb_road_edge"
+
+[node name="SidewalkEdge" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0.18, 0.1)
+metadata/socket_role = "street_curb_sidewalk_edge"

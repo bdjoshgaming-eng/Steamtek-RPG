@@ -1,0 +1,102 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="1_gunmetal"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_AgedCopper_Base_v01.tres" id="2_copper"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_RoofSteel_Base_v01.tres" id="3_roofsteel"]
+
+[sub_resource type="CylinderMesh" id="TankBodyMesh"]
+material = ExtResource("3_roofsteel")
+top_radius = 0.65
+bottom_radius = 0.65
+height = 1.55
+radial_segments = 36
+
+[sub_resource type="TorusMesh" id="TankBandMesh"]
+material = ExtResource("2_copper")
+inner_radius = 0.61
+outer_radius = 0.69
+rings = 36
+ring_segments = 12
+
+[sub_resource type="BoxMesh" id="LegMesh"]
+material = ExtResource("1_gunmetal")
+size = Vector3(0.14, 0.38, 0.14)
+
+[sub_resource type="CylinderMesh" id="HatchMesh"]
+material = ExtResource("1_gunmetal")
+top_radius = 0.2
+bottom_radius = 0.24
+height = 0.12
+radial_segments = 28
+
+[sub_resource type="CylinderMesh" id="OutletMesh"]
+material = ExtResource("2_copper")
+top_radius = 0.075
+bottom_radius = 0.075
+height = 0.24
+radial_segments = 20
+
+[node name="SteamtekWaterTank3D" type="Node3D"]
+editor_description = "Floor or rooftop water-tank blockout. Root origin is the mounting plane; named pipe sockets remain stable during final-art replacement."
+metadata/status = "geometry_contract_blockout"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/nominal_size_m = Vector3(1.4, 2.2, 1.4)
+metadata/up_axis = "+Y"
+metadata/facing_contract = "yaw_0_90_180_270_no_negative_scale"
+
+[node name="Visual_Blockout" type="Node3D" parent="."]
+
+[node name="TankBody" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 1.18, 0)
+mesh = SubResource("TankBodyMesh")
+
+[node name="BandLower" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 0.68, 0)
+mesh = SubResource("TankBandMesh")
+
+[node name="BandMiddle" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 1.18, 0)
+mesh = SubResource("TankBandMesh")
+
+[node name="BandUpper" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 1.68, 0)
+mesh = SubResource("TankBandMesh")
+
+[node name="LegFrontLeft" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(-0.42, 0.19, 0.42)
+mesh = SubResource("LegMesh")
+
+[node name="LegFrontRight" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0.42, 0.19, 0.42)
+mesh = SubResource("LegMesh")
+
+[node name="LegBackLeft" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(-0.42, 0.19, -0.42)
+mesh = SubResource("LegMesh")
+
+[node name="LegBackRight" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0.42, 0.19, -0.42)
+mesh = SubResource("LegMesh")
+
+[node name="TopHatch" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 2.02, 0)
+mesh = SubResource("HatchMesh")
+
+[node name="SideOutlet" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0.74, 0.72, 0)
+rotation_degrees = Vector3(0, 0, 90)
+mesh = SubResource("OutletMesh")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="FloorMount" type="Marker3D" parent="Sockets"]
+metadata/socket_role = "floor_or_roof_mount"
+
+[node name="PipeSide" type="Marker3D" parent="Sockets"]
+position = Vector3(0.86, 0.72, 0)
+rotation_degrees = Vector3(0, 0, -90)
+metadata/socket_role = "utility_pipe"
+
+[node name="TopAccessory" type="Marker3D" parent="Sockets"]
+position = Vector3(0, 2.1, 0)
+metadata/socket_role = "tank_accessory"

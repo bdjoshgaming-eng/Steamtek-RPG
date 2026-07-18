@@ -1,0 +1,71 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_WetConcrete_Neutral_v01.tres" id="1_concrete"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="2_gunmetal"]
+
+[sub_resource type="BoxMesh" id="LandingMesh"]
+size = Vector3(2.4, 0.18, 0.36)
+
+[sub_resource type="BoxMesh" id="RampMesh"]
+size = Vector3(1.8, 0.08, 0.84)
+
+[sub_resource type="BoxMesh" id="CheekMesh"]
+size = Vector3(0.3, 0.18, 0.84)
+
+[sub_resource type="BoxMesh" id="EdgeStripMesh"]
+size = Vector3(1.8, 0.025, 0.08)
+
+[node name="SteamtekSidewalkCurbRamp2_4m3D" type="Node3D" groups=["steamtek_live3d_modular"]]
+editor_description = "2.4 m sidewalk bay with a centered road-facing ramp. Root is the finished sidewalk plane; local -Z faces the road."
+metadata/module_system = "live3d_meter_v1"
+metadata/module_type = "street_sidewalk_curb_ramp"
+metadata/status = "blockout_geometry_production_snap_contract"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/footprint_m = Vector2(2.4, 1.2)
+metadata/street_edge_axis = "-Z"
+metadata/root_contract = "Root is segment center on finished sidewalk plane; ramp descends 0.18 m toward local -Z"
+metadata/rotation_contract = "Yaw only: 0, 90, 180, or 270 degrees; never negative-scale mirror"
+
+[node name="BackLanding" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.09, 0.42)
+mesh = SubResource("LandingMesh")
+material_override = ExtResource("1_concrete")
+
+[node name="RampSurface" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.09, -0.18)
+rotation_degrees = Vector3(-12.68, 0, 0)
+mesh = SubResource("RampMesh")
+material_override = ExtResource("1_concrete")
+
+[node name="CheekLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-1.05, -0.09, -0.18)
+mesh = SubResource("CheekMesh")
+material_override = ExtResource("1_concrete")
+
+[node name="CheekRight" type="MeshInstance3D" parent="."]
+position = Vector3(1.05, -0.09, -0.18)
+mesh = SubResource("CheekMesh")
+material_override = ExtResource("1_concrete")
+
+[node name="RampEdgeStrip" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.1675, -0.58)
+mesh = SubResource("EdgeStripMesh")
+material_override = ExtResource("2_gunmetal")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="ChainNegX" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-1.2, 0, 0)
+metadata/socket_role = "street_sidewalk_chain"
+
+[node name="ChainPosX" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(1.2, 0, 0)
+metadata/socket_role = "street_sidewalk_chain"
+
+[node name="RoadEdge" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, -0.18, -0.6)
+metadata/socket_role = "street_sidewalk_road_edge"
+
+[node name="BuildingEdge" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, 0.6)
+metadata/socket_role = "street_sidewalk_building_edge"

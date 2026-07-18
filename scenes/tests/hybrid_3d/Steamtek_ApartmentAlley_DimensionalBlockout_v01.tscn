@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="Script" path="res://scenes/tests/hybrid_3d/steamtek_apartment_alley_dimensional_blockout.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://scenes/characters/player/VesperKane_PlayerCharacter_v01.tscn" id="2_character"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" path="res://assets/environment/live3d/materials/apartment_v01/STK_MAT_WetConcrete_HandPainted_v01.png" id="5_ground"]
 [ext_resource type="PackedScene" path="res://scenes/effects/live3d/SteamtekRainVolume3D.tscn" id="6_rain"]
 [ext_resource type="PackedScene" path="res://scenes/effects/live3d/SteamtekSteamVent3D.tscn" id="7_steam"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/windows/SteamtekApartmentWindow3D.tscn" id="8_window"]
 
 [sub_resource type="ProceduralSkyMaterial" id="SkyMaterial"]
 sky_top_color = Color(0.002, 0.006, 0.014, 1)
@@ -66,6 +67,31 @@ shadow_enabled = true
 
 [node name="Architecture" type="Node3D" parent="."]
 
+[node name="Windows" type="Node3D" parent="Architecture"]
+
+[node name="FrontWindowLowerA" parent="Architecture/Windows" instance=ExtResource("8_window")]
+position = Vector3(-0.7, 1.75, -2.81)
+
+[node name="FrontWindowLowerB" parent="Architecture/Windows" instance=ExtResource("8_window")]
+position = Vector3(1.8, 1.75, -2.81)
+
+[node name="FrontWindowUpperA" parent="Architecture/Windows" instance=ExtResource("8_window")]
+position = Vector3(-3.4, 4.75, -2.81)
+
+[node name="FrontWindowUpperB" parent="Architecture/Windows" instance=ExtResource("8_window")]
+position = Vector3(-0.7, 4.75, -2.81)
+
+[node name="FrontWindowUpperC" parent="Architecture/Windows" instance=ExtResource("8_window")]
+position = Vector3(1.8, 4.75, -2.81)
+
+[node name="SideWindowLower" parent="Architecture/Windows" instance=ExtResource("8_window")]
+position = Vector3(4.19, 1.75, -5.2)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="SideWindowUpper" parent="Architecture/Windows" instance=ExtResource("8_window")]
+position = Vector3(4.19, 4.75, -7.5)
+rotation_degrees = Vector3(0, 90, 0)
+
 [node name="ApartmentDoorInteraction" parent="." instance=ExtResource("3_zone_door")]
 position = Vector3(-3.4, 1.1, -2.05)
 interaction_prompt = "Enter apartment"
@@ -95,8 +121,8 @@ current = true
 position = Vector3(-0.5, 6.9, -6.7)
 
 [node name="AlleyPipeSteam" parent="WeatherEffects" instance=ExtResource("7_steam")]
-position = Vector3(4.32, 1.46, -8.4)
-scale = Vector3(0.72, 0.72, 0.72)
+position = Vector3(4.52, 1.5, -8.18)
+scale = Vector3(0.82, 0.82, 0.82)
 
 [node name="TransitionUI" type="CanvasLayer" parent="."]
 

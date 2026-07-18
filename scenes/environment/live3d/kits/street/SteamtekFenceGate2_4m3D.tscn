@@ -1,0 +1,87 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="1_gunmetal"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_AgedCopper_Base_v01.tres" id="2_copper"]
+
+[sub_resource type="BoxMesh" id="PostMesh"]
+size = Vector3(0.11, 1.9, 0.11)
+
+[sub_resource type="BoxMesh" id="GateRailMesh"]
+size = Vector3(2.08, 0.07, 0.07)
+
+[sub_resource type="BoxMesh" id="GatePicketMesh"]
+size = Vector3(0.045, 1.38, 0.045)
+
+[sub_resource type="BoxMesh" id="LatchMesh"]
+size = Vector3(0.12, 0.22, 0.12)
+
+[node name="SteamtekFenceGate2_4m3D" type="Node3D" groups=["steamtek_live3d_modular"]]
+editor_description = "Straight 2.4 m service-gate module matching the fence chain contract. Root is ground contact at bay center."
+metadata/module_system = "live3d_meter_v1"
+metadata/module_type = "street_fence_gate"
+metadata/status = "blockout_geometry_production_snap_contract"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/nominal_size_m = Vector3(2.4, 1.9, 0.12)
+metadata/primary_axis = "local_x"
+metadata/root_contract = "Root is ground contact at gate bay center"
+metadata/rotation_contract = "Yaw only: 0, 90, 180, or 270 degrees; never negative-scale mirror"
+
+[node name="PostLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-1.15, 0.95, 0)
+mesh = SubResource("PostMesh")
+material_override = ExtResource("1_gunmetal")
+
+[node name="PostRight" type="MeshInstance3D" parent="."]
+position = Vector3(1.15, 0.95, 0)
+mesh = SubResource("PostMesh")
+material_override = ExtResource("1_gunmetal")
+
+[node name="GateRailLower" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.28, 0)
+mesh = SubResource("GateRailMesh")
+material_override = ExtResource("2_copper")
+
+[node name="GateRailUpper" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.68, 0)
+mesh = SubResource("GateRailMesh")
+material_override = ExtResource("2_copper")
+
+[node name="GatePicketA" type="MeshInstance3D" parent="."]
+position = Vector3(-0.78, 0.98, 0)
+mesh = SubResource("GatePicketMesh")
+material_override = ExtResource("1_gunmetal")
+
+[node name="GatePicketB" type="MeshInstance3D" parent="."]
+position = Vector3(-0.39, 0.98, 0)
+mesh = SubResource("GatePicketMesh")
+material_override = ExtResource("1_gunmetal")
+
+[node name="GatePicketC" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.98, 0)
+mesh = SubResource("GatePicketMesh")
+material_override = ExtResource("1_gunmetal")
+
+[node name="GatePicketD" type="MeshInstance3D" parent="."]
+position = Vector3(0.39, 0.98, 0)
+mesh = SubResource("GatePicketMesh")
+material_override = ExtResource("1_gunmetal")
+
+[node name="GatePicketE" type="MeshInstance3D" parent="."]
+position = Vector3(0.78, 0.98, 0)
+mesh = SubResource("GatePicketMesh")
+material_override = ExtResource("1_gunmetal")
+
+[node name="GateLatch" type="MeshInstance3D" parent="."]
+position = Vector3(0.94, 1.05, 0.07)
+mesh = SubResource("LatchMesh")
+material_override = ExtResource("2_copper")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="ChainNegX" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-1.2, 0, 0)
+metadata/socket_role = "street_fence_chain"
+
+[node name="ChainPosX" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(1.2, 0, 0)
+metadata/socket_role = "street_fence_chain"

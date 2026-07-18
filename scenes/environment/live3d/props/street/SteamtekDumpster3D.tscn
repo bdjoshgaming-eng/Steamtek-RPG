@@ -1,0 +1,99 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="1_gunmetal"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_RoofSteel_Base_v01.tres" id="2_roofsteel"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_AgedCopper_Base_v01.tres" id="3_copper"]
+
+[sub_resource type="BoxMesh" id="BodyMesh"]
+material = ExtResource("1_gunmetal")
+size = Vector3(1.5, 0.72, 0.75)
+
+[sub_resource type="BoxMesh" id="LidMesh"]
+material = ExtResource("2_roofsteel")
+size = Vector3(1.56, 0.08, 0.8)
+
+[sub_resource type="BoxMesh" id="ReinforcementMesh"]
+material = ExtResource("3_copper")
+size = Vector3(0.055, 0.62, 0.04)
+
+[sub_resource type="CylinderMesh" id="WheelMesh"]
+material = ExtResource("1_gunmetal")
+top_radius = 0.12
+bottom_radius = 0.12
+height = 0.09
+radial_segments = 20
+
+[sub_resource type="CylinderMesh" id="HingeMesh"]
+material = ExtResource("3_copper")
+top_radius = 0.045
+bottom_radius = 0.045
+height = 1.3
+radial_segments = 16
+
+[node name="SteamtekDumpster3D" type="Node3D"]
+editor_description = "Street and alley dumpster blockout. Root origin is the floor contact point at the footprint center; +Y is up and +Z is front."
+metadata/status = "geometry_contract_blockout"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/nominal_size_m = Vector3(1.6, 1.0, 0.85)
+metadata/front_axis = "+Z"
+metadata/facing_contract = "yaw_0_90_180_270_no_negative_scale"
+
+[node name="Visual_Blockout" type="Node3D" parent="."]
+
+[node name="DumpsterBody" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 0.55, 0)
+mesh = SubResource("BodyMesh")
+
+[node name="DumpsterLid" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 0.95, 0)
+mesh = SubResource("LidMesh")
+
+[node name="ReinforcementLeft" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(-0.5, 0.55, 0.397)
+mesh = SubResource("ReinforcementMesh")
+
+[node name="ReinforcementCenter" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 0.55, 0.397)
+mesh = SubResource("ReinforcementMesh")
+
+[node name="ReinforcementRight" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0.5, 0.55, 0.397)
+mesh = SubResource("ReinforcementMesh")
+
+[node name="LidHinge" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 0.91, -0.4)
+rotation_degrees = Vector3(0, 0, 90)
+mesh = SubResource("HingeMesh")
+
+[node name="WheelFrontLeft" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(-0.58, 0.12, 0.3)
+rotation_degrees = Vector3(0, 0, 90)
+mesh = SubResource("WheelMesh")
+
+[node name="WheelFrontRight" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0.58, 0.12, 0.3)
+rotation_degrees = Vector3(0, 0, 90)
+mesh = SubResource("WheelMesh")
+
+[node name="WheelBackLeft" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(-0.58, 0.12, -0.3)
+rotation_degrees = Vector3(0, 0, 90)
+mesh = SubResource("WheelMesh")
+
+[node name="WheelBackRight" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0.58, 0.12, -0.3)
+rotation_degrees = Vector3(0, 0, 90)
+mesh = SubResource("WheelMesh")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="FloorMount" type="Marker3D" parent="Sockets"]
+metadata/socket_role = "floor_mount"
+
+[node name="InteractionFront" type="Marker3D" parent="Sockets"]
+position = Vector3(0, 0.5, 0.55)
+metadata/socket_role = "interaction_anchor"
+
+[node name="LidHinge" type="Marker3D" parent="Sockets"]
+position = Vector3(0, 0.91, -0.4)
+metadata/socket_role = "animation_pivot"

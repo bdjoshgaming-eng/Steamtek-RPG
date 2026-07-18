@@ -1,0 +1,43 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekRoadStraight4_8x2_4m3D.tscn" id="1_road"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_RoadMarking_Amber_Base_v01.tres" id="2_marking"]
+
+[sub_resource type="BoxMesh" id="LaneDashMesh"]
+size = Vector3(1.15, 0.012, 0.08)
+
+[node name="SteamtekRoadLaneMarkedStraight4_8x2_4m3D" type="Node3D" groups=["steamtek_live3d_modular"]]
+editor_description = "Lane-marked replacement for the 2.4 m by 4.8 m straight road bay. Root and sockets match the unmarked road scene."
+metadata/module_system = "live3d_meter_v1"
+metadata/module_type = "street_road_lane_marked_straight"
+metadata/status = "blockout_geometry_production_snap_contract"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/footprint_m = Vector2(2.4, 4.8)
+metadata/primary_axis = "local_x"
+metadata/root_contract = "Root is segment center on finished road plane; substitutes directly for road straight"
+metadata/rotation_contract = "Yaw only: 0, 90, 180, or 270 degrees; never negative-scale mirror"
+
+[node name="RoadBase" parent="." instance=ExtResource("1_road")]
+
+[node name="CenterLaneDash" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.008, 0)
+mesh = SubResource("LaneDashMesh")
+material_override = ExtResource("2_marking")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="ChainNegX" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-1.2, 0, 0)
+metadata/socket_role = "street_road_chain"
+
+[node name="ChainPosX" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(1.2, 0, 0)
+metadata/socket_role = "street_road_chain"
+
+[node name="EdgeNegZ" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, -2.4)
+metadata/socket_role = "street_road_edge"
+
+[node name="EdgePosZ" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, 2.4)
+metadata/socket_role = "street_road_edge"

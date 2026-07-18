@@ -1,0 +1,108 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/interiors/apartments/SteamtekPlayerApartmentOpeningBlockout3D.tscn" id="1_apartment"]
+[ext_resource type="PackedScene" path="res://scenes/characters/player/VesperKane_PlayerCharacter_v01.tscn" id="2_character"]
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 1
+background_color = Color(0.004, 0.006, 0.009, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.46, 0.36, 0.25, 1)
+ambient_light_energy = 0.74
+tonemap_mode = 2
+
+[sub_resource type="LabelSettings" id="LabelSettings"]
+font_size = 18
+font_color = Color(0.9, 0.94, 1, 1)
+outline_size = 5
+outline_color = Color(0.005, 0.008, 0.012, 0.96)
+
+[sub_resource type="StandardMaterial3D" id="ExitMaterial"]
+albedo_color = Color(0.025, 0.19, 0.22, 1)
+emission_enabled = true
+emission = Color(0.04, 0.55, 0.68, 1)
+emission_energy_multiplier = 1.0
+
+[sub_resource type="BoxMesh" id="ExitGuideMesh"]
+material = SubResource("ExitMaterial")
+size = Vector3(0.06, 2.1, 1.1)
+
+[node name="SteamtekPlayerApartmentOpeningPreview3D" type="Node3D"]
+editor_description = "Normal-editor F6 spatial review of the opening apartment at unchanged C001 scale. Screenshot-inspired composition only; all geometry is replaceable blockout art."
+metadata/status = "opening_apartment_f6_review_v01"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/camera_contract = "orthographic_60deg_azimuth_30deg_elevation"
+metadata/c001_contract = "unchanged wrapper at scale 1,1,1"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment")
+
+[node name="WarmCeilingKey" type="OmniLight3D" parent="."]
+position = Vector3(-2.2, 2.8, 0.5)
+light_color = Color(1, 0.54, 0.24, 1)
+light_energy = 4.6
+omni_range = 9.0
+shadow_enabled = true
+
+[node name="WarmEastFill" type="OmniLight3D" parent="."]
+position = Vector3(3.7, 2.5, 1.1)
+light_color = Color(1, 0.68, 0.4, 1)
+light_energy = 2.2
+omni_range = 6.0
+shadow_enabled = false
+
+[node name="NeutralInteriorFill" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-52, 132, 0)
+light_color = Color(0.6, 0.7, 0.78, 1)
+light_energy = 0.42
+shadow_enabled = false
+
+[node name="WorkstationCyanFill" type="OmniLight3D" parent="."]
+position = Vector3(0, 1.45, -3.5)
+light_color = Color(0.08, 0.72, 0.82, 1)
+light_energy = 0.9
+omni_range = 4.2
+shadow_enabled = false
+
+[node name="ApartmentAssembly" parent="." instance=ExtResource("1_apartment")]
+
+[node name="EastExitGuide" type="MeshInstance3D" parent="."]
+position = Vector3(5.85, 1.2, 1.35)
+mesh = SubResource("ExitGuideMesh")
+
+[node name="VesperKane_PlayerCharacter_v01" parent="." instance=ExtResource("2_character")]
+position = Vector3(-4.3, 0.08, 2.45)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+position = Vector3(17.32, 12.547, 10)
+rotation_degrees = Vector3(-30, 60, 0)
+projection = 1
+size = 12.5
+current = true
+
+[node name="ReviewUI" type="CanvasLayer" parent="."]
+
+[node name="Title" type="Label" parent="ReviewUI"]
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 1480.0
+offset_bottom = 108.0
+text = "STEAMTEK — OPENING APARTMENT BLOCKOUT\nWake in the west sleep zone → find the note → optional workstation → exit east to Rain Alley\nWorn worker loft | functional cyan screens | warm practical lighting | sparse, lived-in furnishing"
+label_settings = SubResource("LabelSettings")
+
+[node name="Contract" type="Label" parent="ReviewUI"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -760.0
+offset_top = -70.0
+offset_right = -24.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "C001 SCALE (1,1,1)  |  12 m × 9.6 m room  |  +X travel east  |  temporary contract geometry"
+horizontal_alignment = 2
+label_settings = SubResource("LabelSettings")

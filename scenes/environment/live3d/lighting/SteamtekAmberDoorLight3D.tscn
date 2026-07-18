@@ -1,0 +1,67 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="1_gunmetal"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_AgedCopper_Base_v01.tres" id="2_copper"]
+
+[sub_resource type="StandardMaterial3D" id="LensMaterial"]
+shading_mode = 0
+albedo_color = Color(0.75, 0.22, 0.03, 1)
+emission_enabled = true
+emission = Color(1, 0.32, 0.06, 1)
+emission_energy_multiplier = 1.7
+
+[sub_resource type="BoxMesh" id="BodyMesh"]
+material = ExtResource("1_gunmetal")
+size = Vector3(0.34, 0.22, 0.14)
+
+[sub_resource type="BoxMesh" id="HoodMesh"]
+material = ExtResource("2_copper")
+size = Vector3(0.42, 0.08, 0.26)
+
+[sub_resource type="BoxMesh" id="LensMesh"]
+material = SubResource("LensMaterial")
+size = Vector3(0.24, 0.1, 0.045)
+
+[node name="SteamtekAmberDoorLight3D" type="Node3D"]
+editor_description = "Modular warm door-light preset. Root origin is the wall contact plane; +Z is outward. Fixture_Blockout may be replaced without moving LightRig or sockets."
+metadata/status = "lighting_contract_v1"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/front_axis = "+Z"
+metadata/light_role = "warm_doorway_pool"
+metadata/facing_contract = "yaw_0_90_180_270_no_negative_scale"
+
+[node name="Fixture_Blockout" type="Node3D" parent="."]
+
+[node name="FixtureBody" type="MeshInstance3D" parent="Fixture_Blockout"]
+position = Vector3(0, 0, 0.07)
+mesh = SubResource("BodyMesh")
+
+[node name="FixtureHood" type="MeshInstance3D" parent="Fixture_Blockout"]
+position = Vector3(0, 0.11, 0.16)
+mesh = SubResource("HoodMesh")
+
+[node name="FixtureLens" type="MeshInstance3D" parent="Fixture_Blockout"]
+position = Vector3(0, -0.02, 0.18)
+mesh = SubResource("LensMesh")
+
+[node name="LightRig" type="Node3D" parent="."]
+
+[node name="DoorAmber" type="OmniLight3D" parent="LightRig"]
+position = Vector3(0, -0.08, 0.28)
+light_color = Color(1, 0.38, 0.09, 1)
+light_energy = 1.6
+omni_range = 4.8
+shadow_enabled = true
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="FixtureMount" type="Marker3D" parent="Sockets"]
+metadata/socket_role = "wall_mount"
+
+[node name="LightOrigin" type="Marker3D" parent="Sockets"]
+position = Vector3(0, -0.08, 0.28)
+metadata/socket_role = "light_origin"
+
+[node name="AimReference" type="Marker3D" parent="Sockets"]
+position = Vector3(0, -1.5, 1.2)
+metadata/socket_role = "aim_reference"

@@ -1,0 +1,109 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/neocyber/SteamtekNeonSignPanel3D.tscn" id="1_neon"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/neocyber/SteamtekDataTerminal3D.tscn" id="2_terminal"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/neocyber/SteamtekAdvertisementScreen3D.tscn" id="3_ad"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/neocyber/SteamtekSecurityCamera3D.tscn" id="4_camera"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_RainPolishedStreet_Candidate_v01.tres" id="5_street"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_ApartmentFacade_Neutral_v01.tres" id="6_facade"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SkyMaterial"]
+sky_top_color = Color(0.012, 0.016, 0.024, 1)
+sky_horizon_color = Color(0.08, 0.09, 0.11, 1)
+ground_bottom_color = Color(0.008, 0.01, 0.014, 1)
+ground_horizon_color = Color(0.05, 0.055, 0.065, 1)
+
+[sub_resource type="Sky" id="Sky"]
+sky_material = SubResource("SkyMaterial")
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 2
+sky = SubResource("Sky")
+ambient_light_source = 3
+ambient_light_color = Color(0.5, 0.58, 0.72, 1)
+ambient_light_energy = 0.46
+tonemap_mode = 2
+
+[sub_resource type="BoxMesh" id="FloorMesh"]
+material = ExtResource("5_street")
+size = Vector3(11, 0.16, 8)
+
+[sub_resource type="BoxMesh" id="WallMesh"]
+material = ExtResource("6_facade")
+size = Vector3(11, 4.5, 0.2)
+
+[node name="SteamtekNeoCyberKitPreview3D" type="Node3D"]
+editor_description = "Focused neo-cyber fixture contract review. Emission is restrained; dark structural geometry remains dominant."
+metadata/status = "prop_contract_review_only"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/facing_contract = "root_rotation_no_negative_scale"
+metadata/art_direction = "neo_industrial_structure_with_restrained_neocyber_accents"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment")
+
+[node name="NeutralKey" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-48, -36, 0)
+light_color = Color(0.76, 0.84, 1, 1)
+light_energy = 1.15
+shadow_enabled = true
+
+[node name="CyanFill" type="OmniLight3D" parent="."]
+position = Vector3(-2.2, 2.2, 0.2)
+light_color = Color(0.05, 0.7, 1, 1)
+light_energy = 0.8
+omni_range = 5.5
+
+[node name="MagentaFill" type="OmniLight3D" parent="."]
+position = Vector3(2.5, 2.5, -1.5)
+light_color = Color(0.9, 0.04, 0.72, 1)
+light_energy = 0.65
+omni_range = 5.5
+
+[node name="Camera3D" type="Camera3D" parent="."]
+position = Vector3(8.66, 6.77, 5)
+rotation_degrees = Vector3(-30, 60, 0)
+projection = 1
+size = 10.5
+current = true
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.08, 0)
+mesh = SubResource("FloorMesh")
+
+[node name="ReviewWall" type="MeshInstance3D" parent="."]
+position = Vector3(0, 2.25, -3.7)
+mesh = SubResource("WallMesh")
+
+[node name="NeonSign" parent="." instance=ExtResource("1_neon")]
+position = Vector3(-3.5, 3.05, -3.58)
+
+[node name="DataTerminal" parent="." instance=ExtResource("2_terminal")]
+position = Vector3(-1.45, 0, -2.7)
+
+[node name="AdvertisementScreen" parent="." instance=ExtResource("3_ad")]
+position = Vector3(1.1, 2.75, -3.58)
+
+[node name="SecurityCamera" parent="." instance=ExtResource("4_camera")]
+position = Vector3(3.8, 3.15, -3.58)
+
+[node name="NeoCyberLabel" type="Label3D" parent="."]
+position = Vector3(0, 4.25, -3.25)
+text = "NEON SIGN  |  DATA TERMINAL  |  AD SCREEN  |  SECURITY CAMERA"
+font_size = 38
+outline_size = 8
+pixel_size = 0.005
+billboard = 1
+
+[node name="ReviewUI" type="CanvasLayer" parent="."]
+
+[node name="Title" type="Label" parent="ReviewUI"]
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 1400.0
+offset_bottom = 115.0
+text = "STEAMTEK LIVE-3D NEO-CYBER KIT v1 - CONTRACT REVIEW\nDark neo-industrial structure + restrained cyan and magenta accents\nOne Godot unit = one meter  |  Rotate roots; never negative-scale mirror."
+theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
+theme_override_colors/font_outline_color = Color(0.005, 0.008, 0.012, 0.95)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 19

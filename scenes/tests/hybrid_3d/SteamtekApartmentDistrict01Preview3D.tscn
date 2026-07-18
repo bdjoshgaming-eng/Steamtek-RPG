@@ -1,0 +1,87 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/districts/SteamtekApartmentDistrict01Assembly3D.tscn" id="1_district"]
+[ext_resource type="PackedScene" path="res://scenes/effects/live3d/SteamtekRainVolume3D.tscn" id="2_rain"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SkyMaterial"]
+sky_top_color = Color(0.007, 0.011, 0.022, 1)
+sky_horizon_color = Color(0.038, 0.052, 0.085, 1)
+ground_bottom_color = Color(0.006, 0.009, 0.016, 1)
+ground_horizon_color = Color(0.025, 0.036, 0.06, 1)
+
+[sub_resource type="Sky" id="Sky"]
+sky_material = SubResource("SkyMaterial")
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 2
+sky = SubResource("Sky")
+ambient_light_source = 3
+ambient_light_color = Color(0.32, 0.4, 0.58, 1)
+ambient_light_energy = 0.82
+tonemap_mode = 2
+
+[node name="SteamtekApartmentDistrict01Preview3D" type="Node3D"]
+editor_description = "Normal-editor F6 review of the first linked apartment district assembly. This scene owns only review lighting, camera, UI, and camera-local rain."
+metadata/status = "district_spatial_contract_f6_review"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/camera_contract = "orthographic_60deg_azimuth_30deg_elevation"
+metadata/c001_contract = "No character scaling or C001 edits in this scene"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment")
+
+[node name="MoonKey" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-55, -35, 0)
+light_color = Color(0.46, 0.6, 0.92, 1)
+light_energy = 1.05
+shadow_enabled = true
+
+[node name="NeutralFill" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-38, 145, 0)
+light_color = Color(0.72, 0.8, 1, 1)
+light_energy = 0.78
+shadow_enabled = false
+
+[node name="Camera3D" type="Camera3D" parent="."]
+position = Vector3(31.5, 23, 18.2)
+rotation_degrees = Vector3(-30, 60, 0)
+projection = 1
+size = 31
+current = true
+
+[node name="DistrictAssembly" parent="." instance=ExtResource("1_district")]
+
+[node name="CameraLocalRain" parent="." instance=ExtResource("2_rain")]
+position = Vector3(0, 13.2, 0)
+
+[node name="ReviewUI" type="CanvasLayer" parent="."]
+
+[node name="Title" type="Label" parent="ReviewUI"]
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 1780.0
+offset_bottom = 124.0
+text = "STEAMTEK LIVE-3D APARTMENT DISTRICT 01 - SPATIAL CONTRACT REVIEW\nApartment A-D linked assemblies  |  four-way street  |  2.4 m snap rhythm  |  3.2 m storeys  |  service alley  |  rain + steam\nTemporary art: review district flow, building orientation, street continuity, alley clearance, silhouette variety, and effect visibility."
+theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
+theme_override_colors/font_outline_color = Color(0.005, 0.008, 0.012, 0.96)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 18
+
+[node name="Contract" type="Label" parent="ReviewUI"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -720.0
+offset_top = -70.0
+offset_right = -24.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "LIVE 3D SCALE AUTHORITY  |  building roots rotate only 0 / 90 / 180 / 270  |  no negative scale  |  C001 unchanged"
+horizontal_alignment = 2
+theme_override_colors/font_color = Color(0.82, 0.9, 1, 1)
+theme_override_colors/font_outline_color = Color(0.005, 0.008, 0.012, 0.96)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 16

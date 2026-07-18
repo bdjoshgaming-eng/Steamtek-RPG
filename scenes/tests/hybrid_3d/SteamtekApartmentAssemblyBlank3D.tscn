@@ -1,0 +1,13 @@
+[gd_scene format=3]
+
+[node name="SteamtekApartmentAssemblyBlank3D" type="Node3D"]
+editor_description = "Blank meter-scale assembly scene for the Steamtek Live3D Builder dock. Build beneath Architecture; keep module roots at scale (1,1,1)."
+metadata/module_system = "live3d_meter_v1"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/grid_contract = "2.4m_horizontal_3.2m_vertical_90deg_yaw"
+metadata/status = "blank_editor_assembly_workspace"
+
+[node name="Architecture" type="Node3D" parent="."]
+
+[node name="Props" type="Node3D" parent="."]
+

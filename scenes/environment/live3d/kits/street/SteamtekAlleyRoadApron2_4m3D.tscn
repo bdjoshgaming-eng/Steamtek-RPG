@@ -1,0 +1,58 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_WetConcrete_Neutral_v01.tres" id="1_concrete"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_RainPolishedStreet_Candidate_v01.tres" id="2_street"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="3_gunmetal"]
+
+[sub_resource type="BoxMesh" id="ApronBaseMesh"]
+size = Vector3(2.4, 0.16, 2.4)
+
+[sub_resource type="BoxMesh" id="RoadLipMesh"]
+size = Vector3(2.4, 0.025, 0.48)
+
+[sub_resource type="BoxMesh" id="ThresholdMesh"]
+size = Vector3(2.4, 0.03, 0.08)
+
+[node name="SteamtekAlleyRoadApron2_4m3D" type="Node3D" groups=["steamtek_live3d_modular"]]
+editor_description = "2.4 m alley-to-road apron. Local -Z is the road edge; local +Z continues the alley chain."
+metadata/module_system = "live3d_meter_v1"
+metadata/module_type = "street_alley_road_apron"
+metadata/status = "blockout_geometry_production_snap_contract"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/footprint_m = Vector2(2.4, 2.4)
+metadata/road_edge_axis = "-Z"
+metadata/root_contract = "Root is tile center on finished surface plane; structure extends downward"
+metadata/rotation_contract = "Yaw only: 0, 90, 180, or 270 degrees; never negative-scale mirror"
+
+[node name="AlleySurface" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.08, 0)
+mesh = SubResource("ApronBaseMesh")
+material_override = ExtResource("1_concrete")
+
+[node name="RoadMaterialLip" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.0125, -0.96)
+mesh = SubResource("RoadLipMesh")
+material_override = ExtResource("2_street")
+
+[node name="ThresholdStrip" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.015, -0.7)
+mesh = SubResource("ThresholdMesh")
+material_override = ExtResource("3_gunmetal")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="RoadEdge" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, -1.2)
+metadata/socket_role = "street_road_edge"
+
+[node name="AlleyPosZ" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, 1.2)
+metadata/socket_role = "street_alley_chain"
+
+[node name="AlleyNegX" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-1.2, 0, 0)
+metadata/socket_role = "street_alley_chain"
+
+[node name="AlleyPosX" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(1.2, 0, 0)
+metadata/socket_role = "street_alley_chain"

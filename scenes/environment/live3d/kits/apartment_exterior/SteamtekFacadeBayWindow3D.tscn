@@ -1,0 +1,75 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/windows/SteamtekApartmentWindow3D.tscn" id="1_window"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_ApartmentFacade_Neutral_v01.tres" id="2_facade"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="3_gunmetal"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_side"]
+size = Vector3(0.22, 3.2, 0.24)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bottom"]
+size = Vector3(1.96, 0.99, 0.24)
+
+[sub_resource type="BoxMesh" id="BoxMesh_top"]
+size = Vector3(1.96, 0.69, 0.24)
+
+[sub_resource type="BoxMesh" id="BoxMesh_sill"]
+size = Vector3(2.08, 0.1, 0.34)
+
+[node name="SteamtekFacadeBayWindow3D" type="Node3D" groups=["steamtek_live3d_modular"]]
+metadata/module_system = "live3d_meter_v1"
+metadata/module_type = "facade_bay_window"
+metadata/bay_width_m = 2.4
+metadata/storey_height_m = 3.2
+metadata/window_opening_m = Vector2(1.6, 1.25)
+metadata/front_axis = "+Z"
+metadata/rotation_contract = "Yaw only: 0, 90, 180, or 270 degrees"
+metadata/status = "blockout_geometry_production_snap_contract"
+
+[node name="Visual_Blockout" type="Node3D" parent="."]
+
+[node name="LeftWall" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(-1.09, 1.6, -0.12)
+mesh = SubResource("BoxMesh_side")
+material_override = ExtResource("2_facade")
+
+[node name="RightWall" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(1.09, 1.6, -0.12)
+mesh = SubResource("BoxMesh_side")
+material_override = ExtResource("2_facade")
+
+[node name="LowerWall" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 0.495, -0.12)
+mesh = SubResource("BoxMesh_bottom")
+material_override = ExtResource("2_facade")
+
+[node name="UpperWall" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 2.855, -0.12)
+mesh = SubResource("BoxMesh_top")
+material_override = ExtResource("2_facade")
+
+[node name="WindowSill" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 0.98, 0.02)
+mesh = SubResource("BoxMesh_sill")
+material_override = ExtResource("3_gunmetal")
+
+[node name="ApartmentWindow" parent="Visual_Blockout" instance=ExtResource("1_window")]
+position = Vector3(0, 1.75, 0.025)
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="SnapLeft" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-1.2, 0, 0)
+metadata/socket_role = "facade_horizontal"
+
+[node name="SnapRight" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(1.2, 0, 0)
+metadata/socket_role = "facade_horizontal"
+
+[node name="StoryDown" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+metadata/socket_role = "storey_vertical"
+
+[node name="StoryUp" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 3.2, 0)
+metadata/socket_role = "storey_vertical"
+

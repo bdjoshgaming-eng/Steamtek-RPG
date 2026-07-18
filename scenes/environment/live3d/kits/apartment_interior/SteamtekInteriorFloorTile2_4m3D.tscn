@@ -1,0 +1,34 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/SteamtekInteriorFloorTile1_2m3D.tscn" id="1_tile"]
+
+[node name="SteamtekInteriorFloorTile2_4m3D" type="Node3D" groups=["steamtek_live3d_modular"]]
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "apartment_interior_floor_macro"
+metadata/module_dimensions_m = Vector3(2.4, 0.12, 2.4)
+metadata/grid_step_m = 2.4
+metadata/convenience_macro = true
+
+[node name="TileNW" parent="." instance=ExtResource("1_tile")]
+position = Vector3(-0.6, 0, -0.6)
+[node name="TileNE" parent="." instance=ExtResource("1_tile")]
+position = Vector3(0.6, 0, -0.6)
+[node name="TileSW" parent="." instance=ExtResource("1_tile")]
+position = Vector3(-0.6, 0, 0.6)
+[node name="TileSE" parent="." instance=ExtResource("1_tile")]
+position = Vector3(0.6, 0, 0.6)
+
+[node name="Sockets" type="Node3D" parent="."]
+[node name="FloorXNegative" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-1.2, 0, 0)
+metadata/socket_role = "interior_floor_chain"
+[node name="FloorXPositive" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(1.2, 0, 0)
+metadata/socket_role = "interior_floor_chain"
+[node name="FloorZNegative" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, -1.2)
+metadata/socket_role = "interior_floor_chain"
+[node name="FloorZPositive" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, 1.2)
+metadata/socket_role = "interior_floor_chain"
+

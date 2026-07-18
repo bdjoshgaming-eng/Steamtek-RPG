@@ -1,0 +1,92 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="1_gunmetal"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_AgedCopper_Base_v01.tres" id="2_copper"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_RoofSteel_Base_v01.tres" id="3_roofsteel"]
+
+[sub_resource type="BoxMesh" id="BodyMesh"]
+material = ExtResource("1_gunmetal")
+size = Vector3(0.55, 0.8, 0.2)
+
+[sub_resource type="BoxMesh" id="FaceMesh"]
+material = ExtResource("3_roofsteel")
+size = Vector3(0.46, 0.7, 0.035)
+
+[sub_resource type="BoxMesh" id="TerminalMesh"]
+material = ExtResource("2_copper")
+size = Vector3(0.1, 0.075, 0.04)
+
+[sub_resource type="BoxMesh" id="IndicatorMesh"]
+material = ExtResource("3_roofsteel")
+size = Vector3(0.085, 0.085, 0.035)
+
+[sub_resource type="BoxMesh" id="FrameMesh"]
+material = ExtResource("2_copper")
+size = Vector3(0.48, 0.035, 0.035)
+
+[node name="SteamtekWallPowerRelay3D" type="Node3D"]
+editor_description = "Wall power-relay blockout with readable terminals and status lenses. Root origin is the wall contact plane; +Z is outward."
+metadata/status = "geometry_contract_blockout"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/nominal_size_m = Vector3(0.55, 0.8, 0.24)
+metadata/front_axis = "+Z"
+metadata/facing_contract = "yaw_0_90_180_270_no_negative_scale"
+
+[node name="Visual_Blockout" type="Node3D" parent="."]
+
+[node name="RelayBody" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 0, 0.1)
+mesh = SubResource("BodyMesh")
+
+[node name="RelayFace" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 0, 0.218)
+mesh = SubResource("FaceMesh")
+
+[node name="FrameTop" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 0.355, 0.245)
+mesh = SubResource("FrameMesh")
+
+[node name="FrameBottom" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, -0.355, 0.245)
+mesh = SubResource("FrameMesh")
+
+[node name="IndicatorLeft" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(-0.14, 0.18, 0.26)
+mesh = SubResource("IndicatorMesh")
+
+[node name="IndicatorCenter" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 0.18, 0.26)
+mesh = SubResource("IndicatorMesh")
+
+[node name="IndicatorRight" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0.14, 0.18, 0.26)
+mesh = SubResource("IndicatorMesh")
+
+[node name="TerminalLeft" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(-0.14, -0.18, 0.26)
+mesh = SubResource("TerminalMesh")
+
+[node name="TerminalCenter" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, -0.18, 0.26)
+mesh = SubResource("TerminalMesh")
+
+[node name="TerminalRight" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0.14, -0.18, 0.26)
+mesh = SubResource("TerminalMesh")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="WallMount" type="Marker3D" parent="Sockets"]
+metadata/socket_role = "wall_mount"
+
+[node name="ConduitTopLeft" type="Marker3D" parent="Sockets"]
+position = Vector3(-0.14, 0.45, 0.1)
+metadata/socket_role = "electrical_conduit"
+
+[node name="ConduitTopRight" type="Marker3D" parent="Sockets"]
+position = Vector3(0.14, 0.45, 0.1)
+metadata/socket_role = "electrical_conduit"
+
+[node name="ConduitBottom" type="Marker3D" parent="Sockets"]
+position = Vector3(0, -0.45, 0.1)
+metadata/socket_role = "electrical_conduit"

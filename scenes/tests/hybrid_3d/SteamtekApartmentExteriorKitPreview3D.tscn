@@ -1,0 +1,319 @@
+[gd_scene load_steps=16 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_exterior/SteamtekFacadeBaySolid3D.tscn" id="1_solid"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_exterior/SteamtekFacadeBayWindow3D.tscn" id="2_window"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_exterior/SteamtekFacadeBayDoor3D.tscn" id="3_door"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_exterior/SteamtekFacadeCornerColumn3D.tscn" id="4_corner"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_exterior/SteamtekParapetStraight3D.tscn" id="5_parapet"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_exterior/SteamtekBalconyModule3D.tscn" id="6_balcony"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/lighting/SteamtekAmberDoorLight3D.tscn" id="7_doorlight"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_RainPolishedStreet_Candidate_v01.tres" id="8_street"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_exterior/SteamtekFloorTile3D.tscn" id="9_floor"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_exterior/SteamtekRoofTile3D.tscn" id="10_roof"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_exterior/SteamtekParapetCorner3D.tscn" id="11_parapet_corner"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SkyMaterial"]
+sky_top_color = Color(0.009, 0.014, 0.026, 1)
+sky_horizon_color = Color(0.05, 0.065, 0.1, 1)
+ground_bottom_color = Color(0.008, 0.011, 0.019, 1)
+ground_horizon_color = Color(0.035, 0.045, 0.07, 1)
+
+[sub_resource type="Sky" id="Sky"]
+sky_material = SubResource("SkyMaterial")
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 2
+sky = SubResource("Sky")
+ambient_light_source = 3
+ambient_light_color = Color(0.3, 0.38, 0.55, 1)
+ambient_light_energy = 0.68
+tonemap_mode = 2
+
+[sub_resource type="BoxMesh" id="FloorMesh"]
+material = ExtResource("8_street")
+size = Vector3(14, 0.16, 11)
+
+[node name="SteamtekApartmentExteriorKitPreview3D" type="Node3D"]
+editor_description = "Normal-editor F6 review scene for the live-3D apartment exterior snap contract. It does not reference the playable dimensional blockout."
+metadata/status = "apartment_exterior_kit_contract_review"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/camera_contract = "orthographic_60deg_azimuth_30deg_elevation"
+metadata/snap_contract = "2.4m_bays_and_tiles_3.2m_storeys_root_rotation_only"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment")
+
+[node name="MoonKey" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-55, -35, 0)
+light_color = Color(0.48, 0.62, 0.9, 1)
+light_energy = 0.95
+shadow_enabled = true
+
+[node name="FrontReviewFill" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-38, 145, 0)
+light_color = Color(0.72, 0.82, 1, 1)
+light_energy = 0.85
+shadow_enabled = false
+
+[node name="Camera3D" type="Camera3D" parent="."]
+position = Vector3(9, 9, 3.7)
+rotation_degrees = Vector3(-30, 60, 0)
+projection = 1
+size = 12.5
+current = true
+
+[node name="WetStreetReviewFloor" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.08, -2)
+mesh = SubResource("FloorMesh")
+
+[node name="BuildingAssembly" type="Node3D" parent="."]
+
+[node name="ShellTiles" type="Node3D" parent="BuildingAssembly"]
+
+[node name="GroundFloor_FrontLeft" parent="BuildingAssembly/ShellTiles" instance=ExtResource("9_floor")]
+position = Vector3(-2.4, 0, -1.2)
+
+[node name="GroundFloor_FrontCenter" parent="BuildingAssembly/ShellTiles" instance=ExtResource("9_floor")]
+position = Vector3(0, 0, -1.2)
+
+[node name="GroundFloor_FrontRight" parent="BuildingAssembly/ShellTiles" instance=ExtResource("9_floor")]
+position = Vector3(2.4, 0, -1.2)
+
+[node name="GroundFloor_BackLeft" parent="BuildingAssembly/ShellTiles" instance=ExtResource("9_floor")]
+position = Vector3(-2.4, 0, -3.6)
+
+[node name="GroundFloor_BackCenter" parent="BuildingAssembly/ShellTiles" instance=ExtResource("9_floor")]
+position = Vector3(0, 0, -3.6)
+
+[node name="GroundFloor_BackRight" parent="BuildingAssembly/ShellTiles" instance=ExtResource("9_floor")]
+position = Vector3(2.4, 0, -3.6)
+
+[node name="UpperFloor_FrontLeft" parent="BuildingAssembly/ShellTiles" instance=ExtResource("9_floor")]
+position = Vector3(-2.4, 3.2, -1.2)
+
+[node name="UpperFloor_FrontCenter" parent="BuildingAssembly/ShellTiles" instance=ExtResource("9_floor")]
+position = Vector3(0, 3.2, -1.2)
+
+[node name="UpperFloor_FrontRight" parent="BuildingAssembly/ShellTiles" instance=ExtResource("9_floor")]
+position = Vector3(2.4, 3.2, -1.2)
+
+[node name="UpperFloor_BackLeft" parent="BuildingAssembly/ShellTiles" instance=ExtResource("9_floor")]
+position = Vector3(-2.4, 3.2, -3.6)
+
+[node name="UpperFloor_BackCenter" parent="BuildingAssembly/ShellTiles" instance=ExtResource("9_floor")]
+position = Vector3(0, 3.2, -3.6)
+
+[node name="UpperFloor_BackRight" parent="BuildingAssembly/ShellTiles" instance=ExtResource("9_floor")]
+position = Vector3(2.4, 3.2, -3.6)
+
+[node name="Roof_FrontLeft" parent="BuildingAssembly/ShellTiles" instance=ExtResource("10_roof")]
+position = Vector3(-2.4, 6.4, -1.2)
+
+[node name="Roof_FrontCenter" parent="BuildingAssembly/ShellTiles" instance=ExtResource("10_roof")]
+position = Vector3(0, 6.4, -1.2)
+
+[node name="Roof_FrontRight" parent="BuildingAssembly/ShellTiles" instance=ExtResource("10_roof")]
+position = Vector3(2.4, 6.4, -1.2)
+
+[node name="Roof_BackLeft" parent="BuildingAssembly/ShellTiles" instance=ExtResource("10_roof")]
+position = Vector3(-2.4, 6.4, -3.6)
+
+[node name="Roof_BackCenter" parent="BuildingAssembly/ShellTiles" instance=ExtResource("10_roof")]
+position = Vector3(0, 6.4, -3.6)
+
+[node name="Roof_BackRight" parent="BuildingAssembly/ShellTiles" instance=ExtResource("10_roof")]
+position = Vector3(2.4, 6.4, -3.6)
+
+[node name="FrontGround_Door" parent="BuildingAssembly" instance=ExtResource("3_door")]
+position = Vector3(-2.4, 0, 0)
+
+[node name="FrontGround_Window" parent="BuildingAssembly" instance=ExtResource("2_window")]
+
+[node name="FrontGround_Solid" parent="BuildingAssembly" instance=ExtResource("1_solid")]
+position = Vector3(2.4, 0, 0)
+
+[node name="FrontUpper_WindowLeft" parent="BuildingAssembly" instance=ExtResource("2_window")]
+position = Vector3(-2.4, 3.2, 0)
+
+[node name="FrontUpper_BalconyDoor" parent="BuildingAssembly" instance=ExtResource("3_door")]
+position = Vector3(0, 3.2, 0)
+
+[node name="FrontUpper_WindowRight" parent="BuildingAssembly" instance=ExtResource("2_window")]
+position = Vector3(2.4, 3.2, 0)
+
+[node name="FrontBalcony" parent="BuildingAssembly" instance=ExtResource("6_balcony")]
+position = Vector3(0, 3.2, 0.08)
+
+[node name="FrontCornerGround" parent="BuildingAssembly" instance=ExtResource("4_corner")]
+position = Vector3(3.8, 0, -0.2)
+
+[node name="FrontCornerUpper" parent="BuildingAssembly" instance=ExtResource("4_corner")]
+position = Vector3(3.8, 3.2, -0.2)
+
+[node name="FrontLeftCornerGround" parent="BuildingAssembly" instance=ExtResource("4_corner")]
+position = Vector3(-3.8, 0, -0.2)
+
+[node name="FrontLeftCornerUpper" parent="BuildingAssembly" instance=ExtResource("4_corner")]
+position = Vector3(-3.8, 3.2, -0.2)
+
+[node name="SideGround_WindowNear" parent="BuildingAssembly" instance=ExtResource("2_window")]
+position = Vector3(3.8, 0, -1.4)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="SideGround_SolidFar" parent="BuildingAssembly" instance=ExtResource("1_solid")]
+position = Vector3(3.8, 0, -3.8)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="SideUpper_SolidNear" parent="BuildingAssembly" instance=ExtResource("1_solid")]
+position = Vector3(3.8, 3.2, -1.4)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="SideUpper_WindowFar" parent="BuildingAssembly" instance=ExtResource("2_window")]
+position = Vector3(3.8, 3.2, -3.8)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="LeftSideGround_SolidNear" parent="BuildingAssembly" instance=ExtResource("1_solid")]
+position = Vector3(-3.8, 0, -1.4)
+rotation_degrees = Vector3(0, 270, 0)
+
+[node name="LeftSideGround_WindowFar" parent="BuildingAssembly" instance=ExtResource("2_window")]
+position = Vector3(-3.8, 0, -3.8)
+rotation_degrees = Vector3(0, 270, 0)
+
+[node name="LeftSideUpper_WindowNear" parent="BuildingAssembly" instance=ExtResource("2_window")]
+position = Vector3(-3.8, 3.2, -1.4)
+rotation_degrees = Vector3(0, 270, 0)
+
+[node name="LeftSideUpper_SolidFar" parent="BuildingAssembly" instance=ExtResource("1_solid")]
+position = Vector3(-3.8, 3.2, -3.8)
+rotation_degrees = Vector3(0, 270, 0)
+
+[node name="RearRightCornerGround" parent="BuildingAssembly" instance=ExtResource("4_corner")]
+position = Vector3(3.8, 0, -5)
+
+[node name="RearRightCornerUpper" parent="BuildingAssembly" instance=ExtResource("4_corner")]
+position = Vector3(3.8, 3.2, -5)
+
+[node name="RearLeftCornerGround" parent="BuildingAssembly" instance=ExtResource("4_corner")]
+position = Vector3(-3.8, 0, -5)
+
+[node name="RearLeftCornerUpper" parent="BuildingAssembly" instance=ExtResource("4_corner")]
+position = Vector3(-3.8, 3.2, -5)
+
+[node name="BackGround_SolidLeft" parent="BuildingAssembly" instance=ExtResource("1_solid")]
+position = Vector3(-2.4, 0, -5.2)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="BackGround_WindowCenter" parent="BuildingAssembly" instance=ExtResource("2_window")]
+position = Vector3(0, 0, -5.2)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="BackGround_SolidRight" parent="BuildingAssembly" instance=ExtResource("1_solid")]
+position = Vector3(2.4, 0, -5.2)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="BackUpper_WindowLeft" parent="BuildingAssembly" instance=ExtResource("2_window")]
+position = Vector3(-2.4, 3.2, -5.2)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="BackUpper_SolidCenter" parent="BuildingAssembly" instance=ExtResource("1_solid")]
+position = Vector3(0, 3.2, -5.2)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="BackUpper_WindowRight" parent="BuildingAssembly" instance=ExtResource("2_window")]
+position = Vector3(2.4, 3.2, -5.2)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="FrontParapetLeft" parent="BuildingAssembly" instance=ExtResource("5_parapet")]
+position = Vector3(-2.4, 6.4, 0)
+
+[node name="FrontParapetCenter" parent="BuildingAssembly" instance=ExtResource("5_parapet")]
+position = Vector3(0, 6.4, 0)
+
+[node name="FrontParapetRight" parent="BuildingAssembly" instance=ExtResource("5_parapet")]
+position = Vector3(2.4, 6.4, 0)
+
+[node name="SideParapetNear" parent="BuildingAssembly" instance=ExtResource("5_parapet")]
+position = Vector3(3.8, 6.4, -1.4)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="SideParapetFar" parent="BuildingAssembly" instance=ExtResource("5_parapet")]
+position = Vector3(3.8, 6.4, -3.8)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="LeftParapetNear" parent="BuildingAssembly" instance=ExtResource("5_parapet")]
+position = Vector3(-3.8, 6.4, -1.4)
+rotation_degrees = Vector3(0, 270, 0)
+
+[node name="LeftParapetFar" parent="BuildingAssembly" instance=ExtResource("5_parapet")]
+position = Vector3(-3.8, 6.4, -3.8)
+rotation_degrees = Vector3(0, 270, 0)
+
+[node name="BackParapetLeft" parent="BuildingAssembly" instance=ExtResource("5_parapet")]
+position = Vector3(-2.4, 6.4, -5.2)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="BackParapetCenter" parent="BuildingAssembly" instance=ExtResource("5_parapet")]
+position = Vector3(0, 6.4, -5.2)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="BackParapetRight" parent="BuildingAssembly" instance=ExtResource("5_parapet")]
+position = Vector3(2.4, 6.4, -5.2)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="ParapetCornerFrontRight" parent="BuildingAssembly" instance=ExtResource("11_parapet_corner")]
+position = Vector3(3.8, 6.4, -0.2)
+
+[node name="ParapetCornerFrontLeft" parent="BuildingAssembly" instance=ExtResource("11_parapet_corner")]
+position = Vector3(-3.8, 6.4, -0.2)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="ParapetCornerRearRight" parent="BuildingAssembly" instance=ExtResource("11_parapet_corner")]
+position = Vector3(3.8, 6.4, -5)
+rotation_degrees = Vector3(0, 270, 0)
+
+[node name="ParapetCornerRearLeft" parent="BuildingAssembly" instance=ExtResource("11_parapet_corner")]
+position = Vector3(-3.8, 6.4, -5)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="GroundDoorAmberLight" parent="BuildingAssembly" instance=ExtResource("7_doorlight")]
+position = Vector3(-2.4, 2.55, 0.22)
+
+[node name="ReviewLabels" type="Node3D" parent="."]
+
+[node name="FrontAxisLabel" type="Label3D" parent="ReviewLabels"]
+position = Vector3(-2.2, 7.2, 0.3)
+text = "FRONT RUN: 2.4 m BAYS"
+font_size = 36
+outline_size = 8
+pixel_size = 0.005
+billboard = 1
+
+[node name="RotatedAxisLabel" type="Label3D" parent="ReviewLabels"]
+position = Vector3(4.2, 5.7, -3.1)
+text = "SAME MODULES: 90 DEG ROOT ROTATION"
+font_size = 30
+outline_size = 8
+pixel_size = 0.005
+billboard = 1
+
+[node name="RoofGridLabel" type="Label3D" parent="ReviewLabels"]
+position = Vector3(0, 7.15, -2.5)
+text = "CLOSED 2.4 m FLOOR + ROOF TILE GRID"
+font_size = 30
+outline_size = 8
+pixel_size = 0.005
+billboard = 1
+
+[node name="ReviewUI" type="CanvasLayer" parent="."]
+
+[node name="Title" type="Label" parent="ReviewUI"]
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 1500.0
+offset_bottom = 118.0
+text = "STEAMTEK LIVE-3D APARTMENT EXTERIOR KIT - CLOSED SHELL REVIEW\n2.4 m facade/floor/roof grid  |  3.2 m storeys  |  root scale (1,1,1)  |  four-axis wall rotation\nGeometry is temporary; verify roof closure, parapet corners, storey alignment, and clean seams."
+theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
+theme_override_colors/font_outline_color = Color(0.005, 0.008, 0.012, 0.95)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 18

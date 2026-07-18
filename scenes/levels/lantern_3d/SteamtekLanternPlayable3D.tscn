@@ -1,0 +1,298 @@
+[gd_scene load_steps=18 format=3]
+
+[ext_resource type="Script" path="res://scenes/levels/lantern_3d/steamtek_lantern_playable_3d.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/interiors/lantern/SteamtekLanternBarInteriorBlockout3D.tscn" id="2_interior"]
+[ext_resource type="PackedScene" path="res://scenes/characters/player/VesperKane_PlayerCharacter_v01.tscn" id="3_character"]
+[ext_resource type="PackedScene" path="res://scenes/gameplay/live3d/SteamtekTutorialInteractable3D.tscn" id="4_interactable"]
+[ext_resource type="PackedScene" path="res://scenes/interactions/SteamtekZoneDoor3D.tscn" id="5_zone_door"]
+[ext_resource type="PackedScene" path="res://scenes/gameplay/live3d/SteamtekTutorialWaypoint3D.tscn" id="6_waypoint"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SkyMaterial"]
+sky_top_color = Color(0.004, 0.006, 0.012, 1)
+sky_horizon_color = Color(0.025, 0.018, 0.018, 1)
+ground_bottom_color = Color(0.003, 0.004, 0.008, 1)
+ground_horizon_color = Color(0.018, 0.014, 0.016, 1)
+
+[sub_resource type="Sky" id="Sky"]
+sky_material = SubResource("SkyMaterial")
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 2
+sky = SubResource("Sky")
+ambient_light_source = 3
+ambient_light_color = Color(0.42, 0.31, 0.25, 1)
+ambient_light_energy = 0.74
+tonemap_mode = 2
+
+[sub_resource type="BoxShape3D" id="NorthBoundaryShape"]
+size = Vector3(14.4, 2.8, 0.4)
+
+[sub_resource type="BoxShape3D" id="EastBoundaryShape"]
+size = Vector3(0.4, 2.8, 9.6)
+
+[sub_resource type="StandardMaterial3D" id="ContactMaterial"]
+albedo_color = Color(0.055, 0.065, 0.075, 1)
+metallic = 0.58
+roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="ContactAccentMaterial"]
+shading_mode = 0
+albedo_color = Color(0.75, 0.16, 0.035, 1)
+emission_enabled = true
+emission = Color(1, 0.22, 0.04, 1)
+emission_energy_multiplier = 1.9
+
+[sub_resource type="CapsuleMesh" id="ContactBodyMesh"]
+material = SubResource("ContactMaterial")
+radius = 0.32
+height = 1.35
+radial_segments = 16
+rings = 6
+
+[sub_resource type="SphereMesh" id="ContactHeadMesh"]
+material = SubResource("ContactMaterial")
+radius = 0.23
+height = 0.46
+radial_segments = 16
+rings = 8
+
+[sub_resource type="BoxMesh" id="ContactAccentMesh"]
+material = SubResource("ContactAccentMaterial")
+size = Vector3(0.38, 0.08, 0.05)
+
+[sub_resource type="LabelSettings" id="LabelSettings"]
+font_size = 18
+font_color = Color(0.88, 0.94, 1, 1)
+outline_size = 5
+outline_color = Color(0.004, 0.008, 0.018, 0.96)
+
+[sub_resource type="LabelSettings" id="ObjectiveSettings"]
+font_size = 20
+font_color = Color(1, 0.76, 0.32, 1)
+outline_size = 6
+outline_color = Color(0.004, 0.008, 0.018, 0.98)
+
+[sub_resource type="LabelSettings" id="MessageSettings"]
+font_size = 21
+font_color = Color(0.3, 0.9, 1, 1)
+outline_size = 7
+outline_color = Color(0.004, 0.008, 0.018, 0.98)
+
+[node name="SteamtekLanternPlayable3D" type="Node3D"]
+editor_description = "Playable Lantern interior and opening quest handoff. Sparse NPC population, west entry/exit, contact behind the bar, and persistent transition into Below the Surface."
+script = ExtResource("1_script")
+metadata/status = "lantern_opening_quest_vertical_slice_v01"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/camera_contract = "orthographic_60deg_azimuth_30deg_elevation_size_12_5"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment")
+
+[node name="InteriorKey" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-52, -38, 0)
+light_color = Color(0.62, 0.72, 0.9, 1)
+light_energy = 1.05
+shadow_enabled = true
+
+[node name="WarmFill" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-38, 145, 0)
+light_color = Color(1, 0.56, 0.3, 1)
+light_energy = 0.42
+
+[node name="InteriorAssembly" parent="." instance=ExtResource("2_interior")]
+
+[node name="InvisibleBoundaries" type="Node3D" parent="."]
+
+[node name="NorthBoundary" type="StaticBody3D" parent="InvisibleBoundaries"]
+position = Vector3(0, 1.4, 4.8)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Collision" type="CollisionShape3D" parent="InvisibleBoundaries/NorthBoundary"]
+shape = SubResource("NorthBoundaryShape")
+
+[node name="EastBoundary" type="StaticBody3D" parent="InvisibleBoundaries"]
+position = Vector3(7.2, 1.4, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Collision" type="CollisionShape3D" parent="InvisibleBoundaries/EastBoundary"]
+shape = SubResource("EastBoundaryShape")
+
+[node name="ContactVisual" type="Node3D" parent="."]
+position = Vector3(4.15, 0.0, -1.8)
+
+[node name="Body" type="MeshInstance3D" parent="ContactVisual"]
+position = Vector3(0, 0.85, 0)
+mesh = SubResource("ContactBodyMesh")
+
+[node name="Head" type="MeshInstance3D" parent="ContactVisual"]
+position = Vector3(0, 1.73, 0)
+mesh = SubResource("ContactHeadMesh")
+
+[node name="SourceLinkedAccent" type="MeshInstance3D" parent="ContactVisual"]
+position = Vector3(0, 1.05, 0.31)
+mesh = SubResource("ContactAccentMesh")
+
+[node name="BartenderVisual" type="Node3D" parent="."]
+position = Vector3(1.25, 0, -1.8)
+
+[node name="Body" type="MeshInstance3D" parent="BartenderVisual"]
+position = Vector3(0, 0.85, 0)
+mesh = SubResource("ContactBodyMesh")
+
+[node name="Head" type="MeshInstance3D" parent="BartenderVisual"]
+position = Vector3(0, 1.73, 0)
+mesh = SubResource("ContactHeadMesh")
+
+[node name="SourceLinkedAccent" type="MeshInstance3D" parent="BartenderVisual"]
+position = Vector3(0, 1.05, 0.31)
+mesh = SubResource("ContactAccentMesh")
+
+[node name="TutorialInteractables" type="Node3D" parent="."]
+
+[node name="LanternContact" parent="TutorialInteractables" instance=ExtResource("4_interactable")]
+position = Vector3(4.15, 0.9, -1.8)
+interaction_prompt = "Speak with Lantern contact"
+action_id = "lantern_contact"
+
+[node name="BartenderVendor" parent="TutorialInteractables" instance=ExtResource("4_interactable")]
+position = Vector3(1.25, 0.9, -1.8)
+interaction_prompt = "Browse food and water"
+action_id = "bartender_vendor"
+
+[node name="SurfaceExitDoor" parent="." instance=ExtResource("5_zone_door")]
+position = Vector3(-6.45, 1.0, 1.6)
+interaction_prompt = "Return to Main Street"
+target_scene_path = "res://scenes/levels/surface_3d/SteamtekSurfaceTutorialPlayable3D.tscn"
+target_spawn_id = "LanternReturnFromInterior"
+
+[node name="LanternEntryFromSurface" type="Marker3D" parent="."]
+position = Vector3(-6.25, 0.12, 1.6)
+
+[node name="ObjectiveWaypoints" type="Node3D" parent="."]
+
+[node name="LanternContact" parent="ObjectiveWaypoints" instance=ExtResource("6_waypoint")]
+position = Vector3(4.15, 0.18, -0.9)
+waypoint_text = "LANTERN CONTACT"
+
+[node name="Bartender" parent="ObjectiveWaypoints" instance=ExtResource("6_waypoint")]
+position = Vector3(1.25, 0.18, -0.9)
+waypoint_text = "BARTENDER"
+
+[node name="SurfaceExit" parent="ObjectiveWaypoints" instance=ExtResource("6_waypoint")]
+position = Vector3(-6.25, 0.18, 1.6)
+waypoint_text = "RETURN TO STREET"
+
+[node name="VesperKane_PlayerCharacter_v01" parent="." instance=ExtResource("3_character")]
+position = Vector3(-6.25, 0.12, 1.6)
+
+[node name="CameraRig" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig"]
+position = Vector3(17.32, 12.547, 10)
+projection = 1
+size = 12.5
+current = true
+
+[node name="TransitionUI" type="CanvasLayer" parent="."]
+
+[node name="Title" type="Label" parent="TransitionUI"]
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 760.0
+offset_bottom = 52.0
+text = "STEAMTEK — THE LANTERN"
+label_settings = SubResource("LabelSettings")
+
+[node name="Objective" type="Label" parent="TransitionUI"]
+offset_left = 24.0
+offset_top = 54.0
+offset_right = 1720.0
+offset_bottom = 92.0
+label_settings = SubResource("ObjectiveSettings")
+
+[node name="Message" type="Label" parent="TransitionUI"]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -720.0
+offset_top = -152.0
+offset_right = 720.0
+offset_bottom = -112.0
+grow_horizontal = 2
+grow_vertical = 0
+label_settings = SubResource("MessageSettings")
+horizontal_alignment = 1
+
+[node name="InteractionPrompt" type="Label" parent="TransitionUI"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -340.0
+offset_top = -96.0
+offset_right = 340.0
+offset_bottom = -48.0
+grow_horizontal = 2
+grow_vertical = 0
+label_settings = SubResource("LabelSettings")
+horizontal_alignment = 1
+
+[node name="VendorPanel" type="Control" parent="TransitionUI"]
+visible = false
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -330.0
+offset_top = -235.0
+offset_right = 330.0
+offset_bottom = 235.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Backdrop" type="ColorRect" parent="TransitionUI/VendorPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.018, 0.025, 0.035, 0.96)
+
+[node name="Title" type="Label" parent="TransitionUI/VendorPanel"]
+layout_mode = 0
+offset_left = 38.0
+offset_top = 30.0
+offset_right = 622.0
+offset_bottom = 70.0
+text = "BARTENDER — FOOD & WATER"
+label_settings = SubResource("ObjectiveSettings")
+horizontal_alignment = 1
+
+[node name="Status" type="Label" parent="TransitionUI/VendorPanel"]
+layout_mode = 0
+offset_left = 46.0
+offset_top = 98.0
+offset_right = 614.0
+offset_bottom = 430.0
+label_settings = SubResource("LabelSettings")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Fade" type="ColorRect" parent="TransitionUI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)

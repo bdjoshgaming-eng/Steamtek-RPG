@@ -1,0 +1,204 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekRoadStraight4_8x2_4m3D.tscn" id="1_road"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekSidewalkStraight2_4m3D.tscn" id="2_sidewalk"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekCurbStraight2_4m3D.tscn" id="3_curb"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekDrainBay2_4m3D.tscn" id="4_drain"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekAlleyTile2_4m3D.tscn" id="5_alley"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekFenceStraight2_4m3D.tscn" id="6_fence"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SkyMaterial"]
+sky_top_color = Color(0.009, 0.014, 0.026, 1)
+sky_horizon_color = Color(0.05, 0.065, 0.1, 1)
+ground_bottom_color = Color(0.008, 0.011, 0.019, 1)
+ground_horizon_color = Color(0.035, 0.045, 0.07, 1)
+
+[sub_resource type="Sky" id="Sky"]
+sky_material = SubResource("SkyMaterial")
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 2
+sky = SubResource("Sky")
+ambient_light_source = 3
+ambient_light_color = Color(0.34, 0.42, 0.58, 1)
+ambient_light_energy = 0.82
+tonemap_mode = 2
+
+[node name="SteamtekStreetKitFoundationPreview3D" type="Node3D"]
+editor_description = "Normal-editor F6 review for the first six reusable Street Kit foundation modules."
+metadata/status = "street_kit_foundation_snap_contract_review"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/camera_contract = "orthographic_60deg_azimuth_30deg_elevation"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment")
+
+[node name="MoonKey" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-55, -35, 0)
+light_color = Color(0.5, 0.64, 0.92, 1)
+light_energy = 1.05
+shadow_enabled = true
+
+[node name="NeutralFill" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-38, 145, 0)
+light_color = Color(0.78, 0.84, 1, 1)
+light_energy = 0.9
+shadow_enabled = false
+
+[node name="Camera3D" type="Camera3D" parent="."]
+position = Vector3(18, 12, 9.7)
+rotation_degrees = Vector3(-30, 60, 0)
+projection = 1
+size = 12.5
+current = true
+
+[node name="RoadRun" type="Node3D" parent="."]
+
+[node name="Road01" parent="RoadRun" instance=ExtResource("1_road")]
+position = Vector3(-3.6, 0, 0)
+
+[node name="Road02" parent="RoadRun" instance=ExtResource("1_road")]
+position = Vector3(-1.2, 0, 0)
+
+[node name="Road03" parent="RoadRun" instance=ExtResource("1_road")]
+position = Vector3(1.2, 0, 0)
+
+[node name="Road04" parent="RoadRun" instance=ExtResource("1_road")]
+position = Vector3(3.6, 0, 0)
+
+[node name="NorthCurbRun" type="Node3D" parent="."]
+
+[node name="Curb01" parent="NorthCurbRun" instance=ExtResource("3_curb")]
+position = Vector3(-3.6, 0, 2.5)
+
+[node name="Curb02" parent="NorthCurbRun" instance=ExtResource("3_curb")]
+position = Vector3(-1.2, 0, 2.5)
+
+[node name="Curb03" parent="NorthCurbRun" instance=ExtResource("3_curb")]
+position = Vector3(1.2, 0, 2.5)
+
+[node name="Curb04" parent="NorthCurbRun" instance=ExtResource("3_curb")]
+position = Vector3(3.6, 0, 2.5)
+
+[node name="SouthCurbRun" type="Node3D" parent="."]
+
+[node name="Curb01" parent="SouthCurbRun" instance=ExtResource("3_curb")]
+position = Vector3(-3.6, 0, -2.5)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="Curb02" parent="SouthCurbRun" instance=ExtResource("3_curb")]
+position = Vector3(-1.2, 0, -2.5)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="Curb03" parent="SouthCurbRun" instance=ExtResource("3_curb")]
+position = Vector3(1.2, 0, -2.5)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="Curb04" parent="SouthCurbRun" instance=ExtResource("3_curb")]
+position = Vector3(3.6, 0, -2.5)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="NorthSidewalkRun" type="Node3D" parent="."]
+
+[node name="Sidewalk01" parent="NorthSidewalkRun" instance=ExtResource("2_sidewalk")]
+position = Vector3(-3.6, 0.18, 3.2)
+
+[node name="Sidewalk02" parent="NorthSidewalkRun" instance=ExtResource("2_sidewalk")]
+position = Vector3(-1.2, 0.18, 3.2)
+
+[node name="Sidewalk03" parent="NorthSidewalkRun" instance=ExtResource("2_sidewalk")]
+position = Vector3(1.2, 0.18, 3.2)
+
+[node name="Sidewalk04" parent="NorthSidewalkRun" instance=ExtResource("2_sidewalk")]
+position = Vector3(3.6, 0.18, 3.2)
+
+[node name="SouthSidewalkRun" type="Node3D" parent="."]
+
+[node name="Sidewalk01" parent="SouthSidewalkRun" instance=ExtResource("2_sidewalk")]
+position = Vector3(-3.6, 0.18, -3.2)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="Sidewalk02" parent="SouthSidewalkRun" instance=ExtResource("2_sidewalk")]
+position = Vector3(-1.2, 0.18, -3.2)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="Sidewalk03" parent="SouthSidewalkRun" instance=ExtResource("2_sidewalk")]
+position = Vector3(1.2, 0.18, -3.2)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="Sidewalk04" parent="SouthSidewalkRun" instance=ExtResource("2_sidewalk")]
+position = Vector3(3.6, 0.18, -3.2)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="DrainRun" type="Node3D" parent="."]
+
+[node name="Drain01" parent="DrainRun" instance=ExtResource("4_drain")]
+position = Vector3(-2.4, 0, 2.15)
+
+[node name="Drain02" parent="DrainRun" instance=ExtResource("4_drain")]
+position = Vector3(0, 0, 2.15)
+
+[node name="Drain03" parent="DrainRun" instance=ExtResource("4_drain")]
+position = Vector3(2.4, 0, 2.15)
+
+[node name="FenceRun" type="Node3D" parent="."]
+
+[node name="Fence01" parent="FenceRun" instance=ExtResource("6_fence")]
+position = Vector3(-3.6, 0.18, 3.8)
+
+[node name="Fence02" parent="FenceRun" instance=ExtResource("6_fence")]
+position = Vector3(-1.2, 0.18, 3.8)
+
+[node name="Fence03" parent="FenceRun" instance=ExtResource("6_fence")]
+position = Vector3(1.2, 0.18, 3.8)
+
+[node name="Fence04" parent="FenceRun" instance=ExtResource("6_fence")]
+position = Vector3(3.6, 0.18, 3.8)
+
+[node name="AlleyReviewRun" type="Node3D" parent="."]
+
+[node name="Alley01" parent="AlleyReviewRun" instance=ExtResource("5_alley")]
+position = Vector3(-2.4, 0, -5.2)
+
+[node name="Alley02" parent="AlleyReviewRun" instance=ExtResource("5_alley")]
+position = Vector3(0, 0, -5.2)
+
+[node name="Alley03" parent="AlleyReviewRun" instance=ExtResource("5_alley")]
+position = Vector3(2.4, 0, -5.2)
+
+[node name="RoadLabel" type="Label3D" parent="."]
+position = Vector3(0, 0.22, 0)
+text = "4.8 m ROAD / 2.4 m CHAIN"
+font_size = 30
+outline_size = 8
+pixel_size = 0.005
+billboard = 1
+
+[node name="SidewalkLabel" type="Label3D" parent="."]
+position = Vector3(0, 0.48, 3.2)
+text = "1.2 m SIDEWALK + CURB + FENCE"
+font_size = 26
+outline_size = 8
+pixel_size = 0.005
+billboard = 1
+
+[node name="AlleyLabel" type="Label3D" parent="."]
+position = Vector3(0, 0.25, -5.2)
+text = "2.4 m ALLEY TILE"
+font_size = 28
+outline_size = 8
+pixel_size = 0.005
+billboard = 1
+
+[node name="ReviewUI" type="CanvasLayer" parent="."]
+
+[node name="Title" type="Label" parent="ReviewUI"]
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 1580.0
+offset_bottom = 118.0
+text = "STEAMTEK LIVE-3D STREET KIT - FOUNDATION REVIEW\n2.4 m snap grid  |  4.8 m road  |  1.2 m sidewalks  |  curb + drain + alley + fence  |  root scale (1,1,1)\nTemporary geometry; review widths, surface heights, straight seams, material readability, and modular rhythm."
+theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
+theme_override_colors/font_outline_color = Color(0.005, 0.008, 0.012, 0.95)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 18

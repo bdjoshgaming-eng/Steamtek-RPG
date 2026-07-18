@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[node name="SteamtekStreetAssemblyBlank3D" type="Node3D"]
+editor_description = "Blank meter-scale assembly scene for the Steamtek Live3D Builder. Place Street Kit modules beneath Architecture; keep props and lights in their named groups."
+metadata/module_system = "live3d_meter_v1"
+metadata/assembly_type = "street_builder_blank"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/grid_step_m = 2.4
+metadata/rotation_contract = "Yaw only: 0, 90, 180, or 270 degrees; never negative-scale mirror"
+
+[node name="Architecture" type="Node3D" parent="."]
+
+[node name="Props" type="Node3D" parent="."]
+
+[node name="Lights" type="Node3D" parent="."]

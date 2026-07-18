@@ -1,0 +1,151 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekRoadLaneMarkedStraight4_8x2_4m3D.tscn" id="1_lane"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekRoadCrosswalk4_8x2_4m3D.tscn" id="2_crosswalk"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekSidewalkStraight2_4m3D.tscn" id="3_sidewalk"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekAlleyDrivewayCut2_4m3D.tscn" id="4_drivecut"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekCurbStraight2_4m3D.tscn" id="5_curb"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekAlleyRoadApron2_4m3D.tscn" id="6_apron"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekAlleyTile2_4m3D.tscn" id="7_alley"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekFenceStraight2_4m3D.tscn" id="8_fence"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekFenceGate2_4m3D.tscn" id="9_gate"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SkyMaterial"]
+sky_top_color = Color(0.009, 0.014, 0.026, 1)
+sky_horizon_color = Color(0.05, 0.065, 0.1, 1)
+ground_bottom_color = Color(0.008, 0.011, 0.019, 1)
+ground_horizon_color = Color(0.035, 0.045, 0.07, 1)
+
+[sub_resource type="Sky" id="Sky"]
+sky_material = SubResource("SkyMaterial")
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 2
+sky = SubResource("Sky")
+ambient_light_source = 3
+ambient_light_color = Color(0.34, 0.42, 0.58, 1)
+ambient_light_energy = 0.86
+tonemap_mode = 2
+
+[node name="SteamtekStreetKitFinalAssemblyPreview3D" type="Node3D"]
+editor_description = "Normal-editor F6 review for the completed Street Kit marking and alley-transition chain."
+metadata/status = "street_kit_final_assembly_contract_review"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/camera_contract = "orthographic_60deg_azimuth_30deg_elevation"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment")
+
+[node name="MoonKey" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-55, -35, 0)
+light_color = Color(0.5, 0.64, 0.92, 1)
+light_energy = 1.08
+shadow_enabled = true
+
+[node name="NeutralFill" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-38, 145, 0)
+light_color = Color(0.78, 0.84, 1, 1)
+light_energy = 0.94
+shadow_enabled = false
+
+[node name="Camera3D" type="Camera3D" parent="."]
+position = Vector3(17.55, 12, 12.55)
+rotation_degrees = Vector3(-30, 60, 0)
+projection = 1
+size = 15
+current = true
+
+[node name="Architecture" type="Node3D" parent="."]
+
+[node name="LaneRoadWest" parent="Architecture" instance=ExtResource("1_lane")]
+position = Vector3(-2.4, 0, 0)
+
+[node name="CrosswalkCenter" parent="Architecture" instance=ExtResource("2_crosswalk")]
+
+[node name="LaneRoadEast" parent="Architecture" instance=ExtResource("1_lane")]
+position = Vector3(2.4, 0, 0)
+
+[node name="NorthSidewalkWest" parent="Architecture" instance=ExtResource("3_sidewalk")]
+position = Vector3(-2.4, 0.18, 3.2)
+
+[node name="NorthDrivewayCut" parent="Architecture" instance=ExtResource("4_drivecut")]
+position = Vector3(0, 0.18, 3.2)
+
+[node name="NorthSidewalkEast" parent="Architecture" instance=ExtResource("3_sidewalk")]
+position = Vector3(2.4, 0.18, 3.2)
+
+[node name="NorthCurbWest" parent="Architecture" instance=ExtResource("5_curb")]
+position = Vector3(-2.4, 0, 2.5)
+
+[node name="NorthCurbEast" parent="Architecture" instance=ExtResource("5_curb")]
+position = Vector3(2.4, 0, 2.5)
+
+[node name="SouthSidewalkWest" parent="Architecture" instance=ExtResource("3_sidewalk")]
+position = Vector3(-2.4, 0.18, -3.2)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="SouthSidewalkCenter" parent="Architecture" instance=ExtResource("3_sidewalk")]
+position = Vector3(0, 0.18, -3.2)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="SouthSidewalkEast" parent="Architecture" instance=ExtResource("3_sidewalk")]
+position = Vector3(2.4, 0.18, -3.2)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="SouthCurbWest" parent="Architecture" instance=ExtResource("5_curb")]
+position = Vector3(-2.4, 0, -2.5)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="SouthCurbCenter" parent="Architecture" instance=ExtResource("5_curb")]
+position = Vector3(0, 0, -2.5)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="SouthCurbEast" parent="Architecture" instance=ExtResource("5_curb")]
+position = Vector3(2.4, 0, -2.5)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="AlleyRoadApron" parent="Architecture" instance=ExtResource("6_apron")]
+position = Vector3(0, 0, 5)
+
+[node name="AlleyContinuation" parent="Architecture" instance=ExtResource("7_alley")]
+position = Vector3(0, 0, 7.4)
+
+[node name="Props" type="Node3D" parent="."]
+
+[node name="FenceWest" parent="Props" instance=ExtResource("8_fence")]
+position = Vector3(-2.4, 0.18, 3.8)
+
+[node name="FenceEast" parent="Props" instance=ExtResource("8_fence")]
+position = Vector3(2.4, 0.18, 3.8)
+
+[node name="AlleyServiceGate" parent="Props" instance=ExtResource("9_gate")]
+position = Vector3(0, 0, 8.6)
+
+[node name="RoadLabel" type="Label3D" parent="."]
+position = Vector3(0, 0.25, 0)
+text = "LANE MARKING + CROSSWALK REPLACEMENT BAYS"
+font_size = 28
+outline_size = 8
+pixel_size = 0.005
+billboard = 1
+
+[node name="AlleyLabel" type="Label3D" parent="."]
+position = Vector3(0, 0.35, 6.2)
+text = "DRIVEWAY CUT > ROAD APRON > ALLEY TILE > SERVICE GATE"
+font_size = 26
+outline_size = 8
+pixel_size = 0.005
+billboard = 1
+
+[node name="ReviewUI" type="CanvasLayer" parent="."]
+
+[node name="Title" type="Label" parent="ReviewUI"]
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 1640.0
+offset_bottom = 118.0
+text = "STEAMTEK LIVE-3D STREET KIT - FINAL ASSEMBLY REVIEW\n2.4 m substitution bays  |  lane marking + crosswalk  |  sidewalk driveway cut  |  alley road apron  |  service gate\nTemporary geometry; review marking continuity, flush overlays, sidewalk descent, alley transition, fence opening, and unchanged snap rhythm."
+theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
+theme_override_colors/font_outline_color = Color(0.005, 0.008, 0.012, 0.95)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 18

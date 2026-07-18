@@ -1,0 +1,51 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="1_gunmetal"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_AgedCopper_Base_v01.tres" id="2_copper"]
+
+[sub_resource type="CylinderMesh" id="ConduitMesh"]
+material = ExtResource("1_gunmetal")
+top_radius = 0.025
+bottom_radius = 0.025
+height = 0.94
+radial_segments = 16
+
+[sub_resource type="BoxMesh" id="ClampMesh"]
+material = ExtResource("2_copper")
+size = Vector3(0.12, 0.05, 0.035)
+
+[node name="SteamtekWallConduitStraight1m3D" type="Node3D"]
+editor_description = "One-meter wall conduit blockout. Local Y is the connection axis and +Z points away from the wall. Rotate the root around Z for horizontal placement."
+metadata/status = "geometry_contract_blockout"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/length_m = 1.0
+metadata/primary_axis = "local_y"
+metadata/front_axis = "+Z"
+metadata/facing_contract = "yaw_for_building_axis_roll_for_wall_direction_no_negative_scale"
+
+[node name="Visual_Blockout" type="Node3D" parent="."]
+
+[node name="ConduitBody" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 0, 0.055)
+mesh = SubResource("ConduitMesh")
+
+[node name="ClampStart" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, -0.35, 0.03)
+mesh = SubResource("ClampMesh")
+
+[node name="ClampEnd" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 0.35, 0.03)
+mesh = SubResource("ClampMesh")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="WallMount" type="Marker3D" parent="Sockets"]
+metadata/socket_role = "wall_mount"
+
+[node name="SnapStart" type="Marker3D" parent="Sockets"]
+position = Vector3(0, -0.5, 0.055)
+metadata/socket_role = "electrical_conduit"
+
+[node name="SnapEnd" type="Marker3D" parent="Sockets"]
+position = Vector3(0, 0.5, 0.055)
+metadata/socket_role = "electrical_conduit"

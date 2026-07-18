@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "STK Apartment Interior Olive Fabric v01"
+albedo_color = Color(0.19, 0.22, 0.15, 1)
+roughness = 0.92
+

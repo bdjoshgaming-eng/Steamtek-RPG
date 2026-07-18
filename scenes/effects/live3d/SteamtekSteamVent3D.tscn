@@ -27,7 +27,7 @@ size = Vector2(0.58, 0.58)
 
 [sub_resource type="Gradient" id="SteamLifeGradient"]
 offsets = PackedFloat32Array(0, 0.18, 0.68, 1)
-colors = PackedColorArray(0.68, 0.78, 0.8, 0, 0.72, 0.82, 0.84, 0.38, 0.58, 0.7, 0.74, 0.18, 0.48, 0.6, 0.64, 0)
+colors = PackedColorArray(0.68, 0.78, 0.8, 0, 0.72, 0.82, 0.84, 0.42, 0.58, 0.7, 0.74, 0.2, 0.48, 0.6, 0.64, 0)
 
 [sub_resource type="GradientTexture1D" id="SteamColorRamp"]
 gradient = SubResource("SteamLifeGradient")

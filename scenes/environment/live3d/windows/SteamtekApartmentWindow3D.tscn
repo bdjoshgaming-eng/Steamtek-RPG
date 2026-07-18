@@ -1,0 +1,136 @@
+[gd_scene load_steps=14 format=3]
+
+[sub_resource type="StandardMaterial3D" id="GlassMaterial"]
+transparency = 1
+albedo_color = Color(0.045, 0.105, 0.13, 0.68)
+metallic = 0.15
+roughness = 0.18
+emission_enabled = true
+emission = Color(0.008, 0.045, 0.06, 1)
+emission_energy_multiplier = 0.22
+
+[sub_resource type="StandardMaterial3D" id="InteriorMaterial"]
+albedo_color = Color(0.007, 0.011, 0.016, 1)
+metallic = 0.08
+roughness = 0.82
+
+[sub_resource type="StandardMaterial3D" id="FrameMaterial"]
+albedo_color = Color(0.035, 0.042, 0.052, 1)
+metallic = 0.72
+roughness = 0.34
+
+[sub_resource type="StandardMaterial3D" id="TrimMaterial"]
+albedo_color = Color(0.15, 0.075, 0.04, 1)
+metallic = 0.68
+roughness = 0.42
+
+[sub_resource type="StandardMaterial3D" id="StreakMaterial"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.52, 0.65, 0.7, 0.18)
+
+[sub_resource type="BoxMesh" id="GlassMesh"]
+material = SubResource("GlassMaterial")
+size = Vector3(1.6, 1.25, 0.045)
+
+[sub_resource type="BoxMesh" id="InteriorMesh"]
+material = SubResource("InteriorMaterial")
+size = Vector3(1.56, 1.21, 0.03)
+
+[sub_resource type="BoxMesh" id="FrameHorizontalMesh"]
+material = SubResource("FrameMaterial")
+size = Vector3(1.84, 0.12, 0.14)
+
+[sub_resource type="BoxMesh" id="FrameVerticalMesh"]
+material = SubResource("FrameMaterial")
+size = Vector3(0.12, 1.48, 0.14)
+
+[sub_resource type="BoxMesh" id="MullionMesh"]
+material = SubResource("TrimMaterial")
+size = Vector3(0.07, 1.24, 0.11)
+
+[sub_resource type="BoxMesh" id="SillMesh"]
+material = SubResource("FrameMaterial")
+size = Vector3(1.96, 0.14, 0.28)
+
+[sub_resource type="BoxMesh" id="BoltMesh"]
+material = SubResource("TrimMaterial")
+size = Vector3(0.1, 0.1, 0.055)
+
+[sub_resource type="BoxMesh" id="StreakMesh"]
+material = SubResource("StreakMaterial")
+size = Vector3(0.018, 0.72, 0.012)
+
+[node name="SteamtekApartmentWindow3D" type="Node3D"]
+editor_description = "Reusable meter-scale live-3D apartment window. Neutral rain-darkened glass receives color from Godot lighting. Instance in the dimensional blockout for visual testing; this component has no camera."
+metadata/status = "production_candidate_window_v1"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/opening_size_m = Vector2(1.6, 1.25)
+metadata/scale_contract = "SteamtekLive3DScaleContract-1"
+
+[node name="InteriorBacking" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0, -0.045)
+mesh = SubResource("InteriorMesh")
+
+[node name="Glass" type="MeshInstance3D" parent="."]
+mesh = SubResource("GlassMesh")
+
+[node name="RainStreakA" type="MeshInstance3D" parent="."]
+position = Vector3(-0.56, 0.12, 0.029)
+scale = Vector3(1, 0.72, 1)
+mesh = SubResource("StreakMesh")
+
+[node name="RainStreakB" type="MeshInstance3D" parent="."]
+position = Vector3(-0.18, -0.1, 0.029)
+scale = Vector3(0.72, 0.42, 1)
+mesh = SubResource("StreakMesh")
+
+[node name="RainStreakC" type="MeshInstance3D" parent="."]
+position = Vector3(0.31, 0.06, 0.029)
+scale = Vector3(0.82, 0.58, 1)
+mesh = SubResource("StreakMesh")
+
+[node name="RainStreakD" type="MeshInstance3D" parent="."]
+position = Vector3(0.62, -0.16, 0.029)
+scale = Vector3(0.64, 0.34, 1)
+mesh = SubResource("StreakMesh")
+
+[node name="FrameTop" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.685, 0.07)
+mesh = SubResource("FrameHorizontalMesh")
+
+[node name="FrameBottom" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.685, 0.07)
+mesh = SubResource("FrameHorizontalMesh")
+
+[node name="FrameLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.86, 0, 0.07)
+mesh = SubResource("FrameVerticalMesh")
+
+[node name="FrameRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.86, 0, 0.07)
+mesh = SubResource("FrameVerticalMesh")
+
+[node name="CenterMullion" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0, 0.08)
+mesh = SubResource("MullionMesh")
+
+[node name="RainSill" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.76, 0.1)
+mesh = SubResource("SillMesh")
+
+[node name="BoltTopLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.86, 0.685, 0.155)
+mesh = SubResource("BoltMesh")
+
+[node name="BoltTopRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.86, 0.685, 0.155)
+mesh = SubResource("BoltMesh")
+
+[node name="BoltBottomLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.86, -0.685, 0.155)
+mesh = SubResource("BoltMesh")
+
+[node name="BoltBottomRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.86, -0.685, 0.155)
+mesh = SubResource("BoltMesh")

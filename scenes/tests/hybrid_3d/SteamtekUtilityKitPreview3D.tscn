@@ -1,0 +1,161 @@
+[gd_scene load_steps=18 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/utility/SteamtekPipeStraight3D.tscn" id="1_straight"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/utility/SteamtekPipeElbow90_3D.tscn" id="2_elbow"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/utility/SteamtekPipeValve3D.tscn" id="3_valve"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/utility/SteamtekWallUtilityCabinet3D.tscn" id="4_cabinet"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/utility/SteamtekPipeTJunction3D.tscn" id="5_tjunction"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/utility/SteamtekPipeCrossJunction3D.tscn" id="6_cross"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/utility/SteamtekWallVentUnit3D.tscn" id="7_vent"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/utility/SteamtekPressureTank3D.tscn" id="8_tank"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/utility/SteamtekAccessLadder2m3D.tscn" id="9_ladder"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/utility/SteamtekSteamOutlet3D.tscn" id="10_steamoutlet"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_RainPolishedStreet_Candidate_v01.tres" id="11_street"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_ApartmentFacade_Neutral_v01.tres" id="12_facade"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SkyMaterial"]
+sky_top_color = Color(0.012, 0.016, 0.024, 1)
+sky_horizon_color = Color(0.08, 0.09, 0.11, 1)
+ground_bottom_color = Color(0.008, 0.01, 0.014, 1)
+ground_horizon_color = Color(0.05, 0.055, 0.065, 1)
+
+[sub_resource type="Sky" id="Sky"]
+sky_material = SubResource("SkyMaterial")
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 2
+sky = SubResource("Sky")
+ambient_light_source = 3
+ambient_light_color = Color(0.56, 0.64, 0.78, 1)
+ambient_light_energy = 0.58
+tonemap_mode = 2
+
+[sub_resource type="BoxMesh" id="FloorMesh"]
+material = ExtResource("11_street")
+size = Vector3(11, 0.16, 8)
+
+[sub_resource type="BoxMesh" id="WallMesh"]
+material = ExtResource("12_facade")
+size = Vector3(11, 5, 0.2)
+
+[node name="SteamtekUtilityKitPreview3D" type="Node3D"]
+editor_description = "Isolated live-3D utility prop contract review. Neo-industrial identity blended with rugged masonry weight and dense exposed infrastructure."
+metadata/status = "prop_contract_review_only"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/facing_contract = "root_rotation_no_negative_scale"
+metadata/art_direction = "neo_industrial_core_plus_rugged_masonry_and_utility_density"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment")
+
+[node name="NeutralKey" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-48, -36, 0)
+light_color = Color(0.82, 0.88, 1, 1)
+light_energy = 1.35
+shadow_enabled = true
+
+[node name="NeutralFill" type="OmniLight3D" parent="."]
+position = Vector3(3.5, 3.4, 2.8)
+light_color = Color(0.9, 0.93, 1, 1)
+light_energy = 0.48
+omni_range = 11.0
+
+[node name="Camera3D" type="Camera3D" parent="."]
+position = Vector3(8.66, 6.77, 5)
+rotation_degrees = Vector3(-30, 60, 0)
+projection = 1
+size = 10.5
+current = true
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.08, 0)
+mesh = SubResource("FloorMesh")
+
+[node name="ReviewWall" type="MeshInstance3D" parent="."]
+position = Vector3(0, 2.5, -3.7)
+mesh = SubResource("WallMesh")
+
+[node name="PipeGrammar" type="Node3D" parent="."]
+
+[node name="PipeStraight" parent="PipeGrammar" instance=ExtResource("1_straight")]
+position = Vector3(-4.7, 2.3, -3.48)
+
+[node name="PipeElbow90" parent="PipeGrammar" instance=ExtResource("2_elbow")]
+position = Vector3(-3.9, 2.3, -3.48)
+
+[node name="PipeValve" parent="PipeGrammar" instance=ExtResource("3_valve")]
+position = Vector3(-3, 2.3, -3.48)
+
+[node name="PipeTJunction" parent="PipeGrammar" instance=ExtResource("5_tjunction")]
+position = Vector3(-2, 2.3, -3.48)
+
+[node name="PipeCrossJunction" parent="PipeGrammar" instance=ExtResource("6_cross")]
+position = Vector3(-0.9, 2.3, -3.48)
+
+[node name="WallFixtures" type="Node3D" parent="."]
+
+[node name="WallVentUnit" parent="WallFixtures" instance=ExtResource("7_vent")]
+position = Vector3(0.6, 2.25, -3.6)
+
+[node name="WallUtilityCabinet" parent="WallFixtures" instance=ExtResource("4_cabinet")]
+position = Vector3(2.05, 2.25, -3.6)
+
+[node name="AccessLadder" parent="WallFixtures" instance=ExtResource("9_ladder")]
+position = Vector3(3.45, 1.15, -3.6)
+
+[node name="Equipment" type="Node3D" parent="."]
+
+[node name="PressureTank" parent="Equipment" instance=ExtResource("8_tank")]
+position = Vector3(2.4, 0, -1.25)
+
+[node name="SteamOutlet" parent="Equipment" instance=ExtResource("10_steamoutlet")]
+position = Vector3(-0.3, 0, -1.0)
+
+[node name="RotatedTank" parent="Equipment" instance=ExtResource("8_tank")]
+position = Vector3(-2.5, 0, -0.7)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="PipeLabel" type="Label3D" parent="."]
+position = Vector3(-2.8, 3.55, -3.25)
+text = "MODULAR PIPE GRAMMAR\n0.5 m sockets"
+font_size = 38
+outline_size = 8
+pixel_size = 0.005
+billboard = 1
+
+[node name="FixtureLabel" type="Label3D" parent="."]
+position = Vector3(2.05, 3.75, -3.25)
+text = "WALL FIXTURES + 2 m LADDER"
+font_size = 38
+outline_size = 8
+pixel_size = 0.005
+billboard = 1
+
+[node name="EquipmentLabel" type="Label3D" parent="."]
+position = Vector3(0.8, 2.35, -1.0)
+text = "PRESSURE TANK + STEAM OUTLET"
+font_size = 38
+outline_size = 8
+pixel_size = 0.005
+billboard = 1
+
+[node name="RotationLabel" type="Label3D" parent="."]
+position = Vector3(-2.5, 2.15, -0.7)
+text = "90 DEGREE ROOT ROTATION"
+font_size = 32
+outline_size = 8
+pixel_size = 0.005
+billboard = 1
+
+[node name="ReviewUI" type="CanvasLayer" parent="."]
+
+[node name="Title" type="Label" parent="ReviewUI"]
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 1250.0
+offset_bottom = 115.0
+text = "STEAMTEK LIVE-3D UTILITY KIT v3 - CONTRACT REVIEW\nNeo-industrial core + rugged masonry weight + exposed utility density\nOne Godot unit = one meter  |  Rotate roots; never negative-scale mirror."
+theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
+theme_override_colors/font_outline_color = Color(0.005, 0.008, 0.012, 0.95)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 19

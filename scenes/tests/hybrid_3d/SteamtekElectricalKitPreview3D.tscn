@@ -1,0 +1,151 @@
+[gd_scene load_steps=16 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/electrical/SteamtekWallConduitStraight1m3D.tscn" id="1_conduit"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/electrical/SteamtekWallCableTray1m3D.tscn" id="2_tray"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/electrical/SteamtekWallBreakerBox3D.tscn" id="3_breaker"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/electrical/SteamtekWallTransformer3D.tscn" id="4_transformer"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/electrical/SteamtekWallPowerMeter3D.tscn" id="5_meter"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/electrical/SteamtekWallFuseBox3D.tscn" id="6_fuse"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/electrical/SteamtekWallJunctionBox3D.tscn" id="7_junction"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/electrical/SteamtekWallPowerRelay3D.tscn" id="8_relay"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_RainPolishedStreet_Candidate_v01.tres" id="9_street"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_ApartmentFacade_Neutral_v01.tres" id="10_facade"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SkyMaterial"]
+sky_top_color = Color(0.012, 0.016, 0.024, 1)
+sky_horizon_color = Color(0.08, 0.09, 0.11, 1)
+ground_bottom_color = Color(0.008, 0.01, 0.014, 1)
+ground_horizon_color = Color(0.05, 0.055, 0.065, 1)
+
+[sub_resource type="Sky" id="Sky"]
+sky_material = SubResource("SkyMaterial")
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 2
+sky = SubResource("Sky")
+ambient_light_source = 3
+ambient_light_color = Color(0.56, 0.64, 0.78, 1)
+ambient_light_energy = 0.58
+tonemap_mode = 2
+
+[sub_resource type="BoxMesh" id="FloorMesh"]
+material = ExtResource("9_street")
+size = Vector3(12, 0.16, 8)
+
+[sub_resource type="BoxMesh" id="WallMesh"]
+material = ExtResource("10_facade")
+size = Vector3(12, 5.5, 0.2)
+
+[node name="SteamtekElectricalKitPreview3D" type="Node3D"]
+editor_description = "Focused live-3D electrical prop contract review. All primitive visuals are replaceable; roots, local axes, and sockets are authoritative."
+metadata/status = "prop_contract_review_only"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/facing_contract = "root_rotation_no_negative_scale"
+metadata/art_direction = "neo_industrial_core_plus_rugged_masonry_and_utility_density"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment")
+
+[node name="NeutralKey" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-48, -36, 0)
+light_color = Color(0.82, 0.88, 1, 1)
+light_energy = 1.35
+shadow_enabled = true
+
+[node name="NeutralFill" type="OmniLight3D" parent="."]
+position = Vector3(3.5, 3.4, 2.8)
+light_color = Color(0.9, 0.93, 1, 1)
+light_energy = 0.48
+omni_range = 12.0
+
+[node name="Camera3D" type="Camera3D" parent="."]
+position = Vector3(8.66, 6.77, 5)
+rotation_degrees = Vector3(-30, 60, 0)
+projection = 1
+size = 11.5
+current = true
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.08, 0)
+mesh = SubResource("FloorMesh")
+
+[node name="ReviewWall" type="MeshInstance3D" parent="."]
+position = Vector3(0, 2.75, -3.7)
+mesh = SubResource("WallMesh")
+
+[node name="RoutingRow" type="Node3D" parent="."]
+
+[node name="ConduitVertical" parent="RoutingRow" instance=ExtResource("1_conduit")]
+position = Vector3(-5, 3.6, -3.58)
+
+[node name="ConduitHorizontal" parent="RoutingRow" instance=ExtResource("1_conduit")]
+position = Vector3(-4.15, 4.25, -3.58)
+rotation_degrees = Vector3(0, 0, 90)
+
+[node name="CableTrayHorizontal" parent="RoutingRow" instance=ExtResource("2_tray")]
+position = Vector3(-2.65, 4.25, -3.58)
+
+[node name="CableTrayVertical" parent="RoutingRow" instance=ExtResource("2_tray")]
+position = Vector3(-1.35, 3.6, -3.58)
+rotation_degrees = Vector3(0, 0, 90)
+
+[node name="JunctionBox" parent="RoutingRow" instance=ExtResource("7_junction")]
+position = Vector3(0, 4.05, -3.6)
+
+[node name="EquipmentRow" type="Node3D" parent="."]
+
+[node name="BreakerBox" parent="EquipmentRow" instance=ExtResource("3_breaker")]
+position = Vector3(-4.25, 2.1, -3.6)
+
+[node name="WallTransformer" parent="EquipmentRow" instance=ExtResource("4_transformer")]
+position = Vector3(-2.55, 2.15, -3.6)
+
+[node name="PowerMeter" parent="EquipmentRow" instance=ExtResource("5_meter")]
+position = Vector3(-0.75, 2.15, -3.6)
+
+[node name="FuseBox" parent="EquipmentRow" instance=ExtResource("6_fuse")]
+position = Vector3(0.65, 2.15, -3.6)
+
+[node name="PowerRelay" parent="EquipmentRow" instance=ExtResource("8_relay")]
+position = Vector3(2.25, 2.15, -3.6)
+
+[node name="RotatedRelay" parent="EquipmentRow" instance=ExtResource("8_relay")]
+position = Vector3(4.25, 2.15, -3.6)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="RoutingLabel" type="Label3D" parent="."]
+position = Vector3(-2.5, 5, -3.35)
+text = "ROUTING: CONDUIT + TRAY + FOUR-WAY JUNCTION"
+font_size = 38
+outline_size = 8
+pixel_size = 0.005
+billboard = 1
+
+[node name="EquipmentLabel" type="Label3D" parent="."]
+position = Vector3(-0.2, 3.25, -3.35)
+text = "BREAKER  |  TRANSFORMER  |  METER  |  FUSE  |  RELAY"
+font_size = 38
+outline_size = 8
+pixel_size = 0.005
+billboard = 1
+
+[node name="RotationLabel" type="Label3D" parent="."]
+position = Vector3(4.25, 3.25, -3.35)
+text = "90 DEGREE YAW"
+font_size = 30
+outline_size = 8
+pixel_size = 0.005
+billboard = 1
+
+[node name="ReviewUI" type="CanvasLayer" parent="."]
+
+[node name="Title" type="Label" parent="ReviewUI"]
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 1350.0
+offset_bottom = 115.0
+text = "STEAMTEK LIVE-3D ELECTRICAL KIT v2 - CONTRACT REVIEW\nNeo-industrial core + rugged masonry weight + exposed utility density\nOne Godot unit = one meter  |  Rotate roots; never negative-scale mirror."
+theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
+theme_override_colors/font_outline_color = Color(0.005, 0.008, 0.012, 0.95)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 19

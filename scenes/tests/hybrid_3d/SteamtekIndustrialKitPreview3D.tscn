@@ -1,0 +1,107 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/utility/SteamtekPipeSteamValve3D.tscn" id="1_steamvalve"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/industrial/SteamtekGenerator3D.tscn" id="2_generator"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/industrial/SteamtekRooftopFan3D.tscn" id="3_fan"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/industrial/SteamtekWaterTank3D.tscn" id="4_tank"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/industrial/SteamtekBoiler3D.tscn" id="5_boiler"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_RainPolishedStreet_Candidate_v01.tres" id="6_street"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_ApartmentFacade_Neutral_v01.tres" id="7_facade"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SkyMaterial"]
+sky_top_color = Color(0.012, 0.016, 0.024, 1)
+sky_horizon_color = Color(0.08, 0.09, 0.11, 1)
+ground_bottom_color = Color(0.008, 0.01, 0.014, 1)
+ground_horizon_color = Color(0.05, 0.055, 0.065, 1)
+
+[sub_resource type="Sky" id="Sky"]
+sky_material = SubResource("SkyMaterial")
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 2
+sky = SubResource("Sky")
+ambient_light_source = 3
+ambient_light_color = Color(0.56, 0.64, 0.78, 1)
+ambient_light_energy = 0.58
+tonemap_mode = 2
+
+[sub_resource type="BoxMesh" id="FloorMesh"]
+material = ExtResource("6_street")
+size = Vector3(13, 0.16, 9)
+
+[sub_resource type="BoxMesh" id="WallMesh"]
+material = ExtResource("7_facade")
+size = Vector3(13, 4.5, 0.2)
+
+[node name="SteamtekIndustrialKitPreview3D" type="Node3D"]
+editor_description = "Focused live-3D industrial equipment contract review. Primitive visuals are replaceable; roots, dimensions, and sockets are authoritative."
+metadata/status = "prop_contract_review_only"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/facing_contract = "root_rotation_no_negative_scale"
+metadata/art_direction = "neo_industrial_core_plus_rugged_masonry_and_dense_utilities"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment")
+
+[node name="NeutralKey" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-48, -36, 0)
+light_color = Color(0.82, 0.88, 1, 1)
+light_energy = 1.35
+shadow_enabled = true
+
+[node name="NeutralFill" type="OmniLight3D" parent="."]
+position = Vector3(3.5, 3.4, 2.8)
+light_color = Color(0.9, 0.93, 1, 1)
+light_energy = 0.48
+omni_range = 13.0
+
+[node name="Camera3D" type="Camera3D" parent="."]
+position = Vector3(8.66, 6.77, 5)
+rotation_degrees = Vector3(-30, 60, 0)
+projection = 1
+size = 12.5
+current = true
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.08, 0)
+mesh = SubResource("FloorMesh")
+
+[node name="ReviewWall" type="MeshInstance3D" parent="."]
+position = Vector3(0, 2.25, -4.2)
+mesh = SubResource("WallMesh")
+
+[node name="SteamValve" parent="." instance=ExtResource("1_steamvalve")]
+position = Vector3(-5, 1.2, -4.05)
+
+[node name="Generator" parent="." instance=ExtResource("2_generator")]
+position = Vector3(-3.4, 0, -2.7)
+
+[node name="RooftopFan" parent="." instance=ExtResource("3_fan")]
+position = Vector3(-0.8, 0, -2.5)
+
+[node name="WaterTank" parent="." instance=ExtResource("4_tank")]
+position = Vector3(1.45, 0, -2.65)
+
+[node name="Boiler" parent="." instance=ExtResource("5_boiler")]
+position = Vector3(4.15, 0, -2.6)
+
+[node name="IndustrialLabel" type="Label3D" parent="."]
+position = Vector3(0, 3.4, -3.5)
+text = "STEAM VALVE  |  GENERATOR  |  ROOF FAN  |  WATER TANK  |  BOILER"
+font_size = 38
+outline_size = 8
+pixel_size = 0.005
+billboard = 1
+
+[node name="ReviewUI" type="CanvasLayer" parent="."]
+
+[node name="Title" type="Label" parent="ReviewUI"]
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 1400.0
+offset_bottom = 115.0
+text = "STEAMTEK LIVE-3D INDUSTRIAL KIT v1 - CONTRACT REVIEW\nNeo-industrial core + rugged material weight + exposed utility density\nOne Godot unit = one meter  |  Rotate roots; never negative-scale mirror."
+theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
+theme_override_colors/font_outline_color = Color(0.005, 0.008, 0.012, 0.95)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 19

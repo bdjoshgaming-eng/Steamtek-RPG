@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="1_metal"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_AgedCopper_Base_v01.tres" id="2_copper"]
+[sub_resource type="BoxMesh" id="ColumnMesh"]
+material = ExtResource("1_metal")
+size = Vector3(0.24, 3.2, 0.24)
+[sub_resource type="BoxMesh" id="BandMesh"]
+material = ExtResource("2_copper")
+size = Vector3(0.29, 0.08, 0.29)
+
+[node name="SteamtekInteriorCornerColumn3D" type="Node3D" groups=["steamtek_live3d_modular"]]
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "apartment_interior_corner"
+metadata/module_dimensions_m = Vector3(0.24, 3.2, 0.24)
+
+[node name="Column" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.6, 0)
+mesh = SubResource("ColumnMesh")
+[node name="BandLow" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.55, 0)
+mesh = SubResource("BandMesh")
+[node name="BandHigh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 2.55, 0)
+mesh = SubResource("BandMesh")
+[node name="Sockets" type="Node3D" parent="."]
+[node name="WallX" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0.12, 0, 0)
+metadata/socket_role = "interior_wall_chain"
+[node name="WallZ" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, 0.12)
+rotation_degrees = Vector3(0, 90, 0)
+metadata/socket_role = "interior_wall_chain"
+

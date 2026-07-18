@@ -1,0 +1,45 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_WetConcrete_Neutral_v01.tres" id="1_concrete"]
+
+[sub_resource type="BoxMesh" id="CurbArmMesh"]
+size = Vector3(1.2, 0.18, 0.2)
+
+[sub_resource type="BoxMesh" id="CurbCoreMesh"]
+size = Vector3(0.2, 0.18, 0.2)
+
+[node name="SteamtekCurbCorner90_3D" type="Node3D" groups=["steamtek_live3d_modular"]]
+editor_description = "Authored 90-degree curb corner with local +X and +Z arms. Rotate the root for other corner orientations."
+metadata/module_system = "live3d_meter_v1"
+metadata/module_type = "street_curb_corner_90"
+metadata/status = "blockout_geometry_production_snap_contract"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/root_contract = "Root is the curb centerline turn on road plane; arms extend local +X and +Z"
+metadata/handedness_contract = "Authored right-angle corner; rotate root only, never negative-scale mirror"
+metadata/rotation_contract = "Yaw only: 0, 90, 180, or 270 degrees"
+
+[node name="CornerCore" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.09, 0)
+mesh = SubResource("CurbCoreMesh")
+material_override = ExtResource("1_concrete")
+
+[node name="ArmPosX" type="MeshInstance3D" parent="."]
+position = Vector3(0.6, 0.09, 0)
+mesh = SubResource("CurbArmMesh")
+material_override = ExtResource("1_concrete")
+
+[node name="ArmPosZ" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.09, 0.6)
+rotation_degrees = Vector3(0, 90, 0)
+mesh = SubResource("CurbArmMesh")
+material_override = ExtResource("1_concrete")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="CurbPosX" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(1.2, 0, 0)
+metadata/socket_role = "street_curb_chain"
+
+[node name="CurbPosZ" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, 1.2)
+metadata/socket_role = "street_curb_chain"

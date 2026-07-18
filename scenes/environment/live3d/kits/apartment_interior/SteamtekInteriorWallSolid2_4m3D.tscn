@@ -1,0 +1,30 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/SteamtekInteriorWallSolid1_2m3D.tscn" id="1_wall"]
+
+[node name="SteamtekInteriorWallSolid2_4m3D" type="Node3D" groups=["steamtek_live3d_modular"]]
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "apartment_interior_wall_macro"
+metadata/module_dimensions_m = Vector3(2.4, 3.2, 0.16)
+metadata/grid_step_m = 2.4
+metadata/convenience_macro = true
+
+[node name="WallLeft" parent="." instance=ExtResource("1_wall")]
+position = Vector3(-0.6, 0, 0)
+[node name="WallRight" parent="." instance=ExtResource("1_wall")]
+position = Vector3(0.6, 0, 0)
+
+[node name="Sockets" type="Node3D" parent="."]
+[node name="WallLeft" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-1.2, 0, 0)
+metadata/socket_role = "interior_wall_chain"
+[node name="WallRight" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(1.2, 0, 0)
+metadata/socket_role = "interior_wall_chain"
+[node name="WallPropLeft" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-0.6, 1.65, 0.12)
+metadata/socket_role = "wall_prop_surface"
+[node name="WallPropRight" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0.6, 1.65, 0.12)
+metadata/socket_role = "wall_prop_surface"
+

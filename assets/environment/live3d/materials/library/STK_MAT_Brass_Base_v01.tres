@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "STK Brass Base v01"
+albedo_color = Color(0.31, 0.205, 0.065, 1)
+metallic = 0.8
+roughness = 0.42

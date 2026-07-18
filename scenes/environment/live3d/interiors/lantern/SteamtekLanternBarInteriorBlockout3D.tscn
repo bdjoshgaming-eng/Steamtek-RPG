@@ -1,0 +1,260 @@
+[gd_scene load_steps=26 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/neocyber/SteamtekDataTerminal3D.tscn" id="1_terminal"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/street/SteamtekStreetBench3D.tscn" id="2_bench"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/utility/SteamtekPressureTank3D.tscn" id="3_tank"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/utility/SteamtekWallVentUnit3D.tscn" id="4_vent"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/lighting/SteamtekAmberDoorLight3D.tscn" id="5_door_light"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/neocyber/SteamtekNeonSignPanel3D.tscn" id="6_sign"]
+
+[sub_resource type="StandardMaterial3D" id="FloorMaterial"]
+albedo_color = Color(0.055, 0.06, 0.065, 1)
+metallic = 0.42
+roughness = 0.48
+
+[sub_resource type="StandardMaterial3D" id="WallMaterial"]
+albedo_color = Color(0.045, 0.052, 0.062, 1)
+metallic = 0.62
+roughness = 0.58
+
+[sub_resource type="StandardMaterial3D" id="BarMaterial"]
+albedo_color = Color(0.085, 0.07, 0.055, 1)
+metallic = 0.48
+roughness = 0.52
+
+[sub_resource type="StandardMaterial3D" id="TableMaterial"]
+albedo_color = Color(0.13, 0.075, 0.035, 1)
+metallic = 0.22
+roughness = 0.68
+
+[sub_resource type="StandardMaterial3D" id="AmberMaterial"]
+shading_mode = 0
+albedo_color = Color(0.72, 0.18, 0.025, 1)
+emission_enabled = true
+emission = Color(1, 0.24, 0.035, 1)
+emission_energy_multiplier = 2.2
+
+[sub_resource type="BoxMesh" id="FloorMesh"]
+material = SubResource("FloorMaterial")
+size = Vector3(14.4, 0.16, 9.6)
+
+[sub_resource type="BoxShape3D" id="FloorShape"]
+size = Vector3(14.4, 0.16, 9.6)
+
+[sub_resource type="BoxMesh" id="SouthWallMesh"]
+material = SubResource("WallMaterial")
+size = Vector3(14.4, 3.2, 0.25)
+
+[sub_resource type="BoxShape3D" id="SouthWallShape"]
+size = Vector3(14.4, 3.2, 0.25)
+
+[sub_resource type="BoxMesh" id="WestWallLongMesh"]
+material = SubResource("WallMaterial")
+size = Vector3(0.25, 3.2, 5.6)
+
+[sub_resource type="BoxShape3D" id="WestWallLongShape"]
+size = Vector3(0.25, 3.2, 5.6)
+
+[sub_resource type="BoxMesh" id="WestWallShortMesh"]
+material = SubResource("WallMaterial")
+size = Vector3(0.25, 3.2, 2.4)
+
+[sub_resource type="BoxShape3D" id="WestWallShortShape"]
+size = Vector3(0.25, 3.2, 2.4)
+
+[sub_resource type="BoxMesh" id="CounterMesh"]
+material = SubResource("BarMaterial")
+size = Vector3(6.2, 1.08, 0.9)
+
+[sub_resource type="BoxShape3D" id="CounterShape"]
+size = Vector3(6.2, 1.08, 0.9)
+
+[sub_resource type="BoxMesh" id="BackBarMesh"]
+material = SubResource("WallMaterial")
+size = Vector3(6.4, 2.3, 0.42)
+
+[sub_resource type="BoxMesh" id="ShelfMesh"]
+material = SubResource("BarMaterial")
+size = Vector3(5.8, 0.1, 0.42)
+
+[sub_resource type="BoxMesh" id="TableTopMesh"]
+material = SubResource("TableMaterial")
+size = Vector3(1.25, 0.1, 1.0)
+
+[sub_resource type="BoxMesh" id="TableLegMesh"]
+material = SubResource("BarMaterial")
+size = Vector3(0.14, 0.72, 0.14)
+
+[sub_resource type="CylinderMesh" id="BottleMesh"]
+material = SubResource("AmberMaterial")
+top_radius = 0.055
+bottom_radius = 0.07
+height = 0.32
+radial_segments = 10
+
+[node name="SteamtekLanternBarInteriorBlockout3D" type="Node3D" groups=["steamtek_live3d_interior"]]
+editor_description = "Sparse Neo-Industrial bar interior for The Lantern. West entrance, readable central aisle, practical seating, service-heavy back bar, and east contact position. Temporary contract geometry only."
+metadata/status = "lantern_bar_spatial_blockout_v01"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/room_size_m = Vector2(14.4, 9.6)
+metadata/travel_axis = "+X_west_to_east"
+metadata/art_direction = "modern neo_industrial worker bar; blackened steel, aged surfaces, warm service lighting, restrained cyan and magenta sources; no Victorian ornament"
+metadata/population_contract = "sparse exterior; small meaningful NPC concentration inside The Lantern"
+
+[node name="Architecture" type="Node3D" parent="."]
+
+[node name="Floor" type="StaticBody3D" parent="Architecture"]
+position = Vector3(0, -0.08, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="Architecture/Floor"]
+mesh = SubResource("FloorMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Architecture/Floor"]
+shape = SubResource("FloorShape")
+
+[node name="SouthWall" type="StaticBody3D" parent="Architecture"]
+position = Vector3(0, 1.6, -4.8)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="Architecture/SouthWall"]
+mesh = SubResource("SouthWallMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Architecture/SouthWall"]
+shape = SubResource("SouthWallShape")
+
+[node name="WestWallSouth" type="StaticBody3D" parent="Architecture"]
+position = Vector3(-7.2, 1.6, -2)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="Architecture/WestWallSouth"]
+mesh = SubResource("WestWallLongMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Architecture/WestWallSouth"]
+shape = SubResource("WestWallLongShape")
+
+[node name="WestWallNorth" type="StaticBody3D" parent="Architecture"]
+position = Vector3(-7.2, 1.6, 3.6)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="Architecture/WestWallNorth"]
+mesh = SubResource("WestWallShortMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Architecture/WestWallNorth"]
+shape = SubResource("WestWallShortShape")
+
+[node name="BarZone" type="Node3D" parent="."]
+
+[node name="Counter" type="StaticBody3D" parent="BarZone"]
+position = Vector3(2.8, 0.54, -2.9)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="BarZone/Counter"]
+mesh = SubResource("CounterMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="BarZone/Counter"]
+shape = SubResource("CounterShape")
+
+[node name="BackBar" type="MeshInstance3D" parent="BarZone"]
+position = Vector3(2.8, 1.2, -4.52)
+mesh = SubResource("BackBarMesh")
+
+[node name="ShelfLower" type="MeshInstance3D" parent="BarZone"]
+position = Vector3(2.8, 0.95, -4.24)
+mesh = SubResource("ShelfMesh")
+
+[node name="ShelfUpper" type="MeshInstance3D" parent="BarZone"]
+position = Vector3(2.8, 1.65, -4.24)
+mesh = SubResource("ShelfMesh")
+
+[node name="BottleA" type="MeshInstance3D" parent="BarZone"]
+position = Vector3(1.3, 1.16, -4.18)
+mesh = SubResource("BottleMesh")
+
+[node name="BottleB" type="MeshInstance3D" parent="BarZone"]
+position = Vector3(2.15, 1.16, -4.18)
+mesh = SubResource("BottleMesh")
+
+[node name="BottleC" type="MeshInstance3D" parent="BarZone"]
+position = Vector3(3.4, 1.16, -4.18)
+mesh = SubResource("BottleMesh")
+
+[node name="BottleD" type="MeshInstance3D" parent="BarZone"]
+position = Vector3(4.65, 1.16, -4.18)
+mesh = SubResource("BottleMesh")
+
+[node name="BarTerminal" parent="BarZone" instance=ExtResource("1_terminal")]
+position = Vector3(4.7, 1.08, -2.92)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="ServiceTank" parent="BarZone" instance=ExtResource("3_tank")]
+position = Vector3(6.15, 0.08, -4.05)
+
+[node name="SouthWallVent" parent="BarZone" instance=ExtResource("4_vent")]
+position = Vector3(5.9, 2.15, -4.62)
+
+[node name="SeatingZone" type="Node3D" parent="."]
+
+[node name="BoothWest" parent="SeatingZone" instance=ExtResource("2_bench")]
+position = Vector3(-3.9, 0.0, -3.85)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="BoothNorth" parent="SeatingZone" instance=ExtResource("2_bench")]
+position = Vector3(-2.8, 0.0, 3.65)
+
+[node name="TableWestTop" type="MeshInstance3D" parent="SeatingZone"]
+position = Vector3(-3.9, 0.78, -2.55)
+mesh = SubResource("TableTopMesh")
+
+[node name="TableWestLeg" type="MeshInstance3D" parent="SeatingZone"]
+position = Vector3(-3.9, 0.38, -2.55)
+mesh = SubResource("TableLegMesh")
+
+[node name="TableNorthTop" type="MeshInstance3D" parent="SeatingZone"]
+position = Vector3(-2.8, 0.78, 2.35)
+mesh = SubResource("TableTopMesh")
+
+[node name="TableNorthLeg" type="MeshInstance3D" parent="SeatingZone"]
+position = Vector3(-2.8, 0.38, 2.35)
+mesh = SubResource("TableLegMesh")
+
+[node name="LightingAndIdentity" type="Node3D" parent="."]
+
+[node name="EntranceLight" parent="LightingAndIdentity" instance=ExtResource("5_door_light")]
+position = Vector3(-7.05, 2.25, 1.6)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="LanternSign" parent="LightingAndIdentity" instance=ExtResource("6_sign")]
+position = Vector3(0.2, 2.35, -4.58)
+
+[node name="WarmBarPool" type="OmniLight3D" parent="LightingAndIdentity"]
+position = Vector3(2.4, 2.45, -1.8)
+light_color = Color(1, 0.36, 0.09, 1)
+light_energy = 2.4
+omni_range = 8.2
+shadow_enabled = true
+
+[node name="CoolEntryFill" type="OmniLight3D" parent="LightingAndIdentity"]
+position = Vector3(-4.4, 2.35, 1.5)
+light_color = Color(0.16, 0.62, 0.9, 1)
+light_energy = 0.95
+omni_range = 6.0
+
+[node name="GameplayMarkers" type="Node3D" parent="."]
+
+[node name="LanternEntryFromSurface" type="Marker3D" parent="GameplayMarkers" groups=["steamtek_gameplay_point"]]
+position = Vector3(-6.35, 0.12, 1.6)
+metadata/marker_role = "lantern_entry_from_surface"
+
+[node name="LanternContactPoint" type="Marker3D" parent="GameplayMarkers" groups=["steamtek_gameplay_point", "steamtek_quest_point", "steamtek_interactable_point"]]
+position = Vector3(4.15, 0.18, -1.8)
+metadata/marker_role = "lantern_contact_quest_handoff"
+
+[node name="LanternExitToSurface" type="Marker3D" parent="GameplayMarkers" groups=["steamtek_gameplay_point"]]
+position = Vector3(-6.65, 0.12, 1.6)
+metadata/marker_role = "lantern_exit_to_surface"

@@ -1,0 +1,76 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="1_gunmetal"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_RoofSteel_Base_v01.tres" id="2_roofsteel"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_AgedCopper_Base_v01.tres" id="3_copper"]
+
+[sub_resource type="SphereMesh" id="BagLargeMesh"]
+material = ExtResource("1_gunmetal")
+radius = 0.2
+height = 0.4
+radial_segments = 20
+rings = 12
+
+[sub_resource type="SphereMesh" id="BagSmallMesh"]
+material = ExtResource("1_gunmetal")
+radius = 0.14
+height = 0.28
+radial_segments = 20
+rings = 12
+
+[sub_resource type="BoxMesh" id="CrateMesh"]
+material = ExtResource("2_roofsteel")
+size = Vector3(0.42, 0.3, 0.32)
+
+[sub_resource type="CylinderMesh" id="CanMesh"]
+material = ExtResource("3_copper")
+top_radius = 0.09
+bottom_radius = 0.09
+height = 0.24
+radial_segments = 18
+
+[sub_resource type="BoxMesh" id="ScrapMesh"]
+material = ExtResource("3_copper")
+size = Vector3(0.34, 0.035, 0.12)
+
+[node name="SteamtekTrashClusterSmall3D" type="Node3D"]
+editor_description = "Small reusable street-trash cluster blockout. Root origin is the ground contact point at the cluster center; rotate the root for variation without mirroring."
+metadata/status = "geometry_contract_blockout"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/nominal_size_m = Vector3(0.9, 0.5, 0.65)
+metadata/front_axis = "+Z"
+metadata/facing_contract = "yaw_free_no_negative_scale"
+
+[node name="Visual_Blockout" type="Node3D" parent="."]
+
+[node name="TrashBagLarge" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(-0.22, 0.2, 0.08)
+mesh = SubResource("BagLargeMesh")
+
+[node name="TrashBagSmall" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0.08, 0.14, 0.18)
+mesh = SubResource("BagSmallMesh")
+
+[node name="DiscardedCrate" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0.28, 0.15, -0.12)
+rotation_degrees = Vector3(0, 18, 0)
+mesh = SubResource("CrateMesh")
+
+[node name="DiscardedCan" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(-0.02, 0.1, -0.27)
+rotation_degrees = Vector3(0, 0, 82)
+mesh = SubResource("CanMesh")
+
+[node name="MetalScrap" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0.06, 0.04, 0.34)
+rotation_degrees = Vector3(0, -22, 5)
+mesh = SubResource("ScrapMesh")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="GroundMount" type="Marker3D" parent="Sockets"]
+metadata/socket_role = "ground_mount"
+
+[node name="ScatterAnchor" type="Marker3D" parent="Sockets"]
+position = Vector3(0, 0.2, 0)
+metadata/socket_role = "scatter_anchor"

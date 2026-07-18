@@ -1,0 +1,628 @@
+[gd_scene load_steps=22 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/buildings/apartments/SteamtekApartmentCAssembly3D.tscn" id="1_apartment"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekRoadLaneMarkedStraight4_8x2_4m3D.tscn" id="2_lane"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekRoadCrosswalk4_8x2_4m3D.tscn" id="3_crosswalk"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekAlleyTile2_4m3D.tscn" id="4_alley"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekAlleyRoadApron2_4m3D.tscn" id="5_apron"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekAlleyDrivewayCut2_4m3D.tscn" id="6_driveway"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekSidewalkStraight2_4m3D.tscn" id="7_sidewalk"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/lighting/SteamtekStreetLamp3D.tscn" id="8_lamp"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/utility/SteamtekSteamOutlet3D.tscn" id="9_steam"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/neocyber/SteamtekDataTerminal3D.tscn" id="10_terminal"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekFenceGate2_4m3D.tscn" id="11_gate"]
+
+[sub_resource type="StandardMaterial3D" id="GunmetalMaterial"]
+albedo_color = Color(0.055, 0.075, 0.105, 1)
+metallic = 0.72
+roughness = 0.54
+
+[sub_resource type="StandardMaterial3D" id="ClosedShopMaterial"]
+albedo_color = Color(0.075, 0.065, 0.085, 1)
+metallic = 0.62
+roughness = 0.64
+
+[sub_resource type="StandardMaterial3D" id="CourtyardMaterial"]
+albedo_color = Color(0.085, 0.105, 0.13, 1)
+metallic = 0.28
+roughness = 0.34
+
+[sub_resource type="StandardMaterial3D" id="CyanEmissive"]
+albedo_color = Color(0.03, 0.3, 0.4, 1)
+metallic = 0.35
+roughness = 0.3
+emission_enabled = true
+emission = Color(0.04, 0.7, 0.9, 1)
+emission_energy_multiplier = 2.2
+
+[sub_resource type="StandardMaterial3D" id="AmberEmissive"]
+albedo_color = Color(0.42, 0.16, 0.03, 1)
+metallic = 0.25
+roughness = 0.34
+emission_enabled = true
+emission = Color(1, 0.34, 0.055, 1)
+emission_energy_multiplier = 2.8
+
+[sub_resource type="StandardMaterial3D" id="MagentaEmissive"]
+albedo_color = Color(0.28, 0.015, 0.16, 1)
+metallic = 0.25
+roughness = 0.35
+emission_enabled = true
+emission = Color(0.82, 0.025, 0.47, 1)
+emission_energy_multiplier = 1.8
+
+[sub_resource type="BoxMesh" id="GarageMesh"]
+material = SubResource("GunmetalMaterial")
+size = Vector3(7.2, 3.2, 4.8)
+
+[sub_resource type="BoxMesh" id="LanternMesh"]
+material = SubResource("GunmetalMaterial")
+size = Vector3(7.2, 4.8, 4.8)
+
+[sub_resource type="BoxMesh" id="ShopMesh"]
+material = SubResource("ClosedShopMaterial")
+size = Vector3(7.2, 3.2, 4.8)
+
+[sub_resource type="BoxMesh" id="LiftMesh"]
+material = SubResource("GunmetalMaterial")
+size = Vector3(7.2, 4, 4.8)
+
+[sub_resource type="BoxMesh" id="CourtyardMesh"]
+material = SubResource("CourtyardMaterial")
+size = Vector3(7.2, 0.12, 4.8)
+
+[sub_resource type="BoxMesh" id="SignMesh"]
+size = Vector3(3.6, 0.3, 0.12)
+
+[node name="SteamtekSurfaceDistrict01Assembly3D" type="Node3D" groups=["steamtek_live3d_district"]]
+editor_description = "Canonical sparse opening route for Surface District 01: leave the Player Apartment after finding the note, traverse Rain Alley and Main Street to The Lantern, then unlock the Side Street/Basement route to the Maintenance Lift and underground city. Temporary contract geometry only."
+metadata/status = "surface_district_blueprint_v1_blockout"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/module_system = "live3d_meter_v1"
+metadata/snap_grid_m = 2.4
+metadata/route_topology = "player_apartment_to_rain_alley_to_split_to_main_street_to_lantern_then_side_street_to_basement_to_maintenance_lift"
+metadata/opening_quest_flow = "wake_in_apartment_find_note_reach_lantern_receive_underground_quest_reach_maintenance_lift"
+metadata/tutorial_pillars = "quests_movement_combat_crafting_exploration_interactables"
+metadata/population_contract = "sparse_surface; meaningful NPC concentration belongs inside The Lantern; exterior gameplay relies on spaces, encounters, salvage, and interactables rather than crowds"
+metadata/north_axis = "+Z"
+metadata/opening_travel_axis = "+X_west_to_east"
+metadata/building_rotation_contract = "Yaw only: 0, 90, 180, or 270 degrees; never negative-scale mirror"
+metadata/art_status = "temporary_geometry_and_materials_final_art_replacement_ready"
+
+[node name="NorthApartmentAnchor" type="Node3D" parent="."]
+rotation_degrees = Vector3(0, 270, 0)
+
+[node name="PlayerApartmentBuilding" parent="NorthApartmentAnchor" instance=ExtResource("1_apartment")]
+position = Vector3(0, 0.18, 16.8)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="TutorialAndSplit" type="Node3D" parent="."]
+rotation_degrees = Vector3(0, 270, 0)
+
+[node name="RainAlley01" parent="TutorialAndSplit" instance=ExtResource("4_alley")]
+position = Vector3(0, 0, 12)
+
+[node name="RainAlley02" parent="TutorialAndSplit" instance=ExtResource("4_alley")]
+position = Vector3(0, 0, 9.6)
+
+[node name="RainAlley03" parent="TutorialAndSplit" instance=ExtResource("4_alley")]
+position = Vector3(0, 0, 7.2)
+
+[node name="CourtyardFloor" type="MeshInstance3D" parent="TutorialAndSplit"]
+position = Vector3(-3.6, 0.06, 6)
+mesh = SubResource("CourtyardMesh")
+
+[node name="CourtyardApproach" parent="TutorialAndSplit" instance=ExtResource("4_alley")]
+position = Vector3(-3.6, 0, 3.6)
+
+[node name="CourtyardApron" parent="TutorialAndSplit" instance=ExtResource("5_apron")]
+position = Vector3(-3.6, 0, 2.4)
+
+[node name="ServiceAlleyNorth" parent="TutorialAndSplit" instance=ExtResource("4_alley")]
+position = Vector3(3.6, 0, 7.2)
+
+[node name="ServiceAlleySouth" parent="TutorialAndSplit" instance=ExtResource("4_alley")]
+position = Vector3(3.6, 0, 4.8)
+
+[node name="ServiceAlleyApron" parent="TutorialAndSplit" instance=ExtResource("5_apron")]
+position = Vector3(3.6, 0, 2.4)
+
+[node name="MainStreet" type="Node3D" parent="."]
+rotation_degrees = Vector3(0, 270, 0)
+
+[node name="LaneW06" parent="MainStreet" instance=ExtResource("2_lane")]
+position = Vector3(-14.4, 0, 0)
+
+[node name="LaneW05" parent="MainStreet" instance=ExtResource("2_lane")]
+position = Vector3(-12, 0, 0)
+
+[node name="LaneW04" parent="MainStreet" instance=ExtResource("2_lane")]
+position = Vector3(-9.6, 0, 0)
+
+[node name="LaneW03" parent="MainStreet" instance=ExtResource("2_lane")]
+position = Vector3(-7.2, 0, 0)
+
+[node name="LaneW02" parent="MainStreet" instance=ExtResource("2_lane")]
+position = Vector3(-4.8, 0, 0)
+
+[node name="CourtyardCrosswalk" parent="MainStreet" instance=ExtResource("3_crosswalk")]
+position = Vector3(-2.4, 0, 0)
+
+[node name="LaneCenter" parent="MainStreet" instance=ExtResource("2_lane")]
+
+[node name="ServiceCrosswalk" parent="MainStreet" instance=ExtResource("3_crosswalk")]
+position = Vector3(2.4, 0, 0)
+
+[node name="LaneE02" parent="MainStreet" instance=ExtResource("2_lane")]
+position = Vector3(4.8, 0, 0)
+
+[node name="LaneE03" parent="MainStreet" instance=ExtResource("2_lane")]
+position = Vector3(7.2, 0, 0)
+
+[node name="LaneE04" parent="MainStreet" instance=ExtResource("2_lane")]
+position = Vector3(9.6, 0, 0)
+
+[node name="LaneE05" parent="MainStreet" instance=ExtResource("2_lane")]
+position = Vector3(12, 0, 0)
+
+[node name="LaneE06" parent="MainStreet" instance=ExtResource("2_lane")]
+position = Vector3(14.4, 0, 0)
+
+[node name="Sidewalks" type="Node3D" parent="MainStreet"]
+
+[node name="NorthWalkW06" parent="MainStreet/Sidewalks" instance=ExtResource("7_sidewalk")]
+position = Vector3(-14.4, 0.18, 3.2)
+
+[node name="NorthWalkW05" parent="MainStreet/Sidewalks" instance=ExtResource("7_sidewalk")]
+position = Vector3(-12, 0.18, 3.2)
+
+[node name="NorthWalkW04" parent="MainStreet/Sidewalks" instance=ExtResource("7_sidewalk")]
+position = Vector3(-9.6, 0.18, 3.2)
+
+[node name="NorthWalkW03" parent="MainStreet/Sidewalks" instance=ExtResource("7_sidewalk")]
+position = Vector3(-7.2, 0.18, 3.2)
+
+[node name="NorthWalkW02" parent="MainStreet/Sidewalks" instance=ExtResource("7_sidewalk")]
+position = Vector3(-4.8, 0.18, 3.2)
+
+[node name="NorthCourtyardDriveway" parent="MainStreet/Sidewalks" instance=ExtResource("6_driveway")]
+position = Vector3(-2.4, 0.18, 3.2)
+
+[node name="NorthWalkCenter" parent="MainStreet/Sidewalks" instance=ExtResource("7_sidewalk")]
+position = Vector3(0, 0.18, 3.2)
+
+[node name="NorthServiceDriveway" parent="MainStreet/Sidewalks" instance=ExtResource("6_driveway")]
+position = Vector3(2.4, 0.18, 3.2)
+
+[node name="NorthWalkE02" parent="MainStreet/Sidewalks" instance=ExtResource("7_sidewalk")]
+position = Vector3(4.8, 0.18, 3.2)
+
+[node name="NorthWalkE03" parent="MainStreet/Sidewalks" instance=ExtResource("7_sidewalk")]
+position = Vector3(7.2, 0.18, 3.2)
+
+[node name="NorthWalkE04" parent="MainStreet/Sidewalks" instance=ExtResource("7_sidewalk")]
+position = Vector3(9.6, 0.18, 3.2)
+
+[node name="NorthWalkE05" parent="MainStreet/Sidewalks" instance=ExtResource("7_sidewalk")]
+position = Vector3(12, 0.18, 3.2)
+
+[node name="NorthWalkE06" parent="MainStreet/Sidewalks" instance=ExtResource("7_sidewalk")]
+position = Vector3(14.4, 0.18, 3.2)
+
+[node name="SouthWalkW06" parent="MainStreet/Sidewalks" instance=ExtResource("7_sidewalk")]
+position = Vector3(-14.4, 0.18, -3.2)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="SouthWalkW05" parent="MainStreet/Sidewalks" instance=ExtResource("7_sidewalk")]
+position = Vector3(-12, 0.18, -3.2)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="SouthGarageDriveway" parent="MainStreet/Sidewalks" instance=ExtResource("6_driveway")]
+position = Vector3(-9.6, 0.18, -3.2)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="SouthWalkW03" parent="MainStreet/Sidewalks" instance=ExtResource("7_sidewalk")]
+position = Vector3(-7.2, 0.18, -3.2)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="SouthWalkW02" parent="MainStreet/Sidewalks" instance=ExtResource("7_sidewalk")]
+position = Vector3(-4.8, 0.18, -3.2)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="SouthWalkW01" parent="MainStreet/Sidewalks" instance=ExtResource("7_sidewalk")]
+position = Vector3(-2.4, 0.18, -3.2)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="SouthLanternDriveway" parent="MainStreet/Sidewalks" instance=ExtResource("6_driveway")]
+position = Vector3(0, 0.18, -3.2)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="SouthWalkE01" parent="MainStreet/Sidewalks" instance=ExtResource("7_sidewalk")]
+position = Vector3(2.4, 0.18, -3.2)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="SouthWalkE02" parent="MainStreet/Sidewalks" instance=ExtResource("7_sidewalk")]
+position = Vector3(4.8, 0.18, -3.2)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="SouthWalkE03" parent="MainStreet/Sidewalks" instance=ExtResource("7_sidewalk")]
+position = Vector3(7.2, 0.18, -3.2)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="SouthShopDriveway" parent="MainStreet/Sidewalks" instance=ExtResource("6_driveway")]
+position = Vector3(9.6, 0.18, -3.2)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="SouthWalkE05" parent="MainStreet/Sidewalks" instance=ExtResource("7_sidewalk")]
+position = Vector3(12, 0.18, -3.2)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="SouthWalkE06" parent="MainStreet/Sidewalks" instance=ExtResource("7_sidewalk")]
+position = Vector3(14.4, 0.18, -3.2)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="SouthDestinations" type="Node3D" parent="."]
+rotation_degrees = Vector3(0, 270, 0)
+
+[node name="GarageBlockout" type="MeshInstance3D" parent="SouthDestinations"]
+position = Vector3(-9.6, 1.78, -5.6)
+mesh = SubResource("GarageMesh")
+
+[node name="GarageSign" type="MeshInstance3D" parent="SouthDestinations/GarageBlockout"]
+position = Vector3(0, 0.62, 2.46)
+material_override = SubResource("CyanEmissive")
+mesh = SubResource("SignMesh")
+
+[node name="LanternBlockout" type="MeshInstance3D" parent="SouthDestinations"]
+position = Vector3(0, 2.58, -5.6)
+mesh = SubResource("LanternMesh")
+
+[node name="LanternSign" type="MeshInstance3D" parent="SouthDestinations/LanternBlockout"]
+position = Vector3(0, 1.15, 2.46)
+material_override = SubResource("AmberEmissive")
+mesh = SubResource("SignMesh")
+
+[node name="ClosedShopBlockout" type="MeshInstance3D" parent="SouthDestinations"]
+position = Vector3(9.6, 1.78, -5.6)
+mesh = SubResource("ShopMesh")
+
+[node name="ClosedShopSign" type="MeshInstance3D" parent="SouthDestinations/ClosedShopBlockout"]
+position = Vector3(0, 0.62, 2.46)
+material_override = SubResource("MagentaEmissive")
+mesh = SubResource("SignMesh")
+
+[node name="SouthRouteNetwork" type="Node3D" parent="."]
+rotation_degrees = Vector3(0, 270, 0)
+
+[node name="GarageRoute01" parent="SouthRouteNetwork" instance=ExtResource("4_alley")]
+position = Vector3(-9.6, 0, -9.2)
+
+[node name="GarageRoute02" parent="SouthRouteNetwork" instance=ExtResource("4_alley")]
+position = Vector3(-9.6, 0, -11.6)
+
+[node name="GarageRoute03" parent="SouthRouteNetwork" instance=ExtResource("4_alley")]
+position = Vector3(-9.6, 0, -14)
+
+[node name="GarageRoute04" parent="SouthRouteNetwork" instance=ExtResource("4_alley")]
+position = Vector3(-9.6, 0, -16.4)
+
+[node name="SideStreet01" parent="SouthRouteNetwork" instance=ExtResource("4_alley")]
+position = Vector3(0, 0, -9.2)
+
+[node name="SideStreet02" parent="SouthRouteNetwork" instance=ExtResource("4_alley")]
+position = Vector3(0, 0, -11.6)
+
+[node name="BasementApproach01" parent="SouthRouteNetwork" instance=ExtResource("4_alley")]
+position = Vector3(0, 0, -14)
+
+[node name="BasementApproach02" parent="SouthRouteNetwork" instance=ExtResource("4_alley")]
+position = Vector3(0, 0, -16.4)
+
+[node name="ClosedShopRoute01" parent="SouthRouteNetwork" instance=ExtResource("4_alley")]
+position = Vector3(9.6, 0, -9.2)
+
+[node name="ClosedShopRoute02" parent="SouthRouteNetwork" instance=ExtResource("4_alley")]
+position = Vector3(9.6, 0, -11.6)
+
+[node name="ClosedShopRoute03" parent="SouthRouteNetwork" instance=ExtResource("4_alley")]
+position = Vector3(9.6, 0, -14)
+
+[node name="ClosedShopRoute04" parent="SouthRouteNetwork" instance=ExtResource("4_alley")]
+position = Vector3(9.6, 0, -16.4)
+
+[node name="MaintenanceConnectorW04" parent="SouthRouteNetwork" instance=ExtResource("4_alley")]
+position = Vector3(-7.2, 0, -16.4)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="MaintenanceConnectorW03" parent="SouthRouteNetwork" instance=ExtResource("4_alley")]
+position = Vector3(-4.8, 0, -16.4)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="MaintenanceConnectorW02" parent="SouthRouteNetwork" instance=ExtResource("4_alley")]
+position = Vector3(-2.4, 0, -16.4)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="MaintenanceConnectorE02" parent="SouthRouteNetwork" instance=ExtResource("4_alley")]
+position = Vector3(2.4, 0, -16.4)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="MaintenanceConnectorE03" parent="SouthRouteNetwork" instance=ExtResource("4_alley")]
+position = Vector3(4.8, 0, -16.4)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="MaintenanceConnectorE04" parent="SouthRouteNetwork" instance=ExtResource("4_alley")]
+position = Vector3(7.2, 0, -16.4)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="MaintenanceLift" type="Node3D" parent="."]
+rotation_degrees = Vector3(0, 270, 0)
+
+[node name="LiftHousingBlockout" type="MeshInstance3D" parent="MaintenanceLift"]
+position = Vector3(0, 2.18, -20)
+mesh = SubResource("LiftMesh")
+
+[node name="LiftStatusBar" type="MeshInstance3D" parent="MaintenanceLift/LiftHousingBlockout"]
+position = Vector3(0, 0.7, 2.46)
+material_override = SubResource("CyanEmissive")
+mesh = SubResource("SignMesh")
+
+[node name="LiftGate" parent="MaintenanceLift" instance=ExtResource("11_gate")]
+position = Vector3(0, 0.18, -17.6)
+
+[node name="LiftTerminal" parent="MaintenanceLift" instance=ExtResource("10_terminal")]
+position = Vector3(2.7, 0.18, -17.6)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="Dress" type="Node3D" parent="."]
+rotation_degrees = Vector3(0, 270, 0)
+
+[node name="Lamp_MainWest" parent="Dress" instance=ExtResource("8_lamp")]
+position = Vector3(-6, 0.18, 3.2)
+
+[node name="Lamp_MainEast" parent="Dress" instance=ExtResource("8_lamp")]
+position = Vector3(6, 0.18, -3.2)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="Lamp_Courtyard" parent="Dress" instance=ExtResource("8_lamp")]
+position = Vector3(-5.8, 0.18, 6.8)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="Steam_RainAlley" parent="Dress" instance=ExtResource("9_steam")]
+position = Vector3(1.1, 0.18, 9.6)
+
+[node name="Steam_Maintenance" parent="Dress" instance=ExtResource("9_steam")]
+position = Vector3(-2.8, 0.18, -17.2)
+
+[node name="GameplayMarkers" type="Node3D" parent="."]
+rotation_degrees = Vector3(0, 270, 0)
+
+[node name="PlayerApartmentEntry" type="Marker3D" parent="GameplayMarkers" groups=["steamtek_gameplay_point"]]
+position = Vector3(0, 0.18, 13.2)
+metadata/marker_role = "player_apartment_exterior_threshold"
+metadata/route_order = 1
+metadata/opening_stage = "exit_after_note_quest"
+
+[node name="RainAlleyTutorialStart" type="Marker3D" parent="GameplayMarkers" groups=["steamtek_gameplay_point"]]
+position = Vector3(0, 0.18, 12)
+metadata/marker_role = "tutorial_start"
+metadata/route_order = 2
+metadata/opening_stage = "rain_alley_movement_tutorial"
+metadata/tutorial_pillar = "movement"
+
+[node name="CourtyardChoice" type="Marker3D" parent="GameplayMarkers" groups=["steamtek_gameplay_point"]]
+position = Vector3(-3.6, 0.18, 6)
+metadata/marker_role = "courtyard_route"
+metadata/route_order = 3
+metadata/tutorial_pillar = "exploration"
+metadata/gameplay_contract = "optional salvage cache and readable environmental clue"
+
+[node name="ServiceAlleyChoice" type="Marker3D" parent="GameplayMarkers" groups=["steamtek_gameplay_point"]]
+position = Vector3(3.6, 0.18, 6)
+metadata/marker_role = "service_alley_route"
+metadata/route_order = 3
+metadata/tutorial_pillar = "interactables"
+metadata/gameplay_contract = "salvageable utility fixture and alternate route feedback"
+
+[node name="MainStreetHub" type="Marker3D" parent="GameplayMarkers" groups=["steamtek_gameplay_point"]]
+position = Vector3(0, 0.18, 0)
+metadata/marker_role = "main_street_hub"
+metadata/route_order = 4
+metadata/opening_stage = "main_street_reveal"
+metadata/tutorial_pillar = "combat"
+metadata/gameplay_contract = "guaranteed first combat arena after the split reconverges; preserve a minimum clear footprint of 9.6 by 4.8 meters"
+
+[node name="GarageEntrance" type="Marker3D" parent="GameplayMarkers" groups=["steamtek_gameplay_point"]]
+position = Vector3(-9.6, 0.18, -3.2)
+metadata/marker_role = "garage_route"
+metadata/opening_route_active = true
+metadata/tutorial_pillar = "crafting"
+metadata/gameplay_contract = "accessible tutorial workbench after first combat; no required resident NPC"
+
+[node name="LanternEntrance" type="Marker3D" parent="GameplayMarkers" groups=["steamtek_gameplay_point"]]
+position = Vector3(0, 0.18, -3.2)
+metadata/marker_role = "lantern_route"
+metadata/route_order = 5
+metadata/opening_route_active = true
+metadata/opening_stage = "first_quest_destination_and_underground_quest_source"
+metadata/tutorial_pillar = "quests_and_dialogue"
+
+[node name="ClosedShopEntrance" type="Marker3D" parent="GameplayMarkers" groups=["steamtek_gameplay_point"]]
+position = Vector3(9.6, 0.18, -3.2)
+metadata/marker_role = "closed_shop_route"
+metadata/opening_route_active = false
+metadata/landmark_state = "closed_at_opening"
+metadata/tutorial_pillar = "optional_exploration_and_locked_interactable"
+metadata/gameplay_contract = "locked front door with discoverable side cache or inspectable clue"
+
+[node name="SideStreet" type="Marker3D" parent="GameplayMarkers" groups=["steamtek_gameplay_point"]]
+position = Vector3(0, 0.18, -11.6)
+metadata/marker_role = "side_street"
+metadata/route_order = 6
+metadata/opening_stage = "unlocked_after_lantern_quest"
+metadata/gate_contract = "lantern_underground_quest"
+metadata/tutorial_pillar = "combined_movement_and_combat_mastery"
+
+[node name="Basement" type="Marker3D" parent="GameplayMarkers" groups=["steamtek_gameplay_point"]]
+position = Vector3(0, 0.18, -14)
+metadata/marker_role = "basement_route"
+metadata/route_order = 7
+metadata/opening_stage = "underground_approach"
+metadata/gate_contract = "lantern_underground_quest"
+metadata/tutorial_pillar = "exploration_interactable_mastery"
+
+[node name="MaintenanceLiftEntry" type="Marker3D" parent="GameplayMarkers" groups=["steamtek_gameplay_point"]]
+position = Vector3(0, 0.18, -17.6)
+metadata/marker_role = "maintenance_lift"
+metadata/route_order = 8
+metadata/opening_stage = "surface_to_silo_city_transition"
+metadata/gate_contract = "lantern_underground_quest"
+metadata/tutorial_pillar = "quest_transition"
+
+[node name="CourtyardSalvageCache" type="Marker3D" parent="GameplayMarkers" groups=["steamtek_gameplay_point", "steamtek_interactable_point"]]
+position = Vector3(-4.8, 0.18, 6)
+metadata/marker_role = "optional_salvage_cache"
+metadata/tutorial_pillar = "exploration"
+
+[node name="ServiceUtilityInteractable" type="Marker3D" parent="GameplayMarkers" groups=["steamtek_gameplay_point", "steamtek_interactable_point"]]
+position = Vector3(4.4, 0.18, 6)
+metadata/marker_role = "utility_interactable"
+metadata/tutorial_pillar = "interactables"
+
+[node name="MainStreetCombatArena" type="Marker3D" parent="GameplayMarkers" groups=["steamtek_gameplay_point", "steamtek_encounter_point"]]
+position = Vector3(0, 0.18, 0)
+metadata/marker_role = "tutorial_combat_arena"
+metadata/arena_clear_size_m = Vector2(9.6, 4.8)
+metadata/encounter_state = "inactive_contract_only"
+
+[node name="GarageCraftingWorkbench" type="Marker3D" parent="GameplayMarkers" groups=["steamtek_gameplay_point", "steamtek_interactable_point"]]
+position = Vector3(-9.6, 0.18, -3.6)
+metadata/marker_role = "tutorial_crafting_station"
+metadata/tutorial_pillar = "crafting"
+
+[node name="ClosedShopLockedDoor" type="Marker3D" parent="GameplayMarkers" groups=["steamtek_gameplay_point", "steamtek_interactable_point"]]
+position = Vector3(9.6, 0.18, -3.2)
+metadata/marker_role = "optional_locked_interactable"
+metadata/tutorial_pillar = "exploration_and_interactables"
+
+[node name="LanternQuestTurnIn" type="Marker3D" parent="GameplayMarkers" groups=["steamtek_gameplay_point", "steamtek_quest_point"]]
+position = Vector3(0, 0.18, -3.2)
+metadata/marker_role = "opening_quest_turn_in"
+metadata/quest_output = "lantern_underground_quest"
+
+[node name="SideStreetMasteryEncounter" type="Marker3D" parent="GameplayMarkers" groups=["steamtek_gameplay_point", "steamtek_encounter_point"]]
+position = Vector3(0, 0.18, -11.6)
+metadata/marker_role = "post_lantern_mastery_encounter"
+metadata/encounter_state = "inactive_contract_only"
+
+[node name="ReviewLabels" type="Node3D" parent="."]
+rotation_degrees = Vector3(0, 270, 0)
+
+[node name="PlayerApartment" type="Label3D" parent="ReviewLabels"]
+position = Vector3(0, 6.8, 16.8)
+text = "PLAYER APARTMENT"
+font_size = 42
+outline_size = 8
+modulate = Color(0.86, 0.94, 1, 1)
+pixel_size = 0.01
+billboard = 1
+no_depth_test = true
+
+[node name="RainAlley" type="Label3D" parent="ReviewLabels"]
+position = Vector3(0, 1, 10)
+text = "RAIN ALLEY / TUTORIAL"
+font_size = 36
+outline_size = 8
+modulate = Color(0.2, 0.78, 0.95, 1)
+pixel_size = 0.01
+billboard = 1
+no_depth_test = true
+
+[node name="Courtyard" type="Label3D" parent="ReviewLabels"]
+position = Vector3(-3.6, 0.7, 6)
+text = "COURTYARD"
+font_size = 34
+outline_size = 8
+modulate = Color(0.72, 0.84, 0.94, 1)
+pixel_size = 0.01
+billboard = 1
+no_depth_test = true
+
+[node name="ServiceAlley" type="Label3D" parent="ReviewLabels"]
+position = Vector3(3.6, 0.7, 6)
+text = "SERVICE ALLEY"
+font_size = 34
+outline_size = 8
+modulate = Color(0.72, 0.84, 0.94, 1)
+pixel_size = 0.01
+billboard = 1
+no_depth_test = true
+
+[node name="MainStreet" type="Label3D" parent="ReviewLabels"]
+position = Vector3(0, 0.8, 0)
+text = "MAIN STREET"
+font_size = 42
+outline_size = 9
+modulate = Color(1, 0.72, 0.28, 1)
+pixel_size = 0.01
+billboard = 1
+no_depth_test = true
+
+[node name="Garage" type="Label3D" parent="ReviewLabels"]
+position = Vector3(-9.6, 3.8, -5.6)
+text = "GARAGE"
+font_size = 40
+outline_size = 8
+modulate = Color(0.18, 0.78, 0.94, 1)
+pixel_size = 0.01
+billboard = 1
+no_depth_test = true
+
+[node name="TheLantern" type="Label3D" parent="ReviewLabels"]
+position = Vector3(0, 5.4, -5.6)
+text = "THE LANTERN"
+font_size = 40
+outline_size = 8
+modulate = Color(1, 0.48, 0.12, 1)
+pixel_size = 0.01
+billboard = 1
+no_depth_test = true
+
+[node name="ClosedShop" type="Label3D" parent="ReviewLabels"]
+position = Vector3(9.6, 3.8, -5.6)
+text = "CLOSED SHOP"
+font_size = 40
+outline_size = 8
+modulate = Color(0.92, 0.18, 0.58, 1)
+pixel_size = 0.01
+billboard = 1
+no_depth_test = true
+
+[node name="SideStreet" type="Label3D" parent="ReviewLabels"]
+position = Vector3(0, 0.8, -11.6)
+text = "SIDE STREET"
+font_size = 34
+outline_size = 8
+modulate = Color(0.72, 0.84, 0.94, 1)
+pixel_size = 0.01
+billboard = 1
+no_depth_test = true
+
+[node name="Basement" type="Label3D" parent="ReviewLabels"]
+position = Vector3(0, 0.8, -14)
+text = "BASEMENT"
+font_size = 34
+outline_size = 8
+modulate = Color(0.72, 0.84, 0.94, 1)
+pixel_size = 0.01
+billboard = 1
+no_depth_test = true
+
+[node name="MaintenanceLift" type="Label3D" parent="ReviewLabels"]
+position = Vector3(0, 4.6, -20)
+text = "MAINTENANCE LIFT"
+font_size = 40
+outline_size = 8
+modulate = Color(0.18, 0.78, 0.94, 1)
+pixel_size = 0.01
+billboard = 1
+no_depth_test = true

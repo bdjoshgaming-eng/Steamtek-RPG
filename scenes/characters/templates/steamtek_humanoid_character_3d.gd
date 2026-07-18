@@ -62,7 +62,14 @@ func _physics_process(delta: float) -> void:
 		var target_velocity := move_direction * movement_speed * clampf(input_vector.length(), 0.0, 1.0)
 		velocity.x = move_toward(velocity.x, target_velocity.x, movement_acceleration * delta)
 		velocity.z = move_toward(velocity.z, target_velocity.z, movement_acceleration * delta)
-		target_facing_yaw = atan2(move_direction.x, move_direction.z) + deg_to_rad(model_forward_yaw_offset_degrees)
+		# Movement is authored in world space. Convert its world-facing yaw into
+		# VisualPivot-local space so an accidental rotation on the character root
+		# cannot make the model strafe sideways relative to its velocity.
+		var target_world_facing_yaw := (
+			atan2(move_direction.x, move_direction.z)
+			+ deg_to_rad(model_forward_yaw_offset_degrees)
+		)
+		target_facing_yaw = _world_yaw_to_visual_local_yaw(target_world_facing_yaw)
 		var turn_weight := 1.0 - exp(-turn_response * delta)
 		visual_pivot.rotation.y = lerp_angle(visual_pivot.rotation.y, target_facing_yaw, turn_weight)
 		if absf(angle_difference(visual_pivot.rotation.y, target_facing_yaw)) <= deg_to_rad(turn_snap_threshold_degrees):
@@ -194,6 +201,19 @@ func _camera_relative_direction(input_vector: Vector2) -> Vector3:
 	camera_right.y = 0.0
 	camera_right = camera_right.normalized()
 	return camera_right * input_vector.x + camera_forward * -input_vector.y
+
+
+func _world_yaw_to_visual_local_yaw(world_yaw: float) -> float:
+	var visual_parent := visual_pivot.get_parent_node_3d()
+	if visual_parent == null:
+		return world_yaw
+	var parent_forward := visual_parent.global_transform.basis.z
+	parent_forward.y = 0.0
+	if parent_forward.length_squared() <= 0.000001:
+		return world_yaw
+	parent_forward = parent_forward.normalized()
+	var parent_world_yaw := atan2(parent_forward.x, parent_forward.z)
+	return wrapf(world_yaw - parent_world_yaw, -PI, PI)
 
 
 func _find_animation_player(node: Node) -> AnimationPlayer:

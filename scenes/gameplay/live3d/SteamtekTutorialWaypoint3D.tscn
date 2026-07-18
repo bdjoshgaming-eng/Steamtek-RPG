@@ -1,0 +1,55 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scenes/gameplay/live3d/steamtek_tutorial_waypoint_3d.gd" id="1_script"]
+
+[sub_resource type="StandardMaterial3D" id="WaypointMaterial"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.04, 0.78, 0.94, 0.62)
+emission_enabled = true
+emission = Color(0.04, 0.72, 0.92, 1)
+emission_energy_multiplier = 2.4
+
+[sub_resource type="CylinderMesh" id="BeamMesh"]
+material = SubResource("WaypointMaterial")
+top_radius = 0.035
+bottom_radius = 0.035
+height = 1.8
+radial_segments = 12
+rings = 2
+
+[sub_resource type="SphereMesh" id="BeaconMesh"]
+material = SubResource("WaypointMaterial")
+radius = 0.14
+height = 0.28
+radial_segments = 16
+rings = 8
+
+[node name="SteamtekTutorialWaypoint3D" type="Node3D" groups=["steamtek_tutorial_waypoint_3d"]]
+script = ExtResource("1_script")
+
+[node name="Beam" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.9, 0)
+mesh = SubResource("BeamMesh")
+
+[node name="Beacon" type="Node3D" parent="."]
+position = Vector3(0, 1.42, 0)
+
+[node name="Orb" type="MeshInstance3D" parent="Beacon"]
+mesh = SubResource("BeaconMesh")
+
+[node name="ObjectiveLabel" type="Label3D" parent="Beacon"]
+position = Vector3(0, 0.42, 0)
+billboard = 1
+no_depth_test = true
+text = "OBJECTIVE"
+modulate = Color(0.45, 0.92, 1, 1)
+outline_modulate = Color(0.005, 0.012, 0.025, 0.96)
+font_size = 42
+outline_size = 10
+
+[node name="ObjectiveLight" type="OmniLight3D" parent="Beacon"]
+light_color = Color(0.12, 0.78, 1, 1)
+light_energy = 1.0
+omni_range = 2.4
+shadow_enabled = false

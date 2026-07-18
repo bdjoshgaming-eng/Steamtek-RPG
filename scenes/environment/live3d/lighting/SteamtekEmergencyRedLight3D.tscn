@@ -1,0 +1,89 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="1_gunmetal"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_AgedCopper_Base_v01.tres" id="2_copper"]
+
+[sub_resource type="StandardMaterial3D" id="LensMaterial"]
+shading_mode = 0
+albedo_color = Color(0.65, 0.015, 0.015, 1)
+emission_enabled = true
+emission = Color(1, 0.02, 0.02, 1)
+emission_energy_multiplier = 1.8
+
+[sub_resource type="CylinderMesh" id="BaseMesh"]
+material = ExtResource("1_gunmetal")
+top_radius = 0.16
+bottom_radius = 0.18
+height = 0.1
+radial_segments = 24
+
+[sub_resource type="CylinderMesh" id="LensMesh"]
+material = SubResource("LensMaterial")
+top_radius = 0.12
+bottom_radius = 0.14
+height = 0.24
+radial_segments = 24
+
+[sub_resource type="TorusMesh" id="GuardRingMesh"]
+material = ExtResource("2_copper")
+inner_radius = 0.11
+outer_radius = 0.16
+rings = 24
+ring_segments = 10
+
+[sub_resource type="BoxMesh" id="GuardBarMesh"]
+material = ExtResource("2_copper")
+size = Vector3(0.035, 0.28, 0.035)
+
+[node name="SteamtekEmergencyRedLight3D" type="Node3D"]
+editor_description = "Modular emergency-red warning lamp. Root origin is the wall or ceiling contact plane; +Z is outward."
+metadata/status = "lighting_contract_v1"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/front_axis = "+Z"
+metadata/light_role = "emergency_warning_pool"
+metadata/facing_contract = "yaw_0_90_180_270_no_negative_scale"
+
+[node name="Fixture_Blockout" type="Node3D" parent="."]
+
+[node name="WarningBase" type="MeshInstance3D" parent="Fixture_Blockout"]
+position = Vector3(0, 0, 0.05)
+rotation_degrees = Vector3(90, 0, 0)
+mesh = SubResource("BaseMesh")
+
+[node name="WarningLens" type="MeshInstance3D" parent="Fixture_Blockout"]
+position = Vector3(0, 0, 0.2)
+rotation_degrees = Vector3(90, 0, 0)
+mesh = SubResource("LensMesh")
+
+[node name="GuardRing" type="MeshInstance3D" parent="Fixture_Blockout"]
+position = Vector3(0, 0, 0.32)
+rotation_degrees = Vector3(90, 0, 0)
+mesh = SubResource("GuardRingMesh")
+
+[node name="GuardBarLeft" type="MeshInstance3D" parent="Fixture_Blockout"]
+position = Vector3(-0.12, 0, 0.2)
+rotation_degrees = Vector3(90, 0, 0)
+mesh = SubResource("GuardBarMesh")
+
+[node name="GuardBarRight" type="MeshInstance3D" parent="Fixture_Blockout"]
+position = Vector3(0.12, 0, 0.2)
+rotation_degrees = Vector3(90, 0, 0)
+mesh = SubResource("GuardBarMesh")
+
+[node name="LightRig" type="Node3D" parent="."]
+
+[node name="EmergencyRed" type="OmniLight3D" parent="LightRig"]
+position = Vector3(0, 0, 0.34)
+light_color = Color(1, 0.015, 0.015, 1)
+light_energy = 1.8
+omni_range = 4.5
+shadow_enabled = false
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="FixtureMount" type="Marker3D" parent="Sockets"]
+metadata/socket_role = "wall_or_ceiling_mount"
+
+[node name="LightOrigin" type="Marker3D" parent="Sockets"]
+position = Vector3(0, 0, 0.34)
+metadata/socket_role = "light_origin"

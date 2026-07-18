@@ -1,0 +1,66 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="1_gunmetal"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_RoofSteel_Base_v01.tres" id="2_roofsteel"]
+
+[sub_resource type="StandardMaterial3D" id="NeonMaterial"]
+shading_mode = 0
+albedo_color = Color(0.75, 0.04, 0.65, 1)
+emission_enabled = true
+emission = Color(1, 0.04, 0.78, 1)
+emission_energy_multiplier = 2.2
+
+[sub_resource type="BoxMesh" id="FrameMesh"]
+material = ExtResource("1_gunmetal")
+size = Vector3(0.9, 0.5, 0.12)
+
+[sub_resource type="BoxMesh" id="BackingMesh"]
+material = ExtResource("2_roofsteel")
+size = Vector3(0.78, 0.38, 0.045)
+
+[sub_resource type="BoxMesh" id="NeonTubeMesh"]
+material = SubResource("NeonMaterial")
+size = Vector3(0.62, 0.045, 0.035)
+
+[node name="SteamtekNeonSignPanel3D" type="Node3D"]
+editor_description = "Wall neon-sign contract with restrained magenta emission. Root origin is the wall contact plane; +Z is the readable face direction."
+metadata/status = "geometry_contract_blockout"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/nominal_size_m = Vector3(0.9, 0.5, 0.18)
+metadata/front_axis = "+Z"
+metadata/facing_contract = "yaw_0_90_180_270_no_negative_scale"
+
+[node name="Visual_Blockout" type="Node3D" parent="."]
+
+[node name="SignFrame" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 0, 0.06)
+mesh = SubResource("FrameMesh")
+
+[node name="SignBacking" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 0, 0.142)
+mesh = SubResource("BackingMesh")
+
+[node name="NeonTubeTop" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 0.12, 0.185)
+mesh = SubResource("NeonTubeMesh")
+
+[node name="NeonTubeMiddle" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, 0, 0.185)
+mesh = SubResource("NeonTubeMesh")
+
+[node name="NeonTubeBottom" type="MeshInstance3D" parent="Visual_Blockout"]
+position = Vector3(0, -0.12, 0.185)
+mesh = SubResource("NeonTubeMesh")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="WallMount" type="Marker3D" parent="Sockets"]
+metadata/socket_role = "wall_mount"
+
+[node name="SignFace" type="Marker3D" parent="Sockets"]
+position = Vector3(0, 0, 0.21)
+metadata/socket_role = "sign_face"
+
+[node name="PowerInput" type="Marker3D" parent="Sockets"]
+position = Vector3(0, -0.3, 0.06)
+metadata/socket_role = "electrical_input"

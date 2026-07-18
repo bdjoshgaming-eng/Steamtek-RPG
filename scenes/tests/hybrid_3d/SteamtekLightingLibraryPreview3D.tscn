@@ -1,0 +1,117 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/lighting/SteamtekAmberDoorLight3D.tscn" id="1_amber"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/lighting/SteamtekBlueSecurityLight3D.tscn" id="2_blue"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/lighting/SteamtekStreetLamp3D.tscn" id="3_street"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/lighting/SteamtekNeonSignGlow3D.tscn" id="4_neon"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/lighting/SteamtekIndustrialFloodLight3D.tscn" id="5_flood"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/lighting/SteamtekEmergencyRedLight3D.tscn" id="6_red"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/lighting/SteamtekSteamGlow3D.tscn" id="7_steam"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_RainPolishedStreet_Candidate_v01.tres" id="8_streetmat"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_ApartmentFacade_Neutral_v01.tres" id="9_facade"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SkyMaterial"]
+sky_top_color = Color(0.006, 0.008, 0.014, 1)
+sky_horizon_color = Color(0.025, 0.03, 0.045, 1)
+ground_bottom_color = Color(0.004, 0.005, 0.008, 1)
+ground_horizon_color = Color(0.018, 0.02, 0.03, 1)
+
+[sub_resource type="Sky" id="Sky"]
+sky_material = SubResource("SkyMaterial")
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 2
+sky = SubResource("Sky")
+ambient_light_source = 3
+ambient_light_color = Color(0.2, 0.24, 0.34, 1)
+ambient_light_energy = 0.24
+tonemap_mode = 2
+
+[sub_resource type="BoxMesh" id="FloorMesh"]
+material = ExtResource("8_streetmat")
+size = Vector3(15, 0.16, 10)
+
+[sub_resource type="BoxMesh" id="WallMesh"]
+material = ExtResource("9_facade")
+size = Vector3(15, 5.5, 0.2)
+
+[node name="SteamtekLightingLibraryPreview3D" type="Node3D"]
+editor_description = "Normal-editor F6 review scene for seven modular lighting presets. The locked gameplay blockout is not referenced."
+metadata/status = "lighting_contract_review_only"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/camera_contract = "orthographic_60deg_azimuth_30deg_elevation"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment")
+
+[node name="LowNeutralKey" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-52, -38, 0)
+light_color = Color(0.42, 0.55, 0.78, 1)
+light_energy = 0.32
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+position = Vector3(8.66, 6.77, 5)
+rotation_degrees = Vector3(-30, 60, 0)
+projection = 1
+size = 13.5
+current = true
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.08, 0)
+mesh = SubResource("FloorMesh")
+
+[node name="ReviewWall" type="MeshInstance3D" parent="."]
+position = Vector3(0, 2.75, -4.7)
+mesh = SubResource("WallMesh")
+
+[node name="AmberDoor" parent="." instance=ExtResource("1_amber")]
+position = Vector3(-5.8, 2.3, -4.58)
+
+[node name="BlueSecurity" parent="." instance=ExtResource("2_blue")]
+position = Vector3(-3.65, 3.4, -4.58)
+
+[node name="NeonGlow" parent="." instance=ExtResource("4_neon")]
+position = Vector3(-1.35, 3.0, -4.58)
+
+[node name="IndustrialFlood" parent="." instance=ExtResource("5_flood")]
+position = Vector3(1.15, 3.55, -4.58)
+
+[node name="EmergencyRed" parent="." instance=ExtResource("6_red")]
+position = Vector3(3.55, 3.0, -4.58)
+
+[node name="StreetLamp" parent="." instance=ExtResource("3_street")]
+position = Vector3(5.6, 0, -2.8)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="SteamGlow" parent="." instance=ExtResource("7_steam")]
+position = Vector3(1.1, 0, -1.15)
+
+[node name="WallPresetLabel" type="Label3D" parent="."]
+position = Vector3(-0.9, 4.85, -4.3)
+text = "AMBER DOOR  |  BLUE SECURITY  |  NEON  |  FLOOD  |  EMERGENCY RED"
+font_size = 38
+outline_size = 8
+pixel_size = 0.005
+billboard = 1
+
+[node name="GroundPresetLabel" type="Label3D" parent="."]
+position = Vector3(3.35, 3.85, -2.1)
+text = "STREET LAMP + STEAM ACCENT"
+font_size = 34
+outline_size = 8
+pixel_size = 0.005
+billboard = 1
+
+[node name="ReviewUI" type="CanvasLayer" parent="."]
+
+[node name="Title" type="Label" parent="ReviewUI"]
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 1450.0
+offset_bottom = 115.0
+text = "STEAMTEK LIVE-3D LIGHTING LIBRARY v1 - CONTRACT REVIEW\nFixture mesh, LightRig, and mounting sockets remain separate and replaceable\nOne Godot unit = one meter  |  Rotate roots; never negative-scale mirror."
+theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
+theme_override_colors/font_outline_color = Color(0.005, 0.008, 0.012, 0.95)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 19

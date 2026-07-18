@@ -98,9 +98,9 @@ position = Vector2(682, 461)
 [node name="FX003_RainMist" parent="World/Effects" unique_id=1823844333 instance=ExtResource("9_2f3dj")]
 
 [node name="Lighting" type="Node2D" parent="World" unique_id=1875779571]
+visible = false
 
 [node name="NightModulate" type="CanvasModulate" parent="World/Lighting" unique_id=922270554]
-visible = false
 color = Color(0.2901961, 0.34509805, 0.4392157, 1)
 
 [node name="YSortLayer" type="Node2D" parent="World" unique_id=1476947497]

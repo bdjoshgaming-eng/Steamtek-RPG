@@ -1,0 +1,53 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_WetConcrete_Neutral_v01.tres" id="1_concrete"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="2_gunmetal"]
+
+[sub_resource type="BoxMesh" id="AlleyMesh"]
+size = Vector3(2.4, 0.16, 2.4)
+
+[sub_resource type="BoxMesh" id="GutterMesh"]
+size = Vector3(2.2, 0.025, 0.12)
+
+[node name="SteamtekAlleyTile2_4m3D" type="Node3D" groups=["steamtek_live3d_modular"]]
+editor_description = "Square 2.4 m alley-service tile with two shallow utility gutters. Root is the finished surface plane."
+metadata/module_system = "live3d_meter_v1"
+metadata/module_type = "street_alley_tile"
+metadata/status = "blockout_geometry_production_snap_contract"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/footprint_m = Vector2(2.4, 2.4)
+metadata/root_contract = "Root is tile center on finished alley plane; slab extends downward"
+metadata/rotation_contract = "Yaw only: 0, 90, 180, or 270 degrees; never negative-scale mirror"
+
+[node name="AlleySurface" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.08, 0)
+mesh = SubResource("AlleyMesh")
+material_override = ExtResource("1_concrete")
+
+[node name="GutterNegZ" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.0125, -1.02)
+mesh = SubResource("GutterMesh")
+material_override = ExtResource("2_gunmetal")
+
+[node name="GutterPosZ" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.0125, 1.02)
+mesh = SubResource("GutterMesh")
+material_override = ExtResource("2_gunmetal")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="SnapNegX" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-1.2, 0, 0)
+metadata/socket_role = "street_alley_chain"
+
+[node name="SnapPosX" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(1.2, 0, 0)
+metadata/socket_role = "street_alley_chain"
+
+[node name="SnapNegZ" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, -1.2)
+metadata/socket_role = "street_alley_chain"
+
+[node name="SnapPosZ" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, 1.2)
+metadata/socket_role = "street_alley_chain"

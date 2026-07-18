@@ -1,0 +1,14 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/materials/apartment_interior_v01/STK_MAT_ApartmentInterior_Floor_HandPainted_v01.png" id="1_texture"]
+
+[resource]
+resource_name = "STK Apartment Interior Floor Hand Painted v01"
+albedo_color = Color(0.78, 0.76, 0.72, 1)
+albedo_texture = ExtResource("1_texture")
+metallic = 0.16
+roughness = 0.5
+uv1_scale = Vector3(0.34, 0.34, 0.34)
+uv1_triplanar = true
+uv1_world_triplanar = true
+

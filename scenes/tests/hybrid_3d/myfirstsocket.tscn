@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://dixewuxss36r8"]
+
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_exterior/SteamtekFacadeBaySolid3D.tscn" id="1_r63if"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_exterior/SteamtekFacadeBayWindow3D.tscn" id="2_2fxy2"]
+
+[node name="SteamtekApartmentAssemblyBlank3D" type="Node3D" unique_id=114802375]
+editor_description = "Blank meter-scale assembly scene for the Steamtek Live3D Builder dock. Build beneath Architecture; keep module roots at scale (1,1,1)."
+metadata/module_system = "live3d_meter_v1"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/grid_contract = "2.4m_horizontal_3.2m_vertical_90deg_yaw"
+metadata/status = "blank_editor_assembly_workspace"
+
+[node name="Architecture" type="Node3D" parent="." unique_id=551659716]
+
+[node name="SteamtekFacadeBaySolid3D" type="Node3D" parent="Architecture" unique_id=1491441420 groups=["steamtek_live3d_modular"] instance=ExtResource("1_r63if")]
+metadata/module_system = "live3d_meter_v1"
+metadata/module_type = "facade_bay_solid"
+metadata/bay_width_m = 2.4
+metadata/storey_height_m = 3.2
+metadata/wall_thickness_m = 0.24
+metadata/front_axis = "+Z"
+metadata/rotation_contract = "Yaw only: 0, 90, 180, or 270 degrees"
+metadata/status = "blockout_geometry_production_snap_contract"
+
+[node name="SteamtekFacadeBayWindow3D" type="Node3D" parent="Architecture" unique_id=453536408 groups=["steamtek_live3d_modular"] instance=ExtResource("2_2fxy2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0, 0)
+metadata/module_system = "live3d_meter_v1"
+metadata/module_type = "facade_bay_window"
+metadata/bay_width_m = 2.4
+metadata/storey_height_m = 3.2
+metadata/window_opening_m = Vector2(1.6, 1.25)
+metadata/front_axis = "+Z"
+metadata/rotation_contract = "Yaw only: 0, 90, 180, or 270 degrees"
+metadata/status = "blockout_geometry_production_snap_contract"
+
+[node name="Props" type="Node3D" parent="." unique_id=1003956887]

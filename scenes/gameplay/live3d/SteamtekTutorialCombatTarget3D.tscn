@@ -1,0 +1,52 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scenes/gameplay/live3d/steamtek_tutorial_combat_target_3d.gd" id="1_script"]
+
+[sub_resource type="StandardMaterial3D" id="BodyMaterial"]
+albedo_color = Color(0.16, 0.055, 0.04, 1)
+metallic = 0.52
+roughness = 0.58
+emission_enabled = true
+emission = Color(0.22, 0.025, 0.012, 1)
+emission_energy_multiplier = 0.65
+
+[sub_resource type="CapsuleMesh" id="BodyMesh"]
+material = SubResource("BodyMaterial")
+radius = 0.34
+height = 1.75
+
+[sub_resource type="CapsuleShape3D" id="BodyShape"]
+radius = 0.34
+height = 1.75
+
+[sub_resource type="StandardMaterial3D" id="EyeMaterial"]
+albedo_color = Color(0.3, 0.015, 0.015, 1)
+emission_enabled = true
+emission = Color(1, 0.03, 0.02, 1)
+emission_energy_multiplier = 2.4
+
+[node name="SteamtekTutorialCombatTarget3D" type="Area3D" groups=["steamtek_tutorial_enemy_3d"]]
+script = ExtResource("1_script")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.875, 0)
+mesh = SubResource("BodyMesh")
+
+[node name="Eye" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.35, 0.3)
+scale = Vector3(0.32, 0.12, 0.08)
+material_override = SubResource("EyeMaterial")
+mesh = SubResource("BodyMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.875, 0)
+shape = SubResource("BodyShape")
+
+[node name="StatusLabel" type="Label3D" parent="."]
+position = Vector3(0, 2.1, 0)
+font_size = 36
+outline_size = 8
+modulate = Color(1, 0.48, 0.32, 1)
+pixel_size = 0.008
+billboard = 1
+no_depth_test = true
