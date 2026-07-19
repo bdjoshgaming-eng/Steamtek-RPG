@@ -23,6 +23,8 @@ metadata/module_system = "live3d_meter_v1"
 metadata/module_family = "apartment_furniture"
 metadata/contact_pivot = "floor_center"
 metadata/prop_socket_count = 8
+metadata/art_status = "original_3d_restored_painted_card_rejected_2026_07_19"
+metadata/visual_contract = "true_3d_required_for_furniture_painted_cards_reserved_for_flat_architecture"
 
 [node name="StaticBody" type="StaticBody3D" parent="."]
 collision_layer = 1

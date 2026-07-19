@@ -1,0 +1,94 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/environment/live3d/models/apartment_interior/APT_Workbench_Production_C.glb" id="1_model"]
+
+[sub_resource type="BoxShape3D" id="LeftCabinetShape"]
+size = Vector3(0.56, 0.86, 0.72)
+
+[sub_resource type="BoxShape3D" id="RightCabinetShape"]
+size = Vector3(0.56, 0.86, 0.72)
+
+[sub_resource type="BoxShape3D" id="WorkSurfaceShape"]
+size = Vector3(2.4, 0.14, 0.82)
+
+[sub_resource type="BoxShape3D" id="BackboardShape"]
+size = Vector3(2.34, 0.9, 0.16)
+
+[node name="APT_Workbench_Production_C" type="Node3D" groups=["steamtek_live3d_modular"]]
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "apartment_furniture"
+metadata/module_variant = "finished_handpainted_workstation_C"
+metadata/module_dimensions_m = Vector3(2.4, 1.78, 0.82)
+metadata/module_dimensions_ft = "7 ft 10 in wide x 5 ft 10 in tall x 2 ft 8 in deep"
+metadata/contact_pivot = "floor_center"
+metadata/front_axis = "+Z_toward_room_and_c001"
+metadata/prop_socket_count = 8
+metadata/source_blend = "res://blender/live3d/apartment_interior/APT_Workbench_Production_C.blend"
+metadata/rebuild_script = "res://blender/live3d/apartment_interior/Steamtek_Build_APT_Workbench_Production_C.py"
+metadata/art_style = "hand_painted_shadowrun_returns_rendering_language_not_palette"
+metadata/world_design = "60_cyberpunk_20_neoindustrial_20_functional_steampunk"
+metadata/art_status = "production_C_f6_user_approved_2026_07_19"
+metadata/visual_contract = "finished_true_3d_no_cards_no_billboards"
+
+[node name="Visual" parent="." instance=ExtResource("1_model")]
+
+[node name="StaticBody" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="LeftCabinetCollision" type="CollisionShape3D" parent="StaticBody"]
+position = Vector3(-0.88, 0.43, 0)
+shape = SubResource("LeftCabinetShape")
+
+[node name="RightCabinetCollision" type="CollisionShape3D" parent="StaticBody"]
+position = Vector3(0.88, 0.43, 0)
+shape = SubResource("RightCabinetShape")
+
+[node name="WorkSurfaceCollision" type="CollisionShape3D" parent="StaticBody"]
+position = Vector3(0, 0.82, 0)
+shape = SubResource("WorkSurfaceShape")
+
+[node name="BackboardCollision" type="CollisionShape3D" parent="StaticBody"]
+position = Vector3(0, 1.32, -0.31)
+shape = SubResource("BackboardShape")
+
+[node name="ScreenSourceLight" type="OmniLight3D" parent="."]
+position = Vector3(0.05, 1.4, 0.26)
+light_color = Color(0.08, 0.78, 0.9, 1)
+light_energy = 0.36
+omni_range = 2.1
+shadow_enabled = false
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="Surface01" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-0.82, 0.91, 0.08)
+metadata/socket_role = "prop_surface"
+
+[node name="Surface02" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-0.3, 0.91, 0.08)
+metadata/socket_role = "prop_surface"
+
+[node name="Surface03" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0.25, 0.91, 0.08)
+metadata/socket_role = "prop_surface"
+
+[node name="Surface04" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0.82, 0.91, 0.08)
+metadata/socket_role = "prop_surface"
+
+[node name="Board01" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-0.8, 1.38, 0.1)
+metadata/socket_role = "wall_prop_surface"
+
+[node name="Board02" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0.75, 1.38, 0.1)
+metadata/socket_role = "wall_prop_surface"
+
+[node name="LeftFurniture" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-1.2, 0, 0)
+metadata/socket_role = "furniture_chain"
+
+[node name="RightFurniture" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(1.2, 0, 0)
+metadata/socket_role = "furniture_chain"

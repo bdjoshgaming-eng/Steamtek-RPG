@@ -1,7 +1,7 @@
 [gd_scene load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://scenes/levels/apartment_3d/steamtek_opening_apartment_playable_3d.gd" id="1_script"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/interiors/apartments/SteamtekPlayerApartmentProductionAssembly3D.tscn" id="2_apartment"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/interiors/apartments/SteamtekPlayerApartmentProductionAssembly3D_v02.tscn" id="2_apartment"]
 [ext_resource type="PackedScene" path="res://scenes/characters/player/VesperKane_PlayerCharacter_v01.tscn" id="3_character"]
 [ext_resource type="PackedScene" path="res://scenes/gameplay/live3d/SteamtekTutorialInteractable3D.tscn" id="4_interactable"]
 [ext_resource type="PackedScene" path="res://scenes/interactions/SteamtekZoneDoor3D.tscn" id="5_zone_door"]
@@ -39,12 +39,13 @@ outline_size = 7
 outline_color = Color(0.005, 0.008, 0.012, 0.98)
 
 [node name="SteamtekOpeningApartmentPlayable3D" type="Node3D"]
-editor_description = "Playable opening: wake beside the bed, interact with the note to begin the first quest, optionally inspect the workstation, then exit east to the Surface tutorial."
+editor_description = "Playable opening: wake beside the bed, interact with the note to begin the first quest, optionally inspect the workstation, then use the top-wall door between the workstation and storage to reach the Surface tutorial."
 script = ExtResource("1_script")
-metadata/status = "opening_apartment_playable_production_v01"
+metadata/status = "opening_apartment_playable_production_v02_pending_f6"
 metadata/unit_contract = "1_godot_unit_equals_1_meter"
-metadata/c001_contract = "unchanged wrapper at scale 1,1,1"
-metadata/opening_flow = "wake_learn_movement_find_note_cross_room_open_storage_equip_starter_weapon_exit_east"
+metadata/c001_contract = "six_foot_height_visual_scale_1_075765_collision_and_targets_adjusted"
+metadata/apartment_camera_contract = "the_ascent_gameplay_locked_ortho_9_14_45deg_azimuth_35deg_elevation"
+metadata/opening_flow = "wake_learn_movement_find_note_cross_room_open_storage_equip_starter_weapon_exit_top_wall"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment")
@@ -120,8 +121,8 @@ interaction_prompt = "Open your storage box"
 action_id = "starter_storage"
 
 [node name="ExitDoor" parent="." instance=ExtResource("5_zone_door")]
-position = Vector3(5.2, 1.1, 1.35)
-interaction_prompt = "Exit east to Rain Alley"
+position = Vector3(1.5, 1.1, -4.15)
+interaction_prompt = "Exit to Rain Alley"
 target_scene_path = "res://scenes/levels/surface_3d/SteamtekSurfaceTutorialPlayable3D.tscn"
 target_spawn_id = "SurfaceEntryWest"
 
@@ -130,8 +131,8 @@ position = Vector3(-4.3, 0.08, 2.45)
 rotation_degrees = Vector3(0, 90, 0)
 
 [node name="ApartmentReturnFromSurface" type="Marker3D" parent="."]
-position = Vector3(4.5, 0.08, 1.35)
-rotation_degrees = Vector3(0, 270, 0)
+position = Vector3(1.5, 0.08, -3.8)
+rotation_degrees = Vector3(0, 180, 0)
 
 [node name="VesperKane_PlayerCharacter_v01" parent="." instance=ExtResource("3_character")]
 position = Vector3(-4.3, 0.08, 2.45)
@@ -139,9 +140,9 @@ position = Vector3(-4.3, 0.08, 2.45)
 [node name="CameraRig" type="Node3D" parent="."]
 
 [node name="Camera3D" type="Camera3D" parent="CameraRig"]
-position = Vector3(17.32, 12.547, 10)
+position = Vector3(14.142, 15.004, 14.142)
 projection = 1
-size = 12.5
+size = 9.14
 current = true
 
 [node name="TransitionUI" type="CanvasLayer" parent="."]

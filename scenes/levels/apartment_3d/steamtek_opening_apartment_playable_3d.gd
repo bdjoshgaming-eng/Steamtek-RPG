@@ -100,7 +100,7 @@ func _update_objective() -> void:
 	elif not bool(tutorial_state.get("equipment_tutorial_complete", false)):
 		objective_label.text = "OBJECTIVE  |  Press [I], then equip Brass Knuckles [1] or the Service Pistol [2]"
 	else:
-		objective_label.text = "OBJECTIVE  |  Interact with the east door and leave the apartment"
+		objective_label.text = "OBJECTIVE  |  Use the door between the workstation and storage"
 
 
 func _open_starter_storage() -> void:

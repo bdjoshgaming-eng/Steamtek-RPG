@@ -961,6 +961,12 @@ func _unhandled_input(event: InputEvent) -> void:
 			keystone_viewer._rebuild_graph()
 			keystone_viewer._refresh()
 
+	# Escape always closes the talent panel. Safety net: the panel is
+	# full-screen, so if its close button is ever off-screen (small
+	# window, odd resolution) there is still a guaranteed way out.
+	if event.is_action_pressed("ui_cancel") and talent_ui != null and talent_ui.visible:
+		talent_ui.visible = false
+
 func _generate_unique_resource_name() -> String:
 	var new_name = ""
 	while true:
@@ -2012,21 +2018,30 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 		conditioning_nodes += path_data["unlocked_nodes"]
 		max_conditioning_nodes += path_data.get("max_nodes", NODES_PER_PATH)
 
-	var speed_bonus = 0.0
-	if GameData.pressure_enforcer_weapons.has(weapon_class) or equipped_weapon_name == "":
-		var weapon_type_label = _get_pressure_weapon_type_label(weapon_class, weapon_subclass)
-		if weapon_type_label != "":
-			var speed_stat_total = _get_total_passive_stat(profession_name, weapon_type_label + " Speed")
-			speed_bonus = speed_stat_total / 100.0
-	else:
-		speed_bonus = conditioning_nodes * 0.05
-	speed = speed * (1.0 - speed_bonus)
+	# Phase 10: weapon families + proficiency. The governing keystone
+	# (Melee or Ranged) sets the proficiency tier for this weapon's family,
+	# which grants an accuracy bonus and a faster swing. Certification is
+	# resolved HERE rather than inside the damage call, because an
+	# uncertified wielder also pays more Action and loses special
+	# multipliers -- both needed before the attack resolves.
+	var is_uncertified = Combat.is_weapon_uncertified(equipped_weapon_name, professions_unlocked)
+	var family_points = Combat.keystone_points_for_family(weapon_class, GameData.novice_professions, profession_name)
+	var proficiency = Combat.proficiency_for_family(weapon_class, family_points)
 
-	# Central damage number: variance roll, crit, profession cert (1.10),
-	# and the uncertified-weapon 0.5 penalty all live in Combat.gd now, so
-	# the whole damage formula is tuned in one place. Returns the rolled
-	# damage plus the crit and uncertified flags this function still needs
-	# for the hit messages further down.
+	speed = speed * (1.0 - float(proficiency["speed_pct"]))
+
+	# Uncertified attacks cost more Action.
+	action_cost = Combat.adjusted_action_cost(action_cost, is_uncertified)
+	if action_cost > 0 and player_current_action < action_cost:
+		_show_combat_message("Not enough Action! Uncertified weapons cost more. Need " + str(action_cost) + ", have " + str(player_current_action) + ".")
+		return
+
+	# Uncertified wielders cannot land special multipliers.
+	damage_multiplier = Combat.adjusted_ability_coefficient(damage_multiplier, is_uncertified)
+
+	# Central damage number: variance roll, crit, profession cert (1.10)
+	# and the Phase 10 graded uncertified damage penalty all live in
+	# Combat.gd, so the whole damage formula is tuned in one place.
 	var weapon_damage_type = weapon_stats.get("Damage Type", "Kinetic")
 	var weapon_armor_pen = int(weapon_stats.get("Armor Penetration", 0))
 
@@ -2042,7 +2057,6 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 	})
 	var damage = attack_result["damage"]
 	var crit_hit = attack_result["crit"]
-	var is_uncertified = attack_result["uncertified"]
 
 	# Hit-chance roll: our own formula, weapon Accuracy + player Accuracy
 	# bonus (Pressure Enforcer only, for now) vs a flat per-enemy Defense
@@ -2050,11 +2064,9 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 	# hits close to half the time; weapon quality and trained Accuracy
 	# stats push that up meaningfully from there.
 	var weapon_accuracy = weapon_stats.get("Accuracy", 50)
-	var player_accuracy_bonus = 0.0
-	if GameData.pressure_enforcer_weapons.has(weapon_class) or equipped_weapon_name == "":
-		var weapon_type_label_for_accuracy = _get_pressure_weapon_type_label(weapon_class, weapon_subclass)
-		if weapon_type_label_for_accuracy != "":
-			player_accuracy_bonus = _get_total_passive_stat(profession_name, weapon_type_label_for_accuracy + " Accuracy")
+	# Phase 10: accuracy now comes from family proficiency, plus the
+	# uncertified penalty if the character isn't certified for this weapon.
+	var player_accuracy_bonus = float(proficiency["accuracy"]) + float(Combat.uncertified_accuracy_penalty(is_uncertified))
 
 	var target_defense = enemies[target_id]["defense"]
 	var target_node_for_range = dummy if target_id == "dummy" else enemy2
@@ -2327,7 +2339,7 @@ func _defeat_enemy(enemy_id: String) -> String:
 
 	e["damage_by_weapon_class"] = {}
 
-	var dropped_items = _roll_loot(n["loot_key"])
+	var dropped_items = _roll_loot(n["loot_key"], int(e.get("cl", 1)))
 	_update_inventory_display()
 
 	var cogs_dropped = randi_range(COGS_MIN_DROP, COGS_MAX_DROP)
@@ -2403,10 +2415,11 @@ func _add_skill_xp(xp_type: String, amount: int) -> void:
 	if not xp_pools.has(xp_type):
 		return
 
-	var cap = _get_xp_type_cap(xp_type)
-	var current_xp = xp_pools[xp_type]
-
-	xp_pools[xp_type] = min(current_xp + amount, cap)
+	# XP pools are UNCAPPED. _get_xp_type_cap() exists to scale a display
+	# bar, and clamping earnings to it was silently destroying XP -- the
+	# cap resolved to 15 (cheapest keystone cost x1.5) while a single
+	# kill awards 50+, so most of every kill was thrown away.
+	xp_pools[xp_type] = xp_pools[xp_type] + amount
 
 func _get_box_cost(path_data: Dictionary) -> Dictionary:
 	if path_data.has("xp_cost"):
@@ -3197,18 +3210,23 @@ func _on_player_action_regen_tick() -> void:
 		adrenaline_boost_bonus_amount = 0
 		_show_combat_message("Your Adrenaline Boost has worn off.")
 
-func _roll_loot(enemy_name: String) -> Array:
+func _roll_loot(enemy_name: String, enemy_cl: int = 1) -> Array:
 	var dropped_items = []
 
 	if not loot_tables.has(enemy_name):
 		return dropped_items
+
+	# Phase 9: tier odds now scale with the enemy's hidden Combat Level --
+	# tougher enemies roll the better tiers more often. Drop AMOUNTS are
+	# deliberately untouched; CL raises loot grade, not quantity.
+	var tier_chances = Combat.loot_tier_chances_for_cl(enemy_cl)
 
 	var roll = randf()
 	var chosen_tier = ""
 	var cumulative = 0.0
 
 	for tier_name in ["Common", "Uncommon", "Rare"]:
-		cumulative += LOOT_TIER_CHANCES[tier_name]
+		cumulative += tier_chances[tier_name]
 		if roll < cumulative:
 			chosen_tier = tier_name
 			break
@@ -5037,21 +5055,16 @@ func _make_crafting_book_header(text: String, indent: int, color: Color, categor
 # for every non-Novice recipe (blanket gate for now -- to be split out
 # per recipe later). Recipes for other professions keep the simpler
 # "is the profession unlocked" rule.
-func _is_recipe_learned(recipe: Dictionary) -> bool:
-	var prof = recipe.get("requires_profession", "")
-	if prof == "":
-		return true
-	if not professions_unlocked.get(prof, false):
-		return false
-	if prof == "Street Thug":
-		var street = GameData.novice_professions.get("Street Thug", {})
-		var crafting_ks = street.get("keystones", {}).get("Crafting", {})
-		if not crafting_ks.get("unlocked", false):
-			return false
-		var box = recipe.get("requires_box", "Novice")
-		if box == "Novice":
-			return true
-		return crafting_ks.get("points_spent", 0) >= 6
+func _is_recipe_learned(_recipe: Dictionary) -> bool:
+	# Crafting is NOT a class. Per the crafting system spec, every
+	# character can gather, sample, research, craft, experiment, install
+	# basic mods, dismantle and repair -- "no combat class or keystone
+	# node should be required for basic story progression". The old gate
+	# (Street Thug Crafting keystone unlocked + 6 points spent) violated
+	# that and has been removed along with the Crafting keystone itself.
+	#
+	# Blueprint-based access arrives with the crafting rebuild; until then
+	# every recipe is available to everyone.
 	return true
 
 func _refresh_crafting_book() -> void:
@@ -5315,7 +5328,13 @@ func _execute_assembly_craft() -> void:
 		var needed = recipe["requires"][requirement_key]
 		var instance_name = crafting_assembly_selections[requirement_key]
 
-		var counts_toward_quality = not recipe.has("quality_ingredients") or recipe["quality_ingredients"].has(requirement_key)
+		# A material only contributes to crafted quality if it actually has
+		# stats. Looted materials arrive as plain stacks with no stat block,
+		# and previously scored a flat 50/1000 that silently dragged the
+		# whole craft to the bottom of its stat range. They now simply don't
+		# count -- quality comes from whatever sampled materials were used.
+		var has_material_stats = inventory_stats.get(instance_name, {}).size() > 0
+		var counts_toward_quality = has_material_stats and (not recipe.has("quality_ingredients") or recipe["quality_ingredients"].has(requirement_key))
 		if counts_toward_quality:
 			var stack_score = _get_weighted_stack_score(instance_name, requirement_key, recipe)
 			total_weighted += stack_score * needed
@@ -5323,7 +5342,10 @@ func _execute_assembly_craft() -> void:
 
 		inventory[instance_name] -= needed
 
-	var base_quality = 50
+	# Neutral baseline when no material carried stats (e.g. an all-looted
+	# craft). 500 is the codebase's established mid-scale default rather
+	# than the old 50, which sat in the bottom 5% of every stat range.
+	var base_quality = 500
 	if total_weight > 0:
 		base_quality = round(total_weighted / total_weight)
 

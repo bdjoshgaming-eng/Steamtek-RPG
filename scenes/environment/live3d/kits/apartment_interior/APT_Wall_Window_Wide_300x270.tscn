@@ -1,0 +1,53 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/environment/live3d/models/apartment_interior/library_d/APT_Wall_Window_Wide_300x270.glb" id="1_model"]
+
+[sub_resource type="BoxShape3D" id="PrimaryShape"]
+size = Vector3(3, 0.36, 2.7)
+
+[node name="APT_Wall_Window_Wide_300x270" type="Node3D" groups=["steamtek_live3d_modular"]]
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "apartment_library_d_architecture"
+metadata/module_variant = "APT_Wall_Window_Wide_300x270"
+metadata/module_dimensions_m = Vector3(3, 0.36, 2.7)
+metadata/contact_pivot = "floor_center"
+metadata/front_axis = "+Z_toward_room_and_c001"
+metadata/art_style = "hand_painted_shadowrun_returns_rendering_language_not_palette"
+metadata/world_design = "60_cyberpunk_20_neoindustrial_20_functional_steampunk"
+metadata/visual_contract = "finished_true_3d_no_cards_no_billboards"
+metadata/source_library = "APT_ApartmentAssetLibrary_D.blend"
+
+[node name="Visual" parent="." instance=ExtResource("1_model")]
+
+[node name="StaticBody" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="PrimaryCollision" type="CollisionShape3D" parent="StaticBody"]
+position = Vector3(0, 0.18, 0)
+shape = SubResource("PrimaryShape")
+
+[node name="WindowSourceLight" type="OmniLight3D" parent="."]
+position = Vector3(0, 1.45, 0.38)
+light_color = Color(0.08, 0.72, 0.82, 1)
+light_energy = 0.22
+omni_range = 2.2
+shadow_enabled = false
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="WindowSillProp" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0.8, 0.22)
+metadata/socket_role = "prop_surface"
+
+[node name="WallLeft" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-1.5, 0, 0)
+metadata/socket_role = "interior_wall_chain"
+
+[node name="WallRight" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(1.5, 0, 0)
+metadata/socket_role = "interior_wall_chain"
+
+[node name="FloorAttachment" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, 0)
+metadata/socket_role = "interior_wall_base"

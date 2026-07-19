@@ -31,7 +31,7 @@ var recipes = [
 		"item_class": "Sword",
 		"item_subclass": "1 Handed",
 		"requires_profession": "Street Thug",
-		"weapon_categorical_stats": {"Damage Type": "Slashing", "Wound Type": "Bleed"},
+		"weapon_categorical_stats": {"Damage Type": "Kinetic", "Wound Type": "Bleed"},
 		"weapon_stat_ranges": {"Speed": [2.8, 1.8], "Damage Rating": [8, 16], "Accuracy": [55, 75]}
 	},
 	{
@@ -43,7 +43,7 @@ var recipes = [
 		"item_class": "Sword",
 		"item_subclass": "2 Handed",
 		"requires_profession": "Street Thug",
-		"weapon_categorical_stats": {"Damage Type": "Slashing", "Wound Type": "Bleed"},
+		"weapon_categorical_stats": {"Damage Type": "Kinetic", "Wound Type": "Bleed"},
 		"weapon_stat_ranges": {"Speed": [4.0, 3.0], "Damage Rating": [18, 32], "Accuracy": [40, 60]}
 	},
 	{
@@ -55,7 +55,7 @@ var recipes = [
 		"item_class": "Hammer",
 		"item_subclass": "2 Handed",
 		"requires_profession": "Street Thug",
-		"weapon_categorical_stats": {"Damage Type": "Blunt", "Wound Type": "Crush"},
+		"weapon_categorical_stats": {"Damage Type": "Kinetic", "Wound Type": "Crush"},
 		"weapon_stat_ranges": {"Speed": [4.5, 3.2], "Damage Rating": [20, 36], "Accuracy": [35, 55]}
 	},
 	{
@@ -67,7 +67,7 @@ var recipes = [
 		"item_class": "Stun Stick",
 		"item_subclass": "1 Handed",
 		"requires_profession": "Street Thug",
-		"weapon_categorical_stats": {"Damage Type": "Blunt", "Wound Type": "Stun"},
+		"weapon_categorical_stats": {"Damage Type": "Arc", "Wound Type": "Stun"},
 		"weapon_stat_ranges": {"Speed": [2.4, 1.6], "Damage Rating": [6, 14], "Accuracy": [55, 75]}
 	},
 	{
@@ -79,7 +79,7 @@ var recipes = [
 		"item_class": "Brass Knuckles",
 		"item_subclass": "1 Handed",
 		"requires_profession": "Street Thug",
-		"weapon_categorical_stats": {"Damage Type": "Unarmed", "Wound Type": "Bruise"},
+		"weapon_categorical_stats": {"Damage Type": "Kinetic", "Wound Type": "Bruise"},
 		"weapon_stat_ranges": {"Speed": [1.8, 1.0], "Damage Rating": [5, 12], "Accuracy": [65, 85]}
 	},
 	{
@@ -182,7 +182,7 @@ var recipes = [
 		"item_class": "Pistol",
 		"item_subclass": "Pistol",
 		"requires_profession": "Street Thug",
-		"weapon_categorical_stats": {"Damage Type": "Kinetic", "Wound Type": "Puncture"},
+		"weapon_categorical_stats": {"Damage Type": "Ballistic", "Wound Type": "Puncture"},
 		"weapon_stat_ranges": {"Speed": [1.2, 0.6], "Damage Rating": [6, 14], "Range": [15, 25], "Ammo Capacity": [8, 15], "Reload Speed": [3.0, 1.5], "Accuracy": [65, 85]}
 	},
 	{
@@ -194,7 +194,7 @@ var recipes = [
 		"item_class": "Assault Rifle",
 		"item_subclass": "Assault Rifle",
 		"requires_profession": "Street Thug",
-		"weapon_categorical_stats": {"Damage Type": "Kinetic", "Wound Type": "Puncture"},
+		"weapon_categorical_stats": {"Damage Type": "Ballistic", "Wound Type": "Puncture"},
 		"weapon_stat_ranges": {"Speed": [0.4, 0.15], "Damage Rating": [8, 18], "Range": [40, 70], "Ammo Capacity": [20, 35], "Reload Speed": [3.5, 2.0], "Accuracy": [45, 65]}
 	},
 	{
@@ -206,7 +206,7 @@ var recipes = [
 		"item_class": "Sniper Rifle",
 		"item_subclass": "Sniper Rifle",
 		"requires_profession": "Street Thug",
-		"weapon_categorical_stats": {"Damage Type": "Kinetic", "Wound Type": "Puncture"},
+		"weapon_categorical_stats": {"Damage Type": "Ballistic", "Wound Type": "Puncture"},
 		"weapon_stat_ranges": {"Speed": [3.0, 1.8], "Damage Rating": [30, 55], "Range": [100, 160], "Ammo Capacity": [4, 8], "Reload Speed": [4.0, 2.5], "Accuracy": [70, 90]}
 	},
 	{
@@ -218,7 +218,7 @@ var recipes = [
 		"item_class": "Shotgun",
 		"item_subclass": "Shotgun",
 		"requires_profession": "Street Thug",
-		"weapon_categorical_stats": {"Damage Type": "Kinetic", "Wound Type": "Laceration"},
+		"weapon_categorical_stats": {"Damage Type": "Ballistic", "Wound Type": "Laceration"},
 		"weapon_stat_ranges": {"Speed": [3.5, 2.5], "Damage Rating": [22, 38], "Range": [8, 15], "Ammo Capacity": [4, 8], "Reload Speed": [5.0, 3.5], "Accuracy": [35, 55]}
 	},
 	{
@@ -230,7 +230,7 @@ var recipes = [
 		"item_class": "Grenade Launcher",
 		"item_subclass": "Grenade Launcher",
 		"requires_profession": "Ordnance Specialist",
-		"weapon_categorical_stats": {"Damage Type": "Explosive", "Wound Type": "Blast"},
+		"weapon_categorical_stats": {"Damage Type": "Pressure", "Wound Type": "Blast"},
 		"weapon_stat_ranges": {"Speed": [3.5, 2.2], "Damage Rating": [50, 90], "Range": [30, 60], "Ammo Capacity": [1, 4], "Reload Speed": [5.0, 3.0], "Accuracy": [35, 55]}
 	},
 	{
@@ -242,7 +242,7 @@ var recipes = [
 		"item_class": "Flame Thrower",
 		"item_subclass": "Flame Thrower",
 		"requires_profession": "Ordnance Specialist",
-		"weapon_categorical_stats": {"Damage Type": "Incendiary", "Wound Type": "Burn"},
+		"weapon_categorical_stats": {"Damage Type": "Thermal", "Wound Type": "Burn"},
 		"weapon_stat_ranges": {"Speed": [0.3, 0.1], "Damage Rating": [5, 10], "Range": [5, 12], "Ammo Capacity": [50, 100], "Reload Speed": [4.5, 3.0], "Accuracy": [50, 70]}
 	},
 	{
@@ -255,7 +255,7 @@ var recipes = [
 		"item_subclass": "1 Handed",
 		"requires_profession": "Street Thug",
 		"requires_box": "Weapons Crafting I",
-		"weapon_categorical_stats": {"Damage Type": "Slashing", "Wound Type": "Bleed"},
+		"weapon_categorical_stats": {"Damage Type": "Kinetic", "Wound Type": "Bleed"},
 		"weapon_stat_ranges": {"Speed": [2.4, 1.5], "Damage Rating": [14, 26], "Accuracy": [60, 80]}
 	},
 	{
@@ -268,7 +268,7 @@ var recipes = [
 		"item_subclass": "2 Handed",
 		"requires_profession": "Street Thug",
 		"requires_box": "Weapons Crafting I",
-		"weapon_categorical_stats": {"Damage Type": "Blunt", "Wound Type": "Crush"},
+		"weapon_categorical_stats": {"Damage Type": "Kinetic", "Wound Type": "Crush"},
 		"weapon_stat_ranges": {"Speed": [3.6, 2.4], "Damage Rating": [30, 50], "Accuracy": [40, 60]}
 	},
 	{
@@ -281,7 +281,7 @@ var recipes = [
 		"item_subclass": "1 Handed",
 		"requires_profession": "Street Thug",
 		"requires_box": "Weapons Crafting I",
-		"weapon_categorical_stats": {"Damage Type": "Unarmed", "Wound Type": "Bruise"},
+		"weapon_categorical_stats": {"Damage Type": "Kinetic", "Wound Type": "Bruise"},
 		"weapon_stat_ranges": {"Speed": [1.5, 0.8], "Damage Rating": [9, 18], "Accuracy": [70, 90]}
 	},
 	{
@@ -294,7 +294,7 @@ var recipes = [
 		"item_subclass": "1 Handed",
 		"requires_profession": "Street Thug",
 		"requires_box": "Weapons Crafting I",
-		"weapon_categorical_stats": {"Damage Type": "Blunt", "Wound Type": "Bruise"},
+		"weapon_categorical_stats": {"Damage Type": "Kinetic", "Wound Type": "Bruise"},
 		"weapon_stat_ranges": {"Speed": [2.2, 1.4], "Damage Rating": [12, 22], "Accuracy": [60, 80]}
 	},
 	{
@@ -307,7 +307,7 @@ var recipes = [
 		"item_subclass": "Sniper Rifle",
 		"requires_profession": "Street Thug",
 		"requires_box": "Weapons Crafting II",
-		"weapon_categorical_stats": {"Damage Type": "Kinetic", "Wound Type": "Puncture"},
+		"weapon_categorical_stats": {"Damage Type": "Ballistic", "Wound Type": "Puncture"},
 		"weapon_stat_ranges": {"Speed": [2.6, 1.5], "Damage Rating": [45, 75], "Range": [120, 190], "Ammo Capacity": [5, 10], "Reload Speed": [3.5, 2.2], "Accuracy": [75, 95]}
 	},
 	{
@@ -320,7 +320,7 @@ var recipes = [
 		"item_subclass": "Shotgun",
 		"requires_profession": "Street Thug",
 		"requires_box": "Weapons Crafting II",
-		"weapon_categorical_stats": {"Damage Type": "Kinetic", "Wound Type": "Laceration"},
+		"weapon_categorical_stats": {"Damage Type": "Ballistic", "Wound Type": "Laceration"},
 		"weapon_stat_ranges": {"Speed": [4.5, 3.2], "Damage Rating": [35, 60], "Range": [10, 18], "Ammo Capacity": [2, 4], "Reload Speed": [6.0, 4.5], "Accuracy": [35, 55]}
 	},
 	{
@@ -333,7 +333,7 @@ var recipes = [
 		"item_subclass": "Pistol",
 		"requires_profession": "Street Thug",
 		"requires_box": "Weapons Crafting II",
-		"weapon_categorical_stats": {"Damage Type": "Kinetic", "Wound Type": "Puncture"},
+		"weapon_categorical_stats": {"Damage Type": "Ballistic", "Wound Type": "Puncture"},
 		"weapon_stat_ranges": {"Speed": [1.0, 0.5], "Damage Rating": [10, 22], "Range": [20, 32], "Ammo Capacity": [10, 18], "Reload Speed": [2.5, 1.2], "Accuracy": [70, 90]}
 	},
 	{
@@ -345,7 +345,7 @@ var recipes = [
 		"item_class": "Grenade Launcher",
 		"item_subclass": "Grenade Launcher",
 		"requires_profession": "Ordnance Specialist",
-		"weapon_categorical_stats": {"Damage Type": "Explosive", "Wound Type": "Blast"},
+		"weapon_categorical_stats": {"Damage Type": "Pressure", "Wound Type": "Blast"},
 		"weapon_stat_ranges": {"Speed": [3.0, 1.8], "Damage Rating": [65, 105], "Range": [35, 65], "Ammo Capacity": [2, 5], "Reload Speed": [4.5, 2.8], "Accuracy": [40, 60]}
 	},
 	{
@@ -430,28 +430,28 @@ const WEAPON_CERT_REQUIREMENTS: Dictionary = {
 
 # --- Ability Definitions ---
 var ability_definitions: Dictionary = {
-	"Quick Hit": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Street Thug", "requires_box": "Novice"},
-	"Overhead Swing": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Street Thug", "requires_box": "Novice"},
-	"Bash": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Street Thug", "requires_box": "Novice"},
-	"Backhand": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Street Thug", "requires_box": "Novice"},
-	"Slap": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 50, "damage_multiplier": 1.25, "requires_profession": "Street Thug", "requires_box": "Melee II"},
-	"Thrust": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 50, "damage_multiplier": 1.25, "requires_profession": "Street Thug", "requires_box": "Melee II"},
-	"Bludgeon": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 50, "damage_multiplier": 1.25, "requires_profession": "Street Thug", "requires_box": "Melee II"},
-	"Roundhouse": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 60, "damage_multiplier": 1.5, "aoe": true, "requires_profession": "Street Thug", "requires_box": "Master"},
-	"Flourish": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 60, "damage_multiplier": 1.5, "aoe": true, "requires_profession": "Street Thug", "requires_box": "Master"},
-	"Power Swing": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 60, "damage_multiplier": 1.5, "aoe": true, "requires_profession": "Street Thug", "requires_box": "Master"},
-	"Subdue": {"weapons": ["Sword", "Axe", "Baton", "Hammer", "Brass Knuckles", "Stun Stick"], "action_cost": 30, "damage_multiplier": 0, "debuff": "damage", "debuff_amount": 0.10, "debuff_duration": 3.0, "requires_profession": "Street Thug", "requires_box": "Combat Training I"},
-	"Disorient": {"weapons": ["Sword", "Axe", "Baton", "Hammer", "Brass Knuckles", "Stun Stick"], "action_cost": 30, "damage_multiplier": 0, "debuff": "accuracy", "debuff_amount": 0.05, "debuff_duration": 3.0, "requires_profession": "Street Thug", "requires_box": "Combat Training II"},
-	"Bleed": {"weapons": ["Sword", "Axe", "Baton", "Hammer", "Brass Knuckles", "Stun Stick"], "action_cost": 30, "damage_multiplier": 0, "dot_damage_per_tick": 8, "dot_duration_ticks": 3, "requires_profession": "Street Thug", "requires_box": "Master"},
-	"Bruise": {"weapons": ["Sword", "Axe", "Baton", "Hammer", "Brass Knuckles", "Stun Stick"], "action_cost": 30, "damage_multiplier": 0, "debuff": "attack_speed", "debuff_amount": 0.20, "debuff_duration": 3.0, "requires_profession": "Street Thug", "requires_box": "Master"},
-	"Anger": {"weapons": ["Sword", "Axe", "Baton", "Hammer", "Brass Knuckles", "Stun Stick"], "action_cost": 30, "damage_multiplier": 0, "taunt_duration": 3.0, "requires_profession": "Street Thug", "requires_box": "Master"},
-	"Aimed Shot": {"weapons": ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"], "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Street Thug", "requires_box": "Novice"},
-	"Scatter Blast": {"weapons": ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"], "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Street Thug", "requires_box": "Novice"},
-	"Suppressing Fire": {"weapons": ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"], "action_cost": 35, "damage_multiplier": 1.05, "requires_profession": "Street Thug", "requires_box": "Novice"},
-	"Piercing Round": {"weapons": ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"], "action_cost": 50, "damage_multiplier": 1.25, "requires_profession": "Street Thug", "requires_box": "Ranged III"},
-	"Point-Blank Burst": {"weapons": ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"], "action_cost": 50, "damage_multiplier": 1.25, "requires_profession": "Street Thug", "requires_box": "Ranged II"},
-	"Suppressive Volley": {"weapons": ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"], "action_cost": 60, "damage_multiplier": 1.5, "aoe": true, "requires_profession": "Street Thug", "requires_box": "Master"},
-	"Buckshot Barrage": {"weapons": ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"], "action_cost": 60, "damage_multiplier": 1.5, "aoe": true, "requires_profession": "Street Thug", "requires_box": "Master"}
+	"Quick Hit": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 35, "damage_multiplier": 1.5, "requires_profession": "Street Thug", "requires_box": "Novice"},
+	"Overhead Swing": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 35, "damage_multiplier": 1.5, "requires_profession": "Street Thug", "requires_box": "Novice"},
+	"Bash": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 35, "damage_multiplier": 1.5, "requires_profession": "Street Thug", "requires_box": "Novice"},
+	"Backhand": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 35, "damage_multiplier": 1.5, "requires_profession": "Street Thug", "requires_box": "Novice"},
+	"Slap": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 50, "damage_multiplier": 2.5, "requires_profession": "Street Thug", "requires_box": "Melee II"},
+	"Thrust": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 50, "damage_multiplier": 2.5, "requires_profession": "Street Thug", "requires_box": "Melee II"},
+	"Bludgeon": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 50, "damage_multiplier": 2.5, "requires_profession": "Street Thug", "requires_box": "Melee II"},
+	"Roundhouse": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 60, "damage_multiplier": 4.0, "aoe": true, "requires_profession": "Street Thug", "requires_box": "Master"},
+	"Flourish": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 60, "damage_multiplier": 4.0, "aoe": true, "requires_profession": "Street Thug", "requires_box": "Master"},
+	"Power Swing": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 60, "damage_multiplier": 4.0, "aoe": true, "requires_profession": "Street Thug", "requires_box": "Master"},
+	"Subdue": {"weapons": ["Sword", "Axe", "Baton", "Hammer", "Brass Knuckles", "Stun Stick"], "action_cost": 30, "damage_multiplier": 0.25, "debuff": "damage", "debuff_amount": 0.10, "debuff_duration": 3.0, "requires_profession": "Street Thug", "requires_box": "Combat Training I"},
+	"Disorient": {"weapons": ["Sword", "Axe", "Baton", "Hammer", "Brass Knuckles", "Stun Stick"], "action_cost": 30, "damage_multiplier": 0.25, "debuff": "accuracy", "debuff_amount": 0.05, "debuff_duration": 3.0, "requires_profession": "Street Thug", "requires_box": "Combat Training II"},
+	"Bleed": {"weapons": ["Sword", "Axe", "Baton", "Hammer", "Brass Knuckles", "Stun Stick"], "action_cost": 30, "damage_multiplier": 0.25, "dot_damage_per_tick": 8, "dot_duration_ticks": 3, "requires_profession": "Street Thug", "requires_box": "Master"},
+	"Bruise": {"weapons": ["Sword", "Axe", "Baton", "Hammer", "Brass Knuckles", "Stun Stick"], "action_cost": 30, "damage_multiplier": 0.25, "debuff": "attack_speed", "debuff_amount": 0.20, "debuff_duration": 3.0, "requires_profession": "Street Thug", "requires_box": "Master"},
+	"Anger": {"weapons": ["Sword", "Axe", "Baton", "Hammer", "Brass Knuckles", "Stun Stick"], "action_cost": 30, "damage_multiplier": 0.25, "taunt_duration": 3.0, "requires_profession": "Street Thug", "requires_box": "Master"},
+	"Aimed Shot": {"weapons": ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"], "action_cost": 35, "damage_multiplier": 1.5, "requires_profession": "Street Thug", "requires_box": "Novice"},
+	"Scatter Blast": {"weapons": ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"], "action_cost": 35, "damage_multiplier": 1.5, "requires_profession": "Street Thug", "requires_box": "Novice"},
+	"Suppressing Fire": {"weapons": ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"], "action_cost": 35, "damage_multiplier": 1.5, "requires_profession": "Street Thug", "requires_box": "Novice"},
+	"Piercing Round": {"weapons": ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"], "action_cost": 50, "damage_multiplier": 2.5, "requires_profession": "Street Thug", "requires_box": "Ranged III"},
+	"Point-Blank Burst": {"weapons": ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"], "action_cost": 50, "damage_multiplier": 2.5, "requires_profession": "Street Thug", "requires_box": "Ranged II"},
+	"Suppressive Volley": {"weapons": ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"], "action_cost": 60, "damage_multiplier": 4.0, "aoe": true, "requires_profession": "Street Thug", "requires_box": "Master"},
+	"Buckshot Barrage": {"weapons": ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"], "action_cost": 60, "damage_multiplier": 4.0, "aoe": true, "requires_profession": "Street Thug", "requires_box": "Master"}
 }
 
 
@@ -475,39 +475,39 @@ var novice_professions: Dictionary = {
 			"Melee": {
 				"unlocked": false,
 				"xp_type": "Combat XP",
-				"xp_cost": 10,
+				"xp_cost": 500,
 				"points_spent": 0,
 				"points_max": 10,
 				"nodes": {
 					# --- Melee Accuracy nodes (5) ---
-					"Melee Accuracy 1": {"type": "stat", "cost": 1, "stat": "Melee Accuracy", "amount": 3, "purchased": false},
-					"Melee Accuracy 2": {"type": "stat", "cost": 1, "stat": "Melee Accuracy", "amount": 3, "purchased": false},
-					"Melee Accuracy 3": {"type": "stat", "cost": 1, "stat": "Melee Accuracy", "amount": 3, "purchased": false},
-					"Melee Accuracy 4": {"type": "stat", "cost": 1, "stat": "Melee Accuracy", "amount": 3, "purchased": false},
-					"Melee Accuracy 5": {"type": "stat", "cost": 1, "stat": "Melee Accuracy", "amount": 3, "purchased": false},
+					"Melee Accuracy 1": {"type": "stat", "cost": 1, "stat": "Melee Accuracy", "amount": 3, "purchased": false, "xp_cost": 150},
+					"Melee Accuracy 2": {"type": "stat", "cost": 1, "stat": "Melee Accuracy", "amount": 3, "purchased": false, "xp_cost": 150},
+					"Melee Accuracy 3": {"type": "stat", "cost": 1, "stat": "Melee Accuracy", "amount": 3, "purchased": false, "xp_cost": 150},
+					"Melee Accuracy 4": {"type": "stat", "cost": 1, "stat": "Melee Accuracy", "amount": 3, "purchased": false, "xp_cost": 150},
+					"Melee Accuracy 5": {"type": "stat", "cost": 1, "stat": "Melee Accuracy", "amount": 3, "purchased": false, "xp_cost": 150},
 					# --- Melee Speed nodes (5) ---
-					"Melee Speed 1": {"type": "stat", "cost": 1, "stat": "Melee Speed", "amount": 3, "purchased": false},
-					"Melee Speed 2": {"type": "stat", "cost": 1, "stat": "Melee Speed", "amount": 3, "purchased": false},
-					"Melee Speed 3": {"type": "stat", "cost": 1, "stat": "Melee Speed", "amount": 3, "purchased": false},
-					"Melee Speed 4": {"type": "stat", "cost": 1, "stat": "Melee Speed", "amount": 3, "purchased": false},
-					"Melee Speed 5": {"type": "stat", "cost": 1, "stat": "Melee Speed", "amount": 3, "purchased": false},
+					"Melee Speed 1": {"type": "stat", "cost": 1, "stat": "Melee Speed", "amount": 3, "purchased": false, "xp_cost": 150},
+					"Melee Speed 2": {"type": "stat", "cost": 1, "stat": "Melee Speed", "amount": 3, "purchased": false, "xp_cost": 150},
+					"Melee Speed 3": {"type": "stat", "cost": 1, "stat": "Melee Speed", "amount": 3, "purchased": false, "xp_cost": 150},
+					"Melee Speed 4": {"type": "stat", "cost": 1, "stat": "Melee Speed", "amount": 3, "purchased": false, "xp_cost": 150},
+					"Melee Speed 5": {"type": "stat", "cost": 1, "stat": "Melee Speed", "amount": 3, "purchased": false, "xp_cost": 150},
 					# --- Melee Crit Damage nodes (5) ---
-					"Melee Crit Damage 1": {"type": "stat", "cost": 1, "stat": "Melee Crit Damage", "amount": 3, "purchased": false},
-					"Melee Crit Damage 2": {"type": "stat", "cost": 1, "stat": "Melee Crit Damage", "amount": 3, "purchased": false},
-					"Melee Crit Damage 3": {"type": "stat", "cost": 1, "stat": "Melee Crit Damage", "amount": 3, "purchased": false},
-					"Melee Crit Damage 4": {"type": "stat", "cost": 1, "stat": "Melee Crit Damage", "amount": 3, "purchased": false},
-					"Melee Crit Damage 5": {"type": "stat", "cost": 1, "stat": "Melee Crit Damage", "amount": 3, "purchased": false},
+					"Melee Crit Damage 1": {"type": "stat", "cost": 1, "stat": "Melee Crit Damage", "amount": 3, "purchased": false, "xp_cost": 150},
+					"Melee Crit Damage 2": {"type": "stat", "cost": 1, "stat": "Melee Crit Damage", "amount": 3, "purchased": false, "xp_cost": 150},
+					"Melee Crit Damage 3": {"type": "stat", "cost": 1, "stat": "Melee Crit Damage", "amount": 3, "purchased": false, "xp_cost": 150},
+					"Melee Crit Damage 4": {"type": "stat", "cost": 1, "stat": "Melee Crit Damage", "amount": 3, "purchased": false, "xp_cost": 150},
+					"Melee Crit Damage 5": {"type": "stat", "cost": 1, "stat": "Melee Crit Damage", "amount": 3, "purchased": false, "xp_cost": 150},
 					# --- Ability nodes (3, cost 2 each) ---
 					"Quick Hit": {
-						"type": "ability", "cost": 2, "ability": "Quick Hit", "purchased": false,
+						"type": "ability", "cost": 2, "ability": "Quick Hit", "purchased": false, "xp_cost": 300,
 						"mastery_upgrade": "Quick Hit gains +15% damage and applies a 1s slow"
 					},
 					"Overhead Swing": {
-						"type": "ability", "cost": 2, "ability": "Overhead Swing", "purchased": false,
+						"type": "ability", "cost": 2, "ability": "Overhead Swing", "purchased": false, "xp_cost": 300,
 						"mastery_upgrade": "Overhead Swing becomes an AoE hit striking all enemies in melee range"
 					},
 					"Bash": {
-						"type": "ability", "cost": 2, "ability": "Bash", "purchased": false,
+						"type": "ability", "cost": 2, "ability": "Bash", "purchased": false, "xp_cost": 300,
 						"mastery_upgrade": "Bash gains a stun component -- target is stunned for 2s"
 					}
 				}
@@ -515,103 +515,99 @@ var novice_professions: Dictionary = {
 			"Ranged": {
 				"unlocked": false,
 				"xp_type": "Combat XP",
-				"xp_cost": 10,
+				"xp_cost": 500,
 				"points_spent": 0,
 				"points_max": 10,
 				"nodes": {
 					# --- Ranged Accuracy nodes (5) ---
-					"Ranged Accuracy 1": {"type": "stat", "cost": 1, "stat": "Ranged Accuracy", "amount": 3, "purchased": false},
-					"Ranged Accuracy 2": {"type": "stat", "cost": 1, "stat": "Ranged Accuracy", "amount": 3, "purchased": false},
-					"Ranged Accuracy 3": {"type": "stat", "cost": 1, "stat": "Ranged Accuracy", "amount": 3, "purchased": false},
-					"Ranged Accuracy 4": {"type": "stat", "cost": 1, "stat": "Ranged Accuracy", "amount": 3, "purchased": false},
-					"Ranged Accuracy 5": {"type": "stat", "cost": 1, "stat": "Ranged Accuracy", "amount": 3, "purchased": false},
+					"Ranged Accuracy 1": {"type": "stat", "cost": 1, "stat": "Ranged Accuracy", "amount": 3, "purchased": false, "xp_cost": 150},
+					"Ranged Accuracy 2": {"type": "stat", "cost": 1, "stat": "Ranged Accuracy", "amount": 3, "purchased": false, "xp_cost": 150},
+					"Ranged Accuracy 3": {"type": "stat", "cost": 1, "stat": "Ranged Accuracy", "amount": 3, "purchased": false, "xp_cost": 150},
+					"Ranged Accuracy 4": {"type": "stat", "cost": 1, "stat": "Ranged Accuracy", "amount": 3, "purchased": false, "xp_cost": 150},
+					"Ranged Accuracy 5": {"type": "stat", "cost": 1, "stat": "Ranged Accuracy", "amount": 3, "purchased": false, "xp_cost": 150},
 					# --- Ranged Speed nodes (5) ---
-					"Ranged Speed 1": {"type": "stat", "cost": 1, "stat": "Ranged Speed", "amount": 3, "purchased": false},
-					"Ranged Speed 2": {"type": "stat", "cost": 1, "stat": "Ranged Speed", "amount": 3, "purchased": false},
-					"Ranged Speed 3": {"type": "stat", "cost": 1, "stat": "Ranged Speed", "amount": 3, "purchased": false},
-					"Ranged Speed 4": {"type": "stat", "cost": 1, "stat": "Ranged Speed", "amount": 3, "purchased": false},
-					"Ranged Speed 5": {"type": "stat", "cost": 1, "stat": "Ranged Speed", "amount": 3, "purchased": false},
+					"Ranged Speed 1": {"type": "stat", "cost": 1, "stat": "Ranged Speed", "amount": 3, "purchased": false, "xp_cost": 150},
+					"Ranged Speed 2": {"type": "stat", "cost": 1, "stat": "Ranged Speed", "amount": 3, "purchased": false, "xp_cost": 150},
+					"Ranged Speed 3": {"type": "stat", "cost": 1, "stat": "Ranged Speed", "amount": 3, "purchased": false, "xp_cost": 150},
+					"Ranged Speed 4": {"type": "stat", "cost": 1, "stat": "Ranged Speed", "amount": 3, "purchased": false, "xp_cost": 150},
+					"Ranged Speed 5": {"type": "stat", "cost": 1, "stat": "Ranged Speed", "amount": 3, "purchased": false, "xp_cost": 150},
 					# --- Ranged Crit Damage nodes (5) ---
-					"Ranged Crit Damage 1": {"type": "stat", "cost": 1, "stat": "Ranged Crit Damage", "amount": 3, "purchased": false},
-					"Ranged Crit Damage 2": {"type": "stat", "cost": 1, "stat": "Ranged Crit Damage", "amount": 3, "purchased": false},
-					"Ranged Crit Damage 3": {"type": "stat", "cost": 1, "stat": "Ranged Crit Damage", "amount": 3, "purchased": false},
-					"Ranged Crit Damage 4": {"type": "stat", "cost": 1, "stat": "Ranged Crit Damage", "amount": 3, "purchased": false},
-					"Ranged Crit Damage 5": {"type": "stat", "cost": 1, "stat": "Ranged Crit Damage", "amount": 3, "purchased": false},
+					"Ranged Crit Damage 1": {"type": "stat", "cost": 1, "stat": "Ranged Crit Damage", "amount": 3, "purchased": false, "xp_cost": 150},
+					"Ranged Crit Damage 2": {"type": "stat", "cost": 1, "stat": "Ranged Crit Damage", "amount": 3, "purchased": false, "xp_cost": 150},
+					"Ranged Crit Damage 3": {"type": "stat", "cost": 1, "stat": "Ranged Crit Damage", "amount": 3, "purchased": false, "xp_cost": 150},
+					"Ranged Crit Damage 4": {"type": "stat", "cost": 1, "stat": "Ranged Crit Damage", "amount": 3, "purchased": false, "xp_cost": 150},
+					"Ranged Crit Damage 5": {"type": "stat", "cost": 1, "stat": "Ranged Crit Damage", "amount": 3, "purchased": false, "xp_cost": 150},
 					# --- Ability nodes (3, cost 2 each) ---
 					"Aimed Shot": {
-						"type": "ability", "cost": 2, "ability": "Aimed Shot", "purchased": false,
+						"type": "ability", "cost": 2, "ability": "Aimed Shot", "purchased": false, "xp_cost": 300,
 						"mastery_upgrade": "Aimed Shot gains +20% damage and ignores 10% of target defense"
 					},
 					"Scatter Blast": {
-						"type": "ability", "cost": 2, "ability": "Scatter Blast", "purchased": false,
+						"type": "ability", "cost": 2, "ability": "Scatter Blast", "purchased": false, "xp_cost": 300,
 						"mastery_upgrade": "Scatter Blast becomes an AoE hitting all enemies in shotgun range"
 					},
 					"Suppressing Fire": {
-						"type": "ability", "cost": 2, "ability": "Suppressing Fire", "purchased": false,
+						"type": "ability", "cost": 2, "ability": "Suppressing Fire", "purchased": false, "xp_cost": 300,
 						"mastery_upgrade": "Suppressing Fire reduces target accuracy by 15% for 3s"
 					}
-				}
-			},
-			"Crafting": {
-				"unlocked": false,
-				"xp_type": "Crafting XP",
-				"xp_cost": 10,
-				"points_spent": 0,
-				"points_max": 12,
-				"nodes": {
-					# --- Survey Rate nodes (4) ---
-					"Survey Rate 1": {"type": "stat", "cost": 3, "stat": "Survey Rate", "amount": 5, "purchased": false},
-					"Survey Rate 2": {"type": "stat", "cost": 3, "stat": "Survey Rate", "amount": 5, "purchased": false},
-					"Survey Rate 3": {"type": "stat", "cost": 3, "stat": "Survey Rate", "amount": 5, "purchased": false},
-					"Survey Rate 4": {"type": "stat", "cost": 3, "stat": "Survey Rate", "amount": 5, "purchased": false},
-					# --- Gear Customization nodes (4) ---
-					"Gear Customization 1": {"type": "stat", "cost": 3, "stat": "Gear Customization", "amount": 5, "purchased": false},
-					"Gear Customization 2": {"type": "stat", "cost": 3, "stat": "Gear Customization", "amount": 5, "purchased": false},
-					"Gear Customization 3": {"type": "stat", "cost": 3, "stat": "Gear Customization", "amount": 5, "purchased": false},
-					"Gear Customization 4": {"type": "stat", "cost": 3, "stat": "Gear Customization", "amount": 5, "purchased": false},
-					# --- Crafting Assembly nodes (4) ---
-					"Crafting Assembly 1": {"type": "stat", "cost": 3, "stat": "Crafting Assembly", "amount": 5, "purchased": false},
-					"Crafting Assembly 2": {"type": "stat", "cost": 3, "stat": "Crafting Assembly", "amount": 5, "purchased": false},
-					"Crafting Assembly 3": {"type": "stat", "cost": 3, "stat": "Crafting Assembly", "amount": 5, "purchased": false},
-					"Crafting Assembly 4": {"type": "stat", "cost": 3, "stat": "Crafting Assembly", "amount": 5, "purchased": false},
-					# --- Crafting Experimentation nodes (4) ---
-					"Crafting Experimentation 1": {"type": "stat", "cost": 3, "stat": "Crafting Experimentation", "amount": 5, "purchased": false},
-					"Crafting Experimentation 2": {"type": "stat", "cost": 3, "stat": "Crafting Experimentation", "amount": 5, "purchased": false},
-					"Crafting Experimentation 3": {"type": "stat", "cost": 3, "stat": "Crafting Experimentation", "amount": 5, "purchased": false},
-					"Crafting Experimentation 4": {"type": "stat", "cost": 3, "stat": "Crafting Experimentation", "amount": 5, "purchased": false}
 				}
 			},
 			"Auxiliary": {
 				"unlocked": false,
 				"xp_type": "Combat XP",
-				"xp_cost": 10,
+				"xp_cost": 500,
 				"points_spent": 0,
-				"points_max": 12,
+				"points_max": 24,
 				"nodes": {
 					# --- Melee Defense nodes (3) ---
-					"Melee Defense 1": {"type": "stat", "cost": 3, "stat": "Melee Defense", "amount": 5, "purchased": false},
-					"Melee Defense 2": {"type": "stat", "cost": 3, "stat": "Melee Defense", "amount": 5, "purchased": false},
-					"Melee Defense 3": {"type": "stat", "cost": 3, "stat": "Melee Defense", "amount": 5, "purchased": false},
+					"Melee Defense 1": {"type": "stat", "cost": 3, "stat": "Melee Defense", "amount": 5, "purchased": false, "xp_cost": 150},
+					"Melee Defense 2": {"type": "stat", "cost": 3, "stat": "Melee Defense", "amount": 5, "purchased": false, "xp_cost": 150},
+					"Melee Defense 3": {"type": "stat", "cost": 3, "stat": "Melee Defense", "amount": 5, "purchased": false, "xp_cost": 150},
 					# --- Ranged Defense nodes (3) ---
-					"Ranged Defense 1": {"type": "stat", "cost": 3, "stat": "Ranged Defense", "amount": 5, "purchased": false},
-					"Ranged Defense 2": {"type": "stat", "cost": 3, "stat": "Ranged Defense", "amount": 5, "purchased": false},
-					"Ranged Defense 3": {"type": "stat", "cost": 3, "stat": "Ranged Defense", "amount": 5, "purchased": false},
+					"Ranged Defense 1": {"type": "stat", "cost": 3, "stat": "Ranged Defense", "amount": 5, "purchased": false, "xp_cost": 150},
+					"Ranged Defense 2": {"type": "stat", "cost": 3, "stat": "Ranged Defense", "amount": 5, "purchased": false, "xp_cost": 150},
+					"Ranged Defense 3": {"type": "stat", "cost": 3, "stat": "Ranged Defense", "amount": 5, "purchased": false, "xp_cost": 150},
 					# --- Toughness nodes (3) ---
-					"Toughness 1": {"type": "stat", "cost": 3, "stat": "Toughness", "amount": 5, "purchased": false},
-					"Toughness 2": {"type": "stat", "cost": 3, "stat": "Toughness", "amount": 5, "purchased": false},
-					"Toughness 3": {"type": "stat", "cost": 3, "stat": "Toughness", "amount": 5, "purchased": false},
+					"Toughness 1": {"type": "stat", "cost": 3, "stat": "Toughness", "amount": 5, "purchased": false, "xp_cost": 150},
+					"Toughness 2": {"type": "stat", "cost": 3, "stat": "Toughness", "amount": 5, "purchased": false, "xp_cost": 150},
+					"Toughness 3": {"type": "stat", "cost": 3, "stat": "Toughness", "amount": 5, "purchased": false, "xp_cost": 150},
 					# --- Loot Chance nodes (3) ---
-					"Loot Chance 1": {"type": "stat", "cost": 3, "stat": "Loot Chance", "amount": 5, "purchased": false},
-					"Loot Chance 2": {"type": "stat", "cost": 3, "stat": "Loot Chance", "amount": 5, "purchased": false},
-					"Loot Chance 3": {"type": "stat", "cost": 3, "stat": "Loot Chance", "amount": 5, "purchased": false},
+					"Loot Chance 1": {"type": "stat", "cost": 3, "stat": "Loot Chance", "amount": 5, "purchased": false, "xp_cost": 150},
+					"Loot Chance 2": {"type": "stat", "cost": 3, "stat": "Loot Chance", "amount": 5, "purchased": false, "xp_cost": 150},
+					"Loot Chance 3": {"type": "stat", "cost": 3, "stat": "Loot Chance", "amount": 5, "purchased": false, "xp_cost": 150},
 					# --- Cog Bonus nodes (3) ---
-					"Cog Bonus 1": {"type": "stat", "cost": 3, "stat": "Cog Bonus", "amount": 5, "purchased": false},
-					"Cog Bonus 2": {"type": "stat", "cost": 3, "stat": "Cog Bonus", "amount": 5, "purchased": false},
-					"Cog Bonus 3": {"type": "stat", "cost": 3, "stat": "Cog Bonus", "amount": 5, "purchased": false},
+					"Cog Bonus 1": {"type": "stat", "cost": 3, "stat": "Cog Bonus", "amount": 5, "purchased": false, "xp_cost": 150},
+					"Cog Bonus 2": {"type": "stat", "cost": 3, "stat": "Cog Bonus", "amount": 5, "purchased": false, "xp_cost": 150},
+					"Cog Bonus 3": {"type": "stat", "cost": 3, "stat": "Cog Bonus", "amount": 5, "purchased": false, "xp_cost": 150},
 					# --- Movement Speed nodes (3) ---
-					"Movement Speed 1": {"type": "stat", "cost": 3, "stat": "Movement Speed", "amount": 5, "purchased": false},
-					"Movement Speed 2": {"type": "stat", "cost": 3, "stat": "Movement Speed", "amount": 5, "purchased": false},
-					"Movement Speed 3": {"type": "stat", "cost": 3, "stat": "Movement Speed", "amount": 5, "purchased": false}
+					"Movement Speed 1": {"type": "stat", "cost": 3, "stat": "Movement Speed", "amount": 5, "purchased": false, "xp_cost": 150},
+					"Movement Speed 2": {"type": "stat", "cost": 3, "stat": "Movement Speed", "amount": 5, "purchased": false, "xp_cost": 150},
+					"Movement Speed 3": {"type": "stat", "cost": 3, "stat": "Movement Speed", "amount": 5, "purchased": false, "xp_cost": 150},
+					# --- Crafting nodes (16), relocated from the retired
+					# Crafting keystone. They keep their own xp_type so they
+					# still cost Crafting XP while living inside an otherwise
+					# Combat XP keystone. INTERIM: these move again when the
+					# universal crafting tree is built.
+					# --- Survey Rate nodes (4) ---
+					"Survey Rate 1": {"type": "stat", "cost": 3, "stat": "Survey Rate", "amount": 5, "purchased": false, "xp_cost": 40, "xp_type": "Crafting XP"},
+					"Survey Rate 2": {"type": "stat", "cost": 3, "stat": "Survey Rate", "amount": 5, "purchased": false, "xp_cost": 40, "xp_type": "Crafting XP"},
+					"Survey Rate 3": {"type": "stat", "cost": 3, "stat": "Survey Rate", "amount": 5, "purchased": false, "xp_cost": 40, "xp_type": "Crafting XP"},
+					"Survey Rate 4": {"type": "stat", "cost": 3, "stat": "Survey Rate", "amount": 5, "purchased": false, "xp_cost": 40, "xp_type": "Crafting XP"},
+					# --- Gear Customization nodes (4) ---
+					"Gear Customization 1": {"type": "stat", "cost": 3, "stat": "Gear Customization", "amount": 5, "purchased": false, "xp_cost": 40, "xp_type": "Crafting XP"},
+					"Gear Customization 2": {"type": "stat", "cost": 3, "stat": "Gear Customization", "amount": 5, "purchased": false, "xp_cost": 40, "xp_type": "Crafting XP"},
+					"Gear Customization 3": {"type": "stat", "cost": 3, "stat": "Gear Customization", "amount": 5, "purchased": false, "xp_cost": 40, "xp_type": "Crafting XP"},
+					"Gear Customization 4": {"type": "stat", "cost": 3, "stat": "Gear Customization", "amount": 5, "purchased": false, "xp_cost": 40, "xp_type": "Crafting XP"},
+					# --- Crafting Assembly nodes (4) ---
+					"Crafting Assembly 1": {"type": "stat", "cost": 3, "stat": "Crafting Assembly", "amount": 5, "purchased": false, "xp_cost": 40, "xp_type": "Crafting XP"},
+					"Crafting Assembly 2": {"type": "stat", "cost": 3, "stat": "Crafting Assembly", "amount": 5, "purchased": false, "xp_cost": 40, "xp_type": "Crafting XP"},
+					"Crafting Assembly 3": {"type": "stat", "cost": 3, "stat": "Crafting Assembly", "amount": 5, "purchased": false, "xp_cost": 40, "xp_type": "Crafting XP"},
+					"Crafting Assembly 4": {"type": "stat", "cost": 3, "stat": "Crafting Assembly", "amount": 5, "purchased": false, "xp_cost": 40, "xp_type": "Crafting XP"},
+					# --- Crafting Experimentation nodes (4) ---
+					"Crafting Experimentation 1": {"type": "stat", "cost": 3, "stat": "Crafting Experimentation", "amount": 5, "purchased": false, "xp_cost": 40, "xp_type": "Crafting XP"},
+					"Crafting Experimentation 2": {"type": "stat", "cost": 3, "stat": "Crafting Experimentation", "amount": 5, "purchased": false, "xp_cost": 40, "xp_type": "Crafting XP"},
+					"Crafting Experimentation 3": {"type": "stat", "cost": 3, "stat": "Crafting Experimentation", "amount": 5, "purchased": false, "xp_cost": 40, "xp_type": "Crafting XP"},
+					"Crafting Experimentation 4": {"type": "stat", "cost": 3, "stat": "Crafting Experimentation", "amount": 5, "purchased": false, "xp_cost": 40, "xp_type": "Crafting XP"}
 				}
 			}
 		}

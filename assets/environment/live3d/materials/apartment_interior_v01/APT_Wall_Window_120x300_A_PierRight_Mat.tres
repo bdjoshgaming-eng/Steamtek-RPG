@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/materials/apartment_interior_v01/APT_Wall_Window_120x300_A_PierRight_Albedo.png" id="1_texture"]
+
+[resource]
+resource_name = "APT Wall Window 120x300 A Pier Right"
+albedo_color = Color(0.86, 0.84, 0.78, 1)
+albedo_texture = ExtResource("1_texture")
+metallic = 0.03
+roughness = 0.84

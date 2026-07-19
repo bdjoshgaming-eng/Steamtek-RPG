@@ -1,0 +1,705 @@
+[gd_scene format=4 uid="uid://cgd1farjlth7i"]
+
+[ext_resource type="Script" uid="uid://dvji8tuaq0ajr" path="res://scenes/main.gd" id="1_0wfyh"]
+[ext_resource type="Script" uid="uid://dyjak00r2yqmr" path="res://scenes/player.gd" id="1_o5qli"]
+[ext_resource type="PackedScene" uid="uid://4jpp5khy6ygj" path="res://scenes/effects/surface/FX001_RainSystem.tscn" id="2_2wyq8"]
+[ext_resource type="Texture2D" uid="uid://caiuiyuwkf37k" path="res://assets/surface/ground/wet_concrete/production/G001_WetConcrete_Atlas_8x1.png" id="2_gqmmt"]
+[ext_resource type="Texture2D" uid="uid://dda7jqxjjxkt6" path="res://assets/surface/ground/drain_gate/production/G002_DrainGrate_Special_1x1.png" id="3_yc10j"]
+[ext_resource type="Texture2D" uid="uid://cr5e4byem0vhj" path="res://assets/surface/ground/steel_plate/production/G003_SteelPlate_Atlas_4x1.png" id="4_jscy8"]
+[ext_resource type="Texture2D" uid="uid://dqatwobij1yuo" path="res://assets/surface/ground/hazard_stripes/production/G004_HazardStripes_Special_1x1.png" id="5_pm3ni"]
+[ext_resource type="Texture2D" uid="uid://chfgqy6a0foc0" path="res://pipo-enemy018.png" id="5_tbgi4"]
+[ext_resource type="Script" uid="uid://24r4ooh2k64u" path="res://scenes/action_bar_slot.gd" id="6_o6xl0"]
+[ext_resource type="Texture2D" uid="uid://b378gmjnlfhxx" path="res://assets/surface/ground/G005_PuddleReflections_Atlas_8x1.png" id="6_y6deb"]
+[ext_resource type="Script" uid="uid://dc4r0jsiqgfr3" path="res://scenes/inventory_slot.gd" id="8_tipki"]
+[ext_resource type="PackedScene" uid="uid://dlq5vguxc4jlr" path="res://scenes/effects/surface/FX002_RainSplash.tscn" id="8_vxglm"]
+[ext_resource type="PackedScene" uid="uid://ctf8wv81w77fl" path="res://scenes/effects/surface/FX003_RainMist.tscn" id="9_2f3dj"]
+[ext_resource type="PackedScene" uid="uid://dwdnqdwdkd0ia" path="res://assets/characters/player/Steamtek_C001/animations/walk/godot/Steamtek_C001_WalkVisual.tscn" id="11_jkv2x"]
+[ext_resource type="PackedScene" path="res://scenes/characters/npc/Steamtek_C002_NPC.tscn" id="12_jbj1t"]
+[ext_resource type="PackedScene" uid="uid://bb158t3te0x61" path="res://scenes/props/surface/P001_Street_Lamp.tscn" id="16_jbj1t"]
+[ext_resource type="Script" uid="uid://ty5kstb4j6n8" path="res://scenes/TrainerDialogue.gd" id="18_dp3eg"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_og1vs"]
+texture = ExtResource("2_gqmmt")
+texture_region_size = Vector2i(256, 128)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2wyq8"]
+texture = ExtResource("3_yc10j")
+texture_region_size = Vector2i(256, 128)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vxglm"]
+texture = ExtResource("4_jscy8")
+texture_region_size = Vector2i(256, 128)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2f3dj"]
+texture = ExtResource("5_pm3ni")
+texture_region_size = Vector2i(256, 128)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yq6so"]
+texture = ExtResource("6_y6deb")
+texture_region_size = Vector2i(256, 128)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_tefeu"]
+tile_shape = 1
+tile_size = Vector2i(256, 128)
+sources/2 = SubResource("TileSetAtlasSource_og1vs")
+sources/3 = SubResource("TileSetAtlasSource_2wyq8")
+sources/4 = SubResource("TileSetAtlasSource_vxglm")
+sources/5 = SubResource("TileSetAtlasSource_2f3dj")
+sources/6 = SubResource("TileSetAtlasSource_yq6so")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cfp46"]
+size = Vector2(28, 18)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_cfp46"]
+radius = 14.0
+height = 34.0
+
+[node name="Main" type="Node2D" unique_id=931900513]
+script = ExtResource("1_0wfyh")
+
+[node name="World" type="Node2D" parent="." unique_id=842110082]
+
+[node name="Ground" type="Node2D" parent="World" unique_id=301345205]
+
+[node name="GroundTileMap" type="TileMapLayer" parent="World/Ground" unique_id=1604171379]
+position = Vector2(112, -27)
+tile_map_data = PackedByteArray("AAD7/wMABAACAAAAAAD7/wQABAABAAAAAAD8/wQABAACAAAAAAD8/wUABAABAAAAAAD7/wUABAABAAAAAAD8/wYABAABAAAAAAD8/wcABAABAAAAAAD9/wgABAABAAAAAAD9/wcABAACAAAAAAD+/wgAAgAEAAAAAAD+/wkAAgAFAAAAAAAAAAkABAACAAAAAAABAAoABAADAAAAAAAAAAsABAACAAAAAAAAAAoABAACAAAAAAD//woABAADAAAAAAD//wsABAADAAAAAAAAAAwABAACAAAAAAABAAwABAACAAAAAAABAAsABAADAAAAAAAAAA0ABAACAAAAAAD+/woABAACAAAAAAD9/wkABAABAAAAAAD+/wsABAACAAAAAAD//wwABAADAAAAAAD//w0ABAADAAAAAAAAAA4ABAABAAAAAAD6/wQAAgABAAMAAAD6/wUABAABAAAAAAD6/wYAAgABAAMAAAD6/wcAAgABAAMAAAD6/wgAAgABAAMAAAD6/wkAAgABAAMAAAD6/woAAgABAAMAAAD6/wsAAgABAAMAAAD6/wwAAgABAAMAAAD6/w0AAgABAAMAAAD6/w4AAgABAAMAAAD6/w8AAgABAAMAAAD6/xAAAgABAAMAAAD6/xEAAgABAAMAAAD6/xIAAgABAAMAAAD6/xMAAgABAAMAAAD6/xQAAgABAAMAAAD6/xUAAgABAAMAAAD6/xYAAgABAAMAAAD6/xcAAgABAAMAAAD6/xgAAgABAAMAAAD6/xkAAgABAAMAAAD6/xoAAgABAAMAAAD6/xsAAgABAAMAAAD6/xwAAgABAAMAAAD6/x0AAgABAAMAAAD6/x4AAgABAAMAAAD6/x8AAgABAAMAAAD7/wYABAABAAAAAAD7/wcABAABAAAAAAD7/wgAAgABAAMAAAD7/wkAAgABAAMAAAD7/woAAgABAAMAAAD7/wsAAgABAAMAAAD7/wwAAgABAAMAAAD7/w0AAgABAAMAAAD7/w4AAgABAAMAAAD7/w8AAgABAAMAAAD7/xAAAgABAAMAAAD7/xEAAgABAAMAAAD7/xIAAgABAAMAAAD7/xMAAgABAAMAAAD7/xQAAgABAAMAAAD7/xUAAgABAAMAAAD7/xYAAgABAAMAAAD7/xcAAgABAAMAAAD7/xgAAgABAAMAAAD7/xkAAgABAAMAAAD7/xoAAgABAAMAAAD7/xsAAgABAAMAAAD7/xwAAgABAAMAAAD7/x0AAgABAAMAAAD7/x4AAgABAAMAAAD7/x8AAgABAAMAAAD8/wgABAABAAAAAAD8/wkABAABAAAAAAD8/woAAgABAAMAAAD8/wsAAgABAAMAAAD8/wwAAgABAAMAAAD8/w0AAgABAAMAAAD8/w4AAgABAAMAAAD8/w8AAgABAAMAAAD8/xAAAgABAAMAAAD8/xEAAgABAAMAAAD8/xIAAgABAAMAAAD8/xMAAgABAAMAAAD8/xQAAgABAAMAAAD8/xUAAgABAAMAAAD8/xYAAgABAAMAAAD8/xcAAgABAAMAAAD8/xgAAgABAAMAAAD8/xkAAgABAAMAAAD8/xoAAgABAAMAAAD8/xsAAgABAAMAAAD8/xwAAgABAAMAAAD8/x0AAgABAAMAAAD8/x4AAgABAAMAAAD8/x8AAgABAAMAAAD9/woABAABAAAAAAD9/wsABAABAAAAAAD9/w4AAgABAAMAAAD9/w8AAgABAAMAAAD9/xAAAgABAAMAAAD9/xEAAgABAAMAAAD9/xIAAgABAAMAAAD9/xMAAgABAAMAAAD9/xQAAgABAAMAAAD9/xUAAgABAAMAAAD9/xYAAgABAAMAAAD9/xcAAgABAAMAAAD9/xgAAgABAAMAAAD9/xkAAgABAAMAAAD9/xoAAgABAAMAAAD9/xsAAgABAAMAAAD9/xwAAgABAAMAAAD9/x0AAgABAAMAAAD9/x4AAgABAAMAAAD9/x8AAgABAAMAAAD+/wwABAABAAAAAAD+/w0ABAABAAAAAAD+/w4AAgABAAMAAAD+/w8AAgABAAMAAAD+/xAAAgABAAMAAAD+/xEAAgABAAMAAAD+/xIAAgABAAMAAAD+/xMAAgABAAMAAAD+/xQAAgABAAMAAAD+/xUAAgABAAMAAAD+/xYAAgABAAMAAAD+/xcAAgABAAMAAAD+/xgAAgABAAMAAAD+/xkAAgABAAMAAAD+/xoAAgABAAMAAAD+/xsAAgABAAMAAAD+/xwAAgABAAMAAAD+/x0AAgABAAMAAAD+/x4AAgABAAMAAAD+/x8AAgABAAMAAAD//w4ABAABAAAAAAD//w8ABAABAAAAAAD//xAAAgABAAMAAAD//xEAAgABAAMAAAD//xIAAgABAAMAAAD//xMAAgABAAMAAAD//xQAAgABAAMAAAD//xUAAgABAAMAAAD//xYAAgABAAMAAAD//xcAAgABAAMAAAD//xgAAgABAAMAAAD//xkAAgABAAMAAAD//xoAAgABAAMAAAD//xsAAgABAAMAAAD//xwAAgABAAMAAAD//x0AAgABAAMAAAD//x4AAgABAAMAAAD//x8AAgABAAMAAAAAAA8ABAABAAAAAAAAABAABAABAAAAAAAAABEABAABAAAAAAAAABIAAgABAAMAAAAAABMAAgABAAMAAAAAABQAAgABAAMAAAAAABUAAgABAAMAAAAAABYAAgABAAMAAAAAABcAAgABAAMAAAAAABgAAgABAAMAAAAAABkAAgABAAMAAAAAABoAAgABAAMAAAAAABsAAgABAAMAAAAAABwAAgABAAMAAAAAAB0AAgABAAMAAAAAAB4AAgABAAMAAAAAAB8AAgABAAMAAAABAA0ABAACAAAAAAABAA4ABAACAAAAAAABAA8ABAACAAAAAAABABAABAABAAAAAAABABEABAABAAAAAAABABIABAABAAAAAAABABMABAABAAAAAAABABQAAgABAAMAAAABABUAAgABAAMAAAABABYAAgABAAMAAAABABcAAgABAAMAAAABABgAAgABAAMAAAABABkAAgABAAMAAAABABoAAgABAAMAAAABABsAAgABAAMAAAABABwAAgABAAMAAAABAB0AAgABAAMAAAABAB4AAgABAAMAAAABAB8AAgABAAMAAAACAAsABAACAAAAAAACAAwABAACAAAAAAACAA0ABAACAAAAAAACAA4ABAADAAAAAAACAA8ABAADAAAAAAACABAABAADAAAAAAACABEABAACAAAAAAACABIABAABAAAAAAACABMABAABAAAAAAACABQABAABAAAAAAACABUABAABAAAAAAACABYAAgABAAMAAAACABcAAgABAAMAAAACABgAAgABAAMAAAACABkAAgABAAMAAAACABoAAgABAAMAAAACABsAAgABAAMAAAACABwAAgABAAMAAAACAB0AAgABAAMAAAACAB4AAgABAAMAAAACAB8AAgABAAMAAAADAAsABAACAAAAAAADAAwABAACAAAAAAADAA0ABAACAAAAAAADAA4ABAACAAAAAAADAA8ABAABAAAAAAADABAABAABAAAAAAADABEABAABAAAAAAADABIABAABAAAAAAADABMABAABAAAAAAADABQABAABAAAAAAADABUAAgABAAMAAAADABYAAgABAAMAAAADABcAAgABAAMAAAADABgAAgABAAMAAAADABkAAgABAAMAAAADABoAAgABAAMAAAADABsAAgABAAMAAAADABwAAgABAAMAAAADAB0AAgABAAMAAAADAB4AAgABAAMAAAADAB8AAgABAAMAAAAEAAgABAADAAAAAAAEAAkAAgAEAAAAAAAEAAsABAACAAAAAAAEAAwABAACAAAAAAAEAA0ABAABAAAAAAAEAA4ABAABAAAAAAAEAA8ABAABAAAAAAAEABAABAABAAAAAAAEABEABAABAAAAAAAEABIABAABAAAAAAAEABMAAgABAAMAAAAEABQAAgABAAMAAAAEABUAAgABAAMAAAAEABYAAgABAAMAAAAEABcAAgABAAMAAAAEABgAAgABAAMAAAAEABkAAgABAAMAAAAEABoAAgABAAMAAAAEABsAAgABAAMAAAAEABwAAgABAAMAAAAEAB0AAgABAAMAAAAEAB4AAgABAAMAAAAEAB8AAgABAAMAAAAFAAoAAgAEAAAAAAAFAAwABAABAAAAAAAFAA0ABAABAAAAAAAFAA4ABAABAAAAAAAFAA8ABAABAAAAAAAFABAABAABAAAAAAAFABEAAgABAAMAAAAFABIAAgABAAMAAAAFABMAAgABAAMAAAAFABQAAgABAAMAAAAFABUAAgABAAMAAAAFABYAAgABAAMAAAAFABcAAgABAAMAAAAFABgAAgABAAMAAAAFABkAAgABAAMAAAAFABoAAgABAAMAAAAFABsAAgABAAMAAAAFABwAAgABAAMAAAAFAB0AAgABAAMAAAAFAB4AAgABAAMAAAAFAB8AAgABAAMAAAAGAAUABAACAAAAAAAGAAcAAgAHAAAAAAAGAAgAAgAFAAAAAAAGAAkABAACAAAAAAAGAAsABAABAAAAAAAGAA4ABAABAAAAAAAGAA8AAgABAAMAAAAGABAAAgABAAMAAAAGABEAAgABAAMAAAAGABIAAgABAAMAAAAGABMAAgABAAMAAAAGABQAAgABAAMAAAAGABUAAgABAAMAAAAGABYAAgABAAMAAAAGABcAAgABAAMAAAAGABgAAgABAAMAAAAGABkAAgABAAMAAAAGABoAAgABAAMAAAAGABsAAgABAAMAAAAGABwAAgABAAMAAAAGAB0AAgABAAMAAAAGAB4AAgABAAMAAAAGAB8AAgABAAMAAAAHAAMABAACAAAAAAAHAAQABAACAAAAAAAHAAcABAACAAAAAAAHAAgABAACAAAAAAAHAAkABAABAAAAAAAHAAoABAABAAAAAAAHAAsABAABAAAAAAAHAAwABAABAAAAAAAHAA0AAgABAAMAAAAHABAAAgABAAMAAAAHABEAAgABAAMAAAAHABIAAgABAAMAAAAHABMAAgABAAMAAAAHABQAAgABAAMAAAAHABUAAgABAAMAAAAHABYAAgABAAMAAAAHABcAAgABAAMAAAAHABgAAgABAAMAAAAHABkAAgABAAMAAAAHABoAAgABAAMAAAAHABsAAgABAAMAAAAHABwAAgABAAMAAAAHAB0AAgABAAMAAAAHAB4AAgABAAMAAAAHAB8AAgABAAMAAAAIAAUABAACAAAAAAAIAAYABAACAAAAAAAIAAcABAABAAAAAAAIAAgABAABAAAAAAAIAAkABAABAAAAAAAIAAoABAABAAAAAAAIAAsAAgABAAMAAAAIAAwAAgABAAMAAAAIAA0AAgABAAMAAAAIAA4AAgABAAMAAAAIAA8AAgABAAMAAAAIABIAAgABAAMAAAAIABMAAgABAAMAAAAIABQAAgABAAMAAAAIABUAAgABAAMAAAAIABYAAgABAAMAAAAIABcAAgABAAMAAAAIABgAAgABAAMAAAAIABkAAgABAAMAAAAIABoAAgABAAMAAAAIABsAAgABAAMAAAAIABwAAgABAAMAAAAIAB0AAgABAAMAAAAIAB4AAgABAAMAAAAIAB8AAgABAAMAAAAJAAYABAABAAAAAAAJAAcABAABAAAAAAAJAAgABAABAAAAAAAJAAkAAgABAAMAAAAJAAoAAgABAAMAAAAJAAsAAgABAAMAAAAJAAwAAgABAAMAAAAJAA0AAgABAAMAAAAJAA4AAgABAAMAAAAJAA8AAgABAAMAAAAJABAAAgABAAMAAAAJABEAAgABAAMAAAAJABMAAgABAAMAAAAJABQAAgABAAMAAAAJABUAAgABAAMAAAAJABYAAgABAAMAAAAJABcAAgABAAMAAAAJABgAAgABAAMAAAAJABkAAgABAAMAAAAJABoAAgABAAMAAAAJABsAAgABAAMAAAAJABwAAgABAAMAAAAJAB0AAgABAAMAAAAJAB4AAgABAAMAAAAJAB8AAgABAAMAAAAKAAUAAgABAAMAAAAKAAYABAABAAAAAAAKAAcAAgABAAMAAAAKAAgAAgABAAMAAAAKAAkAAgABAAMAAAAKAAoAAgABAAMAAAAKAAsAAgABAAMAAAAKAAwAAgABAAMAAAAKAA0AAgABAAMAAAAKAA4AAgABAAMAAAAKAA8AAgABAAMAAAAKABAAAgABAAMAAAAKABEAAgABAAMAAAAKABIAAgABAAMAAAAKABMAAgABAAMAAAAKABQAAgABAAMAAAAKABUAAgABAAMAAAAKABYAAgABAAMAAAAKABcAAgABAAMAAAAKABgAAgABAAMAAAAKABkAAgABAAMAAAAKABoAAgABAAMAAAAKABsAAgABAAMAAAAKABwAAgABAAMAAAAKAB0AAgABAAMAAAAKAB4AAgABAAMAAAAKAB8AAgABAAMAAAALAAMAAgABAAMAAAALAAQAAgABAAMAAAALAAUAAgABAAMAAAALAAYAAgABAAMAAAALAAcAAgABAAMAAAALAAgAAgABAAMAAAALAAkAAgABAAMAAAALAAoAAgABAAMAAAALAAsAAgABAAMAAAALAAwAAgABAAMAAAALAA0AAgABAAMAAAALAA4AAgABAAMAAAALAA8AAgABAAMAAAALABAAAgABAAMAAAALABEAAgABAAMAAAALABIAAgABAAMAAAALABMAAgABAAMAAAALABQAAgABAAMAAAALABUAAgABAAMAAAALABYAAgABAAMAAAALABcAAgABAAMAAAALABgAAgABAAMAAAALABkAAgABAAMAAAALABoAAgABAAMAAAALABsAAgABAAMAAAALABwAAgABAAMAAAALAB0AAgABAAMAAAALAB4AAgABAAMAAAALAB8AAgABAAMAAAAMAAMAAgABAAMAAAAMAAQAAgABAAMAAAAMAAUAAgABAAMAAAAMAAYAAgABAAMAAAAMAAcAAgABAAMAAAAMAAgAAgABAAMAAAAMAAkAAgABAAMAAAAMAAoAAgABAAMAAAAMAAsAAgABAAMAAAAMAAwAAgABAAMAAAAMAA0AAgABAAMAAAAMAA4AAgABAAMAAAAMAA8AAgABAAMAAAAMABAAAgABAAMAAAAMABEAAgABAAMAAAAMABIAAgABAAMAAAAMABMAAgABAAMAAAAMABQAAgABAAMAAAAMABUAAgABAAMAAAAMABYAAgABAAMAAAAMABcAAgABAAMAAAAMABgAAgABAAMAAAAMABkAAgABAAMAAAAMABoAAgABAAMAAAAMABsAAgABAAMAAAAMABwAAgABAAMAAAAMAB0AAgABAAMAAAAMAB4AAgABAAMAAAAMAB8AAgABAAMAAAANAAMAAgABAAMAAAANAAQAAgABAAMAAAANAAUAAgABAAMAAAANAAYAAgABAAMAAAANAAcAAgABAAMAAAANAAgAAgABAAMAAAANAAkAAgABAAMAAAANAAoAAgABAAMAAAANAAsAAgABAAMAAAANAAwAAgABAAMAAAANAA0AAgABAAMAAAANAA4AAgABAAMAAAANAA8AAgABAAMAAAANABAAAgABAAMAAAANABEAAgABAAMAAAANABIAAgABAAMAAAANABMAAgABAAMAAAANABQAAgABAAMAAAANABUAAgABAAMAAAANABYAAgABAAMAAAANABcAAgABAAMAAAANABgAAgABAAMAAAANABkAAgABAAMAAAANABoAAgABAAMAAAANABsAAgABAAMAAAANABwAAgABAAMAAAANAB0AAgABAAMAAAANAB4AAgABAAMAAAANAB8AAgABAAMAAAD6/yAAAgABAAMAAAD6/yEAAgABAAMAAAD6/yIAAgABAAMAAAD6/yMAAgABAAMAAAD6/yQAAgABAAMAAAD6/yUAAgABAAMAAAD6/yYAAgABAAMAAAD6/ycAAgABAAMAAAD7/yAAAgABAAMAAAD7/yEAAgABAAMAAAD7/yIAAgABAAMAAAD7/yMAAgABAAMAAAD7/yQAAgABAAMAAAD7/yUAAgABAAMAAAD7/yYAAgABAAMAAAD7/ycAAgABAAMAAAD8/yAAAgABAAMAAAD8/yEAAgABAAMAAAD8/yIAAgABAAMAAAD8/yMAAgABAAMAAAD8/yQAAgABAAMAAAD8/yUAAgABAAMAAAD8/yYAAgABAAMAAAD8/ycAAgABAAMAAAD9/yAAAgABAAMAAAD9/yEAAgABAAMAAAD9/yIAAgABAAMAAAD9/yMAAgABAAMAAAD9/yQAAgABAAMAAAD9/yUAAgABAAMAAAD9/yYAAgABAAMAAAD9/ycAAgABAAMAAAD+/yAAAgABAAMAAAD+/yEAAgABAAMAAAD+/yIAAgABAAMAAAD+/yMAAgABAAMAAAD+/yQAAgABAAMAAAD+/yUAAgABAAMAAAD+/yYAAgABAAMAAAD+/ycAAgABAAMAAAD//yAAAgABAAMAAAD//yEAAgABAAMAAAD//yIAAgABAAMAAAD//yMAAgABAAMAAAD//yQAAgABAAMAAAD//yUAAgABAAMAAAD//yYAAgABAAMAAAD//ycAAgABAAMAAAAAACAAAgABAAMAAAAAACEAAgABAAMAAAAAACIAAgABAAMAAAAAACMAAgABAAMAAAAAACQAAgABAAMAAAAAACUAAgABAAMAAAAAACYAAgABAAMAAAAAACcAAgABAAMAAAABACAAAgABAAMAAAABACEAAgABAAMAAAABACIAAgABAAMAAAABACMAAgABAAMAAAABACQAAgABAAMAAAABACUAAgABAAMAAAABACYAAgABAAMAAAABACcAAgABAAMAAAACACAAAgABAAMAAAACACEAAgABAAMAAAACACIAAgABAAMAAAACACMAAgABAAMAAAACACQAAgABAAMAAAACACUAAgABAAMAAAACACYAAgABAAMAAAACACcAAgABAAMAAAADACAAAgABAAMAAAADACEAAgABAAMAAAADACIAAgABAAMAAAADACMAAgABAAMAAAADACQAAgABAAMAAAADACUAAgABAAMAAAADACYAAgABAAMAAAADACcAAgABAAMAAAAEACAAAgABAAMAAAAEACEAAgABAAMAAAAEACIAAgABAAMAAAAEACMAAgABAAMAAAAEACQAAgABAAMAAAAEACUAAgABAAMAAAAEACYAAgABAAMAAAAEACcAAgABAAMAAAAFACAAAgABAAMAAAAFACEAAgABAAMAAAAFACIAAgABAAMAAAAFACMAAgABAAMAAAAFACQAAgABAAMAAAAFACUAAgABAAMAAAAFACYAAgABAAMAAAAFACcAAgABAAMAAAAGACAAAgABAAMAAAAGACEAAgABAAMAAAAGACIAAgABAAMAAAAGACMAAgABAAMAAAAGACQAAgABAAMAAAAGACUAAgABAAMAAAAGACYAAgABAAMAAAAGACcAAgABAAMAAAAHACAAAgABAAMAAAAHACEAAgABAAMAAAAHACIAAgABAAMAAAAHACMAAgABAAMAAAAHACQAAgABAAMAAAAHACUAAgABAAMAAAAHACYAAgABAAMAAAAHACcAAgABAAMAAAAIACAAAgABAAMAAAAIACEAAgABAAMAAAAIACIAAgABAAMAAAAIACMAAgABAAMAAAAIACQAAgABAAMAAAAIACUAAgABAAMAAAAIACYAAgABAAMAAAAIACcAAgABAAMAAAAJACAAAgABAAMAAAAJACEAAgABAAMAAAAJACIAAgABAAMAAAAJACMAAgABAAMAAAAJACQAAgABAAMAAAAJACUAAgABAAMAAAAJACYAAgABAAMAAAAJACcAAgABAAMAAAAKACAAAgABAAMAAAAKACEAAgABAAMAAAAKACIAAgABAAMAAAAKACMAAgABAAMAAAAKACQAAgABAAMAAAAKACUAAgABAAMAAAAKACYAAgABAAMAAAAKACcAAgABAAMAAAALACAAAgABAAMAAAALACEAAgABAAMAAAALACIAAgABAAMAAAALACMAAgABAAMAAAALACQAAgABAAMAAAALACUAAgABAAMAAAALACYAAgABAAMAAAALACcAAgABAAMAAAAMACAAAgABAAMAAAAMACEAAgABAAMAAAAMACIAAgABAAMAAAAMACMAAgABAAMAAAAMACQAAgABAAMAAAAMACUAAgABAAMAAAAMACYAAgABAAMAAAAMACcAAgABAAMAAAANACAAAgABAAMAAAANACEAAgABAAMAAAANACIAAgABAAMAAAANACMAAgABAAMAAAANACQAAgABAAMAAAANACUAAgABAAMAAAANACYAAgABAAMAAAANACcAAgABAAMAAAD9/wYABAACAAAAAAD9/wUABAACAAAAAAD+/wQAAgACAAAAAAD+/wMAAgACAAAAAAD//wIAAgACAAAAAAD//wEAAgACAAAAAAAAAAAAAgACAAAAAAAAAP//AgACAAAAAAABAP7/AgACAAAAAAABAP3/AgACAAAAAAACAPz/AgACAAAAAAACAPv/AgACAAAAAAADAPr/AgACAAAAAAADAPn/AgACAAAAAAD//wgABAABAAAAAAD//wcABAABAAAAAAAAAAYABAACAAAAAAAAAAUABAACAAAAAAABAAQABAADAAAAAAABAAMABAADAAAAAAACAAIABAABAAAAAAACAAEABAABAAAAAAADAAAABAACAAAAAAADAP//BAACAAAAAAAEAP7/BAADAAAAAAAEAP3/BAADAAAAAAAFAPz/AgAFAAAAAAAEAPr/AgADAAAAAAAEAPv/AgADAAAAAAD//wYABAABAAAAAAABAAEAAgAFAAAAAAADAP3/BAACAAAAAAD+/wYABAADAAAAAAD+/wcABAADAAAAAAD//wUABAABAAAAAAD//wQABAABAAAAAAD+/wUABAADAAAAAAD//wMABAABAAAAAAAAAAIAAgAGAAAAAAAAAAEAAgAGAAAAAAABAAAAAgAGAAAAAAABAP//AgAGAAAAAAACAP7/BAABAAAAAAACAP3/BAABAAAAAAADAPz/AgAGAAAAAAADAPv/AgAGAAAAAAAEAPz/AgAFAAAAAAADAP7/BAACAAAAAAACAP//BAABAAAAAAACAAAABAABAAAAAAABAAIAAgAFAAAAAAAAAAMABAACAAAAAAAAAAQABAACAAAAAAACAAQABAABAAAAAAACAAUABAABAAAAAAADAAYABAACAAAAAAADAAcABAACAAAAAAADAAEABAACAAAAAAAEAAIABAADAAAAAAAEAAMABAADAAAAAAAFAAQAAgAHAAAAAAAFAAUAAgAHAAAAAAAGAAYAAgAHAAAAAAAFAAkAAgAFAAAAAAACAAMABAABAAAAAAADAAIABAACAAAAAAADAAMABAACAAAAAAADAAQABAACAAAAAAADAAUABAACAAAAAAAEAAQABAADAAAAAAAEAAUABAADAAAAAAAEAAYABAADAAAAAAAEAAcABAADAAAAAAAFAAgABAACAAAAAAAFAAcABAACAAAAAAAFAAYABAACAAAAAAD9/wQABAACAAAAAAD9/wMABAACAAAAAAD+/wIABAACAAAAAAD+/wEABAACAAAAAAD//wAABAACAAAAAAD/////BAACAAAAAAAAAP7/BAACAAAAAAAAAP3/BAACAAAAAAABAPz/BAACAAAAAAABAPv/BAACAAAAAAACAPr/BAACAAAAAAACAPn/BAACAAAAAAADAPj/BAACAAAAAAACAPf/BAACAAAAAAACAPj/BAACAAAAAAABAPn/BAACAAAAAAABAPr/BAACAAAAAAAAAPv/BAACAAAAAAAAAPz/BAACAAAAAAD///3/BAACAAAAAAD///7/BAACAAAAAAD+////BAACAAAAAAD8/wMABAACAAAAAAD9/wIABAACAAAAAAD9/wEABAACAAAAAAD+/wAABAACAAAAAAD8/wIABAACAAAAAAD8/wEABAACAAAAAAD9/wAABAACAAAAAAACAPb/BAACAAAAAAABAPf/BAACAAAAAAABAPj/BAACAAAAAAAAAPn/BAACAAAAAAAAAPr/BAACAAAAAAD///v/BAACAAAAAAD///z/BAACAAAAAAD+//3/BAACAAAAAAD+//7/BAACAAAAAAD9////BAACAAAAAAD//wkABAABAAAAAAAAAAgABAACAAAAAAAAAAcABAACAAAAAAABAAYABAADAAAAAAABAAUABAADAAAAAAACAAYABAABAAAAAAACAAcABAABAAAAAAADAAgABAACAAAAAAADAAkABAACAAAAAAAEAAoABAACAAAAAAABAAgABAADAAAAAAABAAcABAADAAAAAAACAAgABAABAAAAAAACAAkABAACAAAAAAACAAoABAACAAAAAAABAAkABAADAAAAAAADAAoABAACAAAAAAAFAP7/BAACAAAAAAAEAP//BAADAAAAAAAEAAAABAADAAAAAAAEAAEABAADAAAAAAAFAAIABAACAAAAAAAFAAMABAACAAAAAAAGAAQABAACAAAAAAAGAAMABAACAAAAAAAGAAIABAACAAAAAAAFAAEABAACAAAAAAAFAAAABAACAAAAAAAFAP//BAACAAAAAAAGAAAABAACAAAAAAAGAAEABAACAAAAAAAHAAIABAACAAAAAAAIAAQABAACAAAAAAAHAAUABAACAAAAAAAHAAYABAACAAAAAAAGAAoABAABAAAAAAAFAAsABAABAAAAAAAFAP3/BAACAAAAAAAGAP7/BAACAAAAAAAGAP//BAACAAAAAAAHAAAABAACAAAAAAAHAAEABAACAAAAAAAIAAIABAACAAAAAAAIAAMABAACAAAAAAAJAAQABAACAAAAAAAJAAUABAABAAAAAAAGAA0ABAABAAAAAAAGAAwABAABAAAAAAA=")
+tile_set = SubResource("TileSet_tefeu")
+
+[node name="Effects" type="Node2D" parent="World" unique_id=1925542834]
+
+[node name="FX001_RainSystem" parent="World/Effects" unique_id=420670253 instance=ExtResource("2_2wyq8")]
+
+[node name="FX002_RainSplash" parent="World/Effects" unique_id=972680456 instance=ExtResource("8_vxglm")]
+position = Vector2(682, 461)
+
+[node name="FX003_RainMist" parent="World/Effects" unique_id=1823844333 instance=ExtResource("9_2f3dj")]
+
+[node name="Lighting" type="Node2D" parent="World" unique_id=1875779571]
+visible = false
+
+[node name="NightModulate" type="CanvasModulate" parent="World/Lighting" unique_id=922270554]
+color = Color(0.2901961, 0.34509805, 0.4392157, 1)
+
+[node name="YSortLayer" type="Node2D" parent="World" unique_id=1476947497]
+y_sort_enabled = true
+
+[node name="Player" type="CharacterBody2D" parent="World/YSortLayer" unique_id=1225172463]
+unique_name_in_owner = true
+script = ExtResource("1_o5qli")
+
+[node name="Steamtek_C001_WalkVisual" parent="World/YSortLayer/Player" unique_id=1233360441 instance=ExtResource("11_jkv2x")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/YSortLayer/Player" unique_id=1956728440]
+position = Vector2(0, -5)
+shape = SubResource("RectangleShape2D_cfp46")
+
+[node name="Camera2D" type="Camera2D" parent="World/YSortLayer/Player" unique_id=1383143390]
+
+[node name="NPCs" type="Node2D" parent="World/YSortLayer" unique_id=1156166013]
+y_sort_enabled = true
+
+[node name="Trainer" parent="World/YSortLayer/NPCs" unique_id=281885045 instance=ExtResource("12_jbj1t")]
+unique_name_in_owner = true
+
+[node name="Trainer2" type="Node2D" parent="World/YSortLayer/NPCs" unique_id=416996789]
+unique_name_in_owner = true
+position = Vector2(1650, 300)
+
+[node name="Trainer2Sprite" type="Sprite2D" parent="World/YSortLayer/NPCs/Trainer2" unique_id=1919338767]
+unique_name_in_owner = true
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("5_tbgi4")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="World/YSortLayer/NPCs/Trainer2" unique_id=695674868]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/YSortLayer/NPCs/Trainer2/StaticBody2D" unique_id=1131682978]
+position = Vector2(4, 25)
+shape = SubResource("CapsuleShape2D_cfp46")
+
+[node name="Trainer2NameLabel" type="Label" parent="World/YSortLayer/NPCs" unique_id=1643396448]
+unique_name_in_owner = true
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Trainer3" type="Node2D" parent="World/YSortLayer/NPCs" unique_id=1063048407]
+unique_name_in_owner = true
+position = Vector2(1350, 400)
+
+[node name="Trainer3Sprite" type="Sprite2D" parent="World/YSortLayer/NPCs/Trainer3" unique_id=860280817]
+unique_name_in_owner = true
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("5_tbgi4")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="World/YSortLayer/NPCs/Trainer3" unique_id=1780564434]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/YSortLayer/NPCs/Trainer3/StaticBody2D" unique_id=1115561491]
+position = Vector2(4, 25)
+shape = SubResource("CapsuleShape2D_cfp46")
+
+[node name="Trainer3NameLabel" type="Label" parent="World/YSortLayer/NPCs" unique_id=647749629]
+unique_name_in_owner = true
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Trainer4" type="Node2D" parent="World/YSortLayer/NPCs" unique_id=1662785432]
+unique_name_in_owner = true
+position = Vector2(1550, 400)
+
+[node name="Trainer4Sprite" type="Sprite2D" parent="World/YSortLayer/NPCs/Trainer4" unique_id=1802021276]
+unique_name_in_owner = true
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("5_tbgi4")
+
+[node name="Trainer4NameLabel" type="Label" parent="World/YSortLayer/NPCs" unique_id=66544842]
+unique_name_in_owner = true
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Enemies" type="Node2D" parent="World/YSortLayer" unique_id=836059221]
+
+[node name="Dummy" type="Node2D" parent="World/YSortLayer/Enemies" unique_id=733159711]
+unique_name_in_owner = true
+position = Vector2(400, 300)
+
+[node name="DummyHealthLabel" type="Label" parent="World/YSortLayer/Enemies/Dummy" unique_id=18012949]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="EnemySprite" type="Sprite2D" parent="World/YSortLayer/Enemies/Dummy" unique_id=1643220392]
+scale = Vector2(0.16875005, 0.18072915)
+texture = ExtResource("5_tbgi4")
+
+[node name="DummyHealthBarBg" type="Polygon2D" parent="World/YSortLayer/Enemies" unique_id=1131554676]
+unique_name_in_owner = true
+
+[node name="DummyHealthBarFill" type="Polygon2D" parent="World/YSortLayer/Enemies" unique_id=301999456]
+unique_name_in_owner = true
+
+[node name="DummyActionBarBg" type="Polygon2D" parent="World/YSortLayer/Enemies" unique_id=1442192416]
+unique_name_in_owner = true
+
+[node name="DummyActionBarFill" type="Polygon2D" parent="World/YSortLayer/Enemies" unique_id=128211421]
+unique_name_in_owner = true
+
+[node name="DummyNameLabel" type="Label" parent="World/YSortLayer/Enemies" unique_id=2096945663]
+unique_name_in_owner = true
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Enemy2" type="Node2D" parent="World/YSortLayer/Enemies" unique_id=1142055689]
+unique_name_in_owner = true
+position = Vector2(800, 125)
+
+[node name="Enemy2Sprite" type="Sprite2D" parent="World/YSortLayer/Enemies/Enemy2" unique_id=1044020790]
+modulate = Color(0.09019608, 0.5019608, 1, 1)
+scale = Vector2(0.181, 0.181)
+texture = ExtResource("5_tbgi4")
+
+[node name="Enemy2HealthBarBg" type="Polygon2D" parent="World/YSortLayer/Enemies" unique_id=185528751]
+unique_name_in_owner = true
+
+[node name="Enemy2HealthBarFill" type="Polygon2D" parent="World/YSortLayer/Enemies" unique_id=1021387460]
+unique_name_in_owner = true
+
+[node name="Enemy2ActionBarBg" type="Polygon2D" parent="World/YSortLayer/Enemies" unique_id=2135878608]
+unique_name_in_owner = true
+
+[node name="Enemy2ActionBarFill" type="Polygon2D" parent="World/YSortLayer/Enemies" unique_id=14136115]
+unique_name_in_owner = true
+
+[node name="Enemy2NameLabel" type="Label" parent="World/YSortLayer/Enemies" unique_id=1053251550]
+unique_name_in_owner = true
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Props" type="Node2D" parent="World/YSortLayer" unique_id=1483618446]
+y_sort_enabled = true
+
+[node name="P001_StreetLamp" parent="World/YSortLayer/Props" unique_id=1661331685 instance=ExtResource("16_jbj1t")]
+position = Vector2(453, 205)
+
+[node name="Buildings" type="Node2D" parent="World/YSortLayer" unique_id=985447406]
+y_sort_enabled = true
+
+[node name="Interactables" type="Node2D" parent="World/YSortLayer" unique_id=1508044679]
+
+[node name="Dumpster" type="Node2D" parent="World/YSortLayer/Interactables" unique_id=1542370767]
+unique_name_in_owner = true
+
+[node name="DumpsterVisual" type="Polygon2D" parent="World/YSortLayer/Interactables/Dumpster" unique_id=830085733]
+unique_name_in_owner = true
+
+[node name="QuestBook" type="Node2D" parent="World/YSortLayer/Interactables" unique_id=1846728479]
+unique_name_in_owner = true
+position = Vector2(-250, 0)
+
+[node name="QuestBookVisual" type="Polygon2D" parent="World/YSortLayer/Interactables/QuestBook" unique_id=393875380]
+unique_name_in_owner = true
+
+[node name="Harvesters" type="Node2D" parent="World/YSortLayer" unique_id=420743345]
+
+[node name="CooldownTimer" type="Timer" parent="." unique_id=318172754]
+wait_time = 20.0
+one_shot = true
+
+[node name="AttackCooldownTimer" type="Timer" parent="." unique_id=1274430988]
+one_shot = true
+
+[node name="DummyRespawnTimer" type="Timer" parent="." unique_id=437125472]
+wait_time = 5.0
+one_shot = true
+
+[node name="MessageClearTimer" type="Timer" parent="." unique_id=1733790744]
+wait_time = 4.0
+one_shot = true
+
+[node name="DummyAttackCooldownTimer" type="Timer" parent="." unique_id=1597029020]
+one_shot = true
+
+[node name="PlayerRespawnTimer" type="Timer" parent="." unique_id=560748145]
+wait_time = 5.0
+one_shot = true
+
+[node name="PlayerRegenTimer" type="Timer" parent="." unique_id=464731648]
+wait_time = 3.0
+
+[node name="PlayerActionRegenTimer" type="Timer" parent="." unique_id=624166681]
+wait_time = 3.0
+
+[node name="BandageCooldownTimer" type="Timer" parent="." unique_id=1832163666]
+
+[node name="XPGainClearTimer" type="Timer" parent="." unique_id=1350502279]
+wait_time = 2.0
+one_shot = true
+
+[node name="Enemy2AttackCooldownTimer" type="Timer" parent="." unique_id=1931634889]
+
+[node name="Enemy2RespawnTimer" type="Timer" parent="." unique_id=1506442146]
+wait_time = 5.0
+one_shot = true
+
+[node name="ForageCooldownTimer" type="Timer" parent="." unique_id=99446312]
+wait_time = 30.06
+
+[node name="ResourceShiftTimer" type="Timer" parent="." unique_id=1257001318]
+
+[node name="DumpsterCooldownTimer" type="Timer" parent="." unique_id=1061319465]
+one_shot = true
+
+[node name="UILayer" type="CanvasLayer" parent="." unique_id=1689779465]
+
+[node name="SurveyUI" type="Control" parent="UILayer" unique_id=894058078]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ResourceStatsLabel" type="Label" parent="UILayer/SurveyUI" unique_id=1494258975]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 250.0
+offset_right = 60.0
+offset_bottom = 273.0
+
+[node name="ScanResultLabel" type="Label" parent="UILayer/SurveyUI" unique_id=1569616603]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 215.0
+offset_right = 60.0
+offset_bottom = 238.0
+
+[node name="SampleButton" type="Button" parent="UILayer/SurveyUI" unique_id=2051532254]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 180.0
+offset_right = 85.0
+offset_bottom = 211.0
+text = "Sample"
+
+[node name="SampleMessageLabel" type="Label" parent="UILayer/SurveyUI" unique_id=1027214777]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 320.0
+offset_right = 60.0
+offset_bottom = 343.0
+
+[node name="ResourceTree" type="Tree" parent="UILayer/SurveyUI" unique_id=400230315]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 270.0
+offset_bottom = 170.0
+hide_root = true
+
+[node name="CraftingUI" type="Control" parent="UILayer" unique_id=1189635716]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="RecipeTree" type="Tree" parent="UILayer/CraftingUI" unique_id=85853897]
+layout_mode = 0
+offset_left = 700.0
+offset_top = 20.0
+offset_right = 950.0
+offset_bottom = 170.0
+hide_root = true
+
+[node name="RecipeInfoLabel" type="Label" parent="UILayer/CraftingUI" unique_id=1130890212]
+layout_mode = 0
+offset_left = 700.0
+offset_top = 350.0
+offset_right = 740.0
+offset_bottom = 373.0
+
+[node name="EnhancementSlotLabel" type="Label" parent="UILayer/CraftingUI" unique_id=51245857]
+layout_mode = 0
+offset_left = 700.0
+offset_top = 225.0
+offset_right = 841.0
+offset_bottom = 248.0
+text = "Enhancement Slot"
+
+[node name="CraftButton" type="Button" parent="UILayer/CraftingUI" unique_id=1760763648]
+layout_mode = 0
+offset_left = 700.0
+offset_top = 180.0
+offset_right = 850.0
+offset_bottom = 220.0
+text = "Craft"
+
+[node name="CraftResultLabel" type="Label" parent="UILayer/CraftingUI" unique_id=192547924]
+layout_mode = 0
+offset_left = 1200.0
+offset_top = 480.0
+offset_right = 1240.0
+offset_bottom = 503.0
+
+[node name="SkillUI" type="Control" parent="UILayer" unique_id=2144439064]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="SkillTree" type="Tree" parent="UILayer/SkillUI" unique_id=125021504]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 270.0
+offset_bottom = 170.0
+hide_root = true
+
+[node name="SkillInfoLabel" type="Label" parent="UILayer/SkillUI" unique_id=299557254]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 180.0
+offset_right = 60.0
+offset_bottom = 203.0
+
+[node name="SpendPointButton" type="Button" parent="UILayer/SkillUI" unique_id=1966369542]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 260.0
+offset_right = 121.0
+offset_bottom = 292.0
+text = "Spend Point"
+
+[node name="SkillResultLabel" type="Label" parent="UILayer/SkillUI" unique_id=794314983]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 300.0
+offset_right = 60.0
+offset_bottom = 323.0
+
+[node name="ProfessionSelectUI" type="Control" parent="UILayer" unique_id=24155767]
+custom_minimum_size = Vector2(320, 260)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ProfessionOptionsList" type="ItemList" parent="UILayer/ProfessionSelectUI" unique_id=1253744698]
+custom_minimum_size = Vector2(280, 160)
+layout_mode = 0
+offset_left = 17.0
+offset_top = 10.0
+offset_right = 267.0
+offset_bottom = 160.0
+
+[node name="ChooseProfessionButton" type="Button" parent="UILayer/ProfessionSelectUI" unique_id=1705026414]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 130.0
+offset_right = 171.0
+offset_bottom = 162.0
+text = "Choose Profession"
+
+[node name="ProfessionSelectResultLabel" type="Label" parent="UILayer/ProfessionSelectUI" unique_id=636377676]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 170.0
+offset_right = 60.0
+offset_bottom = 193.0
+
+[node name="InventoryLabel" type="Label" parent="UILayer" unique_id=420291301]
+offset_left = 500.0
+offset_top = 20.0
+offset_right = 540.0
+offset_bottom = 60.0
+
+[node name="CombatMessageLabel" type="Label" parent="UILayer" unique_id=101366244]
+offset_left = 20.0
+offset_top = 400.0
+offset_right = 60.0
+offset_bottom = 423.0
+
+[node name="XPGainLabel" type="Label" parent="UILayer" unique_id=1774532439]
+offset_left = 400.0
+offset_top = 120.0
+offset_right = 440.0
+offset_bottom = 143.0
+
+[node name="ActionBar" type="HBoxContainer" parent="UILayer" unique_id=715694115]
+offset_right = 92.0
+offset_bottom = 40.0
+
+[node name="Slot1" type="Button" parent="UILayer/ActionBar" unique_id=898315671]
+layout_mode = 2
+script = ExtResource("6_o6xl0")
+
+[node name="Slot2" type="Button" parent="UILayer/ActionBar" unique_id=1442199542]
+layout_mode = 2
+script = ExtResource("6_o6xl0")
+
+[node name="Slot3" type="Button" parent="UILayer/ActionBar" unique_id=1964523165]
+layout_mode = 2
+script = ExtResource("6_o6xl0")
+
+[node name="Slot4" type="Button" parent="UILayer/ActionBar" unique_id=743954567]
+layout_mode = 2
+script = ExtResource("6_o6xl0")
+
+[node name="Slot5" type="Button" parent="UILayer/ActionBar" unique_id=1118289011]
+layout_mode = 2
+script = ExtResource("6_o6xl0")
+
+[node name="Slot6" type="Button" parent="UILayer/ActionBar" unique_id=202790914]
+layout_mode = 2
+script = ExtResource("6_o6xl0")
+
+[node name="Slot7" type="Button" parent="UILayer/ActionBar" unique_id=147843661]
+layout_mode = 2
+script = ExtResource("6_o6xl0")
+
+[node name="Slot8" type="Button" parent="UILayer/ActionBar" unique_id=2084756364]
+layout_mode = 2
+script = ExtResource("6_o6xl0")
+
+[node name="CogsLabel" type="Label" parent="UILayer" unique_id=310088909]
+offset_left = 526.0
+offset_top = 10.0
+offset_right = 566.0
+offset_bottom = 33.0
+
+[node name="InventoryUI" type="GridContainer" parent="UILayer" unique_id=1532124895]
+custom_minimum_size = Vector2(600, 400)
+offset_left = 32.0
+offset_top = 126.0
+offset_right = 632.0
+offset_bottom = 526.0
+columns = 6
+
+[node name="InvSlot1" type="Button" parent="UILayer/InventoryUI" unique_id=1144751907]
+layout_mode = 2
+script = ExtResource("8_tipki")
+
+[node name="InvSlot2" type="Button" parent="UILayer/InventoryUI" unique_id=1850473611]
+layout_mode = 2
+script = ExtResource("8_tipki")
+
+[node name="InvSlot3" type="Button" parent="UILayer/InventoryUI" unique_id=1003622029]
+layout_mode = 2
+script = ExtResource("8_tipki")
+
+[node name="InvSlot4" type="Button" parent="UILayer/InventoryUI" unique_id=2025117308]
+layout_mode = 2
+script = ExtResource("8_tipki")
+
+[node name="InvSlot5" type="Button" parent="UILayer/InventoryUI" unique_id=1691561905]
+layout_mode = 2
+script = ExtResource("8_tipki")
+
+[node name="InvSlot6" type="Button" parent="UILayer/InventoryUI" unique_id=1958216407]
+layout_mode = 2
+script = ExtResource("8_tipki")
+
+[node name="InvSlot7" type="Button" parent="UILayer/InventoryUI" unique_id=1712608198]
+layout_mode = 2
+script = ExtResource("8_tipki")
+
+[node name="InvSlot8" type="Button" parent="UILayer/InventoryUI" unique_id=181903719]
+layout_mode = 2
+script = ExtResource("8_tipki")
+
+[node name="InvSlot9" type="Button" parent="UILayer/InventoryUI" unique_id=2135629492]
+layout_mode = 2
+script = ExtResource("8_tipki")
+
+[node name="InvSlot10" type="Button" parent="UILayer/InventoryUI" unique_id=1343201466]
+layout_mode = 2
+script = ExtResource("8_tipki")
+
+[node name="InvSlot11" type="Button" parent="UILayer/InventoryUI" unique_id=1188124340]
+layout_mode = 2
+script = ExtResource("8_tipki")
+
+[node name="InvSlot12" type="Button" parent="UILayer/InventoryUI" unique_id=1449898360]
+layout_mode = 2
+script = ExtResource("8_tipki")
+
+[node name="InvSlot13" type="Button" parent="UILayer/InventoryUI" unique_id=1456236806]
+layout_mode = 2
+script = ExtResource("8_tipki")
+
+[node name="InvSlot14" type="Button" parent="UILayer/InventoryUI" unique_id=878876637]
+layout_mode = 2
+script = ExtResource("8_tipki")
+
+[node name="InvSlot15" type="Button" parent="UILayer/InventoryUI" unique_id=1585736946]
+layout_mode = 2
+script = ExtResource("8_tipki")
+
+[node name="InvSlot16" type="Button" parent="UILayer/InventoryUI" unique_id=1804886931]
+layout_mode = 2
+script = ExtResource("8_tipki")
+
+[node name="InvSlot17" type="Button" parent="UILayer/InventoryUI" unique_id=246096131]
+layout_mode = 2
+script = ExtResource("8_tipki")
+
+[node name="InvSlot18" type="Button" parent="UILayer/InventoryUI" unique_id=1753137851]
+layout_mode = 2
+script = ExtResource("8_tipki")
+
+[node name="InvSlot19" type="Button" parent="UILayer/InventoryUI" unique_id=872733889]
+layout_mode = 2
+script = ExtResource("8_tipki")
+
+[node name="InvSlot20" type="Button" parent="UILayer/InventoryUI" unique_id=1453613378]
+layout_mode = 2
+script = ExtResource("8_tipki")
+
+[node name="InvSlot21" type="Button" parent="UILayer/InventoryUI" unique_id=584655603]
+layout_mode = 2
+script = ExtResource("8_tipki")
+
+[node name="InvSlot22" type="Button" parent="UILayer/InventoryUI" unique_id=2092300294]
+layout_mode = 2
+script = ExtResource("8_tipki")
+
+[node name="InvSlot23" type="Button" parent="UILayer/InventoryUI" unique_id=2038616158]
+layout_mode = 2
+script = ExtResource("8_tipki")
+
+[node name="InvSlot24" type="Button" parent="UILayer/InventoryUI" unique_id=1205110764]
+layout_mode = 2
+script = ExtResource("8_tipki")
+
+[node name="PlayerHUD" type="Node2D" parent="UILayer" unique_id=1474292478]
+unique_name_in_owner = true
+
+[node name="PlayerHealthBarBg" type="Polygon2D" parent="UILayer/PlayerHUD" unique_id=196571712]
+unique_name_in_owner = true
+
+[node name="PlayerHealthBarFill" type="Polygon2D" parent="UILayer/PlayerHUD" unique_id=1001534320]
+unique_name_in_owner = true
+
+[node name="PlayerActionBarBg" type="Polygon2D" parent="UILayer/PlayerHUD" unique_id=1952473883]
+unique_name_in_owner = true
+
+[node name="PlayerActionBarFill" type="Polygon2D" parent="UILayer/PlayerHUD" unique_id=468126720]
+unique_name_in_owner = true
+
+[node name="PlayerHUDHealthLabel" type="Label" parent="UILayer/PlayerHUD" unique_id=407165634]
+unique_name_in_owner = true
+offset_right = 40.0
+offset_bottom = 22.0
+
+[node name="PlayerHUDActionLabel" type="Label" parent="UILayer/PlayerHUD" unique_id=2091946325]
+unique_name_in_owner = true
+offset_right = 40.0
+offset_bottom = 22.0
+
+[node name="EnemyHUD" type="Node2D" parent="UILayer" unique_id=791479968]
+unique_name_in_owner = true
+
+[node name="EnemyHUDHealthBarBg" type="Polygon2D" parent="UILayer/EnemyHUD" unique_id=1686816633]
+unique_name_in_owner = true
+
+[node name="EnemyHUDHealthBarFill" type="Polygon2D" parent="UILayer/EnemyHUD" unique_id=1762811413]
+unique_name_in_owner = true
+
+[node name="EnemyHUDActionBarBg" type="Polygon2D" parent="UILayer/EnemyHUD" unique_id=436171622]
+unique_name_in_owner = true
+
+[node name="EnemyHUDActionBarFill" type="Polygon2D" parent="UILayer/EnemyHUD" unique_id=1818110177]
+unique_name_in_owner = true
+
+[node name="EnemyHUDHealthLabel" type="Label" parent="UILayer/EnemyHUD" unique_id=329551639]
+unique_name_in_owner = true
+offset_right = 40.0
+offset_bottom = 22.0
+
+[node name="EnemyHUDActionLabel" type="Label" parent="UILayer/EnemyHUD" unique_id=1387373912]
+unique_name_in_owner = true
+offset_right = 40.0
+offset_bottom = 22.0
+
+[node name="TrainerUI" type="Control" parent="." unique_id=426478174]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 360.0
+offset_bottom = 240.0
+script = ExtResource("18_dp3eg")
+
+[node name="DialogueLayout" type="VBoxContainer" parent="TrainerUI" unique_id=933803971]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TrainInfoLabel" type="Label" parent="TrainerUI/DialogueLayout" unique_id=1571822356]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="TrainerOptions" type="VBoxContainer" parent="TrainerUI/DialogueLayout" unique_id=2043988616]
+layout_mode = 2
+
+[node name="TrainResultLabel" type="Label" parent="TrainerUI/DialogueLayout" unique_id=1766430966]
+layout_mode = 2
+horizontal_alignment = 1
+clip_text = true
+
+[editable path="World/YSortLayer/NPCs/Trainer"]

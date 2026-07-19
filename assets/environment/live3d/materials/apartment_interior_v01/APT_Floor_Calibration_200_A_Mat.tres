@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/materials/apartment_interior_v01/APT_Floor_Calibration_200_A_Albedo.png" id="1_albedo"]
+
+[resource]
+albedo_color = Color(0.62, 0.66, 0.7, 1)
+albedo_texture = ExtResource("1_albedo")
+metallic = 0.06
+roughness = 0.86

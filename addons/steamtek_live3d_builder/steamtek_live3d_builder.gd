@@ -88,7 +88,7 @@ func _reset_auto_snap_watch() -> void:
 
 
 func _module_library() -> Array:
-	return [
+	var library := [
 		{
 			"label": "Interior - Floor Tile 1.2m",
 			"path": "res://scenes/environment/live3d/kits/apartment_interior/APT_Floor_120_A.tscn",
@@ -125,11 +125,6 @@ func _module_library() -> Array:
 			"parent": "Architecture",
 		},
 		{
-			"label": "Interior - Half Partition 1.2m",
-			"path": "res://scenes/environment/live3d/kits/apartment_interior/APT_Partition_120x150_A.tscn",
-			"parent": "Architecture",
-		},
-		{
 			"label": "Interior - Corner Column",
 			"path": "res://scenes/environment/live3d/kits/apartment_interior/APT_Column_Corner_A.tscn",
 			"parent": "Architecture",
@@ -146,7 +141,7 @@ func _module_library() -> Array:
 		},
 		{
 			"label": "Furniture - Workbench",
-			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Workbench_A.tscn",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Workbench_Production_C.tscn",
 			"parent": "Furniture",
 		},
 		{
@@ -334,6 +329,175 @@ func _module_library() -> Array:
 			"label": "Street - Alley Driveway Cut",
 			"path": "res://scenes/environment/live3d/kits/street/SteamtekAlleyDrivewayCut2_4m3D.tscn",
 		},
+	]
+	library.append_array(_production_apartment_library())
+	return library
+
+
+func _production_apartment_library() -> Array:
+	return [
+	# APARTMENT_LIBRARY_D_BEGIN
+		{
+			"label": "Interior - Wall Door 300x270 Service",
+			"path": "res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_Door_300x270_Service.tscn",
+			"parent": "Architecture",
+		},
+		{
+			"label": "Interior - Wall Window Wide 300x270",
+			"path": "res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_Window_Wide_300x270.tscn",
+			"parent": "Architecture",
+		},
+		{
+			"label": "Interior - Wall Window Slot 300x270",
+			"path": "res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_Window_Slot_300x270.tscn",
+			"parent": "Architecture",
+		},
+		{
+			"label": "Apartment - Couch 2Seat Rust",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Couch_2Seat_Rust.tscn",
+			"parent": "Furniture",
+		},
+		{
+			"label": "Apartment - Chair Lounge Rust",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Chair_Lounge_Rust.tscn",
+			"parent": "Furniture",
+		},
+		{
+			"label": "Apartment - Bed Full Rust",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Bed_Full_Rust.tscn",
+			"parent": "Furniture",
+		},
+		{
+			"label": "Apartment - Couch 2Seat Teal",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Couch_2Seat_Teal.tscn",
+			"parent": "Furniture",
+		},
+		{
+			"label": "Apartment - Chair Lounge Teal",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Chair_Lounge_Teal.tscn",
+			"parent": "Furniture",
+		},
+		{
+			"label": "Apartment - Bed Full Teal",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Bed_Full_Teal.tscn",
+			"parent": "Furniture",
+		},
+		{
+			"label": "Apartment - Couch 2Seat Plum",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Couch_2Seat_Plum.tscn",
+			"parent": "Furniture",
+		},
+		{
+			"label": "Apartment - Chair Lounge Plum",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Chair_Lounge_Plum.tscn",
+			"parent": "Furniture",
+		},
+		{
+			"label": "Apartment - Bed Full Plum",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Bed_Full_Plum.tscn",
+			"parent": "Furniture",
+		},
+		{
+			"label": "Prop - Prop Pillow Rust",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_Pillow_Rust.tscn",
+			"parent": "Props",
+		},
+		{
+			"label": "Prop - Prop Pillow Teal",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_Pillow_Teal.tscn",
+			"parent": "Props",
+		},
+		{
+			"label": "Prop - Prop Pillow Plum",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_Pillow_Plum.tscn",
+			"parent": "Props",
+		},
+		{
+			"label": "Prop - Prop Pillow Ochre",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_Pillow_Ochre.tscn",
+			"parent": "Props",
+		},
+		{
+			"label": "Apartment - TrashCan Round Steel",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_TrashCan_Round_Steel.tscn",
+			"parent": "Furniture",
+		},
+		{
+			"label": "Apartment - TrashCan Smart Teal",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_TrashCan_Smart_Teal.tscn",
+			"parent": "Furniture",
+		},
+		{
+			"label": "Apartment - Cabinet Low Service",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Cabinet_Low_Service.tscn",
+			"parent": "Furniture",
+		},
+		{
+			"label": "Apartment - Cabinet Tall Wardrobe",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Cabinet_Tall_Wardrobe.tscn",
+			"parent": "Furniture",
+		},
+		{
+			"label": "Apartment - Cabinet Wall Kitchen",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Cabinet_Wall_Kitchen.tscn",
+			"parent": "Furniture",
+		},
+		{
+			"label": "Apartment - Cabinet Base Kitchen",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Cabinet_Base_Kitchen.tscn",
+			"parent": "Furniture",
+		},
+		{
+			"label": "Apartment - Shelf Open Service",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Shelf_Open_Service.tscn",
+			"parent": "Furniture",
+		},
+		{
+			"label": "Apartment - Table Dining Service",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Table_Dining_Service.tscn",
+			"parent": "Furniture",
+		},
+		{
+			"label": "Apartment - Table Coffee Service",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Table_Coffee_Service.tscn",
+			"parent": "Furniture",
+		},
+		{
+			"label": "Apartment - Table Side Service",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Table_Side_Service.tscn",
+			"parent": "Furniture",
+		},
+		{
+			"label": "Apartment - Chair Dining Rust",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Chair_Dining_Rust.tscn",
+			"parent": "Furniture",
+		},
+		{
+			"label": "Apartment - Chair Dining Teal",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Chair_Dining_Teal.tscn",
+			"parent": "Furniture",
+		},
+		{
+			"label": "Apartment - Stool Bar Rust",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Stool_Bar_Rust.tscn",
+			"parent": "Furniture",
+		},
+		{
+			"label": "Apartment - Stool Bar Teal",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Stool_Bar_Teal.tscn",
+			"parent": "Furniture",
+		},
+		{
+			"label": "Apartment - Lamp Floor Copper",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Lamp_Floor_Copper.tscn",
+			"parent": "Furniture",
+		},
+		{
+			"label": "Prop - Prop Planter Teal",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_Planter_Teal.tscn",
+			"parent": "Props",
+		},
+	# APARTMENT_LIBRARY_D_END
 	]
 
 

@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/materials/apartment_interior_v01/APT_Wall_RetrofitRepair_300x270_A_Albedo.png" id="1_texture"]
+
+[resource]
+resource_name = "APT Wall Retrofit Repair 300x270 A"
+albedo_texture = ExtResource("1_texture")
+metallic = 0.04
+roughness = 0.8
+

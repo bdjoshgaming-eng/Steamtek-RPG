@@ -1,28 +1,29 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=12 format=3]
 
-[ext_resource type="Material" path="res://assets/environment/live3d/materials/apartment_interior_v01/APT_Wall_Base_A_Mat.tres" id="1_wall"]
-[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="2_trim"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/apartment_interior_v01/APT_Wall_Window_120x300_A_PierLeft_Mat.tres" id="1_left"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/apartment_interior_v01/APT_Wall_Window_120x300_A_PierRight_Mat.tres" id="2_right"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/apartment_interior_v01/APT_Wall_Window_120x300_A_Header_Mat.tres" id="3_header"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/apartment_interior_v01/APT_Wall_Window_120x300_A_Sill_Mat.tres" id="4_sill"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/apartment_interior_v01/APT_Wall_Window_120x300_A_Glass_Mat.tres" id="5_glass"]
 
-[sub_resource type="StandardMaterial3D" id="WindowMaterial"]
-transparency = 1
-albedo_color = Color(0.035, 0.09, 0.12, 0.72)
-metallic = 0.12
-roughness = 0.18
+[sub_resource type="BoxMesh" id="LeftPierMesh"]
+material = ExtResource("1_left")
+size = Vector3(0.18, 3.2, 0.16)
 
-[sub_resource type="BoxMesh" id="SideMesh"]
-material = ExtResource("1_wall")
+[sub_resource type="BoxMesh" id="RightPierMesh"]
+material = ExtResource("2_right")
 size = Vector3(0.18, 3.2, 0.16)
 
 [sub_resource type="BoxMesh" id="HeaderMesh"]
-material = ExtResource("1_wall")
+material = ExtResource("3_header")
 size = Vector3(0.84, 0.62, 0.16)
 
 [sub_resource type="BoxMesh" id="SillMesh"]
-material = ExtResource("2_trim")
+material = ExtResource("4_sill")
 size = Vector3(0.92, 0.42, 0.22)
 
 [sub_resource type="BoxMesh" id="GlassMesh"]
-material = SubResource("WindowMaterial")
+material = ExtResource("5_glass")
 size = Vector3(0.82, 1.72, 0.035)
 
 [sub_resource type="BoxShape3D" id="WallShape"]
@@ -36,36 +37,46 @@ metadata/module_family = "apartment_interior_wall"
 metadata/module_dimensions_m = Vector3(1.2, 3.2, 0.16)
 metadata/grid_step_m = 1.2
 metadata/front_axis = "+Z"
+metadata/art_status = "hand_painted_production_A"
 
 [node name="LeftPier" type="MeshInstance3D" parent="."]
 position = Vector3(-0.51, 1.6, 0)
-mesh = SubResource("SideMesh")
+mesh = SubResource("LeftPierMesh")
+
 [node name="RightPier" type="MeshInstance3D" parent="."]
 position = Vector3(0.51, 1.6, 0)
-mesh = SubResource("SideMesh")
+mesh = SubResource("RightPierMesh")
+
 [node name="Header" type="MeshInstance3D" parent="."]
 position = Vector3(0, 2.89, 0)
 mesh = SubResource("HeaderMesh")
+
 [node name="Sill" type="MeshInstance3D" parent="."]
 position = Vector3(0, 0.24, 0.03)
 mesh = SubResource("SillMesh")
+
 [node name="Glass" type="MeshInstance3D" parent="."]
 position = Vector3(0, 1.42, 0.02)
 mesh = SubResource("GlassMesh")
+
 [node name="Collision" type="CollisionShape3D" parent="."]
 position = Vector3(0, 1.6, 0)
 shape = SubResource("WallShape")
 
 [node name="Sockets" type="Node3D" parent="."]
+
 [node name="WallLeft" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
 position = Vector3(-0.6, 0, 0)
 metadata/socket_role = "interior_wall_chain"
+
 [node name="WallRight" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
 position = Vector3(0.6, 0, 0)
 metadata/socket_role = "interior_wall_chain"
+
 [node name="WindowSillProp" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
 position = Vector3(0, 0.47, 0.18)
 metadata/socket_role = "prop_surface"
+
 [node name="FloorAttachment" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
 metadata/socket_role = "interior_wall_base"
 

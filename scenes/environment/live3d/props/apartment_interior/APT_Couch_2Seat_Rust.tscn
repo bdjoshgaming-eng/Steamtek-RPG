@@ -1,0 +1,51 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/environment/live3d/models/apartment_interior/library_d/APT_Couch_2Seat_Rust.glb" id="1_model"]
+
+[sub_resource type="BoxShape3D" id="PrimaryShape"]
+size = Vector3(2.2, 1.05, 0.9)
+
+[node name="APT_Couch_2Seat_Rust" type="Node3D" groups=["steamtek_live3d_modular"]]
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "apartment_library_d_seating"
+metadata/module_variant = "APT_Couch_2Seat_Rust"
+metadata/module_dimensions_m = Vector3(2.2, 1.05, 0.9)
+metadata/contact_pivot = "floor_center"
+metadata/front_axis = "+Z_toward_room_and_c001"
+metadata/art_style = "hand_painted_shadowrun_returns_rendering_language_not_palette"
+metadata/world_design = "40_cyberpunk_20_neoindustrial_20_practical_steampunk_20_arcane_color_treatment"
+metadata/visual_contract = "finished_true_3d_no_cards_no_billboards"
+metadata/source_library = "APT_Couch_2Seat_Rust_F.blend"
+metadata/rebuild_script = "res://blender/live3d/apartment_interior/Steamtek_Rebuild_APT_Couch_2Seat_Rust_E.py"
+metadata/quality_benchmark_primary = "approved_apartment_walls"
+metadata/quality_benchmark_secondary = "approved_computer_workbench"
+metadata/accent_rule = "cyan_only_for_actual_light_sources"
+metadata/art_status = "production_F_pending_user_gameplay_review"
+
+[node name="Visual" parent="." instance=ExtResource("1_model")]
+
+[node name="StaticBody" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="PrimaryCollision" type="CollisionShape3D" parent="StaticBody"]
+position = Vector3(0, 0.525, 0)
+shape = SubResource("PrimaryShape")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="SeatLeft" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-0.48, 0.67, 0.05)
+metadata/socket_role = "prop_surface"
+
+[node name="SeatRight" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0.48, 0.67, 0.05)
+metadata/socket_role = "prop_surface"
+
+[node name="LeftFurniture" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-1.1, 0, 0)
+metadata/socket_role = "furniture_chain"
+
+[node name="RightFurniture" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(1.1, 0, 0)
+metadata/socket_role = "furniture_chain"

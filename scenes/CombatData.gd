@@ -296,3 +296,85 @@ const THREAT_DEADLY: Array = ["Deadly", Color(1.00, 0.10, 0.10)]
 # are built out.
 const PLAYER_CL_PER_SKILL_POINT: float = 0.9
 const PLAYER_CL_MAX: int = 100
+
+
+# ============================================================
+# Phase 10: weapon families, proficiency, certification
+# ============================================================
+# Steamtek-native family list: the 12 weapon classes the game already
+# uses ARE the 12 families, rather than the framework's 11-ranged +
+# 1-collapsed-melee list, which would have thrown away the six distinct
+# melee classes. Each family names the keystone that governs its
+# proficiency.
+#
+# NOTE: Street Thug is a generalist, so its Melee keystone lifts all six
+# melee families equally (same for Ranged). Families are still tracked
+# INDIVIDUALLY here so that per-family nodes in later specialist
+# professions (Sniper, Bombardier, etc.) become a source swap rather
+# than a restructure.
+const WEAPON_FAMILIES: Dictionary = {
+	"Sword": {"keystone": "Melee", "range": "Melee"},
+	"Axe": {"keystone": "Melee", "range": "Melee"},
+	"Hammer": {"keystone": "Melee", "range": "Melee"},
+	"Brass Knuckles": {"keystone": "Melee", "range": "Melee"},
+	"Stun Stick": {"keystone": "Melee", "range": "Melee"},
+	"Baton": {"keystone": "Melee", "range": "Melee"},
+	"Pistol": {"keystone": "Ranged", "range": "Ranged"},
+	"Assault Rifle": {"keystone": "Ranged", "range": "Ranged"},
+	"Sniper Rifle": {"keystone": "Ranged", "range": "Ranged"},
+	"Shotgun": {"keystone": "Ranged", "range": "Ranged"},
+	"Grenade Launcher": {"keystone": "Ranged", "range": "Ranged"},
+	"Flame Thrower": {"keystone": "Ranged", "range": "Ranged"},
+}
+
+
+# Proficiency tiers, keyed by points spent in the governing keystone.
+# "min_points" is inclusive; the highest tier whose min_points is met
+# wins. accuracy adds to the hit-chance formula; speed_pct reduces the
+# attack cooldown (a better-trained attacker swings the same weapon
+# faster, per the SWG proficiency concept).
+const PROFICIENCY_TIERS: Array = [
+	{"tier": 0, "label": "Untrained", "min_points": 0, "accuracy": 0, "speed_pct": 0.00},
+	{"tier": 1, "label": "I", "min_points": 1, "accuracy": 10, "speed_pct": 0.03},
+	{"tier": 2, "label": "II", "min_points": 5, "accuracy": 25, "speed_pct": 0.07},
+	{"tier": 3, "label": "III", "min_points": 10, "accuracy": 45, "speed_pct": 0.12},
+	{"tier": 4, "label": "IV", "min_points": 15, "accuracy": 70, "speed_pct": 0.18},
+]
+
+
+# Graded penalty for wielding a weapon the character is NOT certified
+# for, replacing the old blanket half-damage placeholder. The damage hit
+# is softer than the old 0.5 because the accuracy, action-cost and
+# special-lockout penalties now carry real weight on their own.
+const UNCERTIFIED_PENALTY: Dictionary = {
+	"accuracy": -35,
+	"action_cost_multiplier": 1.5,
+	"max_ability_coefficient": 1.0,
+	"damage_multiplier": 0.75,
+}
+
+
+# Returns the family record for a weapon class, or an empty dictionary if
+# the class is unknown (e.g. unarmed with nothing equipped).
+func family_for_class(weapon_class: String) -> Dictionary:
+	return WEAPON_FAMILIES.get(weapon_class, {})
+
+
+# ============================================================
+# Phase 9: loot quality scaling by Combat Level
+# ============================================================
+# Higher-CL enemies roll the better loot TIERS more often. Per the
+# framework, CL raises loot QUALITY/grade, not quantity -- drop amounts
+# are untouched, and UltraRare keeps its own independent per-entry roll.
+#
+# Bands are inclusive of max_cl; anything above the last band uses the
+# last band. Chances within a band must sum to <= 1.0; whatever is left
+# over is a no-drop chance (currently 0.0).
+const LOOT_TIER_BANDS: Array = [
+	{"max_cl": 5, "Common": 0.85, "Uncommon": 0.13, "Rare": 0.02},
+	{"max_cl": 10, "Common": 0.78, "Uncommon": 0.18, "Rare": 0.04},
+	{"max_cl": 20, "Common": 0.70, "Uncommon": 0.23, "Rare": 0.07},
+	{"max_cl": 30, "Common": 0.60, "Uncommon": 0.28, "Rare": 0.12},
+	{"max_cl": 40, "Common": 0.50, "Uncommon": 0.32, "Rare": 0.18},
+	{"max_cl": 100, "Common": 0.40, "Uncommon": 0.35, "Rare": 0.25},
+]

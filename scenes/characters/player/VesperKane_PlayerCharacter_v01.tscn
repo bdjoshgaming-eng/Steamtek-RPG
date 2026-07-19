@@ -1,13 +1,30 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/characters/templates/Steamtek_HumanoidCharacter3D.tscn" id="1_template"]
 [ext_resource type="PackedScene" uid="uid://cda2y3gb3iapa" path="res://assets/characters/humanoid/base/STK_C001_Protagonist/v01/STK_C001_Protagonist_RigAnim_v01.glb" id="2_protagonist"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_six_foot"]
+radius = 0.36576
+height = 1.88259
 
 [node name="VesperKane_PlayerCharacter_v01" instance=ExtResource("1_template")]
 character_scene = ExtResource("2_protagonist")
 character_instance_name = "STK_C001_Protagonist_RigAnim_v01"
 model_forward_yaw_offset_degrees = 0.0
+metadata/physical_height_ft = 6.0
+metadata/physical_height_m = 1.8288
+metadata/height_contract = "c001_six_foot_uniform_scale_1_075765"
+
+[node name="BodyCollision" parent="." index="0"]
+position = Vector3(0, 0.941295, 0)
+shape = SubResource("CapsuleShape3D_six_foot")
+
+[node name="VisualPivot" parent="." index="1"]
+scale = Vector3(1.075765, 1.075765, 1.075765)
 
 [node name="STK_C001_Protagonist_RigAnim_v01" parent="VisualPivot" index="0" instance=ExtResource("2_protagonist")]
+
+[node name="CameraTarget" parent="." index="2"]
+position = Vector3(0, 1.527586, 0)
 
 [editable path="VisualPivot"]

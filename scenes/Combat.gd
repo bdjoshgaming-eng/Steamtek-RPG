@@ -72,13 +72,16 @@ func compute_player_attack_damage(p: Dictionary) -> Dictionary:
 		crit_hit = true
 
 	# CertificationModifier -- profession-certified bonus (1.10) and the
-	# uncertified-weapon penalty (0.5, placeholder until the Phase 10 model).
+	# Phase 10 graded uncertified damage penalty. The other three
+	# uncertified penalties (accuracy, action cost, special lockout) are
+	# applied by the caller, which is why this one is softer than the old
+	# blanket 0.5.
 	var certification_modifier = 1.0
 	if p.get("profession_certified", false):
 		certification_modifier *= 1.10
-	var is_uncertified = _resolve_uncertified(p.get("equipped_weapon_name", ""), p.get("professions_unlocked", {}))
+	var is_uncertified = is_weapon_uncertified(p.get("equipped_weapon_name", ""), p.get("professions_unlocked", {}))
 	if is_uncertified:
-		certification_modifier *= 0.5
+		certification_modifier *= float(CombatData.UNCERTIFIED_PENALTY["damage_multiplier"])
 
 	# ClassModifier and WeakPointModifier -- reserved 1.0 slots (Phase 5+).
 	var class_modifier = 1.0
@@ -100,7 +103,7 @@ func compute_enemy_attack_damage(min_damage: int, max_damage: int, damage_debuff
 # keystone professions certify Novice weapons on unlock and gated weapons
 # once enough keystone points are spent; path professions certify once the
 # named box is fully filled.
-func _resolve_uncertified(equipped_weapon_name: String, professions_unlocked: Dictionary) -> bool:
+func is_weapon_uncertified(equipped_weapon_name: String, professions_unlocked: Dictionary) -> bool:
 	var weapon_cert_req = GameData.WEAPON_CERT_REQUIREMENTS.get(equipped_weapon_name, null)
 	if weapon_cert_req == null:
 		return false
@@ -315,3 +318,83 @@ func threat_for(enemy_cl: int, player_cl: int) -> Dictionary:
 		if ratio <= float(tier[0]):
 			return {"label": String(tier[1]), "color": tier[2]}
 	return {"label": String(CombatData.THREAT_DEADLY[0]), "color": CombatData.THREAT_DEADLY[1]}
+
+
+# ============================================================
+# Phase 10: weapon proficiency + graded certification penalty
+# ============================================================
+
+
+# Points spent in the keystone that governs a weapon family. Returns 0
+# for unknown families or professions without keystones.
+func keystone_points_for_family(weapon_class: String, professions: Dictionary, profession_name: String = "Street Thug") -> int:
+	var fam = CombatData.family_for_class(weapon_class)
+	if fam.is_empty():
+		return 0
+	var prof = professions.get(profession_name, {})
+	if not prof.has("keystones"):
+		return 0
+	var ks = prof["keystones"].get(fam["keystone"], {})
+	return int(ks.get("points_spent", 0))
+
+
+# Resolves a proficiency tier from points spent in the governing
+# keystone. Returns tier number, display label, accuracy bonus and speed
+# percentage. Unknown families fall back to Untrained.
+func proficiency_for_family(weapon_class: String, keystone_points: int) -> Dictionary:
+	var fam = CombatData.family_for_class(weapon_class)
+	if fam.is_empty():
+		return {"tier": 0, "label": "Untrained", "accuracy": 0, "speed_pct": 0.0, "family": weapon_class}
+	var chosen = CombatData.PROFICIENCY_TIERS[0]
+	for entry in CombatData.PROFICIENCY_TIERS:
+		if keystone_points >= int(entry["min_points"]):
+			chosen = entry
+	return {
+		"tier": int(chosen["tier"]),
+		"label": String(chosen["label"]),
+		"accuracy": int(chosen["accuracy"]),
+		"speed_pct": float(chosen["speed_pct"]),
+		"family": weapon_class,
+	}
+
+
+# The accuracy penalty applied when wielding an uncertified weapon.
+func uncertified_accuracy_penalty(is_uncertified: bool) -> int:
+	if not is_uncertified:
+		return 0
+	return int(CombatData.UNCERTIFIED_PENALTY["accuracy"])
+
+
+# Action cost after the uncertified surcharge. Certified attackers pay
+# the listed cost unchanged.
+func adjusted_action_cost(action_cost: int, is_uncertified: bool) -> int:
+	if not is_uncertified or action_cost <= 0:
+		return action_cost
+	return int(round(float(action_cost) * float(CombatData.UNCERTIFIED_PENALTY["action_cost_multiplier"])))
+
+
+# Ability coefficient after the uncertified lockout. An uncertified
+# wielder cannot get special-attack multipliers -- their specials land
+# as basic hits -- but utility abilities keep their small coefficient.
+func adjusted_ability_coefficient(coefficient: float, is_uncertified: bool) -> float:
+	if not is_uncertified:
+		return coefficient
+	var cap = float(CombatData.UNCERTIFIED_PENALTY["max_ability_coefficient"])
+	return min(coefficient, cap)
+
+
+# Phase 9: returns the loot tier chances for an enemy's Combat Level by
+# selecting the first band whose max_cl the CL falls within. CLs above
+# the last band clamp to it.
+func loot_tier_chances_for_cl(cl: int) -> Dictionary:
+	var bands = CombatData.LOOT_TIER_BANDS
+	var chosen = bands[bands.size() - 1]
+	for band in bands:
+		if cl <= int(band["max_cl"]):
+			chosen = band
+			break
+	return {
+		"Common": float(chosen["Common"]),
+		"Uncommon": float(chosen["Uncommon"]),
+		"Rare": float(chosen["Rare"]),
+	}

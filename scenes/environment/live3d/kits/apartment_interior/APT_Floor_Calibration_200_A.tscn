@@ -1,0 +1,65 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/apartment_interior_v01/APT_Floor_Calibration_200_A_Mat.tres" id="1_floor"]
+
+[sub_resource type="StandardMaterial3D" id="BackingMaterial"]
+albedo_color = Color(0.045, 0.05, 0.055, 1)
+metallic = 0.06
+roughness = 0.86
+
+[sub_resource type="BoxMesh" id="FloorMesh"]
+material = SubResource("BackingMaterial")
+size = Vector3(2, 0.04, 2)
+
+[sub_resource type="PlaneMesh" id="ArtMesh"]
+material = ExtResource("1_floor")
+size = Vector2(2, 2)
+orientation = 1
+
+[sub_resource type="BoxShape3D" id="FloorShape"]
+size = Vector3(2, 0.04, 2)
+
+[node name="APT_Floor_Calibration_200_A" type="StaticBody3D" groups=["steamtek_live3d_modular"]]
+collision_layer = 1
+collision_mask = 0
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "apartment_visual_calibration_floor"
+metadata/module_dimensions_m = Vector3(2, 0.04, 2)
+metadata/module_dimensions_ft = "6 ft 7 in x 6 ft 7 in"
+metadata/grid_step_m = 0.25
+metadata/art_status = "approved_f6_2026_07_19"
+metadata/visual_contract = "shadowrun_returns_rendering_style_only_steamtek_palette_60cyberpunk_20neoindustrial_20functional_steampunk"
+
+[node name="FloorPanel" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.02, 0)
+mesh = SubResource("FloorMesh")
+
+[node name="ArtSurface" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.041, 0)
+mesh = SubResource("ArtMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.02, 0)
+shape = SubResource("FloorShape")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="North" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, -1)
+metadata/socket_role = "interior_floor_chain"
+
+[node name="East" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(1, 0, 0)
+metadata/socket_role = "interior_floor_chain"
+
+[node name="South" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, 1)
+metadata/socket_role = "interior_floor_chain"
+
+[node name="West" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-1, 0, 0)
+metadata/socket_role = "interior_floor_chain"
+
+[node name="FloorPropCenter" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0.045, 0)
+metadata/socket_role = "floor_prop_surface"

@@ -1,0 +1,60 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/apartment_interior_v01/APT_Wall_Maintenance_300x270_A_Mat.tres" id="1_wall"]
+
+[sub_resource type="StandardMaterial3D" id="BackingMaterial"]
+albedo_color = Color(0.045, 0.055, 0.06, 1)
+metallic = 0.04
+roughness = 0.8
+
+[sub_resource type="BoxMesh" id="WallMesh"]
+material = SubResource("BackingMaterial")
+size = Vector3(3, 2.7, 0.14)
+
+[sub_resource type="QuadMesh" id="ArtMesh"]
+material = ExtResource("1_wall")
+size = Vector2(3, 2.7)
+
+[sub_resource type="BoxShape3D" id="WallShape"]
+size = Vector3(3, 2.7, 0.14)
+
+[node name="APT_Wall_Maintenance_300x270_A" type="StaticBody3D" groups=["steamtek_live3d_modular"]]
+collision_layer = 1
+collision_mask = 0
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "apartment_wall_300x270"
+metadata/module_variant = "maintenance"
+metadata/module_dimensions_m = Vector3(3, 2.7, 0.14)
+metadata/module_dimensions_ft = "9 ft 10 in x 8 ft 10 in"
+metadata/grid_step_m = 0.25
+metadata/front_axis = "+Z"
+metadata/art_status = "approved_f6_2026_07_19"
+
+[node name="WallPanel" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.35, 0)
+mesh = SubResource("WallMesh")
+
+[node name="ArtSurface" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.35, 0.071)
+mesh = SubResource("ArtMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.35, 0)
+shape = SubResource("WallShape")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="WallLeft" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-1.5, 0, 0)
+metadata/socket_role = "interior_wall_chain"
+
+[node name="WallRight" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(1.5, 0, 0)
+metadata/socket_role = "interior_wall_chain"
+
+[node name="WallPropCenter" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 1.35, 0.09)
+metadata/socket_role = "wall_prop_surface"
+
+[node name="FloorAttachment" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+metadata/socket_role = "interior_wall_base"

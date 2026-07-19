@@ -1,0 +1,84 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scenes/tests/hybrid_3d/steamtek_apartment_wall_art_kit_review_3d.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_NeutralMagenta_300x270_A.tscn" id="2_neutral"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_DataRelay_300x270_A.tscn" id="3_relay"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_RetrofitRepair_300x270_A.tscn" id="4_repair"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_MagentaLight_300x270_A.tscn" id="5_magenta_light"]
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 1
+background_color = Color(0.003, 0.004, 0.006, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.42, 0.46, 0.5, 1)
+ambient_light_energy = 0.82
+tonemap_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="FloorMaterial"]
+albedo_color = Color(0.035, 0.042, 0.045, 1)
+metallic = 0.08
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="FloorMesh"]
+material = SubResource("FloorMaterial")
+size = Vector3(14, 0.08, 3)
+
+[node name="SteamtekApartmentWallOptionsReview3D" type="Node3D"]
+script = ExtResource("1_script")
+metadata/status = "interchangeable_wall_options_approved_f6_2026_07_19"
+metadata/option_contract = "same_dimensions_same_sockets_different_visual_roles"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment")
+
+[node name="KeyLight" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-35, -25, 0)
+light_color = Color(1, 0.88, 0.76, 1)
+light_energy = 0.72
+shadow_enabled = true
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.04, 0)
+mesh = SubResource("FloorMesh")
+
+[node name="NeutralMagenta" parent="." instance=ExtResource("2_neutral")]
+position = Vector3(-4.8, 0, 0)
+
+[node name="DataRelay" parent="." instance=ExtResource("3_relay")]
+position = Vector3(-1.6, 0, 0)
+
+[node name="RetrofitRepair" parent="." instance=ExtResource("4_repair")]
+position = Vector3(1.6, 0, 0)
+
+[node name="MagentaSourceLight" parent="." instance=ExtResource("5_magenta_light")]
+position = Vector3(4.8, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+position = Vector3(0, 1.35, 12)
+projection = 1
+current = true
+size = 7.6
+
+[node name="Interface" type="CanvasLayer" parent="."]
+
+[node name="Title" type="Label" parent="Interface"]
+offset_left = 26.0
+offset_top = 22.0
+offset_right = 1200.0
+offset_bottom = 58.0
+theme_override_colors/font_color = Color(0.9, 0.95, 1, 1)
+theme_override_colors/font_outline_color = Color(0.003, 0.004, 0.006, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 24
+text = "STEAMTEK INTERCHANGEABLE WALL OPTIONS  |  F6 REVIEW"
+
+[node name="Subtitle" type="Label" parent="Interface"]
+offset_left = 26.0
+offset_top = 58.0
+offset_right = 1600.0
+offset_bottom = 90.0
+theme_override_colors/font_color = Color(0.82, 0.44, 0.84, 1)
+theme_override_colors/font_outline_color = Color(0.003, 0.004, 0.006, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 17
+text = "NEUTRAL MAGENTA  |  DATA RELAY  |  RETROFIT REPAIR  |  MAGENTA SOURCE LIGHT + REAL OMNI LIGHT"

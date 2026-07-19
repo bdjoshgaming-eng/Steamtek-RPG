@@ -44,8 +44,7 @@ const CENTER         = Vector2(960, 540)
 const KS_OFFSETS = {
 	"Melee":     Vector2(-300, -260),
 	"Ranged":    Vector2( 300, -260),
-	"Crafting":  Vector2(-300,  260),
-	"Auxiliary": Vector2( 300,  260)
+	"Auxiliary": Vector2(-300,  260)
 }
 const KS_RADIUS         = 48.0
 const NODE_RADIUS       = 24.0
@@ -113,8 +112,13 @@ func _build_ui(parent: Control) -> void:
 	# HUD -- top strip
 	var hud_strip = ColorRect.new()
 	hud_strip.color = Color(0.04, 0.04, 0.08, 0.9)
-	hud_strip.position = Vector2(0, 0)
-	hud_strip.size = Vector2(1920, 58)
+	# Anchored to the real viewport width instead of a hardcoded 1920 --
+	# the panel must stay usable at any window size.
+	hud_strip.anchor_right = 1.0
+	hud_strip.offset_left = 0
+	hud_strip.offset_top = 0
+	hud_strip.offset_right = 0
+	hud_strip.offset_bottom = 58
 	hud_strip.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	parent.add_child(hud_strip)
 
@@ -132,7 +136,12 @@ func _build_ui(parent: Control) -> void:
 
 	var title_lbl = Label.new()
 	title_lbl.text = "TALENTS"
-	title_lbl.position = Vector2(1780, 8)
+	title_lbl.anchor_left = 1.0
+	title_lbl.anchor_right = 1.0
+	title_lbl.offset_left = -200
+	title_lbl.offset_top = 8
+	title_lbl.offset_right = -60
+	title_lbl.offset_bottom = 40
 	title_lbl.add_theme_font_size_override("font_size", 22)
 	title_lbl.modulate = Color(0.7, 0.75, 1.0)
 	parent.add_child(title_lbl)
@@ -140,7 +149,12 @@ func _build_ui(parent: Control) -> void:
 	# Close button
 	var close_btn = Button.new()
 	close_btn.text = "X"
-	close_btn.position = Vector2(1865, 6)
+	close_btn.anchor_left = 1.0
+	close_btn.anchor_right = 1.0
+	close_btn.offset_left = -55
+	close_btn.offset_top = 6
+	close_btn.offset_right = -11
+	close_btn.offset_bottom = 50
 	close_btn.custom_minimum_size = Vector2(44, 44)
 	close_btn.focus_mode = Control.FOCUS_NONE
 	var cs = _flat_style(Color(0.3, 0.08, 0.08), Color(0.8, 0.2, 0.2), 2)
@@ -206,10 +220,13 @@ func _build_info_pane(parent: Control) -> void:
 	left_scroll.add_child(info_unlocked_label)
 
 	# RIGHT panel -- Unlockable / Locked
-	var right_x = 1920 - panel_w - 14
 	var right_bg = Panel.new()
-	right_bg.position = Vector2(right_x, panel_top)
-	right_bg.size = Vector2(panel_w, panel_h)
+	right_bg.anchor_left = 1.0
+	right_bg.anchor_right = 1.0
+	right_bg.offset_left = -(panel_w + 14)
+	right_bg.offset_top = panel_top
+	right_bg.offset_right = -14
+	right_bg.offset_bottom = panel_top + panel_h
 	right_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var rs = StyleBoxFlat.new()
 	rs.bg_color = Color(0.07, 0.06, 0.05, 0.55)
@@ -223,16 +240,24 @@ func _build_info_pane(parent: Control) -> void:
 	parent.add_child(right_bg)
 
 	info_locked_title = Label.new()
-	info_locked_title.position = Vector2(right_x + 16, panel_top + 12)
-	info_locked_title.size = Vector2(panel_w - 20, 26)
+	info_locked_title.anchor_left = 1.0
+	info_locked_title.anchor_right = 1.0
+	info_locked_title.offset_left = -(panel_w + 14) + 16
+	info_locked_title.offset_top = panel_top + 12
+	info_locked_title.offset_right = -(panel_w + 14) + 16 + (panel_w - 20)
+	info_locked_title.offset_bottom = panel_top + 12 + 26
 	info_locked_title.add_theme_font_size_override("font_size", 18)
 	info_locked_title.add_theme_color_override("font_color", Color(0.95, 0.8, 0.5))
 	info_locked_title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	parent.add_child(info_locked_title)
 
 	var right_scroll = ScrollContainer.new()
-	right_scroll.position = Vector2(right_x + 16, panel_top + 44)
-	right_scroll.size = Vector2(panel_w - 26, panel_h - 56)
+	right_scroll.anchor_left = 1.0
+	right_scroll.anchor_right = 1.0
+	right_scroll.offset_left = -(panel_w + 14) + 16
+	right_scroll.offset_top = panel_top + 44
+	right_scroll.offset_right = -(panel_w + 14) + 16 + (panel_w - 26)
+	right_scroll.offset_bottom = panel_top + 44 + (panel_h - 56)
 	right_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	parent.add_child(right_scroll)
 
@@ -340,9 +365,10 @@ func _show_tooltip(text: String, near_pos: Vector2) -> void:
 	tooltip_label.text = text
 	var box_size = Vector2(300, 90)
 	var pos = near_pos + Vector2(18, 18)
-	if pos.x + box_size.x > 1900:
+	var vp = tooltip_panel.get_viewport_rect().size
+	if pos.x + box_size.x > vp.x - 20:
 		pos.x = near_pos.x - box_size.x - 18
-	if pos.y + box_size.y > 1060:
+	if pos.y + box_size.y > vp.y - 20:
 		pos.y = near_pos.y - box_size.y - 18
 	tooltip_panel.position = pos
 	tooltip_panel.size = box_size
@@ -381,7 +407,7 @@ func _refresh_info_pane() -> void:
 	if whole_profession:
 		info_unlocked_title.text = "UNLOCKED -- STREET THUG"
 		info_locked_title.text = "AVAILABLE -- STREET THUG"
-		for ks_name in ["Melee", "Ranged", "Crafting", "Auxiliary"]:
+		for ks_name in ["Melee", "Ranged", "Auxiliary"]:
 			if keystones.has(ks_name):
 				scope_ks.append(ks_name)
 	else:
@@ -490,9 +516,12 @@ func _append_cert_and_recipe_lines(ks_name: String, ks_data: Dictionary, unlocke
 			else:
 				locked_lines.append("  Cert: " + weapon_name + " (5 pts)")
 
-	if ks_name == "Crafting":
-		var recipes_met = ks_unlocked and points_spent >= 6
-		var novice_met = ks_unlocked
+	# Recipes are no longer gated behind a keystone (the crafting spec
+	# forbids it), so they list as available under Auxiliary, which now
+	# holds the crafting nodes.
+	if ks_name == "Auxiliary":
+		var recipes_met = true
+		var novice_met = true
 		for recipe in GameData.recipes:
 			if recipe.get("requires_profession", "") != "Street Thug":
 				continue
@@ -583,14 +612,37 @@ func _draw_graph() -> void:
 	var combat_max = 0
 	var crafting_spent = 0
 	var crafting_max = 0
+	# Tallied PER NODE, because a keystone can now hold nodes of mixed
+	# currency (Auxiliary carries the relocated Crafting XP nodes).
+	# SPENT is exact. MAX is capped by the keystone's shared points_max:
+	# Auxiliary's 24 points are drawn from a SINGLE pool covering both its
+	# combat and crafting nodes, so each currency's ceiling is the lesser
+	# of "cost of all its nodes" and that shared cap. The two lines can
+	# therefore overlap -- spending on crafting reduces what is left for
+	# defense, and vice versa.
 	for ks_name in keystones.keys():
 		var ks = keystones[ks_name]
-		if ks.get("xp_type", "Combat XP") == "Crafting XP":
-			crafting_spent += ks.get("points_spent", 0)
-			crafting_max += ks.get("points_max", 0)
-		else:
-			combat_spent += ks.get("points_spent", 0)
-			combat_max += ks.get("points_max", 0)
+		var ks_xp = ks.get("xp_type", "Combat XP")
+		var ks_cap = ks.get("points_max", 0)
+		var ks_combat_cost = 0
+		var ks_crafting_cost = 0
+		for node_name in ks.get("nodes", {}).keys():
+			var nd = ks["nodes"][node_name]
+			var node_xp = nd.get("xp_type", ks_xp)
+			var node_cost = nd.get("cost", 1)
+			var node_bought = nd.get("purchased", false)
+			if node_xp == "Crafting XP":
+				ks_crafting_cost += node_cost
+				if node_bought:
+					crafting_spent += node_cost
+			else:
+				ks_combat_cost += node_cost
+				if node_bought:
+					combat_spent += node_cost
+		if ks_combat_cost > 0:
+			combat_max += min(ks_combat_cost, ks_cap)
+		if ks_crafting_cost > 0:
+			crafting_max += min(ks_crafting_cost, ks_cap)
 
 	var street_thug_mastered = _is_profession_mastered("Street Thug")
 	var street_thug_all_unlocked = _all_keystones_unlocked("Street Thug")
@@ -603,8 +655,7 @@ func _draw_graph() -> void:
 	var diamond_corners = {
 		"Melee":     CENTER + Vector2(-CENTER_SIZE * 0.75, -CENTER_SIZE * 0.35),
 		"Ranged":    CENTER + Vector2( CENTER_SIZE * 0.75, -CENTER_SIZE * 0.35),
-		"Crafting":  CENTER + Vector2(-CENTER_SIZE * 0.75,  CENTER_SIZE * 0.35),
-		"Auxiliary": CENTER + Vector2( CENTER_SIZE * 0.75,  CENTER_SIZE * 0.35)
+		"Auxiliary": CENTER + Vector2(-CENTER_SIZE * 0.75,  CENTER_SIZE * 0.35)
 	}
 
 	_diamond(CENTER, CENTER_SIZE, CENTER_COLOR, "STREET\nTHUG", combat_spent, combat_max, crafting_spent, crafting_max, street_thug_mastered)
@@ -767,7 +818,7 @@ func _advancement_box(pos: Vector2, profession_name: String, unlocked: bool) -> 
 	if unlocked:
 		tip += "All four Street Thug keystones are unlocked -- " + profession_name + " is available to train at a trainer NPC."
 	else:
-		tip += "Requires all four Street Thug keystones unlocked (Melee, Ranged, Crafting, Auxiliary)."
+		tip += "Requires all Street Thug keystones unlocked (Melee, Ranged, Auxiliary)."
 	btn.mouse_entered.connect(func(): _show_tooltip(tip, pos))
 	btn.mouse_exited.connect(_hide_tooltip)
 	btn.pressed.connect(func(): _on_next_profession_clicked(profession_name, unlocked))
@@ -779,7 +830,7 @@ func _on_next_profession_clicked(profession_name: String, unlocked: bool) -> voi
 	if unlocked:
 		popup_body.text = "All four Street Thug keystones have been unlocked!\n\n" + profession_name + " is available to train at a trainer NPC.\n\n(Its own talent tree will appear here in a future update.)"
 	else:
-		popup_body.text = "Unlock every keystone in Street Thug -- Melee, Ranged, Crafting, and Auxiliary -- to unlock " + profession_name + "."
+		popup_body.text = "Unlock every keystone in Street Thug -- Melee, Ranged, and Auxiliary -- to unlock " + profession_name + "."
 	popup_cost_label.text = ""
 	popup_buy_btn.visible = false
 	popup_panel.visible = true
@@ -869,7 +920,9 @@ func _diamond(pos: Vector2, size: float, color: Color, label: String, combat_spe
 
 	var sub_lbl = Label.new()
 	var action_hint = "click to collapse" if expanded else "click to expand"
-	sub_lbl.text = "CXP " + str(combat_spent) + "/" + str(combat_max) + "   CFT " + str(crafting_spent) + "/" + str(crafting_max) + " -- " + action_hint
+	# These tallies are POINTS spent, not XP -- XP is the price paid, points
+	# are the build budget. Labelled "pts" so the two are not confused.
+	sub_lbl.text = "Combat pts " + str(combat_spent) + "/" + str(combat_max) + "   Craft pts " + str(crafting_spent) + "/" + str(crafting_max) + " -- " + action_hint
 	sub_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	sub_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	sub_lbl.position = pos + Vector2(-130, 14)
@@ -1045,9 +1098,10 @@ func _ability_hex(pos: Vector2, radius: float, category_color: Color, node_name:
 	var spent = ks_data.get("points_spent", 0)
 	var max_pts = ks_data.get("points_max", 10)
 	var remaining = max_pts - spent
-	var xp_type = ks_data.get("xp_type", "Combat XP")
+	var xp_type = node_data.get("xp_type", ks_data.get("xp_type", "Combat XP"))
 	var available_xp = main.xp_pools.get(xp_type, 0)
-	var affordable = ks_unlocked and not purchased and remaining >= cost and available_xp >= cost
+	var node_xp_price = node_data.get("xp_cost", cost)
+	var affordable = ks_unlocked and not purchased and remaining >= cost and available_xp >= node_xp_price
 
 	var display_color: Color
 	var fill_alpha: float
@@ -1159,9 +1213,10 @@ func _node_hex(pos: Vector2, radius: float, category_color: Color, node_name: St
 	var spent = ks_data.get("points_spent", 0)
 	var max_pts = ks_data.get("points_max", 10)
 	var remaining = max_pts - spent
-	var xp_type = ks_data.get("xp_type", "Combat XP")
+	var xp_type = node_data.get("xp_type", ks_data.get("xp_type", "Combat XP"))
 	var available_xp = main.xp_pools.get(xp_type, 0)
-	var affordable = ks_unlocked and not purchased and remaining >= cost and available_xp >= cost
+	var node_xp_price = node_data.get("xp_cost", cost)
+	var affordable = ks_unlocked and not purchased and remaining >= cost and available_xp >= node_xp_price
 
 	var display_color: Color
 	var fill_alpha: float
@@ -1310,11 +1365,12 @@ func _on_node_clicked(ks_name: String, node_name: String) -> void:
 
 	var purchased = node_data.get("purchased", false)
 	var cost = node_data.get("cost", 1)
+	var node_xp_price = node_data.get("xp_cost", cost)
 	var ks_unlocked = ks_data.get("unlocked", false)
 	var spent = ks_data.get("points_spent", 0)
 	var max_pts = ks_data.get("points_max", 10)
 	var remaining = max_pts - spent
-	var xp_type = ks_data.get("xp_type", "Combat XP")
+	var xp_type = node_data.get("xp_type", ks_data.get("xp_type", "Combat XP"))
 	var available_xp = main.xp_pools.get(xp_type, 0)
 
 	var desc = ""
@@ -1339,11 +1395,11 @@ func _on_node_clicked(ks_name: String, node_name: String) -> void:
 	elif remaining < cost:
 		popup_cost_label.text = "No room left in this keystone. " + str(remaining) + " remaining, need " + str(cost) + "."
 		popup_buy_btn.visible = false
-	elif available_xp < cost:
-		popup_cost_label.text = "Not enough " + xp_type + " earned yet. You have " + str(available_xp) + ", need " + str(cost) + "."
+	elif available_xp < node_xp_price:
+		popup_cost_label.text = "Not enough " + xp_type + " earned yet. You have " + str(available_xp) + ", need " + str(node_xp_price) + "."
 		popup_buy_btn.visible = false
 	else:
-		popup_cost_label.text = "Cost: " + str(cost) + " " + xp_type + "   --   " + str(remaining) + " remaining in keystone   --   " + str(available_xp) + " " + xp_type + " available"
+		popup_cost_label.text = "Cost: " + str(node_xp_price) + " " + xp_type + " and " + str(cost) + " point" + ("s" if cost != 1 else "") + "   --   " + str(remaining) + " points remaining   --   " + str(available_xp) + " " + xp_type + " available"
 		popup_buy_btn.text = "Purchase Node"
 		popup_buy_btn.visible = true
 		popup_buy_btn.disabled = false
@@ -1370,10 +1426,16 @@ func _on_buy_pressed() -> void:
 		var spent = ks_data.get("points_spent", 0)
 		if spent + cost > ks_data.get("points_max", 10):
 			return
-		var xp_type = ks_data.get("xp_type", "Combat XP")
-		if main.xp_pools.get(xp_type, 0) < cost:
+		# A node may declare its own xp_type (crafting nodes relocated into
+		# Auxiliary still cost Crafting XP); otherwise it inherits the
+		# keystone's currency.
+		var xp_type = node_data.get("xp_type", ks_data.get("xp_type", "Combat XP"))
+		# "cost" is the POINTS this node consumes from the keystone budget.
+		# "xp_cost" is its XP PRICE. They are separate currencies.
+		var node_xp_cost = node_data.get("xp_cost", cost)
+		if main.xp_pools.get(xp_type, 0) < node_xp_cost:
 			return
-		main.xp_pools[xp_type] -= cost
+		main.xp_pools[xp_type] -= node_xp_cost
 		node_data["purchased"] = true
 		ks_data["points_spent"] = spent + cost
 		if node_data.get("type", "") == "ability":
@@ -1410,7 +1472,7 @@ func _update_hud() -> void:
 	var prof_data = GameData.novice_professions.get("Street Thug", {})
 	var keystones = prof_data.get("keystones", {})
 	var parts: Array = []
-	for ks_name in ["Melee", "Ranged", "Crafting", "Auxiliary"]:
+	for ks_name in ["Melee", "Ranged", "Auxiliary"]:
 		if not keystones.has(ks_name):
 			continue
 		var ks_data = keystones[ks_name]

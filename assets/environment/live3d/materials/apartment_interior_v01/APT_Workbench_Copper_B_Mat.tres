@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "APT Workbench Copper B"
+albedo_color = Color(0.42, 0.19, 0.075, 1)
+metallic = 0.74
+roughness = 0.46
+

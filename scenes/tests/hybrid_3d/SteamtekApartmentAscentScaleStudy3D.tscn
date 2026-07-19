@@ -1,0 +1,553 @@
+[gd_scene format=3 uid="uid://bos6n7ikuhswe"]
+
+[ext_resource type="Script" uid="uid://dd2sq5tma8ml4" path="res://scenes/tests/hybrid_3d/steamtek_apartment_ascent_scale_study_3d.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/characters/player/VesperKane_PlayerCharacter_v01.tscn" id="2_character"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_Calibration_300x270_A.tscn" id="3_calibration_wall"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Floor_Calibration_200_A.tscn" id="4_calibration_floor"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_Maintenance_300x270_A.tscn" id="5_maintenance_wall"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_VentLight_300x270_A.tscn" id="6_vent_light_wall"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_ExposedService_300x270_A.tscn" id="7_service_wall"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_DoorSecure_300x270_A.tscn" id="8_secure_door_wall"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_NeutralMagenta_300x270_A.tscn" id="9_neutral_magenta_wall"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_MagentaLight_300x270_A.tscn" id="12_magenta_light_wall"]
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 1
+background_color = Color(0.003, 0.004, 0.006, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.42, 0.43, 0.4, 1)
+ambient_light_energy = 0.78
+tonemap_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="FloorMaterial"]
+albedo_color = Color(0.18, 0.165, 0.14, 1)
+metallic = 0.02
+roughness = 0.94
+
+[sub_resource type="BoxMesh" id="FloorMesh"]
+material = SubResource("FloorMaterial")
+size = Vector3(10, 0.12, 7)
+
+[sub_resource type="BoxShape3D" id="FloorShape"]
+size = Vector3(10, 0.12, 7)
+
+[sub_resource type="StandardMaterial3D" id="GridMaterial"]
+albedo_color = Color(0.055, 0.052, 0.047, 1)
+
+[sub_resource type="BoxMesh" id="GridXMesh"]
+material = SubResource("GridMaterial")
+size = Vector3(10, 0.012, 0.025)
+
+[sub_resource type="BoxMesh" id="GridZMesh"]
+material = SubResource("GridMaterial")
+size = Vector3(0.025, 0.012, 7)
+
+[sub_resource type="StandardMaterial3D" id="WallMaterial"]
+albedo_color = Color(0.12, 0.125, 0.115, 1)
+metallic = 0.02
+roughness = 0.92
+
+[sub_resource type="BoxMesh" id="BackWallMesh"]
+material = SubResource("WallMaterial")
+size = Vector3(10, 2.7, 0.12)
+
+[sub_resource type="BoxShape3D" id="BackWallShape"]
+size = Vector3(10, 2.7, 0.12)
+
+[sub_resource type="BoxMesh" id="SideWallMesh"]
+material = SubResource("WallMaterial")
+size = Vector3(0.12, 2.7, 7)
+
+[sub_resource type="BoxShape3D" id="SideWallShape"]
+size = Vector3(0.12, 2.7, 7)
+
+[sub_resource type="StandardMaterial3D" id="TrimMaterial"]
+albedo_color = Color(0.045, 0.052, 0.055, 1)
+metallic = 0.32
+roughness = 0.72
+
+[sub_resource type="BoxMesh" id="DoorMesh"]
+material = SubResource("TrimMaterial")
+size = Vector3(0.9, 2.1, 0.07)
+
+[sub_resource type="StandardMaterial3D" id="GlassMaterial"]
+transparency = 1
+albedo_color = Color(0.055, 0.16, 0.18, 0.62)
+metallic = 0.08
+roughness = 0.34
+
+[sub_resource type="BoxMesh" id="WindowGlassMesh"]
+material = SubResource("GlassMaterial")
+size = Vector3(0.75, 0.75, 0.035)
+
+[sub_resource type="StandardMaterial3D" id="BrassMaterial"]
+albedo_color = Color(0.28, 0.205, 0.105, 1)
+metallic = 0.42
+roughness = 0.64
+
+[sub_resource type="BoxMesh" id="WindowFrameHMesh"]
+material = SubResource("BrassMaterial")
+size = Vector3(0.86, 0.055, 0.05)
+
+[sub_resource type="BoxMesh" id="WindowFrameVMesh"]
+material = SubResource("BrassMaterial")
+size = Vector3(0.055, 0.86, 0.05)
+
+[sub_resource type="BoxMesh" id="BedBaseMesh"]
+material = SubResource("TrimMaterial")
+size = Vector3(2.05, 0.18, 1.05)
+
+[sub_resource type="StandardMaterial3D" id="FabricMaterial"]
+albedo_color = Color(0.24, 0.25, 0.17, 1)
+roughness = 0.96
+
+[sub_resource type="BoxMesh" id="BedMattressMesh"]
+material = SubResource("FabricMaterial")
+size = Vector3(1.95, 0.18, 0.95)
+
+[sub_resource type="BoxMesh" id="BedHeadRailMesh"]
+material = SubResource("BrassMaterial")
+size = Vector3(0.08, 0.58, 1.05)
+
+[sub_resource type="BoxMesh" id="BedPostMesh"]
+material = SubResource("TrimMaterial")
+size = Vector3(0.055, 0.72, 0.055)
+
+[sub_resource type="BoxMesh" id="CouchBaseMesh"]
+material = SubResource("TrimMaterial")
+size = Vector3(1.85, 0.2, 0.78)
+
+[sub_resource type="StandardMaterial3D" id="LeatherMaterial"]
+albedo_color = Color(0.22, 0.115, 0.075, 1)
+roughness = 0.86
+
+[sub_resource type="BoxMesh" id="CouchSeatMesh"]
+material = SubResource("LeatherMaterial")
+size = Vector3(1.48, 0.2, 0.61)
+
+[sub_resource type="BoxMesh" id="CouchBackMesh"]
+material = SubResource("LeatherMaterial")
+size = Vector3(1.55, 0.58, 0.16)
+
+[sub_resource type="BoxMesh" id="CouchArmMesh"]
+material = SubResource("LeatherMaterial")
+size = Vector3(0.14, 0.46, 0.7)
+
+[sub_resource type="StandardMaterial3D" id="WoodMaterial"]
+albedo_color = Color(0.25, 0.18, 0.105, 1)
+roughness = 0.88
+
+[sub_resource type="BoxMesh" id="WorkbenchTopMesh"]
+material = SubResource("WoodMaterial")
+size = Vector3(1.8, 0.1, 0.65)
+
+[sub_resource type="BoxMesh" id="WorkbenchLegMesh"]
+material = SubResource("TrimMaterial")
+size = Vector3(0.08, 0.72, 0.08)
+
+[sub_resource type="BoxMesh" id="WorkbenchBackMesh"]
+material = SubResource("TrimMaterial")
+size = Vector3(1.72, 0.72, 0.055)
+
+[sub_resource type="StandardMaterial3D" id="ScreenMaterial"]
+albedo_color = Color(0.025, 0.21, 0.24, 1)
+roughness = 0.48
+emission_enabled = true
+emission = Color(0.04, 0.65, 0.72, 1)
+emission_energy_multiplier = 1.15
+
+[sub_resource type="BoxMesh" id="WorkbenchScreenMesh"]
+material = SubResource("ScreenMaterial")
+size = Vector3(0.34, 0.22, 0.025)
+
+[sub_resource type="BoxMesh" id="LockerBodyMesh"]
+material = SubResource("TrimMaterial")
+size = Vector3(0.72, 1.9, 0.5)
+
+[sub_resource type="BoxMesh" id="LockerDoorMesh"]
+material = SubResource("BrassMaterial")
+size = Vector3(0.62, 1.7, 0.025)
+
+[node name="SteamtekApartmentAscentScaleStudy3D" type="Node3D" unique_id=1933680017]
+script = ExtResource("1_script")
+metadata/status = "isolated_scale_study"
+metadata/reference = "The Ascent gameplay video 2562x1382 supplied 2026-07-19"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/c001_contract = "six_foot_height_uniform_scale_1_075765"
+metadata/camera_contract = "the_ascent_gameplay_locked_ortho_9_14_45deg_azimuth_35deg_elevation"
+metadata/reference_screen_contract = "gameplay_character_occupancy_20_percent_dense_chunky_environment"
+metadata/floor_calibration = "APT_Floor_Calibration_200_A_5x3_room_field_pending_f6"
+metadata/wall_kit_integration = "mixed_original_and_magenta_option_families_pending_f6"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=670192151]
+environment = SubResource("Environment")
+
+[node name="WarmKey" type="DirectionalLight3D" parent="." unique_id=1980216580]
+transform = Transform3D(0.8290376, 0.45239657, -0.32868537, 0, 0.5877853, 0.809017, 0.5591929, -0.6707055, 0.48729613, 0, 0, 0)
+light_color = Color(1, 0.78, 0.59, 1)
+light_energy = 1.05
+shadow_enabled = true
+
+[node name="CoolFill" type="OmniLight3D" parent="." unique_id=1247947093]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.1, 2.2, -2.4)
+light_color = Color(0.15, 0.55, 0.62, 1)
+light_energy = 0.38
+omni_range = 5.5
+
+[node name="Floor" type="StaticBody3D" parent="." unique_id=1610568898]
+collision_mask = 0
+
+[node name="Surface" type="MeshInstance3D" parent="Floor" unique_id=1601901763]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.06, 0)
+mesh = SubResource("FloorMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Floor" unique_id=397177132]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.06, 0)
+shape = SubResource("FloorShape")
+
+[node name="ApprovedFloorField" type="Node3D" parent="."]
+
+[node name="Tile_NW0" parent="ApprovedFloorField" instance=ExtResource("4_calibration_floor")]
+position = Vector3(-4, 0, -2)
+
+[node name="Tile_NW1" parent="ApprovedFloorField" instance=ExtResource("4_calibration_floor")]
+position = Vector3(-2, 0, -2)
+
+[node name="Tile_N0" parent="ApprovedFloorField" instance=ExtResource("4_calibration_floor")]
+position = Vector3(0, 0, -2)
+
+[node name="Tile_NE1" parent="ApprovedFloorField" instance=ExtResource("4_calibration_floor")]
+position = Vector3(2, 0, -2)
+
+[node name="Tile_NE0" parent="ApprovedFloorField" instance=ExtResource("4_calibration_floor")]
+position = Vector3(4, 0, -2)
+
+[node name="Tile_W0" parent="ApprovedFloorField" instance=ExtResource("4_calibration_floor")]
+position = Vector3(-4, 0, 0)
+
+[node name="Tile_W1" parent="ApprovedFloorField" instance=ExtResource("4_calibration_floor")]
+position = Vector3(-2, 0, 0)
+
+[node name="Tile_C" parent="ApprovedFloorField" instance=ExtResource("4_calibration_floor")]
+
+[node name="Tile_E1" parent="ApprovedFloorField" instance=ExtResource("4_calibration_floor")]
+position = Vector3(2, 0, 0)
+
+[node name="Tile_E0" parent="ApprovedFloorField" instance=ExtResource("4_calibration_floor")]
+position = Vector3(4, 0, 0)
+
+[node name="Tile_SW0" parent="ApprovedFloorField" instance=ExtResource("4_calibration_floor")]
+position = Vector3(-4, 0, 2)
+
+[node name="Tile_SW1" parent="ApprovedFloorField" instance=ExtResource("4_calibration_floor")]
+position = Vector3(-2, 0, 2)
+
+[node name="Tile_S0" parent="ApprovedFloorField" instance=ExtResource("4_calibration_floor")]
+position = Vector3(0, 0, 2)
+
+[node name="Tile_SE1" parent="ApprovedFloorField" instance=ExtResource("4_calibration_floor")]
+position = Vector3(2, 0, 2)
+
+[node name="Tile_SE0" parent="ApprovedFloorField" instance=ExtResource("4_calibration_floor")]
+position = Vector3(4, 0, 2)
+
+[node name="Grid" type="Node3D" parent="." unique_id=2065619420]
+
+[node name="Row0" type="MeshInstance3D" parent="Grid" unique_id=1690443758]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.006, -3.5)
+mesh = SubResource("GridXMesh")
+
+[node name="Row1" type="MeshInstance3D" parent="Grid" unique_id=138214223]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.006, -2.5)
+mesh = SubResource("GridXMesh")
+
+[node name="Row2" type="MeshInstance3D" parent="Grid" unique_id=1695823016]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.006, -1.5)
+mesh = SubResource("GridXMesh")
+
+[node name="Row3" type="MeshInstance3D" parent="Grid" unique_id=582661137]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.006, -0.5)
+mesh = SubResource("GridXMesh")
+
+[node name="Row4" type="MeshInstance3D" parent="Grid" unique_id=392627896]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.006, 0.5)
+mesh = SubResource("GridXMesh")
+
+[node name="Row5" type="MeshInstance3D" parent="Grid" unique_id=1853996935]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.006, 1.5)
+mesh = SubResource("GridXMesh")
+
+[node name="Row6" type="MeshInstance3D" parent="Grid" unique_id=1045831271]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.006, 2.5)
+mesh = SubResource("GridXMesh")
+
+[node name="Row7" type="MeshInstance3D" parent="Grid" unique_id=276916664]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.006, 3.5)
+mesh = SubResource("GridXMesh")
+
+[node name="Column0" type="MeshInstance3D" parent="Grid" unique_id=417649914]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.006, 0)
+mesh = SubResource("GridZMesh")
+
+[node name="Column1" type="MeshInstance3D" parent="Grid" unique_id=1386833997]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.006, 0)
+mesh = SubResource("GridZMesh")
+
+[node name="Column2" type="MeshInstance3D" parent="Grid" unique_id=1178670510]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.006, 0)
+mesh = SubResource("GridZMesh")
+
+[node name="Column3" type="MeshInstance3D" parent="Grid" unique_id=1429865161]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.006, 0)
+mesh = SubResource("GridZMesh")
+
+[node name="Column4" type="MeshInstance3D" parent="Grid" unique_id=1902128274]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.006, 0)
+mesh = SubResource("GridZMesh")
+
+[node name="Column5" type="MeshInstance3D" parent="Grid" unique_id=1255695726]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.006, 0)
+mesh = SubResource("GridZMesh")
+
+[node name="Column6" type="MeshInstance3D" parent="Grid" unique_id=1130176937]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.006, 0)
+mesh = SubResource("GridZMesh")
+
+[node name="Column7" type="MeshInstance3D" parent="Grid" unique_id=420514308]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.006, 0)
+mesh = SubResource("GridZMesh")
+
+[node name="Column8" type="MeshInstance3D" parent="Grid" unique_id=1630209679]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.006, 0)
+mesh = SubResource("GridZMesh")
+
+[node name="Column9" type="MeshInstance3D" parent="Grid" unique_id=339219091]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.006, 0)
+mesh = SubResource("GridZMesh")
+
+[node name="Column10" type="MeshInstance3D" parent="Grid" unique_id=897653855]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.006, 0)
+mesh = SubResource("GridZMesh")
+
+[node name="Architecture" type="Node3D" parent="." unique_id=952133403]
+
+[node name="BackWall" type="StaticBody3D" parent="Architecture" unique_id=299232001]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.35, -3.5)
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="Architecture/BackWall" unique_id=1155220110]
+mesh = SubResource("BackWallMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Architecture/BackWall" unique_id=1653527741]
+shape = SubResource("BackWallShape")
+
+[node name="LeftWall" type="StaticBody3D" parent="Architecture" unique_id=2041350238]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1.35, 0)
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="Architecture/LeftWall" unique_id=605087136]
+mesh = SubResource("SideWallMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Architecture/LeftWall" unique_id=937064737]
+shape = SubResource("SideWallShape")
+
+[node name="ApprovedWindowWall" parent="Architecture" instance=ExtResource("3_calibration_wall")]
+position = Vector3(-3, 0, -3.41)
+
+[node name="ApprovedMagentaSourceLightWall" parent="Architecture" instance=ExtResource("12_magenta_light_wall")]
+position = Vector3(0, 0, -3.41)
+
+[node name="ApprovedSecureDoorWall" parent="Architecture" instance=ExtResource("8_secure_door_wall")]
+position = Vector3(3, 0, -3.41)
+
+[node name="ApprovedExposedServiceWall" parent="Architecture" instance=ExtResource("7_service_wall")]
+position = Vector3(-5.01, 0, -1.5)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="ApprovedNeutralMagentaWall" parent="Architecture" instance=ExtResource("9_neutral_magenta_wall")]
+position = Vector3(-5.01, 0, 1.5)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="Door090x210" type="MeshInstance3D" parent="Architecture" unique_id=1077291116]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.72, 1.05, -3.425)
+mesh = SubResource("DoorMesh")
+
+[node name="Window075x075" type="Node3D" parent="Architecture" unique_id=1797625171]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.85, 1.65, -3.425)
+
+[node name="Glass" type="MeshInstance3D" parent="Architecture/Window075x075" unique_id=1519107994]
+mesh = SubResource("WindowGlassMesh")
+
+[node name="FrameTop" type="MeshInstance3D" parent="Architecture/Window075x075" unique_id=1020668317]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.405, 0)
+mesh = SubResource("WindowFrameHMesh")
+
+[node name="FrameBottom" type="MeshInstance3D" parent="Architecture/Window075x075" unique_id=53715174]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.405, 0)
+mesh = SubResource("WindowFrameHMesh")
+
+[node name="FrameLeft" type="MeshInstance3D" parent="Architecture/Window075x075" unique_id=1546437991]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.405, 0, 0)
+mesh = SubResource("WindowFrameVMesh")
+
+[node name="FrameRight" type="MeshInstance3D" parent="Architecture/Window075x075" unique_id=1901247054]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.405, 0, 0)
+mesh = SubResource("WindowFrameVMesh")
+
+[node name="Furniture" type="Node3D" parent="." unique_id=658589618]
+
+[node name="Bed205x105" type="Node3D" parent="Furniture" unique_id=1655940455]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.65, 0, -1.75)
+
+[node name="Base" type="MeshInstance3D" parent="Furniture/Bed205x105" unique_id=1950293408]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.22, 0)
+mesh = SubResource("BedBaseMesh")
+
+[node name="Mattress" type="MeshInstance3D" parent="Furniture/Bed205x105" unique_id=746373363]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, 0.4, 0)
+mesh = SubResource("BedMattressMesh")
+
+[node name="HeadRail" type="MeshInstance3D" parent="Furniture/Bed205x105" unique_id=294695321]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.985, 0.4, 0)
+mesh = SubResource("BedHeadRailMesh")
+
+[node name="HeadPostNear" type="MeshInstance3D" parent="Furniture/Bed205x105" unique_id=57952582]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.985, 0.36, 0.495)
+mesh = SubResource("BedPostMesh")
+
+[node name="HeadPostFar" type="MeshInstance3D" parent="Furniture/Bed205x105" unique_id=978711149]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.985, 0.36, -0.495)
+mesh = SubResource("BedPostMesh")
+
+[node name="Couch185" type="Node3D" parent="Furniture" unique_id=38658350]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7, 0, 1.65)
+
+[node name="Base" type="MeshInstance3D" parent="Furniture/Couch185" unique_id=411088728]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+mesh = SubResource("CouchBaseMesh")
+
+[node name="Seat" type="MeshInstance3D" parent="Furniture/Couch185" unique_id=367739071]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0.08)
+mesh = SubResource("CouchSeatMesh")
+
+[node name="Back" type="MeshInstance3D" parent="Furniture/Couch185" unique_id=461566505]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.63, -0.31)
+mesh = SubResource("CouchBackMesh")
+
+[node name="ArmLeft" type="MeshInstance3D" parent="Furniture/Couch185" unique_id=1096054681]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.84, 0.43, 0)
+mesh = SubResource("CouchArmMesh")
+
+[node name="ArmRight" type="MeshInstance3D" parent="Furniture/Couch185" unique_id=871150279]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.84, 0.43, 0)
+mesh = SubResource("CouchArmMesh")
+
+[node name="Workbench180" type="Node3D" parent="Furniture" unique_id=618918654]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.55, 0, -2.35)
+
+[node name="Top" type="MeshInstance3D" parent="Furniture/Workbench180" unique_id=501363940]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.76, 0)
+mesh = SubResource("WorkbenchTopMesh")
+
+[node name="LegLeft" type="MeshInstance3D" parent="Furniture/Workbench180" unique_id=913933433]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 0.36, 0)
+mesh = SubResource("WorkbenchLegMesh")
+
+[node name="LegRight" type="MeshInstance3D" parent="Furniture/Workbench180" unique_id=1932603139]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 0.36, 0)
+mesh = SubResource("WorkbenchLegMesh")
+
+[node name="Backboard" type="MeshInstance3D" parent="Furniture/Workbench180" unique_id=435090418]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.16, -0.3)
+mesh = SubResource("WorkbenchBackMesh")
+
+[node name="Screen" type="MeshInstance3D" parent="Furniture/Workbench180" unique_id=1600426560]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35, 1.2, -0.265)
+mesh = SubResource("WorkbenchScreenMesh")
+
+[node name="Locker072x190" type="Node3D" parent="Furniture" unique_id=1642269420]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.35, 0, -2.72)
+
+[node name="Body" type="MeshInstance3D" parent="Furniture/Locker072x190" unique_id=627107268]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0)
+mesh = SubResource("LockerBodyMesh")
+
+[node name="Door" type="MeshInstance3D" parent="Furniture/Locker072x190" unique_id=132334086]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0.263)
+mesh = SubResource("LockerDoorMesh")
+
+[node name="VesperKane_PlayerCharacter_v01" parent="." unique_id=634554165 instance=ExtResource("2_character")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35, 0.08, -0.05)
+
+[node name="CameraRig" type="Node3D" parent="." unique_id=2004452116]
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig" unique_id=1782178410]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.142, 15.004, 14.142)
+projection = 1
+current = true
+size = 9.14
+
+[node name="StudyLabels" type="Node3D" parent="." unique_id=1602639588]
+
+[node name="WallLabel" type="Label3D" parent="StudyLabels" unique_id=1133598722]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.95, -3.38)
+billboard = 1
+text = "APPROVED WALL KIT 8 FT 10 IN (2.70 m)"
+font_size = 28
+outline_size = 8
+
+[node name="DoorLabel" type="Label3D" parent="StudyLabels" unique_id=2068536763]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 2.88, -3.32)
+billboard = 1
+text = "SECURE DOOR - CLOSED VISUAL"
+font_size = 22
+outline_size = 7
+
+[node name="WindowLabel" type="Label3D" parent="StudyLabels" unique_id=309174697]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 2.88, -3.32)
+billboard = 1
+text = "CYAN UTILITY WINDOW"
+font_size = 22
+outline_size = 7
+
+[node name="CharacterLabel" type="Label3D" parent="StudyLabels" unique_id=1106496991]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35, 2.05, -0.05)
+billboard = 1
+text = "C001 6 FT 0 IN (1.83 m) - APPROVED HEIGHT"
+font_size = 24
+outline_size = 8
+
+[node name="Interface" type="CanvasLayer" parent="." unique_id=631557740]
+
+[node name="Title" type="Label" parent="Interface" unique_id=1894417218]
+offset_left = 28.0
+offset_top = 24.0
+offset_right = 1150.0
+offset_bottom = 58.0
+theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
+theme_override_colors/font_outline_color = Color(0.005, 0.008, 0.012, 0.98)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 22
+text = "STEAMTEK - THE ASCENT SCALE + VISUAL CALIBRATION STUDY"
+
+[node name="Guide" type="Label" parent="Interface" unique_id=417343995]
+offset_left = 28.0
+offset_top = 62.0
+offset_right = 1520.0
+offset_bottom = 92.0
+theme_override_colors/font_color = Color(0.54, 0.86, 0.92, 1)
+theme_override_colors/font_outline_color = Color(0.005, 0.008, 0.012, 0.98)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 17
+text = "The Ascent gameplay is the fixed reference. Match 20% character occupancy, character-forward isometric framing, dense cover, and chunky machinery."
+
+[node name="Framing" type="Label" parent="Interface" unique_id=200943555]
+offset_left = 28.0
+offset_top = 96.0
+offset_right = 760.0
+offset_bottom = 126.0
+theme_override_colors/font_color = Color(1, 0.76, 0.32, 1)
+theme_override_colors/font_outline_color = Color(0.005, 0.008, 0.012, 0.98)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 18
+text = "THE ASCENT GAMEPLAY LOCK  |  35 DEG ELEVATION  |  ORTHOGRAPHIC SIZE 9.14"

@@ -1,0 +1,84 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scenes/tests/hybrid_3d/steamtek_apartment_wall_art_kit_review_3d.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_Maintenance_300x270_A.tscn" id="2_maintenance"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_VentLight_300x270_A.tscn" id="3_vent_light"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_ExposedService_300x270_A.tscn" id="4_service"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_DoorSecure_300x270_A.tscn" id="5_door"]
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 1
+background_color = Color(0.003, 0.004, 0.006, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.46, 0.5, 0.52, 1)
+ambient_light_energy = 0.9
+tonemap_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="FloorMaterial"]
+albedo_color = Color(0.035, 0.042, 0.045, 1)
+metallic = 0.08
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="FloorMesh"]
+material = SubResource("FloorMaterial")
+size = Vector3(14, 0.08, 3)
+
+[node name="SteamtekApartmentWallArtKitReview3D" type="Node3D"]
+script = ExtResource("1_script")
+metadata/status = "four_wall_art_kit_approved_f6_2026_07_19"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment")
+
+[node name="KeyLight" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-35, -25, 0)
+light_color = Color(1, 0.88, 0.76, 1)
+light_energy = 0.85
+shadow_enabled = true
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.04, 0)
+mesh = SubResource("FloorMesh")
+
+[node name="Maintenance" parent="." instance=ExtResource("2_maintenance")]
+position = Vector3(-4.8, 0, 0)
+
+[node name="VentLight" parent="." instance=ExtResource("3_vent_light")]
+position = Vector3(-1.6, 0, 0)
+
+[node name="ExposedService" parent="." instance=ExtResource("4_service")]
+position = Vector3(1.6, 0, 0)
+
+[node name="SecureDoor" parent="." instance=ExtResource("5_door")]
+position = Vector3(4.8, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+position = Vector3(0, 1.35, 12)
+projection = 1
+current = true
+size = 7.6
+
+[node name="Interface" type="CanvasLayer" parent="."]
+
+[node name="Title" type="Label" parent="Interface"]
+offset_left = 26.0
+offset_top = 22.0
+offset_right = 1100.0
+offset_bottom = 58.0
+theme_override_colors/font_color = Color(0.9, 0.95, 1, 1)
+theme_override_colors/font_outline_color = Color(0.003, 0.004, 0.006, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 24
+text = "STEAMTEK APARTMENT WALL KIT  |  F6 ART REVIEW"
+
+[node name="Subtitle" type="Label" parent="Interface"]
+offset_left = 26.0
+offset_top = 58.0
+offset_right = 1500.0
+offset_bottom = 90.0
+theme_override_colors/font_color = Color(0.48, 0.84, 0.9, 1)
+theme_override_colors/font_outline_color = Color(0.003, 0.004, 0.006, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 17
+text = "MAINTENANCE  |  VENT + SOURCE LIGHT  |  EXPOSED SERVICE  |  SECURE DOOR (CLOSED VISUAL)"
