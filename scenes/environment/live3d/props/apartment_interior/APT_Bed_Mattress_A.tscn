@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/apartment_interior_v01/APT_Fabric_Olive_A_Mat.tres" id="1_fabric"]
+[sub_resource type="BoxMesh" id="MattressMesh"]
+material = ExtResource("1_fabric")
+size = Vector3(2.02, 0.22, 1.02)
+[sub_resource type="BoxMesh" id="BlanketMesh"]
+material = ExtResource("1_fabric")
+size = Vector3(1.22, 0.06, 1.05)
+
+[node name="APT_Bed_Mattress_A" type="Node3D" groups=["steamtek_live3d_modular"]]
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "apartment_furniture_component"
+metadata/contact_pivot = "bottom_center"
+
+[node name="Mattress" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.11, 0)
+mesh = SubResource("MattressMesh")
+[node name="Blanket" type="MeshInstance3D" parent="."]
+position = Vector3(0.32, 0.25, 0)
+mesh = SubResource("BlanketMesh")
+[node name="Sockets" type="Node3D" parent="."]
+[node name="Anchor" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+metadata/socket_role = "prop_anchor"
+[node name="PillowSocket" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-0.7, 0.28, 0)
+metadata/socket_role = "prop_surface"
+

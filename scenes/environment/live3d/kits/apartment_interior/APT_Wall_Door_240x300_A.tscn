@@ -1,0 +1,53 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/apartment_interior_v01/APT_Wall_Door_240x300_A_Mat.tres" id="1_door"]
+
+[sub_resource type="BoxMesh" id="DoorWallMesh"]
+material = ExtResource("1_door")
+size = Vector3(2.4, 3.2, 0.16)
+
+[sub_resource type="BoxShape3D" id="DoorWallShape"]
+size = Vector3(2.4, 3.2, 0.16)
+
+[node name="APT_Wall_Door_240x300_A" type="StaticBody3D" groups=["steamtek_live3d_modular"]]
+collision_layer = 1
+collision_mask = 0
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "apartment_interior_wall"
+metadata/module_dimensions_m = Vector3(2.4, 3.2, 0.16)
+metadata/grid_step_m = 1.2
+metadata/front_axis = "+Z"
+metadata/art_status = "hand_painted_production_A"
+
+[node name="DoorWall" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.6, 0)
+mesh = SubResource("DoorWallMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.6, 0)
+shape = SubResource("DoorWallShape")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="WallLeft" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-1.2, 0, 0)
+metadata/socket_role = "interior_wall_chain"
+
+[node name="WallRight" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(1.2, 0, 0)
+metadata/socket_role = "interior_wall_chain"
+
+[node name="DoorLightSocket" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 2.75, 0.13)
+metadata/socket_role = "wall_prop_surface"
+
+[node name="FloorAttachment" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+metadata/socket_role = "interior_wall_base"
+
+[node name="FloorAttachmentLeft" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-0.6, 0, 0)
+metadata/socket_role = "interior_wall_base"
+
+[node name="FloorAttachmentRight" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0.6, 0, 0)
+metadata/socket_role = "interior_wall_base"

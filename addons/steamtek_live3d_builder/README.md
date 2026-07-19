@@ -19,6 +19,10 @@ It does not modify runtime scenes, C001, the camera contract, or the existing 2D
 
 The add-on is enabled in the canonical project and validated with Godot 4.7 Compatibility. It has no dependency on the older modular snap workflow.
 
+## Drag directly from the FileSystem
+
+Enable **Auto Snap FileSystem / Viewport Drag** in the Builder dock. Drag any `live3d_meter_v1` modular scene from Godot's FileSystem into the 3D viewport and release it within 1 meter of a compatible Marker3D socket. The dropped module snaps automatically and the placement remains undoable. The same option also snaps an existing module after it is moved with the viewport gizmo. Disable the checkbox when free placement is preferred; **Snap Nearest** remains available for manual snapping.
+
 ## Beginner workflow
 
 1. Open `SteamtekApartmentInteriorAssemblyBlank3D.tscn`.

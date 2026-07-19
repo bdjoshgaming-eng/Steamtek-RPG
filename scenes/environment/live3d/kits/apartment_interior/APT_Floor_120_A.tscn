@@ -1,0 +1,89 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/apartment_interior_v01/APT_Floor_120_A_Mat.tres" id="1_floor"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="2_trim"]
+
+[sub_resource type="BoxMesh" id="FloorMesh"]
+material = ExtResource("1_floor")
+size = Vector3(1.2, 0.12, 1.2)
+
+[sub_resource type="CylinderMesh" id="FastenerMesh"]
+material = ExtResource("2_trim")
+top_radius = 0.025
+bottom_radius = 0.025
+height = 0.014
+radial_segments = 8
+
+[sub_resource type="BoxShape3D" id="FloorShape"]
+size = Vector3(1.2, 0.12, 1.2)
+
+[node name="APT_Floor_120_A" type="StaticBody3D" groups=["steamtek_live3d_modular"]]
+collision_layer = 1
+collision_mask = 0
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "apartment_interior_floor"
+metadata/module_dimensions_m = Vector3(1.2, 0.12, 1.2)
+metadata/grid_step_m = 1.2
+metadata/art_status = "hand_painted_production_v02"
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.06, 0)
+mesh = SubResource("FloorMesh")
+
+[node name="Fasteners" type="Node3D" parent="."]
+
+[node name="NW" type="MeshInstance3D" parent="Fasteners"]
+position = Vector3(-0.5, 0.028, -0.5)
+mesh = SubResource("FastenerMesh")
+[node name="NE" type="MeshInstance3D" parent="Fasteners"]
+position = Vector3(0.5, 0.028, -0.5)
+mesh = SubResource("FastenerMesh")
+[node name="SW" type="MeshInstance3D" parent="Fasteners"]
+position = Vector3(-0.5, 0.028, 0.5)
+mesh = SubResource("FastenerMesh")
+[node name="SE" type="MeshInstance3D" parent="Fasteners"]
+position = Vector3(0.5, 0.028, 0.5)
+mesh = SubResource("FastenerMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, -0.06, 0)
+shape = SubResource("FloorShape")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="FloorXNegative" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-0.6, 0, 0)
+metadata/socket_role = "interior_floor_chain"
+
+[node name="FloorXPositive" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0.6, 0, 0)
+metadata/socket_role = "interior_floor_chain"
+
+[node name="FloorZNegative" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, -0.6)
+metadata/socket_role = "interior_floor_chain"
+
+[node name="FloorZPositive" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, 0.6)
+metadata/socket_role = "interior_floor_chain"
+
+[node name="FloorPropCenter" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0.015, 0)
+metadata/socket_role = "floor_prop_surface"
+
+[node name="WallEdgeNorth" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, -0.6)
+metadata/socket_role = "interior_wall_floor_edge"
+[node name="WallEdgeSouth" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, 0.6)
+rotation_degrees = Vector3(0, 180, 0)
+metadata/socket_role = "interior_wall_floor_edge"
+[node name="WallEdgeWest" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-0.6, 0, 0)
+rotation_degrees = Vector3(0, -90, 0)
+metadata/socket_role = "interior_wall_floor_edge"
+[node name="WallEdgeEast" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0.6, 0, 0)
+rotation_degrees = Vector3(0, 90, 0)
+metadata/socket_role = "interior_wall_floor_edge"
+

@@ -1,0 +1,43 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/apartment_interior_v01/APT_Wall_Base_A_Mat.tres" id="1_wall"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="2_trim"]
+[sub_resource type="BoxMesh" id="PanelMesh"]
+material = ExtResource("1_wall")
+size = Vector3(1.2, 1.15, 0.16)
+[sub_resource type="BoxMesh" id="CapMesh"]
+material = ExtResource("2_trim")
+size = Vector3(1.24, 0.08, 0.22)
+[sub_resource type="BoxShape3D" id="PanelShape"]
+size = Vector3(1.2, 1.15, 0.16)
+
+[node name="APT_Partition_120x150_A" type="StaticBody3D" groups=["steamtek_live3d_modular"]]
+collision_layer = 1
+collision_mask = 0
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "apartment_interior_partition"
+metadata/module_dimensions_m = Vector3(1.2, 1.19, 0.16)
+metadata/grid_step_m = 1.2
+
+[node name="Panel" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.575, 0)
+mesh = SubResource("PanelMesh")
+[node name="Cap" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.17, 0)
+mesh = SubResource("CapMesh")
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.575, 0)
+shape = SubResource("PanelShape")
+[node name="Sockets" type="Node3D" parent="."]
+[node name="PartitionLeft" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-0.6, 0, 0)
+metadata/socket_role = "interior_partition_chain"
+[node name="PartitionRight" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0.6, 0, 0)
+metadata/socket_role = "interior_partition_chain"
+[node name="PartitionProp" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 1.23, 0)
+metadata/socket_role = "prop_surface"
+[node name="FloorAttachment" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+metadata/socket_role = "interior_wall_base"
+

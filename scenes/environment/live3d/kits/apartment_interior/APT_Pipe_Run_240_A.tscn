@@ -1,0 +1,66 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="1_metal"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_AgedCopper_Base_v01.tres" id="2_copper"]
+
+[sub_resource type="CylinderMesh" id="PipeLargeMesh"]
+material = ExtResource("1_metal")
+top_radius = 0.055
+bottom_radius = 0.055
+height = 2.18
+radial_segments = 12
+
+[sub_resource type="CylinderMesh" id="PipeSmallMesh"]
+material = ExtResource("2_copper")
+top_radius = 0.035
+bottom_radius = 0.035
+height = 2.18
+radial_segments = 10
+
+[sub_resource type="BoxMesh" id="ClampMesh"]
+material = ExtResource("2_copper")
+size = Vector3(0.06, 0.32, 0.08)
+
+[sub_resource type="BoxMesh" id="JunctionMesh"]
+material = ExtResource("1_metal")
+size = Vector3(0.34, 0.28, 0.12)
+
+[node name="APT_Pipe_Run_240_A" type="Node3D" groups=["steamtek_live3d_modular"]]
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "apartment_interior_wall_service"
+metadata/module_dimensions_m = Vector3(2.4, 0.42, 0.16)
+metadata/grid_step_m = 1.2
+metadata/front_axis = "+Z"
+metadata/contact_pivot = "wall_center"
+
+[node name="LargePipe" type="MeshInstance3D" parent="."]
+position = Vector3(0, 2.72, 0.18)
+rotation_degrees = Vector3(0, 0, 90)
+mesh = SubResource("PipeLargeMesh")
+
+[node name="SmallPipe" type="MeshInstance3D" parent="."]
+position = Vector3(0, 2.9, 0.18)
+rotation_degrees = Vector3(0, 0, 90)
+mesh = SubResource("PipeSmallMesh")
+
+[node name="ClampLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.82, 2.81, 0.18)
+mesh = SubResource("ClampMesh")
+[node name="ClampCenter" type="MeshInstance3D" parent="."]
+position = Vector3(0, 2.81, 0.18)
+mesh = SubResource("ClampMesh")
+[node name="ClampRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.82, 2.81, 0.18)
+mesh = SubResource("ClampMesh")
+
+[node name="JunctionBox" type="MeshInstance3D" parent="."]
+position = Vector3(0.62, 2.48, 0.17)
+mesh = SubResource("JunctionMesh")
+
+[node name="Sockets" type="Node3D" parent="."]
+[node name="WallLeft" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-1.2, 0, 0)
+metadata/socket_role = "wall_service_chain"
+[node name="WallRight" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(1.2, 0, 0)
+metadata/socket_role = "wall_service_chain"

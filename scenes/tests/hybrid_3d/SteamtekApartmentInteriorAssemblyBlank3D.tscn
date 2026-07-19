@@ -1,6 +1,9 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dlsjtc6rmhp7"]
 
-[node name="SteamtekApartmentInteriorAssemblyBlank3D" type="Node3D"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Floor_120_A.tscn" id="1_s84ek"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_Solid_120x300_A.tscn" id="2_vr6q3"]
+
+[node name="SteamtekApartmentInteriorAssemblyBlank3D" type="Node3D" unique_id=585412920]
 editor_description = "Blank plug-and-play apartment interior workspace. Use Steamtek Live3D Builder with Interior Structure, Furniture, and Small Props profiles."
 metadata/status = "apartment_interior_blank_workspace_v01"
 metadata/unit_contract = "1_godot_unit_equals_1_meter"
@@ -9,9 +12,107 @@ metadata/furniture_grid_m = 0.3
 metadata/prop_grid_m = 0.1
 metadata/rotation_contract = "cardinal_y_only_no_negative_scale"
 
-[node name="Architecture" type="Node3D" parent="."]
-[node name="Furniture" type="Node3D" parent="."]
-[node name="Props" type="Node3D" parent="."]
-[node name="Lighting" type="Node3D" parent="."]
-[node name="Gameplay" type="Node3D" parent="."]
+[node name="Architecture" type="Node3D" parent="." unique_id=1054934123]
 
+[node name="APT_Floor_120_A" type="StaticBody3D" parent="Architecture" unique_id=1924161248 groups=["steamtek_live3d_modular"] instance=ExtResource("1_s84ek")]
+collision_mask = 0
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "apartment_interior_floor"
+metadata/module_dimensions_m = Vector3(1.2, 0.12, 1.2)
+metadata/grid_step_m = 1.2
+metadata/art_status = "hand_painted_production_candidate"
+
+[node name="APT_Floor_120_A2" type="StaticBody3D" parent="Architecture" unique_id=1473539938 groups=["steamtek_live3d_modular"] instance=ExtResource("1_s84ek")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 0, 0)
+collision_mask = 0
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "apartment_interior_floor"
+metadata/module_dimensions_m = Vector3(1.2, 0.12, 1.2)
+metadata/grid_step_m = 1.2
+metadata/art_status = "hand_painted_production_candidate"
+
+[node name="APT_Floor_120_A3" type="StaticBody3D" parent="Architecture" unique_id=1063998311 groups=["steamtek_live3d_modular"] instance=ExtResource("1_s84ek")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 0, -1.2)
+collision_mask = 0
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "apartment_interior_floor"
+metadata/module_dimensions_m = Vector3(1.2, 0.12, 1.2)
+metadata/grid_step_m = 1.2
+metadata/art_status = "hand_painted_production_candidate"
+
+[node name="APT_Floor_120_A4" type="StaticBody3D" parent="Architecture" unique_id=1733526004 groups=["steamtek_live3d_modular"] instance=ExtResource("1_s84ek")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 0, 1.2)
+collision_mask = 0
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "apartment_interior_floor"
+metadata/module_dimensions_m = Vector3(1.2, 0.12, 1.2)
+metadata/grid_step_m = 1.2
+metadata/art_status = "hand_painted_production_candidate"
+
+[node name="APT_Floor_120_A5" type="StaticBody3D" parent="Architecture" unique_id=869323030 groups=["steamtek_live3d_modular"] instance=ExtResource("1_s84ek")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.2)
+collision_mask = 0
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "apartment_interior_floor"
+metadata/module_dimensions_m = Vector3(1.2, 0.12, 1.2)
+metadata/grid_step_m = 1.2
+metadata/art_status = "hand_painted_production_candidate"
+
+[node name="APT_Floor_120_A6" type="StaticBody3D" parent="Architecture" unique_id=122135600 groups=["steamtek_live3d_modular"] instance=ExtResource("1_s84ek")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0, 1.2)
+collision_mask = 0
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "apartment_interior_floor"
+metadata/module_dimensions_m = Vector3(1.2, 0.12, 1.2)
+metadata/grid_step_m = 1.2
+metadata/art_status = "hand_painted_production_candidate"
+
+[node name="APT_Floor_120_A7" type="StaticBody3D" parent="Architecture" unique_id=1394989183 groups=["steamtek_live3d_modular"] instance=ExtResource("1_s84ek")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0, 0)
+collision_mask = 0
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "apartment_interior_floor"
+metadata/module_dimensions_m = Vector3(1.2, 0.12, 1.2)
+metadata/grid_step_m = 1.2
+metadata/art_status = "hand_painted_production_candidate"
+
+[node name="APT_Floor_120_A8" type="StaticBody3D" parent="Architecture" unique_id=1978532267 groups=["steamtek_live3d_modular"] instance=ExtResource("1_s84ek")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0, -1.2)
+collision_mask = 0
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "apartment_interior_floor"
+metadata/module_dimensions_m = Vector3(1.2, 0.12, 1.2)
+metadata/grid_step_m = 1.2
+metadata/art_status = "hand_painted_production_candidate"
+
+[node name="APT_Floor_120_A9" type="StaticBody3D" parent="Architecture" unique_id=1812457196 groups=["steamtek_live3d_modular"] instance=ExtResource("1_s84ek")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.2)
+collision_mask = 0
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "apartment_interior_floor"
+metadata/module_dimensions_m = Vector3(1.2, 0.12, 1.2)
+metadata/grid_step_m = 1.2
+metadata/art_status = "hand_painted_production_candidate"
+
+[node name="APT_Floor_120_A10" parent="Architecture" unique_id=1361322019 instance=ExtResource("1_s84ek")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05820012, 0, 2.4060843)
+
+[node name="APT_Wall_Solid_120x300_A" type="StaticBody3D" parent="Architecture" unique_id=1715981056 groups=["steamtek_live3d_modular"] instance=ExtResource("2_vr6q3")]
+collision_mask = 0
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "apartment_interior_wall"
+metadata/module_dimensions_m = Vector3(1.2, 3.2, 0.16)
+metadata/grid_step_m = 1.2
+metadata/front_axis = "+Z"
+metadata/art_status = "hand_painted_production_candidate"
+
+[node name="Furniture" type="Node3D" parent="." unique_id=2118065103]
+
+[node name="Props" type="Node3D" parent="." unique_id=1485674520]
+
+[node name="Lighting" type="Node3D" parent="." unique_id=1573154072]
+
+[node name="Gameplay" type="Node3D" parent="." unique_id=1358027168]
+
+[node name="APT_Floor_120_A" parent="." unique_id=477665645 instance=ExtResource("1_s84ek")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.510515, -2.3841858e-07, 2.4157228)

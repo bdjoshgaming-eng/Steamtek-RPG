@@ -22,6 +22,16 @@ This is the production-facing kit for building the opening apartment in Godot. E
 
 The module search box accepts names and tags such as `floor`, `wall`, `bed`, `desk`, `couch`, `rug`, `picture`, `cup`, and `book`.
 
+## Asset naming
+
+Apartment assets use `APT_Category_Subtype_Dimensions_Variant`.
+
+- Dimensions are centimeters: `120`, `240`, or `120x300`.
+- Variant letters (`A`, `B`, `C`) identify visibly different designs.
+- Textures end in `_Albedo.png`; Godot materials end in `_Mat.tres`.
+- Git stores revisions, so filenames do not carry `v01`, `v02`, or workflow labels such as `HandPainted`.
+- Examples: `APT_Floor_120_A.tscn`, `APT_Wall_Door_240x300_A.tscn`, and `APT_Prop_Cup_A.tscn`.
+
 ## Locked contracts
 
 - One Godot unit equals one meter.
@@ -44,6 +54,7 @@ The module search box accepts names and tags such as `floor`, `wall`, `bed`, `de
 - 2.4 m door wall
 - 1.2 m half-height partition
 - corner column
+- 2.4 m exposed service-pipe run
 
 ## Furniture and prop modules
 
@@ -68,6 +79,6 @@ The module search box accepts names and tags such as `floor`, `wall`, `bed`, `de
 
 ## Visual direction
 
-The material set lives at `res://assets/environment/live3d/materials/apartment_interior_v01/`. It uses hand-painted dark steel wall panels and worn industrial floor tiles with restrained cyan and warm-amber source lighting. The style reference is `res://docs/references/Steamtek_PlayerApartment_InteriorStyleReference_A_2026-07-18.png`.
+The material set lives at `res://assets/environment/live3d/materials/apartment_interior_v01/`. Its locked mixture is **40% neo-industrial, 40% cyberpunk, and 20% practical steampunk**. It uses hand-painted dark steel wall panels, worn industrial floors, embedded interfaces, segmented technical framing, controlled cyan/magenta signals, exposed pressure infrastructure, and warm-amber domestic lighting.
 
 This kit is Neo-Industrial and practical: no Victorian ornament, decorative gears, glossy showroom materials, or baked prop arrangements.

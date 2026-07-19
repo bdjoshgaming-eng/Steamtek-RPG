@@ -59,10 +59,14 @@ func compute_player_attack_damage(p: Dictionary) -> Dictionary:
 	var max_damage = int(base_damage + variance)
 	var weapon_roll = randi_range(min_damage, max_damage)
 
-	# CriticalModifier.
+	# CriticalModifier. Phase 5: the target's Critical Resistance (a
+	# percentage from its CL) subtracts directly from the attacker's crit
+	# chance, floored at zero so a high-CL enemy suppresses crits without
+	# ever making them impossible to roll toward.
 	var crit_hit = false
 	var critical_modifier = 1.0
-	var crit_chance = conditioning_nodes * 0.03
+	var crit_resistance: float = p.get("target_crit_resistance", 0.0)
+	var crit_chance = max(0.0, (conditioning_nodes * 0.03) - (crit_resistance / 100.0))
 	if randf() < crit_chance:
 		critical_modifier = 2.0 if conditioning_nodes >= max_conditioning_nodes else 1.5
 		crit_hit = true
@@ -142,16 +146,16 @@ func _resolve_uncertified(equipped_weapon_name: String, professions_unlocked: Di
 # health, action, damage (center of the attack roll), and defense. CLs
 # below or above the anchored range clamp to the nearest anchor (CL41-100
 # stubbed until the table is expanded).
-func derive_stats_from_cl(cl: int) -> Dictionary:
+func derive_stats_from_cl(cl: int, archetype: String = "", faction: String = "") -> Dictionary:
 	var anchors = CombatData.CL_ANCHORS
 	var levels = anchors.keys()
 	levels.sort()
 	var lo = levels[0]
 	var hi = levels[levels.size() - 1]
 	if cl <= lo:
-		return _anchor_values(anchors[lo])
+		return _apply_identity_modifiers(_anchor_values(anchors[lo]), archetype, faction)
 	if cl >= hi:
-		return _anchor_values(anchors[hi])
+		return _apply_identity_modifiers(_anchor_values(anchors[hi]), archetype, faction)
 	var a = lo
 	var b = hi
 	for i in range(levels.size() - 1):
@@ -162,13 +166,16 @@ func derive_stats_from_cl(cl: int) -> Dictionary:
 	var t = float(cl - a) / float(b - a)
 	var da = anchors[a]
 	var db = anchors[b]
-	return {
+	return _apply_identity_modifiers({
 		"health": int(round(lerp(float(da["health"]), float(db["health"]), t))),
 		"action": int(round(lerp(float(da["action"]), float(db["action"]), t))),
 		"damage": int(round(lerp(float(da["damage"]), float(db["damage"]), t))),
 		"defense": int(round(lerp(float(da["defense"]), float(db["defense"]), t))),
 		"armor": int(round(lerp(float(da["armor"]), float(db["armor"]), t))),
-	}
+		"dodge": lerp(float(da.get("dodge", 0.0)), float(db.get("dodge", 0.0)), t),
+		"block": lerp(float(da.get("block", 0.0)), float(db.get("block", 0.0)), t),
+		"crit_resist": lerp(float(da.get("crit_resist", 0.0)), float(db.get("crit_resist", 0.0)), t),
+	}, archetype, faction)
 
 
 func _anchor_values(a: Dictionary) -> Dictionary:
@@ -178,6 +185,9 @@ func _anchor_values(a: Dictionary) -> Dictionary:
 		"damage": int(a["damage"]),
 		"defense": int(a["defense"]),
 		"armor": int(a["armor"]),
+		"dodge": float(a.get("dodge", 0.0)),
+		"block": float(a.get("block", 0.0)),
+		"crit_resist": float(a.get("crit_resist", 0.0)),
 	}
 
 
@@ -214,14 +224,94 @@ func effective_health(base_health: int, armor_rating: int) -> int:
 	return int(round(float(base_health) / (1.0 - dr)))
 
 
-# --- Phase 4b: typed mitigation ---
+# --- Phase 4b/4c: typed mitigation ---
 # Reduces incoming damage by the target's resistance to THIS damage type.
 # resistances maps damage type -> rating; the matched rating (minus armor
 # penetration) runs through the same diminishing-returns curve as 4a.
-# Phase 4b resistances are uniform, so this matches 4a numerically until
-# 4c varies them.
+# As of Phase 4c those ratings VARY per damage type: CombatData builds
+# them from the enemy's CL-derived Armor Rating shaped by its archetype
+# profile, so damage type selection now matters. An enemy with no
+# archetype still resists uniformly, matching 4b behavior.
 func apply_typed_mitigation(damage, resistances: Dictionary, damage_type: String, armor_penetration: int = 0) -> int:
 	var rating = int(resistances.get(damage_type, 0))
 	var effective_rating = max(0, rating - armor_penetration)
 	var dr = damage_reduction_from_rating(effective_rating)
 	return int(round(float(damage) * (1.0 - dr)))
+
+
+# --- Phase 5: combat roll layer ---
+# Resolves the defensive rolls that happen AFTER the attacker's hit
+# chance has already been computed by the caller. Order is deliberate:
+#
+#   1. Hit    -- Accuracy vs Defense (hit_chance, computed by caller)
+#   2. Dodge  -- full avoid, rolled only if the hit landed
+#   3. Block  -- partial mitigation (damage x BLOCK_DAMAGE_MULTIPLIER)
+#
+# Dodge is a SECOND way to whiff on top of the hit roll, so the CL table
+# keeps it capped low (15% at CL40); the two compounding is exactly why
+# it isn't allowed to scale like Defense does.
+#
+# Returns:
+#   hit          -- false if the attack missed outright
+#   dodged       -- true if the target evaded a landed hit
+#   blocked      -- true if the target blocked (damage halved)
+#   damage_mult  -- 0.0 on miss/dodge, 0.5 on block, else 1.0
+func resolve_defensive_rolls(hit_chance: float, dodge_pct: float, block_pct: float) -> Dictionary:
+	if randf() * 100.0 > hit_chance:
+		return {"hit": false, "dodged": false, "blocked": false, "damage_mult": 0.0}
+	if dodge_pct > 0.0 and randf() * 100.0 < dodge_pct:
+		return {"hit": true, "dodged": true, "blocked": false, "damage_mult": 0.0}
+	if block_pct > 0.0 and randf() * 100.0 < block_pct:
+		return {"hit": true, "dodged": false, "blocked": true, "damage_mult": CombatData.BLOCK_DAMAGE_MULTIPLIER}
+	return {"hit": true, "dodged": false, "blocked": false, "damage_mult": 1.0}
+
+
+# --- Phase 6a: identity modifiers ---
+# Applies the archetype + faction stat multipliers to a CL-derived stat
+# set. CL establishes the TIER (a CL40 enemy dwarfs a CL5 one); archetype
+# and faction shape the character within that tier. Health, damage,
+# defense and armor are scaled; the defensive percentages (dodge, block,
+# crit_resist) are left alone so they stay purely CL-driven as designed.
+#
+# Armor is scaled BEFORE resistances are built from it, so an armor
+# modifier flows through into every damage-type resistance automatically.
+func _apply_identity_modifiers(d: Dictionary, archetype: String, faction: String) -> Dictionary:
+	if archetype == "" and faction == "":
+		return d
+	var m = CombatData.stat_modifiers_for(archetype, faction)
+	d["health"] = int(round(float(d["health"]) * m["health"]))
+	d["damage"] = int(round(float(d["damage"]) * m["damage"]))
+	d["defense"] = int(round(float(d["defense"]) * m["defense"]))
+	d["armor"] = int(round(float(d["armor"]) * m["armor"]))
+	return d
+
+
+# --- Phase 7: rank marks & threat ---
+# Converts a hidden Combat Level into the rank mark the player actually
+# sees. This is the ONLY thing that should ever surface CL to the UI --
+# the raw number stays internal.
+func rank_mark_for_cl(cl: int) -> String:
+	for entry in CombatData.RANK_MARKS:
+		if cl >= int(entry[0]):
+			return String(entry[1])
+	return String(CombatData.RANK_MARKS[CombatData.RANK_MARKS.size() - 1][1])
+
+
+# Effective player Combat Level, derived from total skill points spent so
+# the player sits on the same 1-100 scale enemies do. Phase 7 uses this
+# purely for threat comparison; it is not a player-facing stat.
+func effective_player_cl(total_skill_points_spent: int) -> int:
+	var cl = 1.0 + float(total_skill_points_spent) * CombatData.PLAYER_CL_PER_SKILL_POINT
+	return int(clamp(round(cl), 1, CombatData.PLAYER_CL_MAX))
+
+
+# Threat of an enemy relative to the player, as {label, color}. Ratio is
+# enemy CL over effective player CL, so an enemy at the player's own
+# level reads "Even" regardless of where on the curve they both sit.
+func threat_for(enemy_cl: int, player_cl: int) -> Dictionary:
+	var safe_player_cl = max(player_cl, 1)
+	var ratio = float(enemy_cl) / float(safe_player_cl)
+	for tier in CombatData.THREAT_TIERS:
+		if ratio <= float(tier[0]):
+			return {"label": String(tier[1]), "color": tier[2]}
+	return {"label": String(CombatData.THREAT_DEADLY[0]), "color": CombatData.THREAT_DEADLY[1]}

@@ -1,0 +1,71 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="1_metal"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_AgedCopper_Base_v01.tres" id="2_copper"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/apartment_interior_v01/APT_Screen_Cyan_A_Mat.tres" id="3_screen"]
+[sub_resource type="BoxMesh" id="BenchMesh"]
+material = ExtResource("1_metal")
+size = Vector3(2.4, 0.16, 0.8)
+[sub_resource type="BoxMesh" id="CabinetMesh"]
+material = ExtResource("1_metal")
+size = Vector3(0.56, 0.7, 0.68)
+[sub_resource type="BoxMesh" id="BackboardMesh"]
+material = ExtResource("2_copper")
+size = Vector3(2.2, 1.05, 0.08)
+[sub_resource type="BoxMesh" id="ScreenMesh"]
+material = ExtResource("3_screen")
+size = Vector3(0.48, 0.32, 0.035)
+[sub_resource type="BoxShape3D" id="CollisionShape"]
+size = Vector3(2.4, 1.45, 0.82)
+
+[node name="APT_Workbench_A" type="Node3D" groups=["steamtek_live3d_modular"]]
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "apartment_furniture"
+metadata/contact_pivot = "floor_center"
+metadata/prop_socket_count = 8
+
+[node name="StaticBody" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+[node name="BenchTop" type="MeshInstance3D" parent="StaticBody"]
+position = Vector3(0, 0.82, 0)
+mesh = SubResource("BenchMesh")
+[node name="CabinetLeft" type="MeshInstance3D" parent="StaticBody"]
+position = Vector3(-0.88, 0.39, 0)
+mesh = SubResource("CabinetMesh")
+[node name="CabinetRight" type="MeshInstance3D" parent="StaticBody"]
+position = Vector3(0.88, 0.39, 0)
+mesh = SubResource("CabinetMesh")
+[node name="Backboard" type="MeshInstance3D" parent="StaticBody"]
+position = Vector3(0, 1.38, -0.34)
+mesh = SubResource("BackboardMesh")
+[node name="ScreenLeft" type="MeshInstance3D" parent="StaticBody"]
+position = Vector3(-0.48, 1.46, -0.285)
+mesh = SubResource("ScreenMesh")
+[node name="ScreenRight" type="MeshInstance3D" parent="StaticBody"]
+position = Vector3(0.16, 1.5, -0.285)
+mesh = SubResource("ScreenMesh")
+[node name="Collision" type="CollisionShape3D" parent="StaticBody"]
+position = Vector3(0, 0.73, 0)
+shape = SubResource("CollisionShape")
+
+[node name="Sockets" type="Node3D" parent="."]
+[node name="Surface01" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-0.82, 0.92, 0.12)
+metadata/socket_role = "prop_surface"
+[node name="Surface02" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-0.3, 0.92, 0.12)
+metadata/socket_role = "prop_surface"
+[node name="Surface03" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0.25, 0.92, 0.12)
+metadata/socket_role = "prop_surface"
+[node name="Surface04" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0.82, 0.92, 0.12)
+metadata/socket_role = "prop_surface"
+[node name="Board01" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-0.8, 1.38, -0.285)
+metadata/socket_role = "wall_prop_surface"
+[node name="Board02" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0.75, 1.38, -0.285)
+metadata/socket_role = "wall_prop_surface"
+

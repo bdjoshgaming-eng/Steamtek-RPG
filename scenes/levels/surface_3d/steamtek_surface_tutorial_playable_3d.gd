@@ -395,14 +395,25 @@ func _collect_character_meshes(node: Node) -> void:
 
 
 func _update_camera_occlusion() -> void:
-	var query := PhysicsRayQueryParameters3D.create(
-		camera.global_position,
-		character.global_position + Vector3(0.0, 1.0, 0.0),
-		BUILDING_OCCLUSION_MASK
-	)
-	query.collide_with_areas = false
-	var hit := get_world_3d().direct_space_state.intersect_ray(query)
-	_set_character_occluded(not hit.is_empty())
+	var camera_right := camera.global_basis.x.normalized()
+	var sample_points: Array[Vector3] = [
+		character.global_position + Vector3(0.0, 1.65, 0.0),
+		character.global_position + Vector3(0.0, 1.05, 0.0) - camera_right * 0.28,
+		character.global_position + Vector3(0.0, 1.05, 0.0) + camera_right * 0.28,
+		character.global_position + Vector3(0.0, 0.45, 0.0) - camera_right * 0.22,
+		character.global_position + Vector3(0.0, 0.45, 0.0) + camera_right * 0.22,
+	]
+	var blocked_samples := 0
+	for sample_point in sample_points:
+		var query := PhysicsRayQueryParameters3D.create(
+			camera.global_position,
+			sample_point,
+			BUILDING_OCCLUSION_MASK
+		)
+		query.collide_with_areas = false
+		if not get_world_3d().direct_space_state.intersect_ray(query).is_empty():
+			blocked_samples += 1
+	_set_character_occluded(blocked_samples >= 3)
 
 
 func _set_character_occluded(is_occluded: bool) -> void:

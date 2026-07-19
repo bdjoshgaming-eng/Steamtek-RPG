@@ -1,29 +1,30 @@
-[gd_scene load_steps=25 format=3]
+[gd_scene load_steps=26 format=3]
 
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/SteamtekInteriorFloorTile2_4m3D.tscn" id="1_floor"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/SteamtekInteriorFloorServiceGrate1_2m3D.tscn" id="2_grate"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/SteamtekInteriorWallSolid2_4m3D.tscn" id="3_wall"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/SteamtekInteriorWallDoor2_4m3D.tscn" id="4_door"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/SteamtekInteriorWallWindow1_2m3D.tscn" id="5_window"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/SteamtekInteriorPartitionHalf1_2m3D.tscn" id="6_half"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/SteamtekInteriorCornerColumn3D.tscn" id="7_corner"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/SteamtekUtilityTable3D.tscn" id="8_table"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/SteamtekApartmentWorkbench3D.tscn" id="9_workbench"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/SteamtekApartmentLocker3D.tscn" id="10_locker"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/SteamtekBedFrame3D.tscn" id="11_bed"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/SteamtekMattress3D.tscn" id="12_mattress"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/SteamtekCouch3D.tscn" id="13_couch"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/SteamtekRugLarge3D.tscn" id="14_rug"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/SteamtekCoffeeTable3D.tscn" id="15_coffee"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/SteamtekBookshelf3D.tscn" id="16_shelf"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/SteamtekChair3D.tscn" id="17_chair"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/SteamtekWallPicture3D.tscn" id="18_picture"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/small/SteamtekCup3D.tscn" id="19_cup"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/small/SteamtekBook3D.tscn" id="20_book"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/small/SteamtekToolCase3D.tscn" id="21_toolcase"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/small/SteamtekPillow3D.tscn" id="22_pillow"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/small/SteamtekTableLamp3D.tscn" id="23_lamp"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/small/SteamtekNote3D.tscn" id="24_note"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Floor_240_A.tscn" id="1_floor"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Floor_Grate_120_A.tscn" id="2_grate"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_Solid_240x300_A.tscn" id="3_wall"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_Door_240x300_A.tscn" id="4_door"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_Window_120x300_A.tscn" id="5_window"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Partition_120x150_A.tscn" id="6_half"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Column_Corner_A.tscn" id="7_corner"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Table_Utility_A.tscn" id="8_table"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Workbench_A.tscn" id="9_workbench"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Locker_A.tscn" id="10_locker"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Bed_Frame_A.tscn" id="11_bed"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Bed_Mattress_A.tscn" id="12_mattress"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Couch_2Seat_A.tscn" id="13_couch"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Rug_Large_A.tscn" id="14_rug"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Table_Coffee_A.tscn" id="15_coffee"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Bookshelf_A.tscn" id="16_shelf"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Chair_Dining_A.tscn" id="17_chair"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Decor_WallPicture_A.tscn" id="18_picture"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_Cup_A.tscn" id="19_cup"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_Book_A.tscn" id="20_book"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_ToolCase_A.tscn" id="21_toolcase"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_Pillow_A.tscn" id="22_pillow"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_Lamp_Table_A.tscn" id="23_lamp"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_Note_Quest_A.tscn" id="24_note"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Pipe_Run_240_A.tscn" id="25_pipe"]
 
 [node name="SteamtekPlayerApartmentProductionAssembly3D" type="Node3D" groups=["steamtek_live3d_interior"]]
 editor_description = "Production-facing modular opening apartment assembly. Every floor, wall, furniture item, and small prop remains an independent scene instance."
@@ -113,12 +114,15 @@ rotation_degrees = Vector3(0, 90, 0)
 [node name="EastBackWall" parent="Architecture" instance=ExtResource("3_wall")]
 position = Vector3(6, 0, -3.6)
 rotation_degrees = Vector3(0, 90, 0)
+visible = false
 [node name="EastMidWall" parent="Architecture" instance=ExtResource("3_wall")]
 position = Vector3(6, 0, -1.2)
 rotation_degrees = Vector3(0, 90, 0)
+visible = false
 [node name="EastExitDoor" parent="Architecture" instance=ExtResource("4_door")]
 position = Vector3(6, 0, 1.2)
 rotation_degrees = Vector3(0, 90, 0)
+visible = false
 
 [node name="NorthHalfW2" parent="Architecture" instance=ExtResource("6_half")]
 position = Vector3(-4.8, 0, 4.8)
@@ -145,6 +149,15 @@ position = Vector3(-3.0, 0, -2.4)
 [node name="BathroomPartitionC" parent="Architecture" instance=ExtResource("6_half")]
 position = Vector3(-2.4, 0, -3.0)
 rotation_degrees = Vector3(0, 90, 0)
+
+[node name="BackServicePipeWest" parent="Architecture" instance=ExtResource("25_pipe")]
+position = Vector3(-4.8, 0, -4.8)
+[node name="BackServicePipeCenterWest" parent="Architecture" instance=ExtResource("25_pipe")]
+position = Vector3(-2.4, 0, -4.8)
+[node name="BackServicePipeCenterEast" parent="Architecture" instance=ExtResource("25_pipe")]
+position = Vector3(2.4, 0, -4.8)
+[node name="BackServicePipeEast" parent="Architecture" instance=ExtResource("25_pipe")]
+position = Vector3(4.8, 0, -4.8)
 
 [node name="Furniture" type="Node3D" parent="."]
 [node name="BedFrame" parent="Furniture" instance=ExtResource("11_bed")]

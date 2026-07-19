@@ -1,0 +1,44 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="1_metal"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_AgedCopper_Base_v01.tres" id="2_copper"]
+[sub_resource type="BoxMesh" id="BodyMesh"]
+material = ExtResource("1_metal")
+size = Vector3(0.82, 2.2, 0.58)
+[sub_resource type="BoxMesh" id="DoorInsetMesh"]
+material = ExtResource("2_copper")
+size = Vector3(0.64, 1.82, 0.035)
+[sub_resource type="BoxMesh" id="VentMesh"]
+material = ExtResource("1_metal")
+size = Vector3(0.4, 0.08, 0.045)
+[sub_resource type="BoxShape3D" id="CollisionShape"]
+size = Vector3(0.82, 2.2, 0.58)
+
+[node name="APT_Locker_A" type="Node3D" groups=["steamtek_live3d_modular"]]
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "apartment_furniture"
+metadata/contact_pivot = "floor_center"
+
+[node name="StaticBody" type="StaticBody3D" parent="."]
+position = Vector3(0, 1.1, 0)
+collision_layer = 1
+collision_mask = 0
+[node name="Body" type="MeshInstance3D" parent="StaticBody"]
+mesh = SubResource("BodyMesh")
+[node name="DoorInset" type="MeshInstance3D" parent="StaticBody"]
+position = Vector3(0, 0, 0.307)
+mesh = SubResource("DoorInsetMesh")
+[node name="Vent01" type="MeshInstance3D" parent="StaticBody"]
+position = Vector3(0, 0.66, 0.335)
+mesh = SubResource("VentMesh")
+[node name="Vent02" type="MeshInstance3D" parent="StaticBody"]
+position = Vector3(0, 0.5, 0.335)
+mesh = SubResource("VentMesh")
+[node name="Collision" type="CollisionShape3D" parent="StaticBody"]
+shape = SubResource("CollisionShape")
+
+[node name="Sockets" type="Node3D" parent="."]
+[node name="LockerTop" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 2.23, 0)
+metadata/socket_role = "prop_surface"
+

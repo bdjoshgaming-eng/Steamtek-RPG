@@ -16,158 +16,222 @@ var module_picker: OptionButton
 var profile_picker: OptionButton
 var module_search: LineEdit
 var status_label: Label
+var auto_snap_drag_enabled := true
+var auto_snap_pending := false
+var last_selected_module_id := 0
+var watched_module_id := 0
+var watched_transform := Transform3D.IDENTITY
+var watched_transform_valid := false
+var stable_transform_frames := 0
+var snap_attempted_for_transform := false
 
 
 func _enter_tree() -> void:
+	set_input_event_forwarding_always_enabled()
+	set_process(true)
+	get_editor_interface().get_selection().selection_changed.connect(_on_editor_selection_changed)
 	_create_dock()
 
 
 func _exit_tree() -> void:
+	set_process(false)
+	var selection := get_editor_interface().get_selection()
+	if selection.selection_changed.is_connected(_on_editor_selection_changed):
+		selection.selection_changed.disconnect(_on_editor_selection_changed)
 	if is_instance_valid(dock):
 		remove_control_from_docks(dock)
 		dock.queue_free()
+
+
+func _process(_delta: float) -> void:
+	if not auto_snap_drag_enabled:
+		_reset_auto_snap_watch()
+		return
+	var module := _selected_module()
+	if module == null:
+		_reset_auto_snap_watch()
+		return
+
+	var module_id := module.get_instance_id()
+	if module_id != watched_module_id:
+		watched_module_id = module_id
+		watched_transform = module.transform
+		watched_transform_valid = true
+		stable_transform_frames = 0
+		snap_attempted_for_transform = false
+		return
+
+	if not watched_transform_valid or not module.transform.is_equal_approx(watched_transform):
+		watched_transform = module.transform
+		watched_transform_valid = true
+		stable_transform_frames = 0
+		snap_attempted_for_transform = false
+		return
+
+	if snap_attempted_for_transform:
+		return
+	stable_transform_frames += 1
+	if stable_transform_frames < 2:
+		return
+
+	snap_attempted_for_transform = true
+	if _snap_module_to_nearest_socket(module, false):
+		watched_transform = module.transform
+		stable_transform_frames = 0
+
+
+func _reset_auto_snap_watch() -> void:
+	watched_module_id = 0
+	watched_transform_valid = false
+	stable_transform_frames = 0
+	snap_attempted_for_transform = false
 
 
 func _module_library() -> Array:
 	return [
 		{
 			"label": "Interior - Floor Tile 1.2m",
-			"path": "res://scenes/environment/live3d/kits/apartment_interior/SteamtekInteriorFloorTile1_2m3D.tscn",
+			"path": "res://scenes/environment/live3d/kits/apartment_interior/APT_Floor_120_A.tscn",
 			"parent": "Architecture",
 		},
 		{
 			"label": "Interior - Floor Tile 2.4m Macro",
-			"path": "res://scenes/environment/live3d/kits/apartment_interior/SteamtekInteriorFloorTile2_4m3D.tscn",
+			"path": "res://scenes/environment/live3d/kits/apartment_interior/APT_Floor_240_A.tscn",
 			"parent": "Architecture",
 		},
 		{
 			"label": "Interior - Floor Service Grate 1.2m",
-			"path": "res://scenes/environment/live3d/kits/apartment_interior/SteamtekInteriorFloorServiceGrate1_2m3D.tscn",
+			"path": "res://scenes/environment/live3d/kits/apartment_interior/APT_Floor_Grate_120_A.tscn",
 			"parent": "Architecture",
 		},
 		{
 			"label": "Interior - Wall Solid 1.2m",
-			"path": "res://scenes/environment/live3d/kits/apartment_interior/SteamtekInteriorWallSolid1_2m3D.tscn",
+			"path": "res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_Solid_120x300_A.tscn",
 			"parent": "Architecture",
 		},
 		{
 			"label": "Interior - Wall Solid 2.4m Macro",
-			"path": "res://scenes/environment/live3d/kits/apartment_interior/SteamtekInteriorWallSolid2_4m3D.tscn",
+			"path": "res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_Solid_240x300_A.tscn",
 			"parent": "Architecture",
 		},
 		{
 			"label": "Interior - Wall Door 2.4m",
-			"path": "res://scenes/environment/live3d/kits/apartment_interior/SteamtekInteriorWallDoor2_4m3D.tscn",
+			"path": "res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_Door_240x300_A.tscn",
 			"parent": "Architecture",
 		},
 		{
 			"label": "Interior - Wall Window 1.2m",
-			"path": "res://scenes/environment/live3d/kits/apartment_interior/SteamtekInteriorWallWindow1_2m3D.tscn",
+			"path": "res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_Window_120x300_A.tscn",
 			"parent": "Architecture",
 		},
 		{
 			"label": "Interior - Half Partition 1.2m",
-			"path": "res://scenes/environment/live3d/kits/apartment_interior/SteamtekInteriorPartitionHalf1_2m3D.tscn",
+			"path": "res://scenes/environment/live3d/kits/apartment_interior/APT_Partition_120x150_A.tscn",
 			"parent": "Architecture",
 		},
 		{
 			"label": "Interior - Corner Column",
-			"path": "res://scenes/environment/live3d/kits/apartment_interior/SteamtekInteriorCornerColumn3D.tscn",
+			"path": "res://scenes/environment/live3d/kits/apartment_interior/APT_Column_Corner_A.tscn",
+			"parent": "Architecture",
+		},
+		{
+			"label": "Interior - Service Pipe Run 2.4m",
+			"path": "res://scenes/environment/live3d/kits/apartment_interior/APT_Pipe_Run_240_A.tscn",
 			"parent": "Architecture",
 		},
 		{
 			"label": "Furniture - Utility Table",
-			"path": "res://scenes/environment/live3d/props/apartment_interior/SteamtekUtilityTable3D.tscn",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Table_Utility_A.tscn",
 			"parent": "Furniture",
 		},
 		{
 			"label": "Furniture - Workbench",
-			"path": "res://scenes/environment/live3d/props/apartment_interior/SteamtekApartmentWorkbench3D.tscn",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Workbench_A.tscn",
 			"parent": "Furniture",
 		},
 		{
 			"label": "Furniture - Storage Locker",
-			"path": "res://scenes/environment/live3d/props/apartment_interior/SteamtekApartmentLocker3D.tscn",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Locker_A.tscn",
 			"parent": "Furniture",
 		},
 		{
 			"label": "Furniture - Bed Frame",
-			"path": "res://scenes/environment/live3d/props/apartment_interior/SteamtekBedFrame3D.tscn",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Bed_Frame_A.tscn",
 			"parent": "Furniture",
 		},
 		{
 			"label": "Furniture - Mattress",
-			"path": "res://scenes/environment/live3d/props/apartment_interior/SteamtekMattress3D.tscn",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Bed_Mattress_A.tscn",
 			"parent": "Furniture",
 		},
 		{
 			"label": "Furniture - Couch",
-			"path": "res://scenes/environment/live3d/props/apartment_interior/SteamtekCouch3D.tscn",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Couch_2Seat_A.tscn",
 			"parent": "Furniture",
 		},
 		{
 			"label": "Furniture - Coffee Table",
-			"path": "res://scenes/environment/live3d/props/apartment_interior/SteamtekCoffeeTable3D.tscn",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Table_Coffee_A.tscn",
 			"parent": "Furniture",
 		},
 		{
 			"label": "Furniture - Bookshelf",
-			"path": "res://scenes/environment/live3d/props/apartment_interior/SteamtekBookshelf3D.tscn",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Bookshelf_A.tscn",
 			"parent": "Furniture",
 		},
 		{
 			"label": "Furniture - Chair",
-			"path": "res://scenes/environment/live3d/props/apartment_interior/SteamtekChair3D.tscn",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Chair_Dining_A.tscn",
 			"parent": "Furniture",
 		},
 		{
 			"label": "Floor Prop - Large Rug",
-			"path": "res://scenes/environment/live3d/props/apartment_interior/SteamtekRugLarge3D.tscn",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Rug_Large_A.tscn",
 			"parent": "Props",
 		},
 		{
 			"label": "Wall Prop - Picture",
-			"path": "res://scenes/environment/live3d/props/apartment_interior/SteamtekWallPicture3D.tscn",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/APT_Decor_WallPicture_A.tscn",
 			"parent": "Props",
 		},
 		{
 			"label": "Prop - Cup",
-			"path": "res://scenes/environment/live3d/props/apartment_interior/small/SteamtekCup3D.tscn",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_Cup_A.tscn",
 			"parent": "Props",
 		},
 		{
 			"label": "Prop - Book",
-			"path": "res://scenes/environment/live3d/props/apartment_interior/small/SteamtekBook3D.tscn",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_Book_A.tscn",
 			"parent": "Props",
 		},
 		{
 			"label": "Prop - Quest Note",
-			"path": "res://scenes/environment/live3d/props/apartment_interior/small/SteamtekNote3D.tscn",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_Note_Quest_A.tscn",
 			"parent": "Props",
 		},
 		{
 			"label": "Prop - Tool Case",
-			"path": "res://scenes/environment/live3d/props/apartment_interior/small/SteamtekToolCase3D.tscn",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_ToolCase_A.tscn",
 			"parent": "Props",
 		},
 		{
 			"label": "Prop - Bottle",
-			"path": "res://scenes/environment/live3d/props/apartment_interior/small/SteamtekBottle3D.tscn",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_Bottle_A.tscn",
 			"parent": "Props",
 		},
 		{
 			"label": "Prop - Plate",
-			"path": "res://scenes/environment/live3d/props/apartment_interior/small/SteamtekPlate3D.tscn",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_Plate_A.tscn",
 			"parent": "Props",
 		},
 		{
 			"label": "Prop - Pillow",
-			"path": "res://scenes/environment/live3d/props/apartment_interior/small/SteamtekPillow3D.tscn",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_Pillow_A.tscn",
 			"parent": "Props",
 		},
 		{
 			"label": "Prop - Table Lamp",
-			"path": "res://scenes/environment/live3d/props/apartment_interior/small/SteamtekTableLamp3D.tscn",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_Lamp_Table_A.tscn",
 			"parent": "Props",
 		},
 		{
@@ -353,6 +417,13 @@ func _create_dock() -> void:
 
 	dock.add_child(HSeparator.new())
 
+	var auto_snap_toggle := CheckBox.new()
+	auto_snap_toggle.text = "Auto Snap FileSystem / Viewport Drag"
+	auto_snap_toggle.tooltip_text = "When a live-3D module is dropped or moved in the 3D viewport, align compatible Marker3D sockets within 1 meter."
+	auto_snap_toggle.button_pressed = auto_snap_drag_enabled
+	auto_snap_toggle.toggled.connect(_on_auto_snap_drag_toggled)
+	dock.add_child(auto_snap_toggle)
+
 	var edit_row := HBoxContainer.new()
 	edit_row.add_child(_make_button("Rotate +90", "Rotate the selected module root by exactly 90 degrees around Y.", _rotate_selected_90))
 	edit_row.add_child(_make_button("Snap Nearest", "Align the nearest compatible Marker3D socket within 1 meter.", _snap_selected_to_nearest_socket))
@@ -378,6 +449,54 @@ func _make_button(text: String, tooltip: String, callback: Callable) -> Button:
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.pressed.connect(callback)
 	return button
+
+
+func _forward_3d_gui_input(_viewport_camera: Camera3D, event: InputEvent) -> int:
+	if not auto_snap_drag_enabled or auto_snap_pending or not event is InputEventMouseButton:
+		return EditorPlugin.AFTER_GUI_INPUT_PASS
+	var mouse_event := event as InputEventMouseButton
+	if mouse_event.button_index == MOUSE_BUTTON_LEFT and not mouse_event.pressed:
+		auto_snap_pending = true
+		call_deferred("_auto_snap_after_viewport_drop")
+	return EditorPlugin.AFTER_GUI_INPUT_PASS
+
+
+func _on_auto_snap_drag_toggled(enabled: bool) -> void:
+	auto_snap_drag_enabled = enabled
+	last_selected_module_id = 0
+	_set_status("Automatic viewport drag snapping enabled." if enabled else "Automatic viewport drag snapping disabled.")
+
+
+func _on_editor_selection_changed() -> void:
+	if not auto_snap_drag_enabled:
+		return
+	var module := _selected_module()
+	if module == null:
+		last_selected_module_id = 0
+		return
+	var module_id := module.get_instance_id()
+	if module_id == last_selected_module_id:
+		return
+	last_selected_module_id = module_id
+	call_deferred("_auto_snap_newly_selected_module", module_id)
+
+
+func _auto_snap_newly_selected_module(expected_module_id: int) -> void:
+	if not auto_snap_drag_enabled:
+		return
+	var module := _selected_module()
+	if module == null or module.get_instance_id() != expected_module_id:
+		return
+	_snap_module_to_nearest_socket(module, false)
+
+
+func _auto_snap_after_viewport_drop() -> void:
+	auto_snap_pending = false
+	if not auto_snap_drag_enabled:
+		return
+	var module := _selected_module()
+	if module != null:
+		_snap_module_to_nearest_socket(module, false)
 
 
 func _refresh_module_picker(_unused_text := "") -> void:
@@ -585,15 +704,20 @@ func _snap_selected_to_nearest_socket() -> void:
 	if module == null:
 		_set_status("Select a live-3D module to snap.")
 		return
+	_snap_module_to_nearest_socket(module, true)
+
+
+func _snap_module_to_nearest_socket(module: Node3D, show_failures: bool) -> bool:
 	var edited_root := _edited_root_3d()
 	if edited_root == null:
-		return
+		return false
 
 	var own_markers: Array[Marker3D] = []
 	_collect_markers(module, own_markers)
 	if own_markers.is_empty():
-		_set_status("Selected module has no live-3D snap markers.")
-		return
+		if show_failures:
+			_set_status("Selected module has no live-3D snap markers.")
+		return false
 
 	var modules: Array[Node3D] = []
 	_collect_modules(edited_root, modules)
@@ -617,23 +741,27 @@ func _snap_selected_to_nearest_socket() -> void:
 					best_target = target
 
 	if best_source == null or best_target == null:
-		_set_status("No compatible Marker3D socket was found.")
-		return
+		if show_failures:
+			_set_status("No compatible Marker3D socket was found.")
+		return false
 	if best_distance > MAX_SOCKET_SNAP_DISTANCE_M:
-		_set_status("Move the module within 1 meter of its target socket, then try again.")
-		return
+		if show_failures:
+			_set_status("Move the module within 1 meter of its target socket, then try again.")
+		return false
 
 	var parent := module.get_parent() as Node3D
 	if parent == null:
-		_set_status("The selected module needs a Node3D parent.")
-		return
+		if show_failures:
+			_set_status("The selected module needs a Node3D parent.")
+		return false
 	var old_transform := module.transform
-	var new_global := module.global_transform
-	new_global.origin += best_target.global_position - best_source.global_position
+	var source_relative := module.global_transform.affine_inverse() * best_source.global_transform
+	var new_global := best_target.global_transform * source_relative.affine_inverse()
 	var new_transform := parent.global_transform.affine_inverse() * new_global
 	if old_transform.is_equal_approx(new_transform):
-		_set_status("The selected sockets are already aligned.")
-		return
+		if show_failures:
+			_set_status("The selected sockets are already aligned.")
+		return false
 
 	var undo_redo := get_undo_redo()
 	undo_redo.create_action("Snap Steamtek Live3D Marker Sockets")
@@ -641,6 +769,7 @@ func _snap_selected_to_nearest_socket() -> void:
 	undo_redo.add_undo_property(module, "transform", old_transform)
 	undo_redo.commit_action()
 	_set_status("Snapped %s to %s." % [best_source.name, best_target.name])
+	return true
 
 
 func _collect_modules(node: Node, output: Array[Node3D]) -> void:
@@ -652,11 +781,15 @@ func _collect_modules(node: Node, output: Array[Node3D]) -> void:
 		_collect_modules(child, output)
 
 
-func _collect_markers(node: Node, output: Array[Marker3D]) -> void:
+func _collect_markers(node: Node, output: Array[Marker3D], module_root: Node = null) -> void:
+	if module_root == null:
+		module_root = node
+	elif node is Node3D and node.is_in_group(MODULE_GROUP):
+		return
 	if node is Marker3D and node.is_in_group(SOCKET_GROUP):
 		output.append(node as Marker3D)
 	for child in node.get_children():
-		_collect_markers(child, output)
+		_collect_markers(child, output, module_root)
 
 
 func _socket_roles_compatible(source: Marker3D, target: Marker3D) -> bool:
@@ -680,6 +813,11 @@ func _socket_roles_compatible(source: Marker3D, target: Marker3D) -> bool:
 			"street_drain_chain",
 			"street_alley_chain",
 			"street_fence_chain",
+			"interior_floor_chain",
+			"interior_wall_chain",
+			"interior_partition_chain",
+			"wall_service_chain",
+			"furniture_chain",
 		]
 	if source_role == "facade_horizontal" and target_role == "corner_wall_attachment":
 		return true
@@ -701,12 +839,9 @@ func _socket_roles_compatible(source: Marker3D, target: Marker3D) -> bool:
 		return true
 	if target_role == "prop_anchor" and source_role in ["prop_surface", "wall_prop_surface", "floor_prop_surface"]:
 		return true
-	if source_role == target_role and source_role in [
-		"interior_floor_chain",
-		"interior_wall_chain",
-		"interior_partition_chain",
-		"furniture_chain",
-	]:
+	if source_role == "interior_wall_base" and target_role == "interior_wall_floor_edge":
+		return true
+	if target_role == "interior_wall_base" and source_role == "interior_wall_floor_edge":
 		return true
 	return false
 

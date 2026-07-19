@@ -1,0 +1,39 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_AgedCopper_Base_v01.tres" id="1_frame"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/apartment_interior_v01/APT_Paper_A_Mat.tres" id="2_paper"]
+[sub_resource type="BoxMesh" id="FrameHorizontalMesh"]
+material = ExtResource("1_frame")
+size = Vector3(0.82, 0.055, 0.055)
+[sub_resource type="BoxMesh" id="FrameVerticalMesh"]
+material = ExtResource("1_frame")
+size = Vector3(0.055, 0.62, 0.055)
+[sub_resource type="BoxMesh" id="ArtMesh"]
+material = ExtResource("2_paper")
+size = Vector3(0.7, 0.5, 0.025)
+
+[node name="APT_Decor_WallPicture_A" type="Node3D" groups=["steamtek_live3d_modular"]]
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "apartment_wall_prop"
+metadata/contact_pivot = "wall_back_center"
+metadata/front_axis = "+Z"
+
+[node name="Art" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0, 0.02)
+mesh = SubResource("ArtMesh")
+[node name="Top" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.285, 0.05)
+mesh = SubResource("FrameHorizontalMesh")
+[node name="Bottom" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.285, 0.05)
+mesh = SubResource("FrameHorizontalMesh")
+[node name="Left" type="MeshInstance3D" parent="."]
+position = Vector3(-0.385, 0, 0.05)
+mesh = SubResource("FrameVerticalMesh")
+[node name="Right" type="MeshInstance3D" parent="."]
+position = Vector3(0.385, 0, 0.05)
+mesh = SubResource("FrameVerticalMesh")
+[node name="Sockets" type="Node3D" parent="."]
+[node name="Anchor" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+metadata/socket_role = "prop_anchor"
+

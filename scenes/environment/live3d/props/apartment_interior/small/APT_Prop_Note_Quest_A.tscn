@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/apartment_interior_v01/APT_Paper_A_Mat.tres" id="1_paper"]
+[sub_resource type="BoxMesh" id="NoteMesh"]
+material = ExtResource("1_paper")
+size = Vector3(0.24, 0.012, 0.17)
+
+[node name="APT_Prop_Note_Quest_A" type="Node3D" groups=["steamtek_live3d_modular"]]
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "apartment_small_prop"
+metadata/contact_pivot = "bottom_center"
+[node name="Note" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.006, 0)
+rotation_degrees = Vector3(0, 7, 0)
+mesh = SubResource("NoteMesh")
+[node name="Sockets" type="Node3D" parent="."]
+[node name="Anchor" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+metadata/socket_role = "prop_anchor"
+
