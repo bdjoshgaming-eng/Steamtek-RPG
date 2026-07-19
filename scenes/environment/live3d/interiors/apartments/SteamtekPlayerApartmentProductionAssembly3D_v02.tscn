@@ -1,22 +1,9 @@
 [gd_scene format=3 uid="uid://sd7bchijwrjy"]
 
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Table_Dining_Service.tscn" id="8_table"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Workbench_Production_C.tscn" id="9_workbench"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Cabinet_Tall_Wardrobe.tscn" id="10_locker"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Bed_Full_Plum.tscn" id="11_bed"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Bed_Mattress_A.tscn" id="12_mattress"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Couch_2Seat_Rust.tscn" id="13_couch"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Rug_Large_A.tscn" id="14_rug"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Table_Coffee_Service.tscn" id="15_coffee"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Shelf_Open_Service.tscn" id="16_shelf"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Chair_Dining_Rust.tscn" id="17_chair"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Decor_WallPicture_A.tscn" id="18_picture"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_Cup_A.tscn" id="19_cup"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_Book_A.tscn" id="20_book"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_ToolCase_A.tscn" id="21_toolcase"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_Pillow_Plum.tscn" id="22_pillow"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_Lamp_Table_A.tscn" id="23_lamp"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_Note_Quest_A.tscn" id="24_note"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Couch_A.tscn" id="13_couch"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Workstation_A.tscn" id="48_workstation"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Couch_A_DeepTeal.tscn" id="49_couch_teal"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Couch_A_ElectricPlum.tscn" id="50_couch_plum"]
 [ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Floor_Calibration_200_A.tscn" id="26_floor_approved"]
 [ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_Window_Wide_300x270.tscn" id="27_wall_window"]
 [ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_ExposedService_300x270_A.tscn" id="29_wall_service"]
@@ -26,17 +13,6 @@
 [ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_RetrofitRepair_300x270_A.tscn" id="33_wall_retrofit"]
 [ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_Door_300x270_Service.tscn" id="34_wall_door_secure"]
 [ext_resource type="Script" uid="uid://b1pvgemyghfrb" path="res://scenes/environment/live3d/interiors/apartments/steamtek_player_apartment_production_assembly_3d.gd" id="35_review_script"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Chair_Lounge_Teal.tscn" id="36_lounge_teal"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Chair_Dining_Teal.tscn" id="37_dining_teal"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Cabinet_Low_Service.tscn" id="38_cabinet_low"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_TrashCan_Round_Steel.tscn" id="39_trash_round"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_TrashCan_Smart_Teal.tscn" id="40_trash_smart"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Lamp_Floor_Copper.tscn" id="41_floor_lamp"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_Planter_Teal.tscn" id="42_planter"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_Pillow_Rust.tscn" id="43_pillow_rust"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_Pillow_Ochre.tscn" id="44_pillow_ochre"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Table_Side_Service.tscn" id="45_table_side"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Cabinet_Base_Kitchen.tscn" id="46_kitchen_base"]
 [ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_Window_Slot_300x270.tscn" id="47_wall_window_slot"]
 
 [sub_resource type="Environment" id="StandaloneReviewEnvironment"]
@@ -48,9 +24,9 @@ ambient_light_energy = 0.92
 tonemap_mode = 2
 
 [node name="SteamtekPlayerApartmentProductionAssembly3D_v02" type="Node3D" unique_id=2129464224 groups=["steamtek_live3d_interior"]]
-editor_description = "Production-facing v02 apartment assembly rebuilt around the approved 3.0 m x 2.7 m wall family and 2.0 m floor family. Furniture, props, and gameplay placement remain independent and preserved from v01."
+editor_description = "Production-facing v02 apartment assembly retaining the approved modular architecture with validated Meshy couch and workstation assets. Deep-teal and electric-plum couches form a three-couch review cluster while sharing the production mesh, collision, and sockets."
 script = ExtResource("35_review_script")
-metadata/status = "player_apartment_modular_production_library_d_pending_f6"
+metadata/status = "player_apartment_architecture_plus_meshy_furniture_and_reusable_couch_variants_pending_visual_review"
 metadata/unit_contract = "1_godot_unit_equals_1_meter"
 metadata/room_size_m = Vector2(12, 10)
 metadata/room_size_ft = "39 ft 4 in x 32 ft 10 in"
@@ -62,8 +38,8 @@ metadata/floor_module_ft = "6 ft 7 in square"
 metadata/furniture_grid_m = 0.3
 metadata/prop_grid_m = 0.1
 metadata/visual_reference = "approved_hand_painted_steamtek_wall_and_floor_family_2026_07_19"
-metadata/art_direction = "shadowrun_returns_rendering_style_only_the_ascent_scale_and_camera_60cyberpunk_20neoindustrial_20functional_steampunk"
-metadata/migration_note = "v01 preserved; half wall removed; production door, two window options, and finished apartment library D installed"
+metadata/art_direction = "40cyberpunk_20neoindustrial_20modern_steampunk_20_arcane_inspired_painterly_finish_functional_gritty_hand_painted"
+metadata/migration_note = "Rejected custom graphical prop library removed; approved architecture, Meshy couch and workstation preserved; second couch uses a non-destructive upholstery material variant"
 metadata/no_baked_clutter = true
 
 [node name="Architecture" type="Node3D" parent="." unique_id=607050996]
@@ -186,104 +162,25 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -6, 
 
 [node name="Furniture" type="Node3D" parent="." unique_id=917625135]
 
-[node name="BedFullPlum" parent="Furniture" unique_id=790998017 instance=ExtResource("11_bed")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.35, 0.05, 2.55)
-
-[node name="BedsideTable" parent="Furniture" unique_id=1580614907 instance=ExtResource("45_table_side")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -3.05, 0.05, 2.45)
-
-[node name="Workbench" parent="Furniture" unique_id=961937648 instance=ExtResource("9_workbench")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6327901, 0.05, -4.4911695)
-
-[node name="Wardrobe" parent="Furniture" unique_id=499577768 instance=ExtResource("10_locker")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.9, 0.05, -4.2)
-
-[node name="LowServiceCabinet" parent="Furniture" unique_id=1432136086 instance=ExtResource("38_cabinet_low")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.15, 0.05, -1.9)
-
-[node name="Bookshelf" parent="Furniture" unique_id=1952265999 instance=ExtResource("16_shelf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.55, 0.05, -4.2)
-
-[node name="DiningTable" parent="Furniture" unique_id=432144731 instance=ExtResource("8_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6, 0.05, -0.35)
-
-[node name="DiningChairA" parent="Furniture" unique_id=1708367742 instance=ExtResource("17_chair")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -3.6, 0.05, 0.55)
-
-[node name="DiningChairB" parent="Furniture" unique_id=946298812 instance=ExtResource("37_dining_teal")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6, 0.05, -1.22)
-
-[node name="LoungeRug" parent="Furniture" unique_id=986590813 instance=ExtResource("14_rug")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.65, 0.06, 1.6)
-visible = false
-metadata/disabled_reason = "held_for_couch_quality_review_to_prevent_black_silhouette_merging"
-
 [node name="Couch" parent="Furniture" unique_id=578725324 instance=ExtResource("13_couch")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.85, 0.05, 2.35)
+metadata/replaces_asset = "APT_Couch_2Seat_Rust"
+metadata/replacement_asset = "STK_PROP_Couch_A"
 
-[node name="CoffeeTable" parent="Furniture" unique_id=1072287923 instance=ExtResource("15_coffee")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.65, 0.05, 1.25)
+[node name="CouchDeepTeal" parent="Furniture" instance=ExtResource("49_couch_teal")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.55, 0.05, 1.1)
+metadata/placement_role = "second_lounge_couch_material_variant"
+metadata/replacement_asset = "STK_PROP_Couch_A_DeepTeal"
 
-[node name="LoungeChair" parent="Furniture" unique_id=1319236652 instance=ExtResource("36_lounge_teal")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.8, 0.05, 1.55)
+[node name="CouchElectricPlum" parent="Furniture" instance=ExtResource("50_couch_plum")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 3.25, 0.05, 1.1)
+metadata/placement_role = "third_lounge_couch_material_variant"
+metadata/replacement_asset = "STK_PROP_Couch_A_ElectricPlum"
 
-[node name="KitchenBase" parent="Furniture" unique_id=1225459104 instance=ExtResource("46_kitchen_base")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 3.65, 0.05, -1.55)
-
-[node name="EntryTrashCan" parent="Furniture" instance=ExtResource("39_trash_round")]
-position = Vector3(2.42, 0.05, -4.18)
-
-[node name="KitchenSmartBin" parent="Furniture" instance=ExtResource("40_trash_smart")]
-position = Vector3(5.3, 0.05, -0.35)
-
-[node name="LoungeFloorLamp" parent="Furniture" instance=ExtResource("41_floor_lamp")]
-position = Vector3(-1.1, 0.05, 3.65)
-
-[node name="LivingPlanter" parent="Furniture" instance=ExtResource("42_planter")]
-position = Vector3(4.85, 0.05, 2.85)
-
-[node name="Props" type="Node3D" parent="." unique_id=1550020459]
-
-[node name="BedPillow" parent="Props" unique_id=1026771675 instance=ExtResource("22_pillow")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.05, 0.78, 2.55)
-
-[node name="BedPillowOchre" parent="Props" instance=ExtResource("44_pillow_ochre")]
-position = Vector3(-3.72, 0.78, 3.0)
-
-[node name="CouchPillowRust" parent="Props" instance=ExtResource("43_pillow_rust")]
-transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 1.42, 0.67, 2.48)
-
-[node name="QuestNote" parent="Props" unique_id=108451121 instance=ExtResource("24_note")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.15, 0.69, 2.35)
-
-[node name="BedLamp" parent="Props" unique_id=1079750201 instance=ExtResource("23_lamp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.92, 0.69, 2.55)
-
-[node name="WorkbenchToolCase" parent="Props" unique_id=855859049 instance=ExtResource("21_toolcase")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0512793, 0.97, -4.3749094)
-
-[node name="WorkbenchBook" parent="Props" unique_id=449802284 instance=ExtResource("20_book")]
-transform = Transform3D(0.99026805, 0, 0.1391731, 0, 1, 0, -0.1391731, 0, 0.99026805, 0.35, 0.97, -3.98)
-
-[node name="DiningCup" parent="Props" unique_id=1436128008 instance=ExtResource("19_cup")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.05, 0.96, -0.25)
-
-[node name="CoffeeTableBook" parent="Props" unique_id=1428792477 instance=ExtResource("20_book")]
-transform = Transform3D(0.9781476, 0, 0.2079117, 0, 1, 0, -0.2079117, 0, 0.9781476, 0.4, 0.63, 1.25)
-
-[node name="CoffeeTableCup" parent="Props" unique_id=258327137 instance=ExtResource("19_cup")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.85, 0.63, 1.25)
-
-[node name="KitchenToolCase" parent="Props" unique_id=778067638 instance=ExtResource("21_toolcase")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.65, 0.96, -1.82)
-
-[node name="WallPictureBed" parent="Props" unique_id=380398120 instance=ExtResource("18_picture")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.35, 1.75, -4.67)
-
-[node name="WallPictureLounge" parent="Props" unique_id=1742283294 instance=ExtResource("18_picture")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 1.65, -4.67)
-visible = false
-metadata/disabled_reason = "replaced_wall_position_now_contains_secure_exit"
+[node name="Workstation" parent="Furniture" instance=ExtResource("48_workstation")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6327901, 0.05, -4.4911695)
+metadata/replaces_asset = "APT_Workbench_Production_C"
+metadata/replacement_asset = "STK_PROP_Workstation_A"
 
 [node name="Lighting" type="Node3D" parent="." unique_id=1099093845]
 
@@ -299,6 +196,14 @@ light_color = Color(1, 0.58, 0.28, 1)
 light_energy = 1.1
 shadow_enabled = true
 omni_range = 4.2
+
+[node name="WarmLoungeKey" type="OmniLight3D" parent="Lighting"]
+position = Vector3(1, 2.6, 2.35)
+light_color = Color(1, 0.72, 0.54, 1)
+light_energy = 1.35
+shadow_enabled = true
+omni_range = 4.0
+metadata/lighting_role = "source_linked_lounge_visibility_key"
 
 [node name="CyanWorkbench" type="OmniLight3D" parent="Lighting" unique_id=1592255374]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.45, -3.75)

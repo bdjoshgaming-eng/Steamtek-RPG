@@ -1,0 +1,16 @@
+[gd_resource type="ShaderMaterial" load_steps=5 format=3]
+
+[ext_resource type="Shader" path="res://assets/environment/live3d/materials/apartment_interior_variants/STK_Couch_UpholsteryVariant.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Couch_A_Production_Baked_BaseColor.png" id="2_albedo"]
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Couch_A_Production_Baked_MetallicRoughness.png" id="3_mr"]
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Couch_A_Production_Baked_Emit.png" id="4_emit"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/base_color_texture = ExtResource("2_albedo")
+shader_parameter/metallic_roughness_texture = ExtResource("3_mr")
+shader_parameter/emission_texture = ExtResource("4_emit")
+shader_parameter/upholstery_tint = Vector3(0.49, 0.285, 0.065)
+shader_parameter/tint_strength = 0.91
+shader_parameter/emission_strength = 1.0

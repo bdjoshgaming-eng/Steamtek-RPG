@@ -1,0 +1,171 @@
+Steamtek 3D asset to feed Meshy
+
+Asset:APT_Couch_2Seat_Rust
+
+Style:40% cyberpunk20% neo-industrial20% modern steampunk20% Arcane-inspired painterly finish
+
+No Victorian ornamentation.Use a hand-painted, illustrative CRPG visual language with broad readable forms, controlled texture detail, selective edge highlights, and slightly exaggerated concept-art depth. Keep the design clean and consistent enough for image-to-3D reconstruction.
+
+Palette:
+
+Deep oxblood upholstery
+
+Dark blue-black and charcoal engineered steel
+
+Restrained functional copper or brass
+
+Localized rust, scratches, repaired wear, and warm edge highlights
+
+No cyan trim
+
+No decorative neon
+
+Emissive color is reserved for believable powered light sources; this couch has no emissive elements
+
+Dimensions:Width: 2.20 m (7 ft 3 in)Depth: 1.05 m (3 ft 5 in)Height: 0.90 m (2 ft 11 in)
+
+Proportions:
+
+Seat height: approximately 0.45 m (17.7 in)
+
+Usable seat depth: approximately 0.55 m (21.7 in)
+
+Comfortable for a 1.83 m (6 ft) character
+
+Two clearly separated seat cushions
+
+Two clearly separated back cushions
+
+Subtle rearward backrest angle
+
+Substantial armrests without making the couch appear oversized
+
+Overall dimensions include the arms, back, base, and feet
+
+Views:Front, back, left, right, and topOrthographic viewsIdentical design and proportions in every viewObject centered and fully visibleNeutral gray backgroundEven neutral lightingNo cast shadowsNo floor planeNo environmentNo extra propsNo loose pillowsNo text labels overlapping the object
+
+Major physical components:
+
+Dark engineered-steel floor plinth
+
+Reinforced lower structural frame
+
+Two substantial side shells forming the armrests
+
+Two individually readable seat cushions
+
+Two individually readable back cushions
+
+Full rear structural panel
+
+Restrained copper service brackets
+
+One quiet side ventilation or maintenance panel
+
+Short recessed feet or floor-contact supports
+
+Clear physical gaps separating cushions from the frame
+
+Real geometry:
+
+Overall couch silhouette
+
+Structural frame and floor plinth
+
+Side shells and armrests
+
+Seat and back cushions
+
+Rear structural panel
+
+Recessed feet
+
+Copper service brackets
+
+Large ventilation or maintenance-panel shapes
+
+Components affecting collision or silhouette
+
+Texture-only detail:
+
+Scratches
+
+Localized rust
+
+Grime
+
+Paint chips
+
+Small bolts and rivets
+
+Fine panel seams
+
+Brush strokes
+
+Minor dents
+
+Leather creases
+
+Subtle cushion wear
+
+Restrained edge highlights
+
+Construction:
+
+Create genuine three-dimensional geometry on every side.
+
+Include a complete back, sides, underside, arms, cushions, and base.
+
+Use believable material thickness.
+
+Avoid paper-thin panels.
+
+Avoid flat cards or billboard surfaces.
+
+Avoid floating fragments.
+
+Avoid deeply recessed details that cannot be seen consistently across the reference views.
+
+Avoid unnecessary hidden interior surfaces.
+
+Keep the floor-contact boundary straight and unobstructed.
+
+Keep cushions visibly separated while securely integrated into the couch.
+
+Maintain identical geometry and proportions in every reference view.
+
+Do not add:
+
+Exposed pipes
+
+Large cables
+
+Handles
+
+Hinges
+
+Decorative gears
+
+Victorian ornamentation
+
+Cyan trim
+
+Glowing elements
+
+Loose pillows
+
+Floor geometry
+
+Platforms
+
+People
+
+Room elements
+
+Surrounding props
+
+Technical:Real-world metric scaleY axis is upFront faces +ZOrigin/pivot at the center of the floor-contact footprintCouch rests directly at Y = 0Overall dimensions include arms and backRoot scale must be 1,1,1 after export
+
+Geometry requirements:Create clear, game-readable major forms suitable for image-to-3D reconstruction. Prioritize silhouette, upholstery volumes, structural thickness, and large construction details over small surface noise.
+
+Topology target:Meshy creates the initial mesh.Blender will perform remeshing, cleanup, optimization, exact scaling, pivot placement, material preparation, and final validation.The final Blender bounding box must measure exactly 2.20 × 1.05 × 0.90 m with applied scale 1,1,1 before export to Godot.

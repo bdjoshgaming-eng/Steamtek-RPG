@@ -1,0 +1,73 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Workstation_A_Production.glb" id="1_model"]
+
+[sub_resource type="BoxShape3D" id="PedestalShape"]
+size = Vector3(0.48, 0.78, 0.75)
+
+[sub_resource type="BoxShape3D" id="DesktopShape"]
+size = Vector3(2.1, 0.12, 0.85)
+
+[sub_resource type="BoxShape3D" id="GantryShape"]
+size = Vector3(2, 0.18, 0.18)
+
+[node name="STK_PROP_Workstation_A" type="Node3D" groups=["steamtek_live3d_modular"]]
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "static_environment_prop_furniture"
+metadata/module_variant = "STK_PROP_Workstation_A"
+metadata/module_dimensions_m = Vector3(2.1, 1.5, 0.85)
+metadata/work_surface_height_m = 0.8
+metadata/contact_pivot = "floor_center"
+metadata/front_axis = "+Z_toward_room_and_c001"
+metadata/scale_contract = "1_godot_unit_equals_1_meter"
+metadata/collision_contract = "four_simplified_box_shapes_with_open_center_leg_space"
+metadata/art_style = "gritty_hand_painted_stylized_game_art"
+metadata/world_design = "40_cyberpunk_20_neoindustrial_20_modern_steampunk_20_arcane_inspired_painterly_finish"
+metadata/source_intake = "res://incoming/meshy_apartment_assets/APT_Computer/STK_PROP_Workstation_A_Meshy.glb"
+metadata/qa_report = "res://incoming/meshy_apartment_assets/APT_Computer/STK_PROP_Workstation_A_QA.md"
+metadata/production_status = "meshy_pipeline_pass_with_topology_warnings_pending_godot_visual_review"
+metadata/render_triangles = 17925
+
+[node name="Visual" parent="." instance=ExtResource("1_model")]
+
+[node name="StaticBody" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="LeftPedestalCollision" type="CollisionShape3D" parent="StaticBody"]
+position = Vector3(-0.8, 0.39, 0.02)
+shape = SubResource("PedestalShape")
+
+[node name="RightPedestalCollision" type="CollisionShape3D" parent="StaticBody"]
+position = Vector3(0.8, 0.39, 0.02)
+shape = SubResource("PedestalShape")
+
+[node name="DesktopCollision" type="CollisionShape3D" parent="StaticBody"]
+position = Vector3(0, 0.74, 0)
+shape = SubResource("DesktopShape")
+
+[node name="OverheadGantryCollision" type="CollisionShape3D" parent="StaticBody"]
+position = Vector3(0, 1.41, -0.31)
+shape = SubResource("GantryShape")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="DeskSurfaceLeft" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-0.62, 0.81, 0.08)
+metadata/socket_role = "prop_surface"
+
+[node name="DeskSurfaceCenter" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0.81, 0.08)
+metadata/socket_role = "prop_surface"
+
+[node name="DeskSurfaceRight" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0.62, 0.81, 0.08)
+metadata/socket_role = "prop_surface"
+
+[node name="LeftFurniture" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-1.05, 0, 0)
+metadata/socket_role = "furniture_chain"
+
+[node name="RightFurniture" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(1.05, 0, 0)
+metadata/socket_role = "furniture_chain"

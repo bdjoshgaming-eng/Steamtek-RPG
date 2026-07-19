@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Floor_240_A.tscn" id="1_floor"]
 [ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Floor_Grate_120_A.tscn" id="2_grate"]
@@ -7,28 +7,11 @@
 [ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_Window_120x300_A.tscn" id="5_window"]
 [ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Partition_120x150_A.tscn" id="6_half"]
 [ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Column_Corner_A.tscn" id="7_corner"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Table_Utility_A.tscn" id="8_table"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Workbench_A.tscn" id="9_workbench"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Locker_A.tscn" id="10_locker"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Bed_Frame_A.tscn" id="11_bed"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Bed_Mattress_A.tscn" id="12_mattress"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Couch_2Seat_A.tscn" id="13_couch"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Rug_Large_A.tscn" id="14_rug"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Table_Coffee_A.tscn" id="15_coffee"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Bookshelf_A.tscn" id="16_shelf"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Chair_Dining_A.tscn" id="17_chair"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/APT_Decor_WallPicture_A.tscn" id="18_picture"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_Cup_A.tscn" id="19_cup"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_Book_A.tscn" id="20_book"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_ToolCase_A.tscn" id="21_toolcase"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_Pillow_A.tscn" id="22_pillow"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_Lamp_Table_A.tscn" id="23_lamp"]
-[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/small/APT_Prop_Note_Quest_A.tscn" id="24_note"]
 [ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Pipe_Run_240_A.tscn" id="25_pipe"]
 
 [node name="SteamtekPlayerApartmentProductionAssembly3D" type="Node3D" groups=["steamtek_live3d_interior"]]
-editor_description = "Production-facing modular opening apartment assembly. Every floor, wall, furniture item, and small prop remains an independent scene instance."
-metadata/status = "player_apartment_modular_production_v01"
+editor_description = "Legacy v01 modular apartment architecture. Rejected custom graphical furniture and prop instances were removed; gameplay placement markers remain."
+metadata/status = "player_apartment_modular_architecture_only_v01"
 metadata/unit_contract = "1_godot_unit_equals_1_meter"
 metadata/room_size_m = Vector2(12, 9.6)
 metadata/structure_grid_m = 1.2
@@ -160,66 +143,6 @@ position = Vector3(2.4, 0, -4.8)
 position = Vector3(4.8, 0, -4.8)
 
 [node name="Furniture" type="Node3D" parent="."]
-[node name="BedFrame" parent="Furniture" instance=ExtResource("11_bed")]
-position = Vector3(-4.35, 0.05, 2.55)
-[node name="Mattress" parent="Furniture" instance=ExtResource("12_mattress")]
-position = Vector3(-4.35, 0.5, 2.55)
-[node name="BedsideTable" parent="Furniture" instance=ExtResource("15_coffee")]
-position = Vector3(-3.05, 0.05, 2.45)
-rotation_degrees = Vector3(0, 90, 0)
-[node name="Workbench" parent="Furniture" instance=ExtResource("9_workbench")]
-position = Vector3(-0.25, 0.05, -4.1)
-[node name="LockerA" parent="Furniture" instance=ExtResource("10_locker")]
-position = Vector3(3.25, 0.05, -4.2)
-[node name="LockerB" parent="Furniture" instance=ExtResource("10_locker")]
-position = Vector3(4.2, 0.05, -4.2)
-[node name="Bookshelf" parent="Furniture" instance=ExtResource("16_shelf")]
-position = Vector3(5.15, 0.05, -3.9)
-[node name="DiningTable" parent="Furniture" instance=ExtResource("8_table")]
-position = Vector3(-3.6, 0.05, -0.35)
-[node name="DiningChairA" parent="Furniture" instance=ExtResource("17_chair")]
-position = Vector3(-3.6, 0.05, 0.55)
-rotation_degrees = Vector3(0, 180, 0)
-[node name="DiningChairB" parent="Furniture" instance=ExtResource("17_chair")]
-position = Vector3(-3.6, 0.05, -1.22)
-[node name="LoungeRug" parent="Furniture" instance=ExtResource("14_rug")]
-position = Vector3(0.65, 0.06, 1.6)
-[node name="Couch" parent="Furniture" instance=ExtResource("13_couch")]
-position = Vector3(0.85, 0.05, 2.35)
-[node name="CoffeeTable" parent="Furniture" instance=ExtResource("15_coffee")]
-position = Vector3(0.65, 0.05, 1.25)
-[node name="LoungeChair" parent="Furniture" instance=ExtResource("17_chair")]
-position = Vector3(-0.8, 0.05, 1.55)
-rotation_degrees = Vector3(0, 90, 0)
-[node name="KitchenTable" parent="Furniture" instance=ExtResource("8_table")]
-position = Vector3(3.65, 0.05, -1.55)
-rotation_degrees = Vector3(0, 90, 0)
-
-[node name="Props" type="Node3D" parent="."]
-[node name="BedPillow" parent="Props" instance=ExtResource("22_pillow")]
-position = Vector3(-5.05, 0.78, 2.55)
-[node name="QuestNote" parent="Props" instance=ExtResource("24_note")]
-position = Vector3(-3.15, 0.58, 2.35)
-[node name="BedLamp" parent="Props" instance=ExtResource("23_lamp")]
-position = Vector3(-2.92, 0.58, 2.55)
-[node name="WorkbenchToolCase" parent="Props" instance=ExtResource("21_toolcase")]
-position = Vector3(-0.85, 0.97, -3.98)
-[node name="WorkbenchBook" parent="Props" instance=ExtResource("20_book")]
-position = Vector3(0.35, 0.97, -3.98)
-rotation_degrees = Vector3(0, 8, 0)
-[node name="DiningCup" parent="Props" instance=ExtResource("19_cup")]
-position = Vector3(-4.05, 0.96, -0.25)
-[node name="CoffeeTableBook" parent="Props" instance=ExtResource("20_book")]
-position = Vector3(0.4, 0.63, 1.25)
-rotation_degrees = Vector3(0, 12, 0)
-[node name="CoffeeTableCup" parent="Props" instance=ExtResource("19_cup")]
-position = Vector3(0.85, 0.63, 1.25)
-[node name="KitchenToolCase" parent="Props" instance=ExtResource("21_toolcase")]
-position = Vector3(3.65, 0.96, -1.82)
-[node name="WallPictureBed" parent="Props" instance=ExtResource("18_picture")]
-position = Vector3(-4.35, 1.75, -4.67)
-[node name="WallPictureLounge" parent="Props" instance=ExtResource("18_picture")]
-position = Vector3(2.4, 1.65, -4.67)
 
 [node name="Lighting" type="Node3D" parent="."]
 [node name="WarmBed" type="OmniLight3D" parent="Lighting"]

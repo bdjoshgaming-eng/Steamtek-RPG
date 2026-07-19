@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Couch_A.tscn" id="1_base"]
+[ext_resource type="Script" path="res://scenes/environment/live3d/props/static_prop_material_variant.gd" id="2_script"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/apartment_interior_variants/STK_MAT_Couch_A_DeepTeal.tres" id="3_material"]
+
+[node name="STK_PROP_Couch_A_DeepTeal" instance=ExtResource("1_base")]
+script = ExtResource("2_script")
+variant_material = ExtResource("3_material")
+metadata/module_variant = "STK_PROP_Couch_A_DeepTeal"
+metadata/color_variant = "deep_teal_upholstery"
+metadata/variant_contract = "shared_production_mesh_collision_and_sockets_material_override_only"
+metadata/production_status = "reusable_material_variant_pending_godot_visual_review"

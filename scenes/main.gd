@@ -5,16 +5,11 @@ extends Node2D
 # elite prereqs, talent display names/rewards) now lives in
 # GameData.gd, an autoload singleton (Pass 1 of splitting this file
 # apart). Every reference to those tables below is prefixed with
-# 'GameData.' -- e.g. GameData.novice_professions, GameData.recipes.
+# 'GameData.' -- e.g. GameData.novice_professions.
 # ============================================================
 
-@onready var survey_ui: Control = $UILayer/SurveyUI
 @onready var resource_tree: Tree = $UILayer/SurveyUI/ResourceTree
-@onready var scan_result_label: Label = $UILayer/SurveyUI/ScanResultLabel
-@onready var resource_stats_label: Label = $UILayer/SurveyUI/ResourceStatsLabel
-@onready var sample_button: Button = $UILayer/SurveyUI/SampleButton
 @onready var sample_message_label: Label = $UILayer/SurveyUI/SampleMessageLabel
-@onready var cooldown_timer: Timer = $CooldownTimer
 @onready var inventory_label: Label = $UILayer/InventoryLabel
 @onready var player: CharacterBody2D = %Player
 @onready var player_hud: Node2D = %PlayerHUD
@@ -84,7 +79,6 @@ var enemy2_target_indicator: Line2D = null
 var quest_system: Node
 @onready var dumpster_cooldown_timer: Timer = $DumpsterCooldownTimer
 @onready var bandage_cooldown_timer: Timer = $BandageCooldownTimer
-@onready var resource_shift_timer: Timer = $ResourceShiftTimer
 @onready var attack_cooldown_timer: Timer = $AttackCooldownTimer
 @onready var dummy_attack_cooldown_timer: Timer = $DummyAttackCooldownTimer
 @onready var player_respawn_timer: Timer = $PlayerRespawnTimer
@@ -146,25 +140,10 @@ var enemy_combat_message_label: Label
 @onready var skill_result_label: Label = $UILayer/SkillUI/SkillResultLabel
 
 @onready var crafting_ui: Control = $UILayer/CraftingUI
-@onready var recipe_tree: Tree = $UILayer/CraftingUI/RecipeTree
 @onready var recipe_info_label: Label = $UILayer/CraftingUI/RecipeInfoLabel
 @onready var enhancement_slot_label: Label = $UILayer/CraftingUI/EnhancementSlotLabel
-@onready var craft_button: Button = $UILayer/CraftingUI/CraftButton
-@onready var craft_result_label: Label = $UILayer/CraftingUI/CraftResultLabel
 
-var resource_classes = {
-	"Metal": ["Black Iron", "Copper", "Tin", "Silver", "Gold", "Titanium", "Aluminum", "Gunmetal Steel", "Brass", "Rust"],
-	"Mineral": ["Quartz", "Limestone", "Granite", "Diamond", "Obsidian", "Amethyst", "Sapphire", "Ruby", "Emerald", "Concrete", "Pressure Glass"],
-	"Flora - Fungal": ["Mushrooms", "Moss", "Lichen", "Bioluminescent Fungus"],
-	"Flora - Wood": ["Weathered Wood"],
-	"Water": ["Spring Water", "River Water"],
-	"Gas": ["Natural Gas", "Methane"],
-	"Oil": ["Crude Oil", "Kerosene"]
-}
 
-var resource_types = {
-	"Copper": ["Cuprite", "Azurite", "Dioptase", "Dornite"]
-}
 
 var resource_stat_definitions = {
 	"Metal": ["Energy", "Conductivity", "Pliability", "Toughness"],
@@ -183,7 +162,6 @@ var resource_stat_ranges = {
 	"Black Iron": {"Pliability": [100, 500]}
 }
 
-var all_possible_resources = []
 
 var gem_gated_subclasses = ["Amethyst", "Diamond", "Sapphire", "Ruby", "Emerald"]
 
@@ -283,17 +261,8 @@ func _consume_one_bandage_charge() -> void:
 			_update_inventory_display()
 			return
 
-func _is_gem_scanning_unlocked() -> bool:
-	return _get_profession_rank_count("Scanning") >= 3
-var resource_class_lookup: Dictionary = {}
 
-var tool_class_access = {
-	"Mineral Survey Tool": ["Metal", "Mineral"],
-	"Flora Tool": ["Flora - Fungal", "Flora - Wood"],
-	"Steam and Oil Sniffer": ["Oil", "Gas", "Water"]
-}
 
-var active_survey_tool: String = ""
 
 var name_starts = [
 	"Zar", "Vex", "Thal", "Kro", "Fen", "Bri", "Dra", "Mor", "Syl", "Nyx",
@@ -310,36 +279,11 @@ var name_endings = [
 var name_single_letters = ["x", "z", "q", "v", "k", "j", "w", "y", "b", "d", "g", "n", "r", "s", "t"]
 var used_resource_names: Dictionary = {}
 
-var active_resources = []
 var resource_subclass_of: Dictionary = {}
 var resource_type_of: Dictionary = {}
 
-var resource_pools: Dictionary = {}
 var resource_stats: Dictionary = {}
-var resource_hotspots: Dictionary = {}
-# Each resource's hotspot cluster is centered on a fixed world position,
-# tracked here separately from the player. This is what actually moves
-# on a "shift" -- NOT the player's current position -- so a shift really
-# does relocate where the good spots are, rather than just re-rolling
-# hotspots around wherever you happen to be standing (which would make
-# the shift statistically meaningless, since your scan reading is
-# always measured from your own position).
-var resource_hotspot_centers: Dictionary = {}
-const MAX_CONCENTRATION_RANGE = 2500.0
-const HOTSPOT_SPAWN_RADIUS = 2000.0
-# Each resource now gets multiple hotspots scattered around, so you're
-# not stuck chasing one single point across a large map -- whichever
-# hotspot is nearest to you determines your scan reading.
-const HOTSPOTS_PER_RESOURCE = 4
-const RESOURCE_SHIFT_INTERVAL = 600.0
-# How far a resource's hotspot cluster can drift from its previous
-# center on each shift -- deliberately larger than HOTSPOT_SPAWN_RADIUS
-# so the whole cluster meaningfully relocates, not just jitters in
-# place.
-const RESOURCE_SHIFT_DRIFT_RADIUS = 3000.0
 
-var current_scan_resource: String = ""
-var current_scan_concentration: int = 0
 
 var inventory: Dictionary = {}
 var inventory_stats: Dictionary = {}
@@ -719,7 +663,6 @@ const DUMMY_KILL_XP = 50
 var selected_profession: String = ""
 var selected_path: String = ""
 
-var selected_recipe_index: int = -1
 
 func _ready() -> void:
 	enemies = CombatData.default_enemies()
@@ -728,8 +671,6 @@ func _ready() -> void:
 	_build_enemy_node_registry()
 	for _eid in enemies.keys():
 		_apply_cl_derivation(_eid)
-	if resource_hotspot_centers == null:
-		resource_hotspot_centers = {}
 
 	# Force the real target resolution at runtime. This is a stopgap --
 	# ideally also update Project Settings > Display > Window >
@@ -738,23 +679,6 @@ func _ready() -> void:
 	get_window().size = Vector2i(1920, 1080)
 	get_window().move_to_center()
 
-	for class_name_key in resource_classes.keys():
-		for subclass_name in resource_classes[class_name_key]:
-			all_possible_resources.append(subclass_name)
-			resource_class_lookup[subclass_name] = class_name_key
-			if not resource_types.has(subclass_name):
-				resource_types[subclass_name] = [subclass_name]
-
-	for class_name_key in resource_classes.keys():
-		for subclass_name in resource_classes[class_name_key]:
-			_spawn_resource_instance(subclass_name)
-
-	_refresh_resource_tree()
-
-	resource_tree.item_selected.connect(_on_tree_item_selected)
-	resource_tree.focus_mode = Control.FOCUS_NONE
-	sample_button.pressed.connect(_on_sample_pressed)
-	cooldown_timer.timeout.connect(_on_cooldown_finished)
 
 	_update_inventory_display()
 	inventory_label.visible = false
@@ -762,13 +686,6 @@ func _ready() -> void:
 	_update_cogs_display()
 
 	_grant_starting_bandages()
-
-	_refresh_recipe_tree()
-
-	recipe_tree.item_selected.connect(_on_recipe_tree_item_selected)
-	recipe_tree.focus_mode = Control.FOCUS_NONE
-	craft_button.pressed.connect(_on_craft_pressed)
-	craft_button.focus_mode = Control.FOCUS_NONE
 
 	attack_cooldown_timer.timeout.connect(_on_attack_cooldown_finished)
 	dummy_attack_cooldown_timer.timeout.connect(_on_enemy_attack_cooldown_finished.bind("dummy"))
@@ -784,9 +701,6 @@ func _ready() -> void:
 	enemy2_respawn_timer.timeout.connect(_on_enemy_respawn.bind("enemy2"))
 	dumpster_cooldown_timer.timeout.connect(_on_dumpster_cooldown_finished)
 	bandage_cooldown_timer.timeout.connect(_on_bandage_cooldown_finished)
-	resource_shift_timer.timeout.connect(_on_resource_shift_timer_timeout)
-	resource_shift_timer.wait_time = RESOURCE_SHIFT_INTERVAL
-	resource_shift_timer.start()
 
 	# Dumpster placeholder visual -- a plain brownish rectangle until real
 	# art exists. Deliberately does NOT move on respawn, unlike the herb
@@ -871,7 +785,6 @@ func _ready() -> void:
 
 	profession_select_ui.visible = false
 
-	survey_ui.visible = false
 	crafting_ui.visible = false
 	skill_ui.visible = false
 
@@ -883,9 +796,6 @@ func _ready() -> void:
 	_build_talent_ui()
 	_build_ability_book_ui()
 	_build_inventory_book_ui()
-	_build_crafting_book_ui()
-	_build_crafting_result_ui()
-	_build_survey_book_ui()
 
 	# Auto-assign Street Thug as the starting profession -- it is currently
 	# the only starting profession, so there is nothing to choose. Additional
@@ -898,6 +808,9 @@ func _ready() -> void:
 		_grant_profession_starting_kit("Street Thug")
 		profession_select_ui.visible = false
 		_refresh_skill_tree_ui()
+	# Data integrity check -- see _run_startup_validation().
+	_run_startup_validation()
+
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed:
@@ -964,6 +877,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	# Escape always closes the talent panel. Safety net: the panel is
 	# full-screen, so if its close button is ever off-screen (small
 	# window, odd resolution) there is still a guaranteed way out.
+	if event.is_action_pressed("ui_cancel"):
+		var _banner = get_node_or_null("UILayer/DataValidationBanner")
+		if _banner != null:
+			_banner.queue_free()
 	if event.is_action_pressed("ui_cancel") and talent_ui != null and talent_ui.visible:
 		talent_ui.visible = false
 
@@ -993,157 +910,13 @@ func _generate_unique_resource_name() -> String:
 	used_resource_names[new_name] = true
 	return new_name
 
-func _generate_hotspot_set(base_position: Vector2) -> Array:
-	var hotspots: Array = []
-	for i in range(HOTSPOTS_PER_RESOURCE):
-		hotspots.append(base_position + Vector2(
-			randf_range(-HOTSPOT_SPAWN_RADIUS, HOTSPOT_SPAWN_RADIUS),
-			randf_range(-HOTSPOT_SPAWN_RADIUS, HOTSPOT_SPAWN_RADIUS)
-		))
-	return hotspots
 
-func _get_nearest_hotspot_distance(instance_name: String) -> float:
-	var nearest_distance = INF
-	for hotspot in resource_hotspots[instance_name]:
-		var d = player.global_position.distance_to(hotspot)
-		if d < nearest_distance:
-			nearest_distance = d
-	return nearest_distance
 
-func _spawn_resource_instance(subclass_name: String) -> String:
-	var instance_name = _generate_unique_resource_name()
 
-	resource_subclass_of[instance_name] = subclass_name
 
-	var types_for_subclass = resource_types[subclass_name]
-	var chosen_type = types_for_subclass[randi_range(0, types_for_subclass.size() - 1)]
-	resource_type_of[instance_name] = chosen_type
 
-	active_resources.append(instance_name)
-	resource_pools[instance_name] = randi_range(50, 150)
 
-	var class_name_for_resource = resource_class_lookup[subclass_name]
-	var stat_names = resource_stat_definitions[class_name_for_resource]
-	var rolled_stats: Dictionary = {}
 
-	for stat_name in stat_names:
-		var min_val = 1
-		var max_val = 1000
-
-		if resource_stat_ranges.has(subclass_name) and resource_stat_ranges[subclass_name].has(stat_name):
-			var override_range = resource_stat_ranges[subclass_name][stat_name]
-			min_val = override_range[0]
-			max_val = override_range[1]
-
-		rolled_stats[stat_name] = randi_range(min_val, max_val)
-
-	resource_stats[instance_name] = rolled_stats
-
-	resource_hotspot_centers[instance_name] = player.global_position
-	resource_hotspots[instance_name] = _generate_hotspot_set(resource_hotspot_centers[instance_name])
-
-	return instance_name
-
-func _on_resource_shift_timer_timeout() -> void:
-	if resource_hotspot_centers == null:
-		resource_hotspot_centers = {}
-	for instance_name in resource_hotspots.keys():
-		var previous_center = resource_hotspot_centers.get(instance_name, player.global_position)
-		var new_center = previous_center + Vector2(
-			randf_range(-RESOURCE_SHIFT_DRIFT_RADIUS, RESOURCE_SHIFT_DRIFT_RADIUS),
-			randf_range(-RESOURCE_SHIFT_DRIFT_RADIUS, RESOURCE_SHIFT_DRIFT_RADIUS)
-		)
-		resource_hotspot_centers[instance_name] = new_center
-		resource_hotspots[instance_name] = _generate_hotspot_set(new_center)
-	_show_combat_message("Resource concentrations have shifted.")
-
-func _get_resource_display_label(instance_name: String) -> String:
-	var subclass_name = resource_subclass_of[instance_name]
-	var type_name = resource_type_of[instance_name]
-
-	if type_name == subclass_name:
-		return instance_name + " (" + subclass_name + ")"
-	else:
-		return instance_name + " (" + type_name + " - " + subclass_name + ")"
-
-func _on_tree_item_selected() -> void:
-	var selected = resource_tree.get_selected()
-	if selected == null:
-		return
-
-	var instance_name = selected.get_metadata(0)
-	if instance_name == null:
-		return
-
-	if not resource_hotspots.has(instance_name):
-		resource_hotspot_centers[instance_name] = player.global_position
-		resource_hotspots[instance_name] = _generate_hotspot_set(resource_hotspot_centers[instance_name])
-
-	var distance = _get_nearest_hotspot_distance(instance_name)
-	var proximity = 1.0 - clamp(distance / MAX_CONCENTRATION_RANGE, 0.0, 1.0)
-	var concentration = int(round(100 * proximity))
-	concentration = max(concentration, 1)
-
-	var scanning_nodes = _get_profession_rank_count("Scanning")
-	var mastery_nodes = _get_profession_rank_count("Fabrication Mastery")
-	concentration += (scanning_nodes * 5) + (mastery_nodes * 2)
-	concentration = min(concentration, 100)
-
-	current_scan_resource = instance_name
-	current_scan_concentration = concentration
-
-	_add_skill_xp("Crafting XP", 5)
-
-	scan_result_label.text = _get_resource_display_label(instance_name) + ": " + str(concentration) + "% concentration"
-
-	var stats_text = ""
-	var stats = resource_stats[instance_name]
-	for stat_name in stats.keys():
-		stats_text += stat_name + ": " + _format_number(stats[stat_name]) + "   "
-	resource_stats_label.text = stats_text
-
-func _on_sample_pressed() -> void:
-	if current_scan_resource == "":
-		sample_message_label.text = "Scan a resource first!"
-		survey_book_message_label.text = "Scan a resource first!"
-		return
-
-	if not cooldown_timer.is_stopped():
-		return
-
-	var desired_amount = _get_yield_for_concentration(current_scan_concentration)
-	var remaining = resource_pools[current_scan_resource]
-	var actual_amount = min(desired_amount, remaining)
-
-	var type_name = resource_type_of[current_scan_resource]
-	var sample_message = "You have sampled " + str(actual_amount) + " " + type_name + "!"
-	sample_message_label.text = sample_message
-	survey_book_message_label.text = sample_message
-
-	_add_to_inventory_with_instance(current_scan_resource, actual_amount)
-	_update_inventory_display()
-
-	_add_skill_xp("Crafting XP", 10)
-
-	resource_pools[current_scan_resource] -= actual_amount
-
-	if resource_pools[current_scan_resource] <= 0:
-		_deplete_and_replace(current_scan_resource)
-
-	const SAMPLE_BASE_COOLDOWN = 20.0
-	var sampling_nodes = _get_profession_rank_count("Sampling")
-	var mastery_nodes_cd = _get_profession_rank_count("Fabrication Mastery")
-	var cooldown_reduction = (sampling_nodes * 0.10) + (mastery_nodes_cd * 0.05)
-	cooldown_reduction = min(cooldown_reduction, 0.9)
-	cooldown_timer.wait_time = SAMPLE_BASE_COOLDOWN * (1.0 - cooldown_reduction)
-
-	cooldown_timer.start()
-	sample_button.disabled = true
-	survey_book_sample_button.disabled = true
-
-func _on_cooldown_finished() -> void:
-	sample_button.disabled = false
-	survey_book_sample_button.disabled = false
 
 func _get_yield_for_concentration(concentration: int) -> int:
 	if concentration <= 25:
@@ -1229,365 +1002,17 @@ func _get_inventory_display_name(instance_name: String) -> String:
 	else:
 		return subclass_name + " (" + type_name + ")"
 
-func _get_leaf_label(instance_name: String) -> String:
-	if not resource_subclass_of.has(instance_name):
-		return instance_name
 
-	var subclass_name = resource_subclass_of[instance_name]
-	var type_name = resource_type_of[instance_name]
 
-	if type_name == subclass_name:
-		return instance_name
-	else:
-		return type_name + " - " + instance_name
 
-func _refresh_resource_tree() -> void:
-	resource_tree.clear()
-	var root = resource_tree.create_item()
-	resource_tree.hide_root = true
 
-	var tree_data: Dictionary = {}
 
-	for instance_name in active_resources:
-		var subclass_name = resource_subclass_of[instance_name]
-		var class_name_for_resource = resource_class_lookup[subclass_name]
 
-		if not tree_data.has(class_name_for_resource):
-			tree_data[class_name_for_resource] = {}
-		if not tree_data[class_name_for_resource].has(subclass_name):
-			tree_data[class_name_for_resource][subclass_name] = []
 
-		tree_data[class_name_for_resource][subclass_name].append(instance_name)
 
-	var unlocked_classes = []
-	if active_survey_tool != "" and tool_class_access.has(active_survey_tool):
-		unlocked_classes = tool_class_access[active_survey_tool]
-	else:
-		unlocked_classes = _get_unlocked_classes()
-	var class_names_sorted = []
-	for class_name_key in tree_data.keys():
-		if unlocked_classes.has(class_name_key):
-			class_names_sorted.append(class_name_key)
-	class_names_sorted.sort()
 
-	for class_name_key in class_names_sorted:
-		var category_item = resource_tree.create_item(root)
-		category_item.set_text(0, class_name_key)
-		category_item.set_selectable(0, false)
 
-		var subclass_names_sorted = tree_data[class_name_key].keys()
-		subclass_names_sorted.sort()
 
-		for subclass_name in subclass_names_sorted:
-			if gem_gated_subclasses.has(subclass_name) and not _is_gem_scanning_unlocked():
-				continue
-
-			var subclass_item = resource_tree.create_item(category_item)
-			subclass_item.set_text(0, subclass_name)
-			subclass_item.set_selectable(0, false)
-
-			var instances = tree_data[class_name_key][subclass_name]
-
-			instances.sort_custom(func(a, b): return resource_type_of[a] < resource_type_of[b])
-
-			for instance_name in instances:
-				var leaf_item = resource_tree.create_item(subclass_item)
-				leaf_item.set_text(0, _get_leaf_label(instance_name))
-				leaf_item.set_metadata(0, instance_name)
-
-func _deplete_and_replace(depleted_instance_name: String) -> void:
-	var depleted_subclass = resource_subclass_of[depleted_instance_name]
-	var depleted_label = _get_resource_display_label(depleted_instance_name)
-
-	active_resources.erase(depleted_instance_name)
-	resource_pools.erase(depleted_instance_name)
-	resource_stats.erase(depleted_instance_name)
-	resource_hotspots.erase(depleted_instance_name)
-
-	var new_instance_name = _spawn_resource_instance(depleted_subclass)
-	var new_label = _get_resource_display_label(new_instance_name)
-
-	var message = depleted_label + " has been depleted! " + new_label + " has appeared!"
-
-	_refresh_resource_tree()
-
-	current_scan_resource = ""
-	current_scan_concentration = 0
-	scan_result_label.text = message
-
-func _get_recipe_category(recipe: Dictionary) -> String:
-	if recipe.has("item_class"):
-		if recipe["item_class"] == "Component":
-			return "Components"
-		elif recipe["item_class"] == "Medicine":
-			return "Medicine"
-		elif recipe["item_class"] == "Tool":
-			return "Tools"
-		else:
-			return "Weapons"
-	return "General"
-
-func _refresh_recipe_tree() -> void:
-	recipe_tree.clear()
-	var root = recipe_tree.create_item()
-	recipe_tree.hide_root = true
-
-	var categories: Dictionary = {}
-	for i in range(GameData.recipes.size()):
-		var category = _get_recipe_category(GameData.recipes[i])
-		if not categories.has(category):
-			categories[category] = []
-		categories[category].append(i)
-
-	var category_order = ["Weapons", "Tools", "Components", "Medicine", "General"]
-
-	for category_name in category_order:
-		if not categories.has(category_name):
-			continue
-
-		var category_item = recipe_tree.create_item(root)
-		category_item.set_text(0, category_name)
-		category_item.set_selectable(0, false)
-
-		for recipe_index in categories[category_name]:
-			var leaf_item = recipe_tree.create_item(category_item)
-			leaf_item.set_text(0, GameData.recipes[recipe_index]["name"])
-			leaf_item.set_metadata(0, recipe_index)
-
-func _on_recipe_tree_item_selected() -> void:
-	var selected = recipe_tree.get_selected()
-	if selected == null:
-		return
-
-	var recipe_index = selected.get_metadata(0)
-	if recipe_index == null:
-		return
-
-	selected_recipe_index = recipe_index
-	var recipe = GameData.recipes[recipe_index]
-
-	var info_text = ""
-
-	if recipe.has("item_class") and recipe.has("item_subclass"):
-		info_text += recipe["item_class"] + " (" + recipe["item_subclass"] + ")\n"
-
-	info_text += "\n"
-
-	if recipe.has("slot_names"):
-		info_text += "Ingredients\n"
-		for requirement_key in recipe["requires"].keys():
-			var needed = recipe["requires"][requirement_key]
-			var slot_label = recipe["slot_names"].get(requirement_key, requirement_key)
-			info_text += slot_label + "\n"
-			info_text += "    Requires " + str(needed) + " " + requirement_key + "\n"
-	else:
-		var requirements_text = ""
-		for requirement_key in recipe["requires"].keys():
-			var needed = recipe["requires"][requirement_key]
-			requirements_text += requirement_key + ": " + str(needed) + "  "
-		info_text += "Requires: " + requirements_text
-
-	recipe_info_label.text = info_text
-
-func _matches_requirement(instance_name: String, requirement_key: String) -> bool:
-	if resource_type_of.get(instance_name, "") == requirement_key:
-		return true
-	if resource_subclass_of.get(instance_name, "") == requirement_key:
-		return true
-	# Crafted items (Syringe, Adrenaline Shot, Empty IV Bag, weapons, etc.)
-	# each get their own randomly-generated instance_name, so a recipe
-	# requiring one by its output name has to check consumable_base_name
-	# rather than the instance_name itself.
-	if consumable_base_name.get(instance_name, "") == requirement_key:
-		return true
-	if instance_name == requirement_key:
-		return true
-	# Class-level match: a recipe can require an entire resource class
-	# (e.g. "Metal") instead of one specific subclass -- satisfied by
-	# any resource belonging to that class (Black Iron, Copper, etc.).
-	if resource_classes.has(requirement_key):
-		var subclass_name = resource_subclass_of.get(instance_name, "")
-		if resource_class_lookup.get(subclass_name, "") == requirement_key:
-			return true
-	return false
-
-func _get_total_amount_for_requirement(requirement_key: String) -> int:
-	var total = 0
-	for instance_name in inventory.keys():
-		if _matches_requirement(instance_name, requirement_key):
-			total += inventory[instance_name]
-	return total
-
-func _has_enough_resources(requirements: Dictionary) -> bool:
-	for requirement_key in requirements.keys():
-		var needed = requirements[requirement_key]
-		if _get_total_amount_for_requirement(requirement_key) < needed:
-			return false
-	return true
-
-func _get_weighted_stack_score(instance_name: String, requirement_key: String, recipe: Dictionary) -> float:
-	var stats = inventory_stats.get(instance_name, {})
-	if stats.size() == 0:
-		return 50.0
-
-	var weights = {}
-	if recipe.has("stat_weights") and recipe["stat_weights"].has(requirement_key):
-		weights = recipe["stat_weights"][requirement_key]
-
-	if weights.size() == 0:
-		var sum = 0.0
-		for stat_name in stats.keys():
-			sum += stats[stat_name]
-		return sum / stats.size()
-
-	var weighted_sum = 0.0
-	var weight_total = 0.0
-	for stat_name in weights.keys():
-		if stats.has(stat_name):
-			weighted_sum += stats[stat_name] * weights[stat_name]
-			weight_total += weights[stat_name]
-
-	if weight_total == 0.0:
-		return 50.0
-
-	return weighted_sum / weight_total
-
-func _on_craft_pressed() -> void:
-	if selected_recipe_index == -1:
-		craft_result_label.text = "Select a recipe first!"
-		return
-
-	var recipe = GameData.recipes[selected_recipe_index]
-
-	if not _has_enough_resources(recipe["requires"]):
-		craft_result_label.text = "Not enough resources for " + recipe["name"] + "!"
-		return
-
-	var total_weighted = 0.0
-	var total_weight = 0
-
-	for requirement_key in recipe["requires"].keys():
-		var remaining_needed = recipe["requires"][requirement_key]
-		var counts_toward_quality = not recipe.has("quality_ingredients") or recipe["quality_ingredients"].has(requirement_key)
-
-		for instance_name in inventory.keys():
-			if remaining_needed <= 0:
-				break
-			if not _matches_requirement(instance_name, requirement_key):
-				continue
-
-			var available = inventory[instance_name]
-			var take = min(available, remaining_needed)
-
-			if counts_toward_quality:
-				var stack_score = _get_weighted_stack_score(instance_name, requirement_key, recipe)
-				total_weighted += stack_score * take
-				total_weight += take
-
-			inventory[instance_name] -= take
-			remaining_needed -= take
-
-	var quality = 50
-	if total_weight > 0:
-		quality = round(total_weighted / total_weight)
-
-	var finalize_result = _finalize_crafted_item(recipe, quality)
-	var result_text = finalize_result["text"]
-	craft_result_label.text = result_text
-
-	var article = _get_article(recipe["output"])
-	_show_combat_message("You have successfully crafted " + article + " " + recipe["output"] + "!")
-
-# Shared by both the old auto-pick crafting flow (_on_craft_pressed)
-# and the new Assembly step (_execute_assembly_craft) -- takes an
-# already-computed base quality (before the Scrap Tinkerer skill
-# multiplier) and a recipe, and handles everything from there:
-# quality scaling, item creation, XP, weapon stat generation. Returns
-# the result message text; does NOT show it, so callers can display it
-# wherever makes sense for their own UI.
-func _finalize_crafted_item(recipe: Dictionary, base_quality: int) -> Dictionary:
-	var quality = base_quality
-
-	var crafting_nodes = _get_profession_rank_count("Crafting")
-	var mastery_nodes_q = _get_profession_rank_count("Fabrication Mastery")
-	var quality_multiplier = 1.0 + (crafting_nodes * 0.03) + (mastery_nodes_q * 0.01)
-	quality = min(1000, round(quality * quality_multiplier))
-
-	# Every crafted item gets its own unique identity, since its exact
-	# stats depend on which resources went into it -- two Piston Blades
-	# made from different Gunmetal Steel batches are genuinely
-	# different items, not stacked copies of one. (Loot that drops
-	# together from a single kill is a separate system -- that one
-	# intentionally CAN share an identifier, since it's not crafted.)
-	var item_key = _generate_unique_resource_name()
-	consumable_base_name[item_key] = recipe["output"]
-
-	var output_quantity = recipe.get("output_quantity", 1)
-	_add_to_inventory(item_key, output_quantity)
-
-	if not inventory_stats.has(item_key):
-		inventory_stats[item_key] = {}
-	inventory_stats[item_key]["Quality"] = quality
-
-	if recipe.has("max_charges"):
-		inventory_stats[item_key]["Charges"] = recipe["max_charges"]
-
-	var crafting_xp_awarded = 15
-	_add_skill_xp("Crafting XP", crafting_xp_awarded)
-
-	if recipe.has("item_class") and recipe["item_class"] == "Medicine":
-		var medicine_bonus_xp = 15
-		_add_skill_xp("Crafting XP", medicine_bonus_xp)
-		crafting_xp_awarded += medicine_bonus_xp
-
-	_show_xp_gain_message("You've gained " + str(crafting_xp_awarded) + " Crafting XP!")
-
-	if recipe.has("item_class"):
-		crafted_item_class[item_key] = recipe["item_class"]
-	if recipe.has("item_subclass"):
-		crafted_item_subclass[item_key] = recipe["item_subclass"]
-
-	var weapon_stats_summary = ""
-
-	if recipe.has("weapon_categorical_stats"):
-		for stat_name in recipe["weapon_categorical_stats"].keys():
-			var stat_value = recipe["weapon_categorical_stats"][stat_name]
-			inventory_stats[item_key][stat_name] = stat_value
-			weapon_stats_summary += stat_name + ": " + _format_number(stat_value) + "  "
-
-	if recipe.has("weapon_stat_ranges"):
-		for stat_name in recipe["weapon_stat_ranges"].keys():
-			var stat_range = recipe["weapon_stat_ranges"][stat_name]
-			var min_val = stat_range[0]
-			var max_val = stat_range[1]
-			var raw_value = min_val + (quality / 1000.0) * (max_val - min_val)
-
-			var scaled_value
-			if stat_name == "Speed" or stat_name == "Reload Speed":
-				scaled_value = round(raw_value * 10.0) / 10.0
-			else:
-				scaled_value = round(raw_value)
-
-			inventory_stats[item_key][stat_name] = scaled_value
-			weapon_stats_summary += stat_name + ": " + str(scaled_value) + "  "
-
-		var output_stats = inventory_stats[item_key]
-		if output_stats.has("Speed") and output_stats.has("Damage Rating"):
-			var speed_value = output_stats["Speed"]
-			var damage_value = output_stats["Damage Rating"]
-			var dps_value = round((damage_value / speed_value) * 10.0) / 10.0
-			output_stats["Damage Per Second"] = dps_value
-			weapon_stats_summary += "Damage Per Second: " + str(dps_value) + "  "
-
-	_cleanup_empty_inventory_stacks()
-	_update_inventory_display()
-
-	var article = _get_article(recipe["output"])
-	var result_text = "You have successfully crafted " + article + " " + recipe["output"] + "!"
-	if weapon_stats_summary != "":
-		result_text += "\n" + weapon_stats_summary.strip_edges()
-
-	return {"text": result_text, "item_key": item_key}
 
 func _cleanup_empty_inventory_stacks() -> void:
 	var empty_keys = []
@@ -1617,28 +1042,12 @@ func _format_number(value):
 	return str(value)
 
 func _save_game() -> void:
-	var hotspots_for_save = {}
-	for instance_name in resource_hotspots.keys():
-		var hotspot_array_for_save = []
-		for hotspot in resource_hotspots[instance_name]:
-			hotspot_array_for_save.append({"x": hotspot.x, "y": hotspot.y})
-		hotspots_for_save[instance_name] = hotspot_array_for_save
-
-	var hotspot_centers_for_save = {}
-	for instance_name in resource_hotspot_centers.keys():
-		var center = resource_hotspot_centers[instance_name]
-		hotspot_centers_for_save[instance_name] = {"x": center.x, "y": center.y}
-
 	var save_data = {
 		"inventory": inventory,
 		"inventory_stats": inventory_stats,
-		"active_resources": active_resources,
 		"resource_subclass_of": resource_subclass_of,
 		"resource_type_of": resource_type_of,
-		"resource_pools": resource_pools,
 		"resource_stats": resource_stats,
-		"resource_hotspots": hotspots_for_save,
-		"resource_hotspot_centers": hotspot_centers_for_save,
 		"used_resource_names": used_resource_names,
 		"crafted_item_class": crafted_item_class,
 		"consumable_base_name": consumable_base_name,
@@ -1694,39 +1103,11 @@ func _load_game() -> void:
 	for key in save_data["inventory"].keys():
 		inventory[key] = int(save_data["inventory"][key])
 
-	resource_pools = {}
-	for key in save_data["resource_pools"].keys():
-		resource_pools[key] = int(save_data["resource_pools"][key])
-
 	inventory_stats = save_data["inventory_stats"]
-	active_resources = save_data["active_resources"]
-	resource_subclass_of = save_data["resource_subclass_of"]
-	resource_type_of = save_data["resource_type_of"]
-	resource_stats = save_data["resource_stats"]
-
-	var loaded_hotspots = save_data.get("resource_hotspots", null)
-	if loaded_hotspots != null:
-		resource_hotspots = {}
-		for instance_name in loaded_hotspots.keys():
-			var h = loaded_hotspots[instance_name]
-			# Old saves stored a single {"x":..,"y":..} point per
-			# resource; new saves store an array of them. Handle both
-			# so existing save files don't break on load.
-			if typeof(h) == TYPE_ARRAY:
-				var hotspot_array = []
-				for point in h:
-					hotspot_array.append(Vector2(point["x"], point["y"]))
-				resource_hotspots[instance_name] = hotspot_array
-			else:
-				resource_hotspots[instance_name] = [Vector2(h["x"], h["y"])]
-	used_resource_names = save_data["used_resource_names"]
-
-	var loaded_hotspot_centers = save_data.get("resource_hotspot_centers", null)
-	resource_hotspot_centers = {}
-	if loaded_hotspot_centers != null:
-		for instance_name in loaded_hotspot_centers.keys():
-			var c = loaded_hotspot_centers[instance_name]
-			resource_hotspot_centers[instance_name] = Vector2(c["x"], c["y"])
+	resource_subclass_of = save_data.get("resource_subclass_of", {})
+	resource_type_of = save_data.get("resource_type_of", {})
+	resource_stats = save_data.get("resource_stats", {})
+	used_resource_names = save_data.get("used_resource_names", [])
 
 	crafted_item_class = save_data.get("crafted_item_class", {})
 	consumable_base_name = save_data.get("consumable_base_name", {})
@@ -1752,7 +1133,12 @@ func _load_game() -> void:
 					if prof_data["keystones"].has(ks_name):
 						var loaded_ks = loaded_prof["keystones"][ks_name]
 						prof_data["keystones"][ks_name]["unlocked"] = loaded_ks.get("unlocked", false)
-						prof_data["keystones"][ks_name]["points_spent"] = int(loaded_ks.get("points_spent", 0))
+						# Clamp to the CURRENT budget. A save written while a
+						# keystone allowed more points (Auxiliary briefly held
+						# 24 during the crafting-node interim) would otherwise
+						# load in a permanently over-budget state.
+						var _ks_max = int(prof_data["keystones"][ks_name].get("points_max", 0))
+						prof_data["keystones"][ks_name]["points_spent"] = clamp(int(loaded_ks.get("points_spent", 0)), 0, _ks_max)
 						for node_name in loaded_ks.get("nodes", {}).keys():
 							if prof_data["keystones"][ks_name]["nodes"].has(node_name):
 								prof_data["keystones"][ks_name]["nodes"][node_name]["purchased"] = loaded_ks["nodes"][node_name].get("purchased", false)
@@ -1801,17 +1187,7 @@ func _load_game() -> void:
 				slots[i].assigned_ability = loaded_assignments[i]
 				slots[i].text = loaded_assignments[i] if loaded_assignments[i] != "" else "(empty)"
 
-	_refresh_resource_tree()
 	_update_inventory_display()
-
-	current_scan_resource = ""
-	current_scan_concentration = 0
-	scan_result_label.text = ""
-	resource_stats_label.text = ""
-
-	if inventory.get("Rusty Crafting Kit", 0) <= 0:
-		_add_to_inventory("Rusty Crafting Kit", 1)
-		_update_inventory_display()
 
 	_show_combat_message("Game loaded!")
 
@@ -2381,14 +1757,6 @@ func _on_enemy_respawn(enemy_id: String) -> void:
 	_show_combat_message(e["name"] + " has respawned.")
 
 
-func _get_unlocked_classes() -> Array:
-	var unlocked = []
-	for tool_name in tool_class_access.keys():
-		if inventory.get(tool_name, 0) > 0:
-			for unlocked_class_name in tool_class_access[tool_name]:
-				if not unlocked.has(unlocked_class_name):
-					unlocked.append(unlocked_class_name)
-	return unlocked
 
 # --- Skills ---
 
@@ -2630,7 +1998,6 @@ func _on_spend_point_pressed() -> void:
 
 	_refresh_skill_tree_ui()
 	_update_skill_info_display()
-	_refresh_resource_tree()
 
 func _show_combat_message(text: String) -> void:
 	combat_message_label.text = text
@@ -3302,13 +2669,11 @@ func _get_con_color(enemy_id: String) -> Color:
 
 
 func _grant_starting_weapon(weapon_name: String, quality: int) -> void:
-	var recipe = null
-	for r in GameData.recipes:
-		if r["output"] == weapon_name:
-			recipe = r
-			break
-
-	if recipe == null:
+	# Reads the ITEM definition, not a crafting recipe. A starting weapon
+	# is granted outright, so it must not depend on the crafting system
+	# existing at all.
+	var recipe: Dictionary = GameData.get_item_definition(weapon_name)
+	if recipe.is_empty():
 		return
 
 	# Unique per grant, same rule as crafted items -- even a starting
@@ -3719,17 +3084,6 @@ func _use_ability_by_name(ability_name: String) -> void:
 		_attempt_adrenaline_boost()
 	elif ability_name == "Blood Bag":
 		_attempt_blood_bag()
-	elif ability_name == "Mineral Survey Tool" or ability_name == "Flora Tool" or ability_name == "Steam and Oil Sniffer":
-		if survey_book_ui.visible and active_survey_tool == ability_name:
-			survey_book_ui.visible = false
-		else:
-			active_survey_tool = ability_name
-			survey_book_ui.visible = true
-			_refresh_survey_book()
-	elif ability_name == "Rusty Crafting Kit":
-		crafting_book_ui.visible = not crafting_book_ui.visible
-		if crafting_book_ui.visible:
-			_refresh_crafting_book()
 	elif GameData.ability_definitions.has(ability_name):
 		_attempt_ability(ability_name)
 	else:
@@ -4050,22 +3404,9 @@ var ability_book_list_container: VBoxContainer
 var inventory_book_ui: Control
 var inventory_book_list_container: VBoxContainer
 var inventory_book_stats_label: Label
-var crafting_book_ui: Control
-var crafting_book_list_container: VBoxContainer
-var crafting_book_details_label: Label
-var crafting_book_craft_button: Button
-var crafting_book_result_label: Label
-var crafting_assembly_recipe_index: int = -1
-var crafting_assembly_selections: Dictionary = {}
-var crafting_book_back_button: Button
 var crafting_result_ui: Control
 var crafting_result_label: Label
 var crafting_result_mod_slots_label: Label
-var survey_book_ui: Control
-var survey_book_list_container: VBoxContainer
-var survey_book_scan_label: Label
-var survey_book_sample_button: Button
-var survey_book_message_label: Label
 # Path to the existing drag-source script, reused so abilities dragged
 # from the Ability Book work identically to the old fixed menu -- if
 # this path is wrong for your project, this is the one line to fix.
@@ -4864,21 +4205,6 @@ func _select_inventory_book_item(item_key: String) -> void:
 
 	inventory_book_stats_label.text = "\n".join(lines)
 
-# --- Crafting Book ---
-# A testing/reference UI for crafting, styled like the Talent Viewer,
-# Ability Book, and Inventory Book -- fully built in code. Unlike those
-# three, this one stays fully FUNCTIONAL: the Craft button reuses the
-# existing _on_craft_pressed() logic unchanged, so quality calculation,
-# resource consumption, and everything else keeps working exactly as
-# before.
-#
-# NOTE: there's currently no "recipe unlock" system anywhere in the
-# game -- every recipe in the `GameData.recipes` array is always craftable
-# regardless of profession or skill. This shows ALL of them for now.
-# True recipe-gating (e.g. tied to Scrap Tinkerer skills, as mentioned
-# earlier for Weapon Cert tier-2 items) would need to be built as its
-# own feature before this list could reflect "learned" recipes only.
-
 const MELEE_WEAPON_CLASSES = ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick"]
 const RANGED_WEAPON_CLASSES = ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"]
 
@@ -4886,136 +4212,7 @@ const RANGED_WEAPON_CLASSES = ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotg
 # "subclass" come back as "" when they wouldn't add a meaningful
 # extra level (e.g. Tools have no sub-type, and most ranged weapons'
 # item_subclass just repeats item_class).
-func _categorize_recipe_for_book(recipe: Dictionary) -> Dictionary:
-	var item_class = recipe.get("item_class", "")
-	var item_subclass = recipe.get("item_subclass", "")
 
-	if MELEE_WEAPON_CLASSES.has(item_class):
-		return {"class": "Melee Weapon", "type": item_class, "subclass": item_subclass}
-	elif RANGED_WEAPON_CLASSES.has(item_class):
-		var subclass_value = "" if item_subclass == item_class else item_subclass
-		return {"class": "Ranged Weapon", "type": item_class, "subclass": subclass_value}
-	elif item_class == "Tool":
-		return {"class": "Tool", "type": "", "subclass": ""}
-	elif item_class == "Medicine":
-		return {"class": "Medicine", "type": "", "subclass": ""}
-	elif item_class == "Component":
-		return {"class": "Component", "type": "", "subclass": ""}
-	else:
-		return {"class": "Material", "type": "", "subclass": ""}
-
-func _build_crafting_book_ui() -> void:
-	crafting_book_ui = Control.new()
-	crafting_book_ui.name = "CraftingBookUI"
-	crafting_book_ui.anchor_right = 1
-	crafting_book_ui.anchor_bottom = 1
-	crafting_book_ui.visible = false
-	crafting_book_ui.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	$UILayer.add_child(crafting_book_ui)
-
-	var backdrop = ColorRect.new()
-	backdrop.color = Color(0, 0, 0, 0.6)
-	backdrop.anchor_right = 1
-	backdrop.anchor_bottom = 1
-	backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	crafting_book_ui.add_child(backdrop)
-
-	var main_panel = Panel.new()
-	main_panel.position = Vector2(460, 165)
-	main_panel.size = Vector2(1000, 750)
-	main_panel.mouse_filter = Control.MOUSE_FILTER_STOP
-	main_panel.add_theme_stylebox_override("panel", _make_flat_style(Color(0.043, 0.086, 0.086)))
-	crafting_book_ui.add_child(main_panel)
-
-	var title_label = Label.new()
-	title_label.text = "Crafting"
-	title_label.position = Vector2(20, 8)
-	title_label.modulate = Color(0.6, 0.9, 0.9)
-	main_panel.add_child(title_label)
-
-	var close_button = Button.new()
-	close_button.text = "X"
-	close_button.position = Vector2(960, 6)
-	close_button.custom_minimum_size = Vector2(30, 30)
-	close_button.focus_mode = Control.FOCUS_NONE
-	close_button.pressed.connect(func(): crafting_book_ui.visible = false)
-	main_panel.add_child(close_button)
-
-	# Left panel -- ingredient breakdown for the selected recipe, plus
-	# the actual Craft button and result message.
-	var details_panel = Panel.new()
-	details_panel.position = Vector2(20, 50)
-	details_panel.size = Vector2(380, 660)
-	details_panel.add_theme_stylebox_override("panel", _make_flat_style(Color(0.03, 0.06, 0.06)))
-	main_panel.add_child(details_panel)
-
-	var details_header = Label.new()
-	details_header.text = "Ingredients"
-	details_header.position = Vector2(10, 4)
-	details_header.modulate = Color(0.6, 0.9, 0.9)
-	details_panel.add_child(details_header)
-
-	var details_scroll = ScrollContainer.new()
-	details_scroll.position = Vector2(10, 28)
-	details_scroll.size = Vector2(360, 520)
-	details_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	details_panel.add_child(details_scroll)
-
-	crafting_book_details_label = Label.new()
-	crafting_book_details_label.custom_minimum_size = Vector2(345, 0)
-	crafting_book_details_label.autowrap_mode = TextServer.AUTOWRAP_WORD
-	crafting_book_details_label.text = "Select a recipe to view what it takes to craft."
-	crafting_book_details_label.modulate = Color(0.85, 0.95, 0.95)
-	details_scroll.add_child(crafting_book_details_label)
-
-	crafting_book_craft_button = Button.new()
-	crafting_book_craft_button.text = "Choose Resources"
-	crafting_book_craft_button.position = Vector2(10, 558)
-	crafting_book_craft_button.custom_minimum_size = Vector2(360, 36)
-	crafting_book_craft_button.focus_mode = Control.FOCUS_NONE
-	crafting_book_craft_button.pressed.connect(_enter_crafting_assembly)
-	details_panel.add_child(crafting_book_craft_button)
-
-	crafting_book_result_label = Label.new()
-	crafting_book_result_label.position = Vector2(10, 600)
-	crafting_book_result_label.size = Vector2(360, 56)
-	crafting_book_result_label.autowrap_mode = TextServer.AUTOWRAP_WORD
-	crafting_book_result_label.text = ""
-	crafting_book_result_label.modulate = Color(0.9, 0.85, 0.6)
-	details_panel.add_child(crafting_book_result_label)
-
-	# Right panel -- scrollable Class > Type > Subclass > Recipe list.
-	var list_panel = Panel.new()
-	list_panel.position = Vector2(420, 50)
-	list_panel.size = Vector2(560, 660)
-	list_panel.add_theme_stylebox_override("panel", _make_flat_style(Color(0.03, 0.06, 0.06)))
-	main_panel.add_child(list_panel)
-
-	crafting_book_back_button = Button.new()
-	crafting_book_back_button.text = "< Back to Schematics"
-	crafting_book_back_button.position = Vector2(10, 4)
-	crafting_book_back_button.custom_minimum_size = Vector2(150, 24)
-	crafting_book_back_button.focus_mode = Control.FOCUS_NONE
-	crafting_book_back_button.visible = false
-	crafting_book_back_button.pressed.connect(_exit_crafting_assembly)
-	list_panel.add_child(crafting_book_back_button)
-
-	var list_header = Label.new()
-	list_header.text = "Schematics"
-	list_header.position = Vector2(10, 4)
-	list_header.modulate = Color(0.6, 0.9, 0.9)
-	list_panel.add_child(list_header)
-
-	var list_scroll = ScrollContainer.new()
-	list_scroll.position = Vector2(10, 28)
-	list_scroll.size = Vector2(540, 622)
-	list_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	list_panel.add_child(list_scroll)
-
-	crafting_book_list_container = VBoxContainer.new()
-	crafting_book_list_container.custom_minimum_size = Vector2(525, 0)
-	crafting_book_list_container.add_theme_constant_override("separation", 2)
-	list_scroll.add_child(crafting_book_list_container)
 
 # Persists which category headers are currently collapsed, keyed by a
 # unique path string per book so Crafting and Survey book state never
@@ -5034,20 +4231,6 @@ func _make_plain_header(text: String, indent: int, color: Color) -> Label:
 	header.add_theme_font_size_override("font_size", 15 - indent)
 	return header
 
-func _make_crafting_book_header(text: String, indent: int, color: Color, category_key: String, refresh_callback: Callable) -> Button:
-	var is_collapsed = book_category_collapsed.get(category_key, false)
-	var arrow = "\u25b6 " if is_collapsed else "\u25bc "
-
-	var header = Button.new()
-	header.text = "  ".repeat(indent) + arrow + text
-	header.modulate = color
-	header.add_theme_font_size_override("font_size", 15 - indent)
-	header.flat = true
-	header.alignment = HORIZONTAL_ALIGNMENT_LEFT
-	header.focus_mode = Control.FOCUS_NONE
-	header.custom_minimum_size = Vector2(510, 0)
-	header.pressed.connect(_toggle_book_category.bind(category_key, refresh_callback))
-	return header
 
 # Determines whether a recipe is currently learned/craftable.
 # Street Thug recipes are gated by the Crafting keystone: the keystone
@@ -5055,310 +4238,34 @@ func _make_crafting_book_header(text: String, indent: int, color: Color, categor
 # for every non-Novice recipe (blanket gate for now -- to be split out
 # per recipe later). Recipes for other professions keep the simpler
 # "is the profession unlocked" rule.
-func _is_recipe_learned(_recipe: Dictionary) -> bool:
-	# Crafting is NOT a class. Per the crafting system spec, every
-	# character can gather, sample, research, craft, experiment, install
-	# basic mods, dismantle and repair -- "no combat class or keystone
-	# node should be required for basic story progression". The old gate
-	# (Street Thug Crafting keystone unlocked + 6 points spent) violated
-	# that and has been removed along with the Crafting keystone itself.
-	#
-	# Blueprint-based access arrives with the crafting rebuild; until then
-	# every recipe is available to everyone.
-	return true
 
-func _refresh_crafting_book() -> void:
-	for child in crafting_book_list_container.get_children():
-		child.queue_free()
-
-	crafting_book_details_label.text = "Select a recipe to view what it takes to craft."
-	crafting_book_result_label.text = ""
-	selected_recipe_index = -1
-	crafting_assembly_recipe_index = -1
-	crafting_assembly_selections.clear()
-	crafting_book_back_button.visible = false
-	crafting_book_craft_button.text = "Choose Resources"
-	if crafting_book_craft_button.pressed.is_connected(_execute_assembly_craft):
-		crafting_book_craft_button.pressed.disconnect(_execute_assembly_craft)
-	if not crafting_book_craft_button.pressed.is_connected(_enter_crafting_assembly):
-		crafting_book_craft_button.pressed.connect(_enter_crafting_assembly)
-
-	# Build nested Class -> Type -> Subclass -> [recipe_index] groups.
-	var grouped: Dictionary = {}
-	for i in range(GameData.recipes.size()):
-		var recipe = GameData.recipes[i]
-		if not _is_recipe_learned(recipe):
-			continue
-
-		var cat = _categorize_recipe_for_book(recipe)
-		if not grouped.has(cat["class"]):
-			grouped[cat["class"]] = {}
-		var type_key = cat["type"] if cat["type"] != "" else "_flat_"
-		if not grouped[cat["class"]].has(type_key):
-			grouped[cat["class"]][type_key] = {}
-		var subclass_key = cat["subclass"] if cat["subclass"] != "" else "_flat_"
-		if not grouped[cat["class"]][type_key].has(subclass_key):
-			grouped[cat["class"]][type_key][subclass_key] = []
-		grouped[cat["class"]][type_key][subclass_key].append(i)
-
-	var class_order = ["Melee Weapon", "Ranged Weapon", "Tool", "Component", "Medicine", "Material"]
-	for class_name_key in class_order:
-		if not grouped.has(class_name_key):
-			continue
-
-		var class_category_key = "craft:" + class_name_key
-		crafting_book_list_container.add_child(_make_crafting_book_header(class_name_key, 0, Color(0.85, 0.7, 0.3), class_category_key, _refresh_crafting_book))
-
-		if book_category_collapsed.get(class_category_key, false):
-			continue
-
-		var type_keys = grouped[class_name_key].keys()
-		type_keys.sort()
-		for type_key in type_keys:
-			var type_category_key = class_category_key + "/" + type_key
-			if type_key != "_flat_":
-				crafting_book_list_container.add_child(_make_crafting_book_header(type_key, 1, Color(0.7, 0.85, 0.85), type_category_key, _refresh_crafting_book))
-				if book_category_collapsed.get(type_category_key, false):
-					continue
-
-			var subclass_keys = grouped[class_name_key][type_key].keys()
-			subclass_keys.sort()
-			for subclass_key in subclass_keys:
-				var indent = 1 if type_key == "_flat_" else 2
-				var subclass_category_key = type_category_key + "/" + subclass_key
-				if subclass_key != "_flat_":
-					crafting_book_list_container.add_child(_make_crafting_book_header(subclass_key, indent, Color(0.6, 0.75, 0.75), subclass_category_key, _refresh_crafting_book))
-					if book_category_collapsed.get(subclass_category_key, false):
-						continue
-
-				var recipe_indices = grouped[class_name_key][type_key][subclass_key]
-				var button_indent = indent if subclass_key == "_flat_" else indent + 1
-				for recipe_index in recipe_indices:
-					var btn = Button.new()
-					btn.text = "  ".repeat(button_indent) + GameData.recipes[recipe_index]["name"]
-					btn.custom_minimum_size = Vector2(510, 30)
-					btn.focus_mode = Control.FOCUS_NONE
-					btn.pressed.connect(_select_crafting_book_recipe.bind(recipe_index))
-					crafting_book_list_container.add_child(btn)
 
 # Builds the "Hilt: 2 Metal, 1 Torn Cloth" style breakdown, grouped by
 # slot_names when a recipe has them (weapons), or a flat list when it
 # doesn't (tools, medicine, simple materials).
-func _get_ingredient_breakdown_text(recipe: Dictionary) -> String:
-	var lines: Array = []
 
-	if recipe.has("item_class") and recipe.has("item_subclass"):
-		lines.append(recipe["item_class"] + " (" + recipe["item_subclass"] + ")")
-		lines.append("")
-
-	if recipe.has("slot_names"):
-		for requirement_key in recipe["requires"].keys():
-			var needed = recipe["requires"][requirement_key]
-			var slot_label = recipe["slot_names"].get(requirement_key, requirement_key)
-			lines.append(slot_label)
-			lines.append("  " + str(needed) + " " + requirement_key)
-			lines.append("")
-	else:
-		lines.append("Requires:")
-		for requirement_key in recipe["requires"].keys():
-			var needed = recipe["requires"][requirement_key]
-			lines.append("  " + str(needed) + " " + requirement_key)
-
-	return "\n".join(lines)
-
-func _select_crafting_book_recipe(recipe_index: int) -> void:
-	selected_recipe_index = recipe_index
-	crafting_book_result_label.text = ""
-	crafting_book_details_label.text = _get_ingredient_breakdown_text(GameData.recipes[recipe_index])
 
 # Finds the first inventory stack matching a requirement, used to
 # pre-select a sensible default when entering Assembly for a slot.
-func _find_first_matching_instance(requirement_key: String) -> String:
-	for instance_name in inventory.keys():
-		if inventory[instance_name] > 0 and _matches_requirement(instance_name, requirement_key):
-			return instance_name
-	return ""
 
 # Switches the right panel from the schematic browser into the
 # Assembly step for the currently selected recipe -- this is where the
 # player picks exactly which resource stack fills each slot and sees
 # a live projected-quality preview before committing, similar in
 # spirit to SWG's assembly screen (not its exact formulas or look).
-func _enter_crafting_assembly() -> void:
-	if selected_recipe_index == -1:
-		crafting_book_result_label.text = "Select a recipe first!"
-		return
 
-	crafting_assembly_recipe_index = selected_recipe_index
-	crafting_assembly_selections.clear()
 
-	var recipe = GameData.recipes[crafting_assembly_recipe_index]
-	for requirement_key in recipe["requires"].keys():
-		var default_instance = _find_first_matching_instance(requirement_key)
-		if default_instance != "":
-			crafting_assembly_selections[requirement_key] = default_instance
-
-	crafting_book_back_button.visible = true
-	_refresh_crafting_assembly_view()
-
-func _exit_crafting_assembly() -> void:
-	_refresh_crafting_book()
-
-func _select_assembly_instance(requirement_key: String, instance_name: String) -> void:
-	crafting_assembly_selections[requirement_key] = instance_name
-	_refresh_crafting_assembly_view()
 
 # Rebuilds the right panel's contents as the per-slot resource picker,
 # and the left panel's contents as the live projected-quality preview.
-func _refresh_crafting_assembly_view() -> void:
-	for child in crafting_book_list_container.get_children():
-		child.queue_free()
-
-	var recipe = GameData.recipes[crafting_assembly_recipe_index]
-
-	var recipe_title = _make_plain_header(recipe["name"], 0, Color(0.85, 0.7, 0.3))
-	crafting_book_list_container.add_child(recipe_title)
-
-	for requirement_key in recipe["requires"].keys():
-		var needed = recipe["requires"][requirement_key]
-		var slot_label = recipe.get("slot_names", {}).get(requirement_key, requirement_key)
-
-		crafting_book_list_container.add_child(_make_plain_header(slot_label + " (needs " + str(needed) + " " + requirement_key + ")", 1, Color(0.7, 0.85, 0.85)))
-
-		var found_any = false
-		for instance_name in inventory.keys():
-			if inventory[instance_name] <= 0:
-				continue
-			if not _matches_requirement(instance_name, requirement_key):
-				continue
-
-			found_any = true
-			var is_selected = crafting_assembly_selections.get(requirement_key, "") == instance_name
-
-			var btn = Button.new()
-			btn.text = "  " + _get_leaf_label(instance_name) + " (" + str(inventory[instance_name]) + " available)" + (" [SELECTED]" if is_selected else "")
-			btn.custom_minimum_size = Vector2(510, 28)
-			btn.focus_mode = Control.FOCUS_NONE
-			var btn_color = TALENT_OWNED_COLOR if is_selected else TALENT_UNLEARNED_COLOR
-			var btn_style = _make_flat_style(btn_color)
-			btn.add_theme_stylebox_override("normal", btn_style)
-			btn.add_theme_stylebox_override("hover", btn_style)
-			btn.add_theme_stylebox_override("pressed", btn_style)
-			btn.add_theme_stylebox_override("focus", btn_style)
-			btn.pressed.connect(_select_assembly_instance.bind(requirement_key, instance_name))
-			crafting_book_list_container.add_child(btn)
-
-		if not found_any:
-			var none_label = Label.new()
-			none_label.text = "  (none available)"
-			none_label.modulate = Color(0.7, 0.3, 0.3)
-			crafting_book_list_container.add_child(none_label)
-
-	crafting_book_craft_button.text = "Assemble"
-	if crafting_book_craft_button.pressed.is_connected(_enter_crafting_assembly):
-		crafting_book_craft_button.pressed.disconnect(_enter_crafting_assembly)
-	if not crafting_book_craft_button.pressed.is_connected(_execute_assembly_craft):
-		crafting_book_craft_button.pressed.connect(_execute_assembly_craft)
-
-	_update_assembly_preview()
 
 # Live preview of what the current resource selections would produce
 # -- our own version of "see how resources affect the build" before
 # committing, not a copy of any specific game's exact formula/look.
-func _update_assembly_preview() -> void:
-	var recipe = GameData.recipes[crafting_assembly_recipe_index]
-
-	var lines: Array = []
-	lines.append(recipe["name"])
-	lines.append("")
-
-	var all_slots_filled = true
-
-	for requirement_key in recipe["requires"].keys():
-		var needed = recipe["requires"][requirement_key]
-		var slot_label = recipe.get("slot_names", {}).get(requirement_key, requirement_key)
-		var instance_name = crafting_assembly_selections.get(requirement_key, "")
-
-		if instance_name == "":
-			lines.append(slot_label + ": (none selected)")
-			all_slots_filled = false
-			continue
-
-		var available = inventory.get(instance_name, 0)
-
-		lines.append(slot_label + " <- " + _get_leaf_label(instance_name))
-		if available < needed:
-			lines.append("  NOT ENOUGH (" + str(available) + " / " + str(needed) + ")")
-			all_slots_filled = false
-
-	lines.append("")
-
-	if not all_slots_filled:
-		lines.append("Fill every slot with enough of the right resource before assembling.")
-
-	crafting_book_details_label.text = "\n".join(lines)
 
 # Commits the craft using the SPECIFIC resource stacks chosen in
 # Assembly, rather than auto-picking from inventory like the old
 # flow -- this is the actual "Assemble" action.
-func _execute_assembly_craft() -> void:
-	var recipe = GameData.recipes[crafting_assembly_recipe_index]
-
-	if not _is_recipe_learned(recipe):
-		crafting_book_result_label.text = "You haven't learned this pattern!"
-		return
-
-	var total_weighted = 0.0
-	var total_weight = 0
-
-	for requirement_key in recipe["requires"].keys():
-		var needed = recipe["requires"][requirement_key]
-		var instance_name = crafting_assembly_selections.get(requirement_key, "")
-
-		if instance_name == "":
-			crafting_book_result_label.text = "Every slot needs a resource selected first!"
-			return
-
-		var available = inventory.get(instance_name, 0)
-		if available < needed:
-			crafting_book_result_label.text = "Not enough " + _get_leaf_label(instance_name) + " for that slot!"
-			return
-
-	for requirement_key in recipe["requires"].keys():
-		var needed = recipe["requires"][requirement_key]
-		var instance_name = crafting_assembly_selections[requirement_key]
-
-		# A material only contributes to crafted quality if it actually has
-		# stats. Looted materials arrive as plain stacks with no stat block,
-		# and previously scored a flat 50/1000 that silently dragged the
-		# whole craft to the bottom of its stat range. They now simply don't
-		# count -- quality comes from whatever sampled materials were used.
-		var has_material_stats = inventory_stats.get(instance_name, {}).size() > 0
-		var counts_toward_quality = has_material_stats and (not recipe.has("quality_ingredients") or recipe["quality_ingredients"].has(requirement_key))
-		if counts_toward_quality:
-			var stack_score = _get_weighted_stack_score(instance_name, requirement_key, recipe)
-			total_weighted += stack_score * needed
-			total_weight += needed
-
-		inventory[instance_name] -= needed
-
-	# Neutral baseline when no material carried stats (e.g. an all-looted
-	# craft). 500 is the codebase's established mid-scale default rather
-	# than the old 50, which sat in the bottom 5% of every stat range.
-	var base_quality = 500
-	if total_weight > 0:
-		base_quality = round(total_weighted / total_weight)
-
-	var finalize_result = _finalize_crafted_item(recipe, base_quality)
-	var result_text = finalize_result["text"]
-	var crafted_item_key = finalize_result["item_key"]
-	crafting_book_result_label.text = result_text
-
-	var article = _get_article(recipe["output"])
-	_show_combat_message("You have successfully crafted " + article + " " + recipe["output"] + "!")
-
-	_exit_crafting_assembly()
-	_show_crafting_result_popup(crafted_item_key)
 
 # --- Completed Item Popup ---
 # Shows the finished item right after Assemble, with its full stats --
@@ -5368,106 +4275,7 @@ func _execute_assembly_craft() -> void:
 # layout already has a home for that feature when it's built later,
 # rather than needing this window redesigned at that point.
 
-func _build_crafting_result_ui() -> void:
-	crafting_result_ui = Control.new()
-	crafting_result_ui.name = "CraftingResultUI"
-	crafting_result_ui.anchor_right = 1
-	crafting_result_ui.anchor_bottom = 1
-	crafting_result_ui.visible = false
-	crafting_result_ui.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	$UILayer.add_child(crafting_result_ui)
 
-	var backdrop = ColorRect.new()
-	backdrop.color = Color(0, 0, 0, 0.65)
-	backdrop.anchor_right = 1
-	backdrop.anchor_bottom = 1
-	backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	crafting_result_ui.add_child(backdrop)
-
-	var main_panel = Panel.new()
-	main_panel.position = Vector2(760, 290)
-	main_panel.size = Vector2(400, 500)
-	main_panel.mouse_filter = Control.MOUSE_FILTER_STOP
-	main_panel.add_theme_stylebox_override("panel", _make_flat_style(Color(0.043, 0.086, 0.086)))
-	crafting_result_ui.add_child(main_panel)
-
-	var title_label = Label.new()
-	title_label.text = "Item Crafted!"
-	title_label.position = Vector2(20, 10)
-	title_label.modulate = Color(0.6, 0.9, 0.9)
-	title_label.add_theme_font_size_override("font_size", 18)
-	main_panel.add_child(title_label)
-
-	var close_button = Button.new()
-	close_button.text = "X"
-	close_button.position = Vector2(360, 8)
-	close_button.custom_minimum_size = Vector2(30, 30)
-	close_button.focus_mode = Control.FOCUS_NONE
-	close_button.pressed.connect(func(): crafting_result_ui.visible = false)
-	main_panel.add_child(close_button)
-
-	var stats_scroll = ScrollContainer.new()
-	stats_scroll.position = Vector2(15, 46)
-	stats_scroll.size = Vector2(370, 300)
-	stats_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	main_panel.add_child(stats_scroll)
-
-	crafting_result_label = Label.new()
-	crafting_result_label.custom_minimum_size = Vector2(355, 0)
-	crafting_result_label.autowrap_mode = TextServer.AUTOWRAP_WORD
-	crafting_result_label.text = ""
-	crafting_result_label.modulate = Color(0.85, 0.95, 0.95)
-	stats_scroll.add_child(crafting_result_label)
-
-	var mod_slots_header = Label.new()
-	mod_slots_header.text = "Mod Slots"
-	mod_slots_header.position = Vector2(15, 356)
-	mod_slots_header.modulate = Color(0.6, 0.9, 0.9)
-	main_panel.add_child(mod_slots_header)
-
-	var mod_slots_panel = Panel.new()
-	mod_slots_panel.position = Vector2(15, 380)
-	mod_slots_panel.size = Vector2(370, 90)
-	mod_slots_panel.add_theme_stylebox_override("panel", _make_flat_style(Color(0.03, 0.06, 0.06)))
-	main_panel.add_child(mod_slots_panel)
-
-	crafting_result_mod_slots_label = Label.new()
-	crafting_result_mod_slots_label.position = Vector2(10, 8)
-	crafting_result_mod_slots_label.size = Vector2(350, 74)
-	crafting_result_mod_slots_label.autowrap_mode = TextServer.AUTOWRAP_WORD
-	crafting_result_mod_slots_label.text = "No mod slots installed yet. Adding item mods is a planned feature."
-	crafting_result_mod_slots_label.modulate = Color(0.6, 0.6, 0.6)
-	mod_slots_panel.add_child(crafting_result_mod_slots_label)
-
-	var continue_button = Button.new()
-	continue_button.text = "Continue"
-	continue_button.position = Vector2(15, 460)
-	continue_button.custom_minimum_size = Vector2(370, 30)
-	continue_button.focus_mode = Control.FOCUS_NONE
-	continue_button.pressed.connect(func(): crafting_result_ui.visible = false)
-	main_panel.add_child(continue_button)
-
-func _show_crafting_result_popup(item_key: String) -> void:
-	var display_name = _get_inventory_display_name(item_key)
-	var stats = inventory_stats.get(item_key, {})
-
-	var lines: Array = []
-	lines.append(display_name)
-	lines.append("")
-
-	var stat_lines: Array = []
-	for stat_name in stats.keys():
-		if stat_name == "Quality":
-			continue
-		stat_lines.append(stat_name + ": " + _format_number(stats[stat_name]))
-
-	if stat_lines.size() == 0:
-		lines.append("No additional stats.")
-	else:
-		lines.append_array(stat_lines)
-
-	crafting_result_label.text = "\n".join(lines)
-	crafting_result_ui.visible = true
 
 # --- Survey Book ---
 # A testing/reference UI for surveying, styled like the other books.
@@ -5476,195 +4284,88 @@ func _show_crafting_result_popup(item_key: String) -> void:
 # Inventory Book and Crafting Book, per request. This only shows
 # concentration %, matching what a real survey tool would tell you.
 
-func _build_survey_book_ui() -> void:
-	survey_book_ui = Control.new()
-	survey_book_ui.name = "SurveyBookUI"
-	survey_book_ui.anchor_right = 1
-	survey_book_ui.anchor_bottom = 1
-	survey_book_ui.visible = false
-	survey_book_ui.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	$UILayer.add_child(survey_book_ui)
 
-	var backdrop = ColorRect.new()
-	backdrop.color = Color(0, 0, 0, 0.6)
-	backdrop.anchor_right = 1
-	backdrop.anchor_bottom = 1
-	backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	survey_book_ui.add_child(backdrop)
-
-	var main_panel = Panel.new()
-	main_panel.position = Vector2(510, 215)
-	main_panel.size = Vector2(900, 650)
-	main_panel.mouse_filter = Control.MOUSE_FILTER_STOP
-	main_panel.add_theme_stylebox_override("panel", _make_flat_style(Color(0.043, 0.086, 0.086)))
-	survey_book_ui.add_child(main_panel)
-
-	var title_label = Label.new()
-	title_label.text = "Survey"
-	title_label.position = Vector2(20, 8)
-	title_label.modulate = Color(0.6, 0.9, 0.9)
-	main_panel.add_child(title_label)
-
-	var close_button = Button.new()
-	close_button.text = "X"
-	close_button.position = Vector2(860, 6)
-	close_button.custom_minimum_size = Vector2(30, 30)
-	close_button.focus_mode = Control.FOCUS_NONE
-	close_button.pressed.connect(func(): survey_book_ui.visible = false)
-	main_panel.add_child(close_button)
-
-	# Left panel -- concentration reading and Sample button. No stats.
-	var details_panel = Panel.new()
-	details_panel.position = Vector2(20, 50)
-	details_panel.size = Vector2(320, 560)
-	details_panel.add_theme_stylebox_override("panel", _make_flat_style(Color(0.03, 0.06, 0.06)))
-	main_panel.add_child(details_panel)
-
-	var details_header = Label.new()
-	details_header.text = "Scan Result"
-	details_header.position = Vector2(10, 4)
-	details_header.modulate = Color(0.6, 0.9, 0.9)
-	details_panel.add_child(details_header)
-
-	survey_book_scan_label = Label.new()
-	survey_book_scan_label.position = Vector2(10, 30)
-	survey_book_scan_label.size = Vector2(300, 100)
-	survey_book_scan_label.autowrap_mode = TextServer.AUTOWRAP_WORD
-	survey_book_scan_label.text = "Select a resource to scan it."
-	survey_book_scan_label.modulate = Color(0.85, 0.95, 0.95)
-	details_panel.add_child(survey_book_scan_label)
-
-	survey_book_sample_button = Button.new()
-	survey_book_sample_button.text = "Sample"
-	survey_book_sample_button.position = Vector2(10, 140)
-	survey_book_sample_button.custom_minimum_size = Vector2(300, 36)
-	survey_book_sample_button.focus_mode = Control.FOCUS_NONE
-	survey_book_sample_button.pressed.connect(_on_sample_pressed)
-	details_panel.add_child(survey_book_sample_button)
-
-	survey_book_message_label = Label.new()
-	survey_book_message_label.position = Vector2(10, 184)
-	survey_book_message_label.size = Vector2(300, 80)
-	survey_book_message_label.autowrap_mode = TextServer.AUTOWRAP_WORD
-	survey_book_message_label.text = ""
-	survey_book_message_label.modulate = Color(0.9, 0.85, 0.6)
-	details_panel.add_child(survey_book_message_label)
-
-	# Right panel -- scrollable Class > Subclass > active resource list.
-	var list_panel = Panel.new()
-	list_panel.position = Vector2(360, 50)
-	list_panel.size = Vector2(520, 560)
-	list_panel.add_theme_stylebox_override("panel", _make_flat_style(Color(0.03, 0.06, 0.06)))
-	main_panel.add_child(list_panel)
-
-	var list_header = Label.new()
-	list_header.text = "Active Resources"
-	list_header.position = Vector2(10, 4)
-	list_header.modulate = Color(0.6, 0.9, 0.9)
-	list_panel.add_child(list_header)
-
-	var list_scroll = ScrollContainer.new()
-	list_scroll.position = Vector2(10, 28)
-	list_scroll.size = Vector2(500, 522)
-	list_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	list_panel.add_child(list_scroll)
-
-	survey_book_list_container = VBoxContainer.new()
-	survey_book_list_container.custom_minimum_size = Vector2(485, 0)
-	survey_book_list_container.add_theme_constant_override("separation", 2)
-	list_scroll.add_child(survey_book_list_container)
-
-func _refresh_survey_book() -> void:
-	for child in survey_book_list_container.get_children():
-		child.queue_free()
-
-	survey_book_scan_label.text = "Select a resource to scan it."
-	survey_book_message_label.text = ""
-
-	var tree_data: Dictionary = {}
-	for instance_name in active_resources:
-		var subclass_name = resource_subclass_of[instance_name]
-		var class_name_for_resource = resource_class_lookup[subclass_name]
-		if not tree_data.has(class_name_for_resource):
-			tree_data[class_name_for_resource] = {}
-		if not tree_data[class_name_for_resource].has(subclass_name):
-			tree_data[class_name_for_resource][subclass_name] = []
-		tree_data[class_name_for_resource][subclass_name].append(instance_name)
-
-	var unlocked_classes = []
-	if active_survey_tool != "" and tool_class_access.has(active_survey_tool):
-		unlocked_classes = tool_class_access[active_survey_tool]
-	else:
-		unlocked_classes = _get_unlocked_classes()
-
-	var class_names_sorted = []
-	for class_name_key in tree_data.keys():
-		if unlocked_classes.has(class_name_key):
-			class_names_sorted.append(class_name_key)
-	class_names_sorted.sort()
-
-	for class_name_key in class_names_sorted:
-		var class_category_key = "survey:" + class_name_key
-		survey_book_list_container.add_child(_make_crafting_book_header(class_name_key, 0, Color(0.85, 0.7, 0.3), class_category_key, _refresh_survey_book))
-
-		if book_category_collapsed.get(class_category_key, false):
-			continue
-
-		var subclass_names_sorted = tree_data[class_name_key].keys()
-		subclass_names_sorted.sort()
-
-		for subclass_name in subclass_names_sorted:
-			if gem_gated_subclasses.has(subclass_name) and not _is_gem_scanning_unlocked():
-				continue
-
-			var subclass_category_key = class_category_key + "/" + subclass_name
-			survey_book_list_container.add_child(_make_crafting_book_header(subclass_name, 1, Color(0.7, 0.85, 0.85), subclass_category_key, _refresh_survey_book))
-
-			if book_category_collapsed.get(subclass_category_key, false):
-				continue
-
-			var instances = tree_data[class_name_key][subclass_name]
-			instances.sort_custom(func(a, b): return resource_type_of[a] < resource_type_of[b])
-
-			for instance_name in instances:
-				var btn = Button.new()
-				btn.text = "    " + _get_leaf_label(instance_name)
-				btn.custom_minimum_size = Vector2(470, 28)
-				btn.focus_mode = Control.FOCUS_NONE
-				btn.pressed.connect(_select_survey_book_resource.bind(instance_name))
-				survey_book_list_container.add_child(btn)
 
 # Scans a resource -- same math as the old resource_tree selection
 # (nearest-hotspot concentration, Scanning XP, skill bonuses), just
 # without ever displaying resource_stats anywhere on this screen.
-func _select_survey_book_resource(instance_name: String) -> void:
-	if not resource_hotspots.has(instance_name):
-		resource_hotspot_centers[instance_name] = player.global_position
-		resource_hotspots[instance_name] = _generate_hotspot_set(resource_hotspot_centers[instance_name])
 
-	var distance = _get_nearest_hotspot_distance(instance_name)
-	var proximity = 1.0 - clamp(distance / MAX_CONCENTRATION_RANGE, 0.0, 1.0)
-	var concentration = int(round(100 * proximity))
-	concentration = max(concentration, 1)
 
-	var scanning_nodes = _get_profession_rank_count("Scanning")
-	var mastery_nodes = _get_profession_rank_count("Fabrication Mastery")
-	concentration += (scanning_nodes * 5) + (mastery_nodes * 2)
-	concentration = min(concentration, 100)
+# ============================================================
+# STARTUP DATA VALIDATION (see Combat.validate_game_data)
+# ============================================================
+# Runs the cross-file data checks once at startup. Problems go to the
+# console via push_error AND to an on-screen banner, because the whole
+# point of this guard is that these failures are otherwise SILENT --
+# a bad key returns a legal default and play continues looking normal.
+#
+# The banner is dismissible (click it, or press ESC) so it can never
+# trap the player behind an overlay.
+func _run_startup_validation() -> void:
+	var issues: Array = Combat.validate_game_data()
+	if issues.is_empty():
+		return
 
-	current_scan_resource = instance_name
-	current_scan_concentration = concentration
+	var real_problems: Array = []
+	for issue in issues:
+		if String(issue).begins_with("NOTE"):
+			print("[DATA CHECK] " + String(issue))
+		else:
+			real_problems.append(issue)
+			push_error("[DATA CHECK] " + String(issue))
 
-	_add_skill_xp("Crafting XP", 5)
+	if real_problems.is_empty():
+		return
 
-	survey_book_scan_label.text = _get_resource_display_label(instance_name) + ": " + str(concentration) + "% concentration"
-	survey_book_message_label.text = ""
+	_show_validation_banner(real_problems)
 
-	# Keep the old survey_ui's labels in sync too, since they share
-	# the same current_scan_resource/current_scan_concentration state.
-	scan_result_label.text = survey_book_scan_label.text
-	var stats_text = ""
-	var stats = resource_stats[instance_name]
-	for stat_name in stats.keys():
-		stats_text += stat_name + ": " + _format_number(stats[stat_name]) + "   "
-	resource_stats_label.text = stats_text
+
+func _show_validation_banner(problems: Array) -> void:
+	var layer = get_node_or_null("UILayer")
+	if layer == null:
+		return
+
+	var banner = Panel.new()
+	banner.name = "DataValidationBanner"
+	banner.anchor_left = 0.0
+	banner.anchor_top = 0.0
+	banner.anchor_right = 1.0
+	banner.offset_left = 0
+	banner.offset_top = 0
+	banner.offset_right = 0
+	banner.custom_minimum_size = Vector2(0, 0)
+	banner.mouse_filter = Control.MOUSE_FILTER_STOP
+
+	var sb = StyleBoxFlat.new()
+	sb.bg_color = Color(0.35, 0.05, 0.05, 0.94)
+	sb.border_color = Color(1.0, 0.35, 0.35)
+	sb.set_border_width_all(2)
+	banner.add_theme_stylebox_override("panel", sb)
+
+	var shown = min(problems.size(), 6)
+	var body = "DATA VALIDATION: " + str(problems.size()) + " problem(s) found\n"
+	for i in range(shown):
+		body += "  - " + String(problems[i]) + "\n"
+	if problems.size() > shown:
+		body += "  ... and " + str(problems.size() - shown) + " more (see Output console)\n"
+	body += "\n[ click this banner or press ESC to dismiss ]"
+
+	var lbl = Label.new()
+	lbl.text = body
+	lbl.autowrap_mode = TextServer.AUTOWRAP_WORD
+	lbl.add_theme_font_size_override("font_size", 14)
+	lbl.add_theme_color_override("font_color", Color(1.0, 0.92, 0.92))
+	lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	lbl.anchor_right = 1.0
+	lbl.offset_left = 14
+	lbl.offset_top = 10
+	lbl.offset_right = -14
+
+	banner.add_child(lbl)
+	banner.offset_bottom = 34 + (shown + 3) * 20
+	layer.add_child(banner)
+
+	banner.gui_input.connect(func(event):
+		if event is InputEventMouseButton and event.pressed:
+			banner.queue_free()
+	)

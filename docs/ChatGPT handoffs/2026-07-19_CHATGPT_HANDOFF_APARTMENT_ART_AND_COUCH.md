@@ -59,14 +59,16 @@ It does **not** mean copying Shadowrun Returns' brown or sepia coloring.
 
 ### 3. World-design mixture
 
-The latest approved mixture is:
+The canonical Steamtek asset-design rule is:
 
 - **40% cyberpunk**
 - **20% neo-industrial**
-- **20% practical steampunk**
-- **20% Arcane-inspired color treatment**
+- **20% modern steampunk**
+- **20% Arcane-inspired painterly finish**
 
-This supersedes the older 60/20/20 direction and the temporary 40% neo-industrial / 40% cyberpunk / 20% steampunk wording.
+Keep it functional, gritty, and hand-painted. Use neon accents sparingly. Use copper/brass as supporting accents. Avoid Victorian ornamentation.
+
+This supersedes every earlier style ratio or conflicting asset-art description. The persistent canonical wording is stored in `res://docs/STEAMPUNK_STYLE_MEMORY.md`.
 
 Arcane is a color and value-treatment influence only. Do not copy its characters, objects, architecture, or intellectual property.
 

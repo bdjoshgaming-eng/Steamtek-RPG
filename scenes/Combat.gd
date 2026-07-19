@@ -398,3 +398,118 @@ func loot_tier_chances_for_cl(cl: int) -> Dictionary:
 		"Uncommon": float(chosen["Uncommon"]),
 		"Rare": float(chosen["Rare"]),
 	}
+
+
+# ============================================================
+# STARTUP DATA VALIDATION
+# ============================================================
+# Cross-checks GameData against CombatData at startup. Reads
+# ITEM_DEFINITIONS, not recipes, so it keeps working after the crafting
+# system is removed.
+#
+# WHY THIS EXISTS: every check below guards the same failure shape --
+# a dictionary lookup with a default, e.g.
+#     resistances.get(damage_type, 0)
+# If the key is wrong, the lookup returns a perfectly legal value and
+# NOTHING complains. That is exactly how a stale GameData.gd let 12
+# weapons carry pre-Phase-4b damage type names, match no resistance
+# key, receive rating 0, and bypass enemy armor entirely for several
+# sessions without a single error.
+#
+# These are all read-only checks. They run once, cost nothing, and turn
+# silent data drift into a visible failure.
+#
+# Returns an Array of human-readable issue strings (empty == all good).
+func validate_game_data() -> Array:
+	var issues: Array = []
+
+	var valid_damage_types := {}
+	for t in CombatData.DAMAGE_TYPES:
+		valid_damage_types[t] = true
+
+	# --- 1. Weapon damage types must exist in CombatData.DAMAGE_TYPES ---
+	# A mismatch means the weapon takes ZERO typed mitigation.
+	var seen_damage_types := {}
+	for wname in GameData.ITEM_DEFINITIONS.keys():
+		var idef = GameData.ITEM_DEFINITIONS[wname]
+		if not idef.has("weapon_categorical_stats"):
+			continue
+		var cat = idef["weapon_categorical_stats"]
+		if not cat.has("Damage Type"):
+			issues.append("Weapon '" + wname + "' has no Damage Type.")
+			continue
+		var dt = cat["Damage Type"]
+		seen_damage_types[dt] = true
+		if not valid_damage_types.has(dt):
+			issues.append("Weapon '" + wname + "' has unknown Damage Type '" + str(dt) + "' -- it will bypass all armor.")
+
+	# --- 2. Weapon families (item_class) must exist in WEAPON_FAMILIES ---
+	# A mismatch means no proficiency tier and no certification resolve.
+	for wname2 in GameData.ITEM_DEFINITIONS.keys():
+		var idef2 = GameData.ITEM_DEFINITIONS[wname2]
+		if not idef2.has("weapon_categorical_stats"):
+			continue
+		var fam = idef2.get("item_class", "")
+		if fam == "":
+			issues.append("Weapon '" + wname2 + "' has no item_class (weapon family).")
+		elif not CombatData.WEAPON_FAMILIES.has(fam):
+			issues.append("Weapon '" + wname2 + "' has unknown family '" + str(fam) + "' -- proficiency and certs will not resolve.")
+
+	# --- 3. Weapon family keystones must be real keystones ---
+	# C1 retired the Crafting keystone; this catches anything still
+	# pointing at a keystone that no longer exists.
+	var street = GameData.novice_professions.get("Street Thug", {})
+	var keystones = street.get("keystones", {})
+	for fam_name in CombatData.WEAPON_FAMILIES.keys():
+		var ks_ref = CombatData.WEAPON_FAMILIES[fam_name].get("keystone", "")
+		if ks_ref != "" and not keystones.has(ks_ref):
+			issues.append("Weapon family '" + fam_name + "' points at keystone '" + ks_ref + "' which does not exist.")
+
+	# --- 4. Weapon cert requirements must point at real keystones ---
+	for cert_weapon in GameData.WEAPON_CERT_REQUIREMENTS.keys():
+		var req = GameData.WEAPON_CERT_REQUIREMENTS[cert_weapon]
+		var cert_ks = req.get("keystone", "")
+		if cert_ks != "" and not keystones.has(cert_ks):
+			issues.append("Cert for '" + cert_weapon + "' requires keystone '" + cert_ks + "' which does not exist.")
+
+	# --- 5. Ability nodes must have a matching ability definition ---
+	# A node naming an ability that was never defined silently grants
+	# nothing when purchased.
+	for ks_name in keystones.keys():
+		var nodes = keystones[ks_name].get("nodes", {})
+		for node_name in nodes.keys():
+			var nd = nodes[node_name]
+			if nd.get("type", "") != "ability":
+				continue
+			var ability_name = nd.get("ability", node_name)
+			if not GameData.ability_definitions.has(ability_name):
+				issues.append("Keystone '" + ks_name + "' node '" + node_name + "' grants ability '" + ability_name + "' which has no definition.")
+
+	# --- 6. Enemy archetypes and factions must resolve ---
+	# An unknown archetype falls back to uniform 1.0 resistances, which
+	# looks exactly like working code.
+	var default_enemy_set = CombatData.default_enemies()
+	for enemy_id in default_enemy_set.keys():
+		var e = default_enemy_set[enemy_id]
+		var arch = e.get("archetype", "")
+		var fac = e.get("faction", "")
+		if arch == "":
+			issues.append("Enemy '" + enemy_id + "' has no archetype.")
+		else:
+			if not CombatData.ARCHETYPE_RESISTANCE_PROFILES.has(arch):
+				issues.append("Enemy '" + enemy_id + "' archetype '" + arch + "' has no resistance profile.")
+			if not CombatData.ARCHETYPE_STAT_MODIFIERS.has(arch):
+				issues.append("Enemy '" + enemy_id + "' archetype '" + arch + "' has no stat modifiers.")
+		if fac != "" and not CombatData.FACTION_DEFINITIONS.has(fac):
+			issues.append("Enemy '" + enemy_id + "' faction '" + fac + "' is not defined.")
+
+	# --- 7. Informational: damage types carried by no weapon ---
+	# Not an error. Their resistance columns simply do nothing in play.
+	var unused: Array = []
+	for t2 in CombatData.DAMAGE_TYPES:
+		if not seen_damage_types.has(t2):
+			unused.append(t2)
+	if unused.size() > 0:
+		issues.append("NOTE (not an error): no weapon deals " + ", ".join(unused) + " -- those resistance columns are inert.")
+
+	return issues
