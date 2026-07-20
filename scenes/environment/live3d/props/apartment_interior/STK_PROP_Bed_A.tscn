@@ -1,0 +1,92 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Bed_A_Production.glb" id="1_model"]
+[ext_resource type="Script" path="res://scenes/environment/live3d/props/static_prop_material_variant.gd" id="2_material_script"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/apartment_interior_variants/bed/STK_MAT_Bed_A_SourceMatte.tres" id="3_matte_material"]
+
+[sub_resource type="BoxShape3D" id="LowerFrameShape"]
+size = Vector3(1.18, 0.32, 2.06)
+
+[sub_resource type="BoxShape3D" id="MattressShape"]
+size = Vector3(1.12, 0.20, 1.78)
+
+[sub_resource type="BoxShape3D" id="HeadboardShape"]
+size = Vector3(1.18, 0.58, 0.14)
+
+[sub_resource type="BoxShape3D" id="FootboardShape"]
+size = Vector3(1.18, 0.40, 0.14)
+
+[sub_resource type="BoxShape3D" id="StorageShape"]
+size = Vector3(0.92, 0.18, 1.08)
+
+[node name="STK_PROP_Bed_A" type="Node3D" groups=["steamtek_live3d_modular"]]
+script = ExtResource("2_material_script")
+variant_material = ExtResource("3_matte_material")
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "static_environment_prop_furniture"
+metadata/module_variant = "STK_PROP_Bed_A"
+metadata/module_dimensions_m = Vector3(1.2, 1.05, 2.1)
+metadata/mattress_top_height_m = 0.52
+metadata/contact_pivot = "floor_center"
+metadata/front_axis = "+Z_toward_room_and_c001"
+metadata/scale_contract = "1_godot_unit_equals_1_meter"
+metadata/placement_profile = "furniture_0_3m"
+metadata/collision_contract = "five_simplified_box_shapes_not_render_mesh"
+metadata/art_style = "gritty_hand_painted_stylized_game_art"
+metadata/world_design = "40_cyberpunk_20_neoindustrial_20_modern_steampunk_20_arcane_inspired_painterly_finish"
+metadata/source_intake = "res://incoming/meshy_apartment_assets/APT_Bed/STK_PROP_Bed_A_Meshy.glb"
+metadata/qa_report = "res://incoming/meshy_apartment_assets/APT_Bed/STK_PROP_Bed_A_QA.md"
+metadata/production_status = "pipeline_complete_pending_normal_editor_f6_visual_approval"
+metadata/render_triangles = 19131
+metadata/render_vertices = 22344
+metadata/source_editable_vertices = 21976
+metadata/recolor_enabled = true
+metadata/recolor_profile = "steamtek_bed_v1"
+metadata/material_variant_profile = "steamtek_bed_v1"
+metadata/recolor_regions = PackedStringArray("Bedding_Main", "Bedding_Secondary", "Frame_PaintedMetal", "Accent_Powered")
+metadata/recolor_mask_mode = "explicit_actual_atlas_masks_v1"
+metadata/recolor_locked_regions = PackedStringArray("StructuralMetal", "Copper", "Rust", "Grime", "Scratches", "EdgeWear", "PaintedShading")
+metadata/recolor_emission_regions = PackedStringArray("Accent_Powered")
+metadata/material_response = "matte_masked_v2_bedding_0_88_to_0_90_frame_0_75_structural_0_68_copper_0_58_accent_0_65_specular_0_20_fabric_nonmetallic"
+metadata/builder_label = "Apartment - Bed Meshy A"
+metadata/builder_parent = "Furniture"
+
+[node name="Visual" parent="." instance=ExtResource("1_model")]
+
+[node name="StaticBody" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="LowerFrameCollision" type="CollisionShape3D" parent="StaticBody"]
+position = Vector3(0, 0.18, 0)
+shape = SubResource("LowerFrameShape")
+
+[node name="MattressCollision" type="CollisionShape3D" parent="StaticBody"]
+position = Vector3(0, 0.42, -0.02)
+shape = SubResource("MattressShape")
+
+[node name="HeadboardCollision" type="CollisionShape3D" parent="StaticBody"]
+position = Vector3(0, 0.76, -0.98)
+shape = SubResource("HeadboardShape")
+
+[node name="FootboardCollision" type="CollisionShape3D" parent="StaticBody"]
+position = Vector3(0, 0.33, 0.98)
+shape = SubResource("FootboardShape")
+
+[node name="StorageCollision" type="CollisionShape3D" parent="StaticBody"]
+position = Vector3(0, 0.18, 0)
+shape = SubResource("StorageShape")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="LeftFurniture" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-0.6, 0, 0)
+metadata/socket_role = "furniture_chain"
+
+[node name="RightFurniture" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0.6, 0, 0)
+metadata/socket_role = "furniture_chain"
+
+[node name="FrontAlignment" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, 1.05)
+metadata/socket_role = "furniture_front_alignment"

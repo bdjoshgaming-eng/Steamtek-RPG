@@ -10,6 +10,7 @@ const MAX_SOCKET_SNAP_DISTANCE_M := 1.0
 const MODULE_GROUP := "steamtek_live3d_modular"
 const SOCKET_GROUP := "steamtek_live3d_snap"
 const MODULE_SYSTEM := "live3d_meter_v1"
+const GENERATED_MATERIAL_VARIANT_DIR := "res://scenes/environment/live3d/props/apartment_interior/generated_variants"
 
 var dock: VBoxContainer
 var module_picker: OptionButton
@@ -236,6 +237,7 @@ func _module_library() -> Array:
 		},
 	]
 	library.append_array(_production_apartment_library())
+	library.append_array(_generated_material_variant_library())
 	return library
 
 
@@ -282,8 +284,44 @@ func _production_apartment_library() -> Array:
 			"path": "res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Workstation_A.tscn",
 			"parent": "Furniture",
 		},
+		{
+			"label": "Apartment - Bed Meshy A",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Bed_A.tscn",
+			"parent": "Furniture",
+		},
 	# APARTMENT_LIBRARY_D_END
 	]
+
+
+func _generated_material_variant_library() -> Array:
+	var generated: Array = []
+	var directory := DirAccess.open(GENERATED_MATERIAL_VARIANT_DIR)
+	if directory == null:
+		return generated
+	directory.list_dir_begin()
+	var file_name := directory.get_next()
+	while not file_name.is_empty():
+		if not directory.current_is_dir() and file_name.get_extension().to_lower() == "tscn":
+			var scene_path := GENERATED_MATERIAL_VARIANT_DIR.path_join(file_name)
+			var packed := load(scene_path) as PackedScene
+			if packed != null:
+				var instance := packed.instantiate()
+				if instance != null and bool(instance.get_meta("material_variant_generated", false)):
+					generated.append({
+						"label": str(instance.get_meta("builder_label", file_name.get_basename().capitalize())),
+						"path": scene_path,
+						"parent": str(instance.get_meta("builder_parent", "Furniture")),
+					})
+				if instance != null:
+					instance.free()
+		file_name = directory.get_next()
+	directory.list_dir_end()
+	generated.sort_custom(_sort_library_entries)
+	return generated
+
+
+func _sort_library_entries(a: Dictionary, b: Dictionary) -> bool:
+	return str(a.get("label", "")) < str(b.get("label", ""))
 
 
 func _create_dock() -> void:
@@ -328,6 +366,13 @@ func _create_dock() -> void:
 	module_search.clear_button_enabled = true
 	module_search.text_changed.connect(_refresh_module_picker)
 	dock.add_child(module_search)
+
+	var refresh_button := _make_button(
+		"Refresh module list",
+		"Reloads generated material variants created by the Steamtek Material Variant Editor.",
+		_refresh_module_picker
+	)
+	dock.add_child(refresh_button)
 
 	module_picker = OptionButton.new()
 	dock.add_child(module_picker)

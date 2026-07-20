@@ -17,8 +17,6 @@ func _ready() -> void:
 
 
 func _apply_variant_material() -> void:
-	if variant_material == null:
-		return
 	for child in find_children("*", "MeshInstance3D", true, false):
 		var mesh_instance := child as MeshInstance3D
 		if mesh_instance != null:

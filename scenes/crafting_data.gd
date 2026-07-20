@@ -204,6 +204,33 @@ const BLUEPRINTS: Dictionary = {
 		"guaranteed_sockets": 0,
 		"max_sockets": 3,
 	},
+	# --- Medicine. Consumables take NO mod sockets. Bandages are the
+	# cheapest recipe in the game deliberately: medicine became
+	# unobtainable when the old crafting system was cut, and this is what
+	# ends that drought.
+	"bp_bandages": {
+		"display_name": "Crate of Bandages",
+		"output_item_id": "Crate of Bandages",
+		"difficulty": 10,
+		"material_slots": [
+			{"slot_id": "fiber", "slot_name": "Fiber", "accepts": ["cultivated_fiber"], "amount": 3, "weight": 0.7},
+			{"slot_id": "binding", "slot_name": "Binding", "accepts": ["cultivated_fiber", "insulating_polymer"], "amount": 1, "weight": 0.3},
+		],
+		"guaranteed_sockets": 0,
+		"max_sockets": 0,
+	},
+	"bp_antiseptic_salve": {
+		"display_name": "Antiseptic Salve",
+		"output_item_id": "Antiseptic Salve",
+		"difficulty": 25,
+		"material_slots": [
+			{"slot_id": "reagent", "slot_name": "Reagent", "accepts": ["medical_reagent"], "amount": 2, "weight": 0.5},
+			{"slot_id": "culture", "slot_name": "Culture", "accepts": ["fungal_culture"], "amount": 2, "weight": 0.35},
+			{"slot_id": "base", "slot_name": "Base", "accepts": ["industrial_solvent"], "amount": 1, "weight": 0.15},
+		],
+		"guaranteed_sockets": 0,
+		"max_sockets": 0,
+	},
 }
 
 
@@ -544,3 +571,22 @@ static func identities_for_era(era_id: String) -> Array:
 			out.append(ident_id)
 	out.sort()
 	return out
+
+
+# --- Surface salvage -------------------------------------------------
+# The Surface is not part of the Silo's 60 floors, so it has no generated
+# sources. These are a small SYNTHETIC set: picked-over street salvage,
+# low quality by design, that lets a player craft before ever descending.
+# They never touch the seeded Silo map.
+const SURFACE_FLOOR_ID: String = "surface"
+const SURFACE_QUALITY_MIN: int = 12
+const SURFACE_QUALITY_MAX: int = 34
+
+# family_id -> location flavour for the surface salvage points.
+const SURFACE_SOURCES: Array = [
+	{"family_id": "scrap_plating", "location_name": "Alley Dumpster", "capacity": 40, "source_type": "repeatable_salvage"},
+	{"family_id": "cultivated_fiber", "location_name": "Alley Dumpster", "capacity": 30, "source_type": "repeatable_salvage"},
+	{"family_id": "copper", "location_name": "Stripped Wiring", "capacity": 24, "source_type": "repeatable_salvage"},
+	{"family_id": "black_iron", "location_name": "Rusted Railing", "capacity": 24, "source_type": "repeatable_salvage"},
+	{"family_id": "insulating_polymer", "location_name": "Alley Dumpster", "capacity": 20, "source_type": "repeatable_salvage"},
+]

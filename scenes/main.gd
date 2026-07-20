@@ -655,6 +655,24 @@ var professions_unlocked: Dictionary = {
 	"Ghost Medic": false, "Warchemist": false, "Toxinsmith": false, "Plague Doctor": false
 }
 var has_chosen_starting_profession: bool = false
+
+# --- Crafting system state (Phase 3) --------------------------------
+# The campaign resource map is generated ONCE from campaign_seed when a new
+# game starts, then saved WHOLE and never regenerated. That permanence is
+# what makes a deposit stay where you found it (spec s2.4/s4.4).
+var campaign_seed: int = 0
+var campaign_map: Dictionary = {}
+var surface_sources: Dictionary = {}
+
+# Material batches the player is carrying, keyed by batch_id. Batches are
+# NOT plain inventory entries -- each carries quality, trait, instability
+# and provenance, so they live in their own store.
+var material_batches: Dictionary = {}
+
+# Crafted item instances, keyed by item_id, and the player's crafting
+# profile (blueprint familiarity, selected keystone nodes).
+var crafted_items: Dictionary = {}
+var crafting_profile: Dictionary = {}
 const PROFESSION_ENTRY_COST = 5
 const ADDITIONAL_PROFESSION_COGS_COST = 1
 const NODES_PER_PATH = 4
@@ -788,12 +806,20 @@ func _ready() -> void:
 	crafting_ui.visible = false
 	skill_ui.visible = false
 
+	# The old Survey/sampling system was deleted, but its SurveyUI node is
+	# still in the scene and its hide-line went with the cut, leaving the
+	# Sample panel permanently on screen. Hidden defensively via has_node
+	# so this is safe whether or not the node is eventually removed.
+	if has_node("UILayer/SurveyUI"):
+		get_node("UILayer/SurveyUI").visible = false
+
 	_setup_health_bars()
 	call_deferred("_layout_hud")
 	var hud_layout_retry_timer = get_tree().create_timer(0.2)
 	hud_layout_retry_timer.timeout.connect(_layout_hud)
 	call_deferred("_setup_enemy_combat_message_label")
 	_build_talent_ui()
+	_build_crafting_panel_ui()
 	_build_ability_book_ui()
 	_build_inventory_book_ui()
 
@@ -801,6 +827,8 @@ func _ready() -> void:
 	# the only starting profession, so there is nothing to choose. Additional
 	# professions are still learned from trainers. A loaded save that already
 	# set a starting profession skips this.
+	_init_crafting_campaign()
+
 	if not has_chosen_starting_profession:
 		professions_unlocked["Street Thug"] = true
 		has_chosen_starting_profession = true
@@ -883,6 +911,17 @@ func _unhandled_input(event: InputEvent) -> void:
 			_banner.queue_free()
 	if event.is_action_pressed("ui_cancel") and talent_ui != null and talent_ui.visible:
 		talent_ui.visible = false
+
+	# Crafting panel. Guarded by InputMap.has_action so the game still runs
+	# if the "crafting_menu" action has not been added yet.
+	if InputMap.has_action("crafting_menu") and event.is_action_pressed("crafting_menu"):
+		if crafting_panel_ui != null:
+			crafting_panel_ui.visible = not crafting_panel_ui.visible
+			if crafting_panel_ui.visible and crafting_panel != null:
+				crafting_panel.refresh()
+
+	if event.is_action_pressed("ui_cancel") and crafting_panel_ui != null and crafting_panel_ui.visible:
+		crafting_panel_ui.visible = false
 
 func _generate_unique_resource_name() -> String:
 	var new_name = ""
@@ -1057,6 +1096,10 @@ func _save_game() -> void:
 		"thug_points_available": thug_points_available,
 		"professions_unlocked": professions_unlocked,
 		"has_chosen_starting_profession": has_chosen_starting_profession,
+		"campaign_seed": campaign_seed,
+		"campaign_map": CraftingResourceGenerator.to_save_dict(campaign_map),
+		"surface_sources": surface_sources,
+		"crafting": CraftingService.to_save_dict(material_batches, crafted_items, crafting_profile),
 		"quest_data": quest_system.get_save_data(),
 		"player_position": {"x": player.position.x, "y": player.position.y},
 		"player_current_health": player_current_health,
@@ -1152,6 +1195,7 @@ func _load_game() -> void:
 	thug_points_available = int(save_data.get("thug_points_available", thug_points_available))
 
 	has_chosen_starting_profession = save_data.get("has_chosen_starting_profession", false)
+	_load_crafting_state(save_data)
 	if save_data.has("quest_data"):
 		quest_system.load_save_data(save_data["quest_data"])
 	var loaded_unlocks = save_data.get("professions_unlocked", null)
@@ -2738,19 +2782,37 @@ func _scavenge_dumpster() -> void:
 		_show_combat_message("This dumpster has already been picked through. Check back later.")
 		return
 
-	var plastic_amount = randi_range(1, 3)
+	# Phase 3: the dumpster now yields a real MaterialBatch pulled from the
+	# Surface's synthetic salvage sources, instead of a flat Plastic drop.
+	# Same call the Silo scavenging loop will use, just against surface
+	# sources rather than a generated floor.
+	var pile = CraftingResourceGenerator.surface_sources_at(surface_sources, "Alley Dumpster")
+	var live: Array = []
+	for src in pile:
+		if int(src.get("remaining", 0)) > 0:
+			live.append(src)
 
+	if live.is_empty():
+		_show_combat_message("This dumpster is stripped bare. Nothing usable left.")
+		return
+
+	var chosen = live[randi() % live.size()]
+	var take = randi_range(1, 3)
 	var foraging_chance_bonus = _get_foraging_chance_bonus()
 	if foraging_chance_bonus > 0 and randf() < (foraging_chance_bonus * 0.10):
-		plastic_amount += randi_range(1, 3)
+		take += randi_range(1, 3)
 
-	_add_to_inventory("Plastic", plastic_amount)
+	var batch = CraftingResourceGenerator.extract_from_source(chosen, take)
+	if batch.is_empty():
+		_show_combat_message("This dumpster is stripped bare. Nothing usable left.")
+		return
+
+	_store_material_batch(batch)
 	cogs += randi_range(DUMPSTER_COGS_MIN, DUMPSTER_COGS_MAX)
 	_update_inventory_display()
 	_update_cogs_display()
 
-
-	_show_combat_message("You scavenge and find: " + str(plastic_amount) + " Plastic, " + str(DUMPSTER_COGS_MIN) + " Cogs")
+	_show_combat_message("You scavenge and find: " + str(int(batch.get("amount", 0))) + " " + String(batch.get("display_name", "material")) + " (Quality " + str(int(batch.get("quality", 0))) + ")")
 
 	dumpster_available = false
 	dumpster.visible = false
@@ -3399,6 +3461,8 @@ func _show_train_result(text: String) -> void:
 # reference layered on top of the same underlying data.
 
 var talent_ui: Control
+var crafting_panel_ui: Control
+var crafting_panel
 var ability_book_ui: Control
 var ability_book_list_container: VBoxContainer
 var inventory_book_ui: Control
@@ -4369,3 +4433,177 @@ func _show_validation_banner(problems: Array) -> void:
 		if event is InputEventMouseButton and event.pressed:
 			banner.queue_free()
 	)
+
+
+# ====================================================================
+# CRAFTING INTEGRATION (Phase 3)
+# ====================================================================
+
+# Generates the campaign resource map ONCE, on a genuinely new game. A
+# loaded save restores the map verbatim instead (see _load_crafting_state),
+# which is what guarantees a deposit never rerolls between sessions.
+func _init_crafting_campaign() -> void:
+	if not campaign_map.is_empty():
+		return
+	if campaign_seed == 0:
+		campaign_seed = int(Time.get_unix_time_from_system()) ^ (randi() & 0xFFFF)
+	campaign_map = CraftingResourceGenerator.generate_campaign(campaign_seed)
+	surface_sources = CraftingResourceGenerator.generate_surface_sources(campaign_seed)
+	if crafting_profile.is_empty():
+		crafting_profile = CraftingModels.new_player_profile()
+
+	var problems = CraftingResourceGenerator.validate_campaign(campaign_map)
+	for p in problems:
+		push_error("[CRAFTING] Campaign map problem: " + String(p))
+
+
+# Adds a batch to the player's material store. Batches of the SAME family,
+# quality, trait and instability merge, so repeated scavenging of one
+# deposit does not flood the store with near-identical entries. Anything
+# that differs stays separate -- quality and provenance are meaningful.
+func _store_material_batch(batch: Dictionary) -> void:
+	if batch.is_empty():
+		return
+	for existing_id in material_batches.keys():
+		var b = material_batches[existing_id]
+		if String(b.get("family_id", "")) != String(batch.get("family_id", "")):
+			continue
+		if int(b.get("quality", -1)) != int(batch.get("quality", -2)):
+			continue
+		if String(b.get("primary_trait_id", "")) != String(batch.get("primary_trait_id", "")):
+			continue
+		if String(b.get("instability_id", "")) != String(batch.get("instability_id", "")):
+			continue
+		if String(b.get("source_id", "")) != String(batch.get("source_id", "")):
+			continue
+		b["amount"] = int(b.get("amount", 0)) + int(batch.get("amount", 0))
+		return
+	material_batches[String(batch.get("batch_id", ""))] = batch
+
+
+# Every batch the player is carrying that a given blueprint slot accepts
+# and has enough of. Used by the crafting UI to populate slot choices.
+func _batches_for_slot(slot: Dictionary) -> Array:
+	var accepts: Array = slot.get("accepts", [])
+	var needed = int(slot.get("amount", 1))
+	var out: Array = []
+	for bid in material_batches.keys():
+		var b = material_batches[bid]
+		if not accepts.has(String(b.get("family_id", ""))):
+			continue
+		if int(b.get("amount", 0)) < needed:
+			continue
+		out.append(b)
+	return out
+
+
+# Consumes the materials a completed craft used.
+func _consume_selection(blueprint_id: String, selection: Dictionary) -> void:
+	var bp = CraftingData.get_blueprint(blueprint_id)
+	for slot in bp.get("material_slots", []):
+		var sid = String(slot.get("slot_id", ""))
+		var batch = selection.get(sid, {})
+		if batch.is_empty():
+			continue
+		var bid = String(batch.get("batch_id", ""))
+		if not material_batches.has(bid):
+			continue
+		var left = int(material_batches[bid].get("amount", 0)) - int(slot.get("amount", 1))
+		if left > 0:
+			material_batches[bid]["amount"] = left
+		else:
+			material_batches.erase(bid)
+
+
+# Bridges a crafted item instance into the ordinary inventory so it can be
+# equipped and used by combat.
+#
+# SCALE WARNING: crafting quality is 0-100 (spec), but the legacy weapon
+# stat model realises stats as min + (Quality / 1000) * (max - min). Writing
+# the crafted 0-100 value straight through would peg every crafted weapon at
+# the bottom of its range, so it is scaled x10 here. This is the ONE place
+# the two scales are allowed to meet.
+func _grant_crafted_item(crafted: Dictionary) -> String:
+	if crafted.is_empty():
+		return ""
+	var item_name = String(crafted.get("display_name", ""))
+	var definition: Dictionary = GameData.get_item_definition(item_name)
+	if definition.is_empty():
+		push_error("[CRAFTING] Crafted item has no ITEM_DEFINITION: " + item_name)
+		return ""
+
+	var item_key = _generate_unique_resource_name()
+	consumable_base_name[item_key] = item_name
+	_add_to_inventory(item_key, 1)
+
+	if not inventory_stats.has(item_key):
+		inventory_stats[item_key] = {}
+	var realised = int(round(float(crafted.get("craft_quality_score", 0.0))))
+	inventory_stats[item_key]["Quality"] = clampi(realised * 10, 0, 1000)
+
+	if definition.has("item_class"):
+		crafted_item_class[item_key] = definition["item_class"]
+
+	crafted_items[String(crafted.get("instance_id", item_key))] = crafted
+	return item_key
+
+
+# Runs a craft end to end: validate, build the item, consume materials,
+# put the result in the player's hands.
+func _perform_craft(blueprint_id: String, selection: Dictionary) -> Dictionary:
+	var problems = CraftingService.validate_selection(blueprint_id, selection)
+	if not problems.is_empty():
+		_show_combat_message("Cannot craft: " + String(problems[0]))
+		return {}
+
+	var crafted = CraftingService.craft(blueprint_id, selection)
+	if crafted.is_empty():
+		_show_combat_message("The craft failed.")
+		return {}
+
+	_consume_selection(blueprint_id, selection)
+	var item_key = _grant_crafted_item(crafted)
+	if item_key == "":
+		return {}
+
+	_update_inventory_display()
+	_show_combat_message("Crafted: " + String(crafted.get("display_name", "item")) + " (Quality " + str(int(round(float(crafted.get("craft_quality_score", 0.0))))) + ")")
+	return crafted
+
+
+# Restores crafting state from a save. The campaign map is restored WHOLE
+# and never regenerated -- that is the anti-reroll guarantee.
+func _load_crafting_state(save_data: Dictionary) -> void:
+	campaign_seed = int(save_data.get("campaign_seed", 0))
+	campaign_map = CraftingResourceGenerator.from_save_dict(save_data.get("campaign_map", {}))
+	surface_sources = save_data.get("surface_sources", {})
+
+	var restored = CraftingService.from_save_dict(save_data.get("crafting", {}))
+	material_batches = restored.get("batches", {})
+	crafted_items = restored.get("items", {})
+	crafting_profile = restored.get("profile", {})
+	if crafting_profile.is_empty():
+		crafting_profile = CraftingModels.new_player_profile()
+
+
+# Builds the blueprint crafting panel. Mirrors _build_talent_ui: a
+# full-screen Control under UILayer, with the panel script building itself
+# into it. A fresh Control is used rather than the scene's leftover
+# CraftingUI node, which may still hold children from the deleted system.
+func _build_crafting_panel_ui() -> void:
+	crafting_panel_ui = Control.new()
+	crafting_panel_ui.name = "CraftingPanelUI"
+	crafting_panel_ui.anchor_right = 1
+	crafting_panel_ui.anchor_bottom = 1
+	crafting_panel_ui.visible = false
+	$UILayer.add_child(crafting_panel_ui)
+
+	crafting_panel = preload("res://scenes/CraftingPanel.gd").new()
+	crafting_panel.main = self
+	add_child(crafting_panel)
+	crafting_panel.setup(crafting_panel_ui)
+
+
+func close_crafting_panel() -> void:
+	if crafting_panel_ui != null:
+		crafting_panel_ui.visible = false

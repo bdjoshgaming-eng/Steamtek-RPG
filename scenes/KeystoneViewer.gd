@@ -30,7 +30,6 @@ const BG_COLOR      = Color(0.06, 0.02, 0.04)
 const COLORS = {
 	"Melee":     Color(0.95, 0.20, 0.20),
 	"Ranged":    Color(0.15, 0.90, 0.95),
-	"Crafting":  Color(0.70, 0.25, 0.95),
 	"Auxiliary": Color(0.95, 0.60, 0.05)
 }
 const CENTER_COLOR    = Color(0.30, 0.55, 1.00)
@@ -40,7 +39,10 @@ const OWNED_TAG_COLOR = Color(0.55, 0.95, 0.55)
 const ABILITY_TAG_COLOR = Color(1.00, 0.92, 0.55)
 
 # --- Geometry ---
-const CENTER         = Vector2(960, 540)
+# Fallback only. The live centre comes from _graph_center(), computed from
+# the actual viewport, so the tree stays centred at any window size -- the
+# same fix already applied to the header and info panels.
+const CENTER_FALLBACK = Vector2(960, 540)
 const KS_OFFSETS = {
 	"Melee":     Vector2(-300, -260),
 	"Ranged":    Vector2( 300, -260),
@@ -381,6 +383,23 @@ func _hide_tooltip() -> void:
 # GRAPH DRAWING
 # ============================================================
 
+func _graph_center() -> Vector2:
+	# NOTE: this script extends Node, not CanvasItem, so get_viewport_rect()
+	# is NOT available here. The graph is drawn into `canvas` (a Control),
+	# so its rect is the correct reference, with the viewport as a fallback.
+	if canvas != null:
+		var cs = canvas.size
+		if cs.x > 0.0 and cs.y > 0.0:
+			return Vector2(cs.x * 0.5, cs.y * 0.5)
+	var vp = get_viewport()
+	if vp == null:
+		return CENTER_FALLBACK
+	var s = vp.get_visible_rect().size
+	if s.x <= 0.0 or s.y <= 0.0:
+		return CENTER_FALLBACK
+	return Vector2(s.x * 0.5, s.y * 0.5)
+
+
 func _rebuild_graph() -> void:
 	for child in canvas.get_children():
 		child.queue_free()
@@ -516,27 +535,11 @@ func _append_cert_and_recipe_lines(ks_name: String, ks_data: Dictionary, unlocke
 			else:
 				locked_lines.append("  Cert: " + weapon_name + " (5 pts)")
 
-	# Recipes are no longer gated behind a keystone (the crafting spec
-	# forbids it), so they list as available under Auxiliary, which now
-	# holds the crafting nodes.
-	if ks_name == "Auxiliary":
-		var recipes_met = true
-		var novice_met = true
-		for recipe in GameData.recipes:
-			if recipe.get("requires_profession", "") != "Street Thug":
-				continue
-			var box = recipe.get("requires_box", "Novice")
-			var rname = recipe.get("name", "?")
-			if box == "Novice":
-				if novice_met:
-					unlocked_lines.append("  Recipe: " + rname)
-				else:
-					locked_lines.append("  Recipe: " + rname + " (unlock Crafting)")
-			else:
-				if recipes_met:
-					unlocked_lines.append("  Recipe: " + rname)
-				else:
-					locked_lines.append("  Recipe: " + rname + " (6 pts)")
+		# Recipe listing was REMOVED here. The old recipe array no longer
+		# exists -- that crafting system was cut and replaced by the
+		# blueprint-driven system in systems/crafting/. Crafting is also no
+		# longer gated behind any keystone, so the talent panel is the wrong
+		# place to advertise it. Blueprints belong in the crafting panel.
 
 func _toggle_expanded() -> void:
 	expanded = not expanded
@@ -649,25 +652,25 @@ func _draw_graph() -> void:
 
 	if not expanded:
 		_draw_advancement_branch(street_thug_all_unlocked)
-		_diamond(CENTER, CENTER_SIZE, CENTER_COLOR, "STREET\nTHUG", combat_spent, combat_max, crafting_spent, crafting_max, street_thug_mastered)
+		_diamond(_graph_center(), CENTER_SIZE, CENTER_COLOR, "STREET\nTHUG", combat_spent, combat_max, crafting_spent, crafting_max, street_thug_mastered)
 		return
 
 	var diamond_corners = {
-		"Melee":     CENTER + Vector2(-CENTER_SIZE * 0.75, -CENTER_SIZE * 0.35),
-		"Ranged":    CENTER + Vector2( CENTER_SIZE * 0.75, -CENTER_SIZE * 0.35),
-		"Auxiliary": CENTER + Vector2(-CENTER_SIZE * 0.75,  CENTER_SIZE * 0.35)
+		"Melee":     _graph_center() + Vector2(-CENTER_SIZE * 0.75, -CENTER_SIZE * 0.35),
+		"Ranged":    _graph_center() + Vector2( CENTER_SIZE * 0.75, -CENTER_SIZE * 0.35),
+		"Auxiliary": _graph_center() + Vector2(-CENTER_SIZE * 0.75,  CENTER_SIZE * 0.35)
 	}
 
-	_diamond(CENTER, CENTER_SIZE, CENTER_COLOR, "STREET\nTHUG", combat_spent, combat_max, crafting_spent, crafting_max, street_thug_mastered)
+	_diamond(_graph_center(), CENTER_SIZE, CENTER_COLOR, "STREET\nTHUG", combat_spent, combat_max, crafting_spent, crafting_max, street_thug_mastered)
 
 	for ks_name in KS_OFFSETS.keys():
 		if not keystones.has(ks_name):
 			continue
 		var ks_data = keystones[ks_name]
 		var col = COLORS.get(ks_name, Color.WHITE)
-		var ks_pos = CENTER + KS_OFFSETS[ks_name]
+		var ks_pos = _graph_center() + KS_OFFSETS[ks_name]
 		var ks_unlocked = ks_data.get("unlocked", false)
-		var corner = diamond_corners.get(ks_name, CENTER)
+		var corner = diamond_corners.get(ks_name, _graph_center())
 
 		var diamond_line_end = _clip_toward(ks_pos, corner, KS_RADIUS)
 		_line(corner, diamond_line_end, col, 4.0, 0.65 if ks_unlocked else 0.35)
@@ -759,9 +762,9 @@ func _draw_graph() -> void:
 			current_angle += CATEGORY_GAP
 
 func _draw_advancement_branch(all_keystones_unlocked: bool) -> void:
-	var top_vertex = CENTER + Vector2(0, -CENTER_SIZE)
+	var top_vertex = _graph_center() + Vector2(0, -CENTER_SIZE)
 	for profession_name in NEXT_TIER_OFFSETS.keys():
-		var box_pos = CENTER + NEXT_TIER_OFFSETS[profession_name]
+		var box_pos = _graph_center() + NEXT_TIER_OFFSETS[profession_name]
 		_line(top_vertex, box_pos, CENTER_COLOR, 3.0, 0.7 if all_keystones_unlocked else 0.3)
 		_advancement_box(box_pos, profession_name, all_keystones_unlocked)
 

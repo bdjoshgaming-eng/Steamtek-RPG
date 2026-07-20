@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Couch_A.tscn" id="1_base"]
+[ext_resource type="Script" path="res://scenes/environment/live3d/props/static_prop_material_variant.gd" id="2_script"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/apartment_interior_variants/generated/STK_MAT_Couch_A_GunmetalBlue.tres" id="3_material"]
+
+[node name="STK_PROP_Couch_A_GunmetalBlue" instance=ExtResource("1_base")]
+script = ExtResource("2_script")
+variant_material = ExtResource("3_material")
+metadata/module_variant = "STK_PROP_Couch_A_GunmetalBlue"
+metadata/material_variant_profile = "STK_PROP_Couch_A_Upholstery_v1"
+metadata/recolor_region = "Upholstery"
+metadata/color_variant = "gunmetal_blue_upholstery"
+metadata/variant_contract = "shared_production_mesh_collision_and_sockets_material_override_only"
+metadata/material_variant_generated = true
+metadata/builder_label = "Apartment - Couch Gunmetal Blue"
+metadata/builder_parent = "Furniture"
+metadata/production_status = "generated_material_variant_pending_normal_editor_f6_review"

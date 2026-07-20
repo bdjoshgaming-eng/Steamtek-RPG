@@ -6,6 +6,8 @@ uniform sampler2D metallic_roughness_texture : hint_default_white, filter_linear
 uniform sampler2D emission_texture : source_color, filter_linear_mipmap_anisotropic;
 uniform vec3 upholstery_tint : source_color = vec3(0.08, 0.30, 0.31);
 uniform float tint_strength : hint_range(0.0, 1.0) = 0.92;
+uniform float brightness : hint_range(0.5, 1.5) = 1.0;
+uniform float roughness_offset : hint_range(-0.5, 0.5) = 0.0;
 uniform float emission_strength : hint_range(0.0, 4.0) = 1.0;
 
 void fragment() {
@@ -24,10 +26,10 @@ void fragment() {
 	const vec3 LUMA = vec3(0.2126, 0.7152, 0.0722);
 	float source_luminance = max(dot(albedo_sample.rgb, LUMA), 0.025);
 	float tint_luminance = max(dot(upholstery_tint, LUMA), 0.025);
-	vec3 recolored_upholstery = clamp(upholstery_tint * (source_luminance / tint_luminance), vec3(0.0), vec3(1.0));
+	vec3 recolored_upholstery = clamp(upholstery_tint * (source_luminance / tint_luminance) * brightness, vec3(0.0), vec3(1.0));
 
 	ALBEDO = mix(albedo_sample.rgb, recolored_upholstery, upholstery_mask * tint_strength);
 	METALLIC = metallic;
-	ROUGHNESS = roughness;
+	ROUGHNESS = clamp(roughness + upholstery_mask * roughness_offset, 0.0, 1.0);
 	EMISSION = texture(emission_texture, UV).rgb * emission_strength;
 }

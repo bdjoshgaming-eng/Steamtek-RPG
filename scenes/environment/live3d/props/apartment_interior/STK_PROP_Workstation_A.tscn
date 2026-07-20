@@ -1,6 +1,8 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Workstation_A_Production.glb" id="1_model"]
+[ext_resource type="Script" path="res://scenes/environment/live3d/props/static_prop_material_variant.gd" id="2_material_script"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/apartment_interior_props/STK_MAT_Workstation_A_MatteReadability.tres" id="3_matte_material"]
 
 [sub_resource type="BoxShape3D" id="PedestalShape"]
 size = Vector3(0.48, 0.78, 0.75)
@@ -12,6 +14,8 @@ size = Vector3(2.1, 0.12, 0.85)
 size = Vector3(2, 0.18, 0.18)
 
 [node name="STK_PROP_Workstation_A" type="Node3D" groups=["steamtek_live3d_modular"]]
+script = ExtResource("2_material_script")
+variant_material = ExtResource("3_matte_material")
 metadata/module_system = "live3d_meter_v1"
 metadata/module_family = "static_environment_prop_furniture"
 metadata/module_variant = "STK_PROP_Workstation_A"
@@ -25,8 +29,12 @@ metadata/art_style = "gritty_hand_painted_stylized_game_art"
 metadata/world_design = "40_cyberpunk_20_neoindustrial_20_modern_steampunk_20_arcane_inspired_painterly_finish"
 metadata/source_intake = "res://incoming/meshy_apartment_assets/APT_Computer/STK_PROP_Workstation_A_Meshy.glb"
 metadata/qa_report = "res://incoming/meshy_apartment_assets/APT_Computer/STK_PROP_Workstation_A_QA.md"
-metadata/production_status = "meshy_pipeline_pass_with_topology_warnings_pending_godot_visual_review"
+metadata/production_status = "approved_meshy_pipeline_matte_readability_gameplay_f6_2026_07_19"
 metadata/render_triangles = 17925
+metadata/material_response = "matte_readability_v1_roughness_floor_0_72_reduced_specular_preserved_emission"
+metadata/color_identity_locked = true
+metadata/future_adjustable_regions = PackedStringArray("Screens", "PoweredLights")
+metadata/gameplay_visual_approval = "approved_by_user_in_normal_editor_f6_2026_07_19"
 
 [node name="Visual" parent="." instance=ExtResource("1_model")]
 

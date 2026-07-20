@@ -127,7 +127,7 @@ target_scene_path = "res://scenes/levels/surface_3d/SteamtekSurfaceTutorialPlaya
 target_spawn_id = "SurfaceEntryWest"
 
 [node name="ApartmentWakeSpawn" type="Marker3D" parent="."]
-position = Vector3(-4.3, 0.08, 2.45)
+position = Vector3(-4.3, 0.08, 1.55)
 rotation_degrees = Vector3(0, 90, 0)
 
 [node name="ApartmentReturnFromSurface" type="Marker3D" parent="."]
@@ -135,7 +135,7 @@ position = Vector3(1.5, 0.08, -3.8)
 rotation_degrees = Vector3(0, 180, 0)
 
 [node name="VesperKane_PlayerCharacter_v01" parent="." instance=ExtResource("3_character")]
-position = Vector3(-4.3, 0.08, 2.45)
+position = Vector3(-4.3, 0.08, 1.55)
 
 [node name="CameraRig" type="Node3D" parent="."]
 

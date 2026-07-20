@@ -333,6 +333,55 @@ static func extract_from_source(source: Dictionary, amount: int) -> Dictionary:
 	)
 
 
+# --- Surface salvage -------------------------------------------------
+# The Surface sits outside the Silo's 60 generated floors, so it gets its
+# own small synthetic source set (CraftingData.SURFACE_SOURCES). These are
+# deterministic from the campaign seed like everything else, permanent for
+# the campaign, and deliberately low quality -- street salvage is picked
+# over. They exist so a player can craft before descending, and they never
+# draw from or modify the seeded Silo map.
+static func generate_surface_sources(campaign_seed: int) -> Dictionary:
+	var rng = _rng_for(campaign_seed, "surface")
+	var families = CraftingData.all_families()
+	var sources: Dictionary = {}
+	var slot = 0
+	for entry in CraftingData.SURFACE_SOURCES:
+		var family_id = String(entry.get("family_id", ""))
+		if not families.has(family_id):
+			push_error("[CRAFTING] Surface source references unknown family: " + family_id)
+			continue
+		var quality = rng.randi_range(CraftingData.SURFACE_QUALITY_MIN, CraftingData.SURFACE_QUALITY_MAX)
+		var capacity = int(entry.get("capacity", 20))
+		var source_id = "src_surface_" + family_id + "_" + str(slot)
+		sources[source_id] = {
+			"source_id": source_id,
+			"family_id": family_id,
+			"floor_id": CraftingData.SURFACE_FLOOR_ID,
+			"floor_number": 0,
+			"location_id": "loc_surface_" + str(slot),
+			"location_name": String(entry.get("location_name", "Street Salvage")),
+			"quality": quality,
+			"primary_trait_id": "",
+			"instability_id": "",
+			"extraction_purity": rng.randi_range(55, 80),
+			"source_type": String(entry.get("source_type", "repeatable_salvage")),
+			"capacity": capacity,
+			"remaining": capacity,
+			"rarity": "common",
+		}
+		slot += 1
+	return sources
+
+
+# Convenience: every surface source whose location matches a given name,
+# so an interactable (the alley dumpster) can pull from just its own pile.
+static func surface_sources_at(surface: Dictionary, location_name: String) -> Array:
+	var out: Array = []
+	for sid in surface.keys():
+		if String(surface[sid].get("location_name", "")) == location_name:
+			out.append(surface[sid])
+	return out
+
 # --- Save / load ----------------------------------------------------
 # The campaign map is saved WHOLE and never regenerated on load. That is
 # what makes sources permanent for the campaign (spec s4.4).

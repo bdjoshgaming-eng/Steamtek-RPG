@@ -12,6 +12,64 @@ The older July 18 transcript remains at:
 
 - `res://docs/7-18 after work.md`
 
+## July 20 continuation update - bed, material variants, and bookshelf
+
+This is the newest continuation state and supersedes the older couch-only next steps below where they conflict. The older sections remain useful historical context.
+
+### Material Variant Editor
+
+- Plugin: `res://addons/steamtek_material_variant_editor/`
+- Godot dock name: **Material Variants**
+- Supported production assets: couch, bed, and bookshelf.
+- Available workflows: temporary preview, save as reusable variant, apply directly to the selected scene instance, and remove a scene override.
+- Region state is retained independently, so editing one bed or bookshelf region does not reset another region.
+- Scene-local changes use the prop's exported `variant_material`; save the containing scene with Ctrl+S after applying.
+- Recoloring must never change geometry, collision, pivots, sockets, or locked source detail.
+
+### Workstation
+
+The production workstation was made more matte after gameplay review. Its desk and controls now retain more readable detail under the apartment lighting, and the user approved the result. Do not broadly recolor the workstation body; reserve future variation for source-linked monitors and powered lights unless explicitly requested.
+
+### Bed production state
+
+- Source: `res://incoming/meshy_apartment_assets/APT_Bed/STK_PROP_Bed_A_Meshy.glb`
+- Production GLB: `res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Bed_A_Production.glb`
+- Wrapper: `res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Bed_A.tscn`
+- QA: `res://incoming/meshy_apartment_assets/APT_Bed/STK_PROP_Bed_A_QA.md`
+- Dimensions: 1.20 x 2.10 x 1.05 m; mattress top approximately 0.52 m.
+- Topology: 19,131 triangles; 22,344 runtime vertices.
+- Editable regions: `Bedding_Main`, `Bedding_Secondary`, `Frame_PaintedMetal`, `Accent_Powered`.
+- Locked regions: structural metal, copper, rust, grime, scratches, edge wear, and painted shading.
+- The main and secondary bedding controls were fixed so they retain independent colors.
+- The final material was made substantially more matte after the user identified excessive shine.
+- A source-matte instance is placed in `SteamtekPlayerApartmentProductionAssembly3D_v02.tscn` at approximately `(-4.35, 0.05, 2.55)` with +90 degrees Y rotation.
+- Wake clearance is on the open side at approximately `(-4.3, 0.08, 1.55)`.
+- Final gameplay-camera F6 approval remains pending in the QA record.
+
+### Bookshelf production state
+
+- Intake: `res://incoming/meshy_apartment_assets/APT_Bookshelf_A/`
+- Production GLB: `res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Bookshelf_A_Production.glb`
+- Wrapper: `res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Bookshelf_A.tscn`
+- QA: `res://incoming/meshy_apartment_assets/APT_Bookshelf_A/STK_PROP_Bookshelf_A_QA.md`
+- Dimensions: 1.20 m wide x 0.38 m deep x 2.00 m high.
+- Pivot: bottom center; floor contact Y = 0; +Z front; scale `1,1,1`.
+- Collision: one simplified box.
+- Recolorable regions: `Frame_PaintedMetal`, `Shelf_PaintedMetal`, and `Accent_Powered`.
+
+The original Meshy result was rejected visually. Its shape and surface layout did not reproduce the five authoritative PNG views. The replacement uses those PNGs directly in a multi-view projected atlas with shallow shelf-bay offsets. The production shell is 76 vertices and 38 triangles, while gameplay collision remains a separate closed box.
+
+This is a deliberately narrow exception to the true-3D/no-flat-card rule later in this handoff. It exists because the user explicitly required the visible asset to look identical to the supplied front, back, left, right, and top PNG artwork. It is not a reusable default for future furniture. Normal F6 review must confirm that the limited parallax is acceptable before it is placed in the apartment.
+
+### Current next actions
+
+1. Let the normal Godot editor import the bookshelf GLB, atlas, masks, shader, and materials.
+2. Open and F6 `STK_PROP_Bookshelf_A.tscn`.
+3. Compare its source-matte front and angled view against the authoritative PNGs.
+4. Test all three recolor regions and verify that books, paper, objects, copper, wear, and grime remain locked.
+5. Place the bookshelf in the apartment only after user gameplay approval.
+6. Continue validating one meaningful prop at a time in normal Godot; never use headless Godot as visual approval.
+
 ## Immediate state
 
 - Canonical repository: `C:\My Game\Steamtek-RPG`

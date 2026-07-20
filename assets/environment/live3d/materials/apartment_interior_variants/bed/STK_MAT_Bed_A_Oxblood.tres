@@ -1,0 +1,34 @@
+[gd_resource type="ShaderMaterial" load_steps=11 format=3]
+
+[ext_resource type="Shader" path="res://assets/environment/live3d/materials/apartment_interior_variants/bed/STK_Bed_MaterialVariant.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Bed_A_Production_Baked_BaseColor.png" id="2_base"]
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Bed_A_Production_Baked_MetallicRoughness.png" id="3_mr"]
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Bed_A_Production_Baked_Emit.png" id="4_emit"]
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/materials/apartment_interior_variants/bed/MASK_Bed_BeddingMain.png" id="5_main"]
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/materials/apartment_interior_variants/bed/MASK_Bed_BeddingSecondary.png" id="6_secondary"]
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/materials/apartment_interior_variants/bed/MASK_Bed_FramePaint.png" id="7_frame"]
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/materials/apartment_interior_variants/bed/MASK_Bed_Emission.png" id="8_emission_mask"]
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/materials/apartment_interior_variants/bed/MASK_Bed_Copper_Locked.png" id="9_copper"]
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/materials/apartment_interior_variants/bed/MASK_Bed_StructuralMetal_Locked.png" id="10_structural"]
+
+[resource]
+shader = ExtResource("1_shader")
+shader_parameter/base_color_texture = ExtResource("2_base")
+shader_parameter/metallic_roughness_texture = ExtResource("3_mr")
+shader_parameter/emission_texture = ExtResource("4_emit")
+shader_parameter/mask_bedding_main = ExtResource("5_main")
+shader_parameter/mask_bedding_secondary = ExtResource("6_secondary")
+shader_parameter/mask_frame_paint = ExtResource("7_frame")
+shader_parameter/mask_accent_powered = ExtResource("8_emission_mask")
+shader_parameter/mask_copper_locked = ExtResource("9_copper")
+shader_parameter/mask_structural_locked = ExtResource("10_structural")
+shader_parameter/bedding_main_tint = Vector3(0.28, 0.055, 0.065)
+shader_parameter/bedding_secondary_tint = Vector3(0.38, 0.35, 0.34)
+shader_parameter/frame_paint_tint = Vector3(0.075, 0.135, 0.17)
+shader_parameter/accent_powered_tint = Vector3(0.02, 0.57, 0.68)
+shader_parameter/bedding_main_strength = 0.92
+shader_parameter/bedding_secondary_strength = 0.82
+shader_parameter/frame_paint_strength = 0.72
+shader_parameter/accent_powered_strength = 0.86
+shader_parameter/emission_strength = 1.25
+shader_parameter/emission_enabled = 1.0
