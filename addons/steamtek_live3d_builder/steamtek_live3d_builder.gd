@@ -265,6 +265,16 @@ func _production_apartment_library() -> Array:
 			"parent": "Furniture",
 		},
 		{
+			"label": "Apartment - Couch L4 Left",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Couch_L4_Left.tscn",
+			"parent": "Furniture",
+		},
+		{
+			"label": "Apartment - Couch L4 Right",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Couch_L4_Right.tscn",
+			"parent": "Furniture",
+		},
+		{
 			"label": "Apartment - Couch Deep Teal",
 			"path": "res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Couch_A_DeepTeal.tscn",
 			"parent": "Furniture",
@@ -287,6 +297,11 @@ func _production_apartment_library() -> Array:
 		{
 			"label": "Apartment - Bed Meshy A",
 			"path": "res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Bed_A.tscn",
+			"parent": "Furniture",
+		},
+		{
+			"label": "Apartment - Bookshelf A",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Bookshelf_A.tscn",
 			"parent": "Furniture",
 		},
 	# APARTMENT_LIBRARY_D_END

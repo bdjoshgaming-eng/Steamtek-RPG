@@ -28,8 +28,14 @@ void fragment() {
 	float tint_luminance = max(dot(upholstery_tint, LUMA), 0.025);
 	vec3 recolored_upholstery = clamp(upholstery_tint * (source_luminance / tint_luminance) * brightness, vec3(0.0), vec3(1.0));
 
+	float structural_floor = mix(0.82, 0.64, smoothstep(0.35, 0.75, metallic));
+	float matte_roughness = max(roughness * 1.18, structural_floor);
+	float upholstery_roughness = max(roughness, 0.84) + roughness_offset;
+	metallic = mix(metallic, 0.0, upholstery_mask);
+
 	ALBEDO = mix(albedo_sample.rgb, recolored_upholstery, upholstery_mask * tint_strength);
 	METALLIC = metallic;
-	ROUGHNESS = clamp(roughness + upholstery_mask * roughness_offset, 0.0, 1.0);
+	ROUGHNESS = clamp(mix(matte_roughness, upholstery_roughness, upholstery_mask), 0.0, 1.0);
+	SPECULAR = 0.18;
 	EMISSION = texture(emission_texture, UV).rgb * emission_strength;
 }

@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scenes/environment/live3d/qa/sectional_couch_right_candidate_apartment_review.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/interiors/apartments/SteamtekPlayerApartmentProductionAssembly3D_v02.tscn" id="2_apartment"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Couch_L4_Right.tscn" id="3_candidate"]
+[ext_resource type="PackedScene" path="res://scenes/characters/player/VesperKane_PlayerCharacter_v01.tscn" id="4_character"]
+
+[node name="SectionalCouchRightCandidateApartmentReview" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="ApprovedApartment" parent="." instance=ExtResource("2_apartment")]
+
+[node name="RightSectionalCandidate" parent="." instance=ExtResource("3_candidate")]
+position = Vector3(1.8, 0.05, 3.2)
+
+[node name="ReviewC001" parent="." instance=ExtResource("4_character")]
+position = Vector3(-1.0, 0.08, 1.0)
+
+[node name="LockedApartmentReviewCamera" type="Camera3D" parent="."]
+position = Vector3(14.142, 15.004, 14.142)
+projection = 1
+size = 9.8
+current = true

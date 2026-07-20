@@ -1,15 +1,19 @@
-[gd_resource type="ShaderMaterial" load_steps=6 format=3]
+[gd_resource type="ShaderMaterial" load_steps=8 format=3]
 
 [ext_resource type="Shader" path="res://assets/environment/live3d/materials/apartment_interior_variants/bookshelf/STK_Bookshelf_ProjectedVariant.gdshader" id="1_shader"]
-[ext_resource type="Texture2D" path="res://assets/environment/live3d/materials/apartment_interior_variants/bookshelf/STK_Bookshelf_ProjectedAtlas.png" id="2_atlas"]
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Bookshelf_A_Production_Baked_BaseColor.png" id="2_atlas"]
 [ext_resource type="Texture2D" path="res://assets/environment/live3d/materials/apartment_interior_variants/bookshelf/MASK_Bookshelf_FramePaint.png" id="3_frame"]
 [ext_resource type="Texture2D" path="res://assets/environment/live3d/materials/apartment_interior_variants/bookshelf/MASK_Bookshelf_ShelfPaint.png" id="4_shelf"]
 [ext_resource type="Texture2D" path="res://assets/environment/live3d/materials/apartment_interior_variants/bookshelf/MASK_Bookshelf_Emission.png" id="5_emission"]
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Bookshelf_A_Production_Baked_MetallicRoughness.png" id="6_mr"]
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Bookshelf_A_Production_Baked_Emit.png" id="7_emit"]
 
 [resource]
 resource_name = "STK_MAT_Bookshelf_A_BurnishedOchre"
 shader = ExtResource("1_shader")
 shader_parameter/base_color_texture = ExtResource("2_atlas")
+shader_parameter/metallic_roughness_texture = ExtResource("6_mr")
+shader_parameter/emission_texture = ExtResource("7_emit")
 shader_parameter/mask_frame_paint = ExtResource("3_frame")
 shader_parameter/mask_shelf_paint = ExtResource("4_shelf")
 shader_parameter/mask_accent_powered = ExtResource("5_emission")
@@ -19,5 +23,5 @@ shader_parameter/accent_tint = Color(0.25, 0.78, 0.20, 1)
 shader_parameter/frame_strength = 0.80
 shader_parameter/shelf_strength = 0.70
 shader_parameter/accent_strength = 1.0
-shader_parameter/emission_strength = 0.95
+shader_parameter/emission_strength = 0.84
 shader_parameter/emission_enabled = 1.0

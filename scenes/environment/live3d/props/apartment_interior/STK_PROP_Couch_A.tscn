@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Couch_A_Production.glb" id="1_model"]
 [ext_resource type="Script" path="res://scenes/environment/live3d/props/static_prop_material_variant.gd" id="2_material_script"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/apartment_interior_variants/STK_MAT_Couch_A_SourceMatte.tres" id="3_source_matte"]
 
 [sub_resource type="BoxShape3D" id="BaseShape"]
 size = Vector3(2.1, 0.46, 0.9)
@@ -14,6 +15,7 @@ size = Vector3(0.24, 0.44, 0.9)
 
 [node name="STK_PROP_Couch_A" type="Node3D" groups=["steamtek_live3d_modular"]]
 script = ExtResource("2_material_script")
+variant_material = ExtResource("3_source_matte")
 metadata/module_system = "live3d_meter_v1"
 metadata/module_family = "static_environment_prop_furniture"
 metadata/module_variant = "STK_PROP_Couch_A"
@@ -26,11 +28,12 @@ metadata/art_style = "hand_painted_illustrative_crpg_rendering_language"
 metadata/world_design = "40_cyberpunk_20_neoindustrial_20_modern_steampunk_20_arcane_inspired_painterly_finish"
 metadata/source_intake = "res://incoming/meshy_apartment_assets/APT_Couch_2seat_Rust/STK_PROP_Couch_A_Meshy.glb"
 metadata/qa_report = "res://incoming/meshy_apartment_assets/APT_Couch_2seat_Rust/STK_PROP_Couch_A_QA.md"
-metadata/production_status = "meshy_pipeline_pass_with_topology_warnings_pending_godot_visual_review"
+metadata/production_status = "approved_production_matte_response_validated"
 metadata/material_variant_profile = "STK_PROP_Couch_A_Upholstery_v1"
 metadata/recolor_regions = PackedStringArray("Upholstery")
 metadata/recolor_mask_mode = "computed_red_saturated_nonmetal"
 metadata/recolor_emission_regions = PackedStringArray()
+metadata/material_response = "matte_floor_0_84_upholstery_0_82_nonmetal_0_64_structural_specular_0_18"
 
 [node name="Visual" parent="." instance=ExtResource("1_model")]
 

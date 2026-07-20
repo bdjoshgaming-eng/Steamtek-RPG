@@ -1,0 +1,130 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Couch_L4_Right_Production.glb" id="1_model"]
+[ext_resource type="Script" path="res://scenes/environment/live3d/props/static_prop_material_variant.gd" id="2_material_script"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/apartment_interior_variants/couch_l4_right/STK_MAT_Couch_L4_Right_SourceMatte.tres" id="3_matte_material"]
+
+[sub_resource type="BoxShape3D" id="LongLowerShape"]
+size = Vector3(3.2, 0.4, 0.82)
+
+[sub_resource type="BoxShape3D" id="ReturnLowerShape"]
+size = Vector3(0.82, 0.4, 1.8)
+
+[sub_resource type="BoxShape3D" id="MainBackShape"]
+size = Vector3(3.2, 0.46, 0.2)
+
+[sub_resource type="BoxShape3D" id="ReturnBackShape"]
+size = Vector3(0.2, 0.46, 1.6)
+
+[sub_resource type="BoxShape3D" id="MainOuterArmShape"]
+size = Vector3(0.22, 0.56, 0.78)
+
+[sub_resource type="BoxShape3D" id="ReturnOuterArmShape"]
+size = Vector3(0.78, 0.56, 0.22)
+
+[node name="STK_PROP_Couch_L4_Right" type="Node3D" groups=["steamtek_live3d_modular"]]
+script = ExtResource("2_material_script")
+variant_material = ExtResource("3_matte_material")
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "static_environment_prop_furniture"
+metadata/module_variant = "STK_PROP_Couch_L4_Right"
+metadata/module_dimensions_m = Vector3(3.2, 0.9, 1.8)
+metadata/contact_pivot = "floor_center"
+metadata/front_axis = "+Z_toward_room_and_c001"
+metadata/sectional_direction = "return_on_negative_x_when_facing_plus_z"
+metadata/sectional_orientation = "right"
+metadata/scale_contract = "1_godot_unit_equals_1_meter"
+metadata/placement_profile = "furniture_0_3m"
+metadata/collision_contract = "six_simplified_box_shapes_not_render_mesh"
+metadata/seat_height_m = 0.45
+metadata/usable_seat_depth_m = 0.58
+metadata/seat_count = 4
+metadata/art_style = "gritty_hand_painted_stylized_game_art"
+metadata/world_design = "40_cyberpunk_20_neoindustrial_20_modern_steampunk_20_arcane_inspired_painterly_finish"
+metadata/source_intake = "res://incoming/meshy_apartment_assets/APT_Couch_L4_Right/STK_PROP_Couch_L4_Right_Meshy.glb"
+metadata/staged_source = "res://incoming/meshy_apartment_assets/APT_Couch_L4_Right/staged_pipeline/STK_PROP_Couch_L4_Right_ProductionCandidate.glb"
+metadata/qa_report = "res://incoming/meshy_apartment_assets/APT_Couch_L4_Right/STK_PROP_Couch_L4_Right_QA.md"
+metadata/production_status = "approved_production_asset"
+metadata/gameplay_approval = "approved_2026_07_20"
+metadata/render_triangles = 17529
+metadata/render_vertices = 13745
+metadata/recolor_enabled = true
+metadata/recolor_profile = "steamtek_sectional_couch_v1"
+metadata/material_variant_profile = "steamtek_sectional_couch_v1"
+metadata/recolor_regions = PackedStringArray("Cushion_Leather", "Frame_PaintedMetal", "Accent_Metal")
+metadata/recolor_material_mode = "texture_aware_soft_uv_masks_preserve_baked_source_detail_v1"
+metadata/recolor_locked_regions = PackedStringArray("StructuralGunmetal", "Wear", "Scratches", "Grime", "EdgeWear", "BakedShading")
+metadata/material_response = "source_textures_preserved_matte_floor_0_84_leather_0_74_frame_0_62_structural_0_56_copper_specular_0_18"
+metadata/builder_label = "Apartment - Couch L4 Right"
+metadata/builder_parent = "Furniture"
+metadata/builder_registration = "registered_after_gameplay_approval"
+
+[node name="Visual" parent="." instance=ExtResource("1_model")]
+
+[node name="StaticBody" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="LongLowerCollision" type="CollisionShape3D" parent="StaticBody"]
+position = Vector3(0, 0.2, -0.49)
+shape = SubResource("LongLowerShape")
+
+[node name="ReturnLowerCollision" type="CollisionShape3D" parent="StaticBody"]
+position = Vector3(-1.19, 0.2, 0)
+shape = SubResource("ReturnLowerShape")
+
+[node name="MainBackCollision" type="CollisionShape3D" parent="StaticBody"]
+position = Vector3(0, 0.67, -0.8)
+shape = SubResource("MainBackShape")
+
+[node name="ReturnBackCollision" type="CollisionShape3D" parent="StaticBody"]
+position = Vector3(-1.5, 0.67, 0)
+shape = SubResource("ReturnBackShape")
+
+[node name="MainOuterArmCollision" type="CollisionShape3D" parent="StaticBody"]
+position = Vector3(1.49, 0.48, -0.43)
+shape = SubResource("MainOuterArmShape")
+
+[node name="ReturnOuterArmCollision" type="CollisionShape3D" parent="StaticBody"]
+position = Vector3(-1.19, 0.48, 0.79)
+shape = SubResource("ReturnOuterArmShape")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="MainOuterFurniture" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(1.6, 0, -0.4)
+metadata/socket_role = "furniture_chain_outer"
+
+[node name="ReturnOuterFurniture" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-1.2, 0, 0.9)
+rotation_degrees = Vector3(0, 90, 0)
+metadata/socket_role = "furniture_chain_outer"
+
+[node name="FrontAlignment" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, 0.9)
+metadata/socket_role = "furniture_front_alignment"
+
+[node name="RearWallAlignment" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, -0.9)
+metadata/socket_role = "furniture_rear_wall_alignment"
+
+[node name="Seat01" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_seat"]]
+position = Vector3(1.02, 0.45, -0.25)
+metadata/socket_role = "seat"
+metadata/seat_index = 1
+
+[node name="Seat02" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_seat"]]
+position = Vector3(0.16, 0.45, -0.25)
+metadata/socket_role = "seat"
+metadata/seat_index = 2
+
+[node name="Seat03" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_seat"]]
+position = Vector3(-0.7, 0.45, -0.25)
+metadata/socket_role = "seat"
+metadata/seat_index = 3
+
+[node name="Seat04_Return" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_seat"]]
+position = Vector3(-1.18, 0.45, 0.46)
+rotation_degrees = Vector3(0, 90, 0)
+metadata/socket_role = "seat"
+metadata/seat_index = 4

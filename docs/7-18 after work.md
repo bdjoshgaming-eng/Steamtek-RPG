@@ -132,7 +132,7 @@ Half-height partition:
 - Direct solid-wall review:
   `res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_Solid_120x300_A.tscn`
 - Production apartment assembly:
-  `res://scenes/environment/live3d/interiors/apartments/SteamtekPlayerApartmentProductionAssembly3D.tscn`
+  `res://scenes/environment/live3d/interiors/apartments/SteamtekPlayerApartmentProductionAssembly3D_v02.tscn`
 - Playable apartment:
   `res://scenes/levels/apartment_3d/SteamtekOpeningApartmentPlayable3D.tscn`
 
@@ -1998,4 +1998,3 @@ Turn ID: `019f7838-5670-70e1-9c2e-8e4ed02238f5`
 ~~~~text
 I’ve recovered the task’s user/Codex transcript directly from the Codex history. I’m keeping image references as paths and omitting only internal reasoning, tool logs, and generated-image binary data so the handoff stays readable and usable.
 ~~~~
-

@@ -123,9 +123,11 @@ y_sort_enabled = true
 
 [node name="Trainer" parent="World/YSortLayer/NPCs" unique_id=281885045 instance=ExtResource("12_jbj1t")]
 unique_name_in_owner = true
+visible = false
 
 [node name="Trainer2" type="Node2D" parent="World/YSortLayer/NPCs" unique_id=416996789]
 unique_name_in_owner = true
+visible = false
 position = Vector2(1650, 300)
 
 [node name="Trainer2Sprite" type="Sprite2D" parent="World/YSortLayer/NPCs/Trainer2" unique_id=1919338767]
@@ -146,6 +148,7 @@ offset_bottom = 23.0
 
 [node name="Trainer3" type="Node2D" parent="World/YSortLayer/NPCs" unique_id=1063048407]
 unique_name_in_owner = true
+visible = false
 position = Vector2(1350, 400)
 
 [node name="Trainer3Sprite" type="Sprite2D" parent="World/YSortLayer/NPCs/Trainer3" unique_id=860280817]
@@ -166,6 +169,7 @@ offset_bottom = 23.0
 
 [node name="Trainer4" type="Node2D" parent="World/YSortLayer/NPCs" unique_id=1662785432]
 unique_name_in_owner = true
+visible = false
 position = Vector2(1550, 400)
 
 [node name="Trainer4Sprite" type="Sprite2D" parent="World/YSortLayer/NPCs/Trainer4" unique_id=1802021276]

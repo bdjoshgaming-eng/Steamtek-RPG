@@ -1,0 +1,41 @@
+[gd_resource type="ShaderMaterial" load_steps=8 format=3]
+
+[ext_resource type="Shader" path="res://assets/environment/live3d/materials/apartment_interior_variants/bookshelf_meshy_candidate/STK_Bookshelf_MeshyVariant.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/models/apartment_interior/meshy/candidates/STK_PROP_Bookshelf_A_ProductionCandidate_Baked_BaseColor.png" id="2_base"]
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/models/apartment_interior/meshy/candidates/STK_PROP_Bookshelf_A_ProductionCandidate_Baked_MetallicRoughness.png" id="3_mr"]
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/models/apartment_interior/meshy/candidates/STK_PROP_Bookshelf_A_ProductionCandidate_Baked_Emit.png" id="4_emit"]
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/materials/apartment_interior_variants/bookshelf_meshy_candidate/MASK_Bookshelf_Meshy_FramePaint.png" id="5_frame"]
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/materials/apartment_interior_variants/bookshelf_meshy_candidate/MASK_Bookshelf_Meshy_ShelfPaint.png" id="6_shelf"]
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/materials/apartment_interior_variants/bookshelf_meshy_candidate/MASK_Bookshelf_Meshy_AccentPowered.png" id="7_accent"]
+
+[resource]
+resource_name = "STK_MAT_Bookshelf_A_Meshy_SourceMatte"
+shader = ExtResource("1_shader")
+shader_parameter/base_color_texture = ExtResource("2_base")
+shader_parameter/metallic_roughness_texture = ExtResource("3_mr")
+shader_parameter/emission_texture = ExtResource("4_emit")
+shader_parameter/mask_frame_paint = ExtResource("5_frame")
+shader_parameter/mask_shelf_paint = ExtResource("6_shelf")
+shader_parameter/mask_accent_powered = ExtResource("7_accent")
+shader_parameter/frame_tint = Color(0.055, 0.10, 0.13, 1)
+shader_parameter/shelf_tint = Color(0.035, 0.055, 0.065, 1)
+shader_parameter/accent_tint = Color(0.02, 0.57, 0.68, 1)
+shader_parameter/frame_strength = 0.28
+shader_parameter/shelf_strength = 0.08
+shader_parameter/accent_strength = 0.0
+shader_parameter/frame_brightness = 1.0
+shader_parameter/shelf_brightness = 1.0
+shader_parameter/midtone_lift = 0.10
+shader_parameter/midtone_gamma = 0.86
+shader_parameter/roughness_gain = 1.25
+shader_parameter/locked_roughness_floor = 0.80
+shader_parameter/hardware_roughness_floor = 0.60
+shader_parameter/frame_roughness_floor = 0.74
+shader_parameter/shelf_roughness_floor = 0.80
+shader_parameter/frame_roughness_offset = 0.0
+shader_parameter/shelf_roughness_offset = 0.0
+shader_parameter/metallic_gain = 1.0
+shader_parameter/frame_metallic_offset = 0.0
+shader_parameter/specular_level = 0.18
+shader_parameter/emission_strength = 0.90
+shader_parameter/emission_enabled = 1.0

@@ -1,6 +1,5 @@
 STEAMTEK RPG - CLAUDE HANDOFF
-Updated: crafting rebuilt and WIRED IN through Phase 3
-         (scavenging + crafting panel are live in game)
+Updated: crafting through Phase 5 complete, Phase 6 HALF done
 =============================================================
 
 >> See docs/claude handoffs/STEAMTEK_WORKFLOW.md for the session
@@ -9,396 +8,319 @@ Updated: crafting rebuilt and WIRED IN through Phase 3
 -------------------------------------------------------------
 PROJECT BASICS
 -------------------------------------------------------------
-- Steamtek RPG: co-op action RPG / roguelite.
-- Engine: Godot 4, GDScript. Repo: bdjoshgaming-eng/Steamtek-RPG
+- Steamtek RPG: co-op action RPG / roguelite. Godot 4, GDScript.
+- Repo: bdjoshgaming-eng/Steamtek-RPG
 - Local path: C:\My Game\Steamtek-RPG
-- Docs: docs\claude handoffs\
-- Two machines (work PC + home PC). INSTALL DELIVERED FILES ON BOTH
-  THE SAME DAY -- a stale GameData.gd once silently disabled an entire
-  combat phase for several sessions (see INCIDENTS).
+- Two machines (work + home). INSTALL DELIVERED FILES ON BOTH THE SAME
+  DAY -- a stale GameData.gd once silently disabled a whole combat
+  phase for several sessions.
+
+DIRECTORY LAYOUT
+  systems\crafting\   crafting_data.gd, crafting_models.gd,
+                      crafting_service.gd, crafting_resource_generator.gd
+  scenes\             main.gd, CraftingPanel.gd, KeystoneViewer.gd,
+                      GameData.gd, CombatData.gd, Combat.gd
+  docs\claude handoffs\
+
+  The crafting files use `class_name`, so no autoload registration.
+  GameData/CombatData/Combat live in scenes\ and are registered as
+  autoloads -- do NOT move them without updating Project Settings.
 
 -------------------------------------------------------------
-HARD RULES (do not break)
+HARD RULES
 -------------------------------------------------------------
-- All .gd files: ASCII ONLY. No em-dashes, no smart quotes.
-  Non-ASCII causes SILENT parse failures in Godot.
-- TABS for indentation, never spaces.
-- Deliver COMPLETE drop-in files, never diffs. Josh does not hand-edit.
-- Line endings: CRLF, normalized on every export.
-- Do NOT re-upload a file mid-session unless it changed on disk.
-- Balance numbers are presented as TABLES for approval BEFORE code.
+- .gd files: ASCII ONLY. Non-ASCII causes SILENT parse failures.
+- TABS, never spaces. CRLF line endings.
+- COMPLETE drop-in files, never diffs. Josh does not hand-edit.
+- INSTALL BY REPLACING THE FILE IN FILE EXPLORER, not by pasting into
+  the Godot script editor -- see INCIDENTS #5.
+- Multi-file deliveries are a MATCHED SET. A "function not found in
+  base CraftingData/CraftingService" error means a file did not get
+  copied, not a code bug.
 - Before every export: ASCII check, tab check, undeclared-identifier
-  sweep, and (for large refactors) a declaration-count comparison.
+  sweep, and for large refactors a DECLARATION COUNT comparison.
 
 -------------------------------------------------------------
-CURRENT STATE - ONE PARAGRAPH
+CURRENT STATE
 -------------------------------------------------------------
-Combat is complete through Phase 10 and stable. The OLD crafting and
-surveying systems were DELETED. The new crafting system is built from the
-authoritative spec in systems/crafting/ and is now WIRED INTO THE GAME
-through spec Phase 3: the campaign resource map generates on new game, the
-alley dumpster yields real MaterialBatches, and a blueprint crafting panel
-turns them into items. The game loots, equips, fights, heals, scavenges and
-crafts. Medicine is obtainable again.
+Combat is complete through Phase 10 and stable. The old crafting and
+surveying systems were deleted entirely. The new crafting system is
+built to spec Phase 5 and wired into the game: scavenge -> materials
+with provenance -> blueprint -> experimentation -> sockets -> a real
+item with real stats. Phase 6 (mods) has its LOGIC layer built but is
+NOT yet wired in.
 
 -------------------------------------------------------------
-COMBAT ARCHITECTURE (unchanged, complete through P10)
+COMBAT (unchanged, complete through P10)
 -------------------------------------------------------------
-Autoloads: Combat.gd (math), CombatData.gd (data). main.gd holds no
-combat formulas.
+Autoloads: Combat.gd (math), CombatData.gd (data).
 
   Damage = WeaponDamage x AbilityCoefficient x ClassModifier
          x CertificationModifier x CriticalModifier x WeakPointModifier
   (ClassModifier and WeakPointModifier are 1.0 placeholders)
 
-  Mitigation curve (armor AND resistances): Rating / (Rating + 140)
-
+  Mitigation (armor AND resistances): Rating / (Rating + 140)
   Damage types (7): Kinetic, Ballistic, Thermal, Pressure, Arc,
-  Chemical, EMP. Chemical and EMP have NO weapons -- columns inert.
-
-  Hidden Combat Level 1-100 in CombatData.CL_ANCHORS drives health,
-  action, damage, defense, armor, dodge, block, crit_resist.
-
-  Phases complete: P0 chokepoint, P1 unified enemies dict, P2 hidden CL,
-  P3 master formula, P4a armor, P4b damage taxonomy, P4c archetype
-  resistance profiles, P5 roll layer (hit->dodge->block->crit),
-  P6a enemy generator, P6b genericized enemy paths, P7 rank marks +
-  threat, P9 loot scaling, P10 weapon families + proficiency + certs.
+    Chemical, EMP. Chemical and EMP have NO weapons -- inert.
+  Hidden Combat Level 1-100 drives health, action, damage, defense,
+    armor, dodge, block, crit_resist.
 
   Rank marks (CL never shown as a number):
     /  1-5    //  6-10   ///  11-15   ////  16-20
     <  21-30  <<  31-40  <<<  41-55   <<<<  56-70
     *  71-84  **  85-94  ***  95-100
 
--------------------------------------------------------------
-STARTUP DATA VALIDATION (new)
--------------------------------------------------------------
-Combat.validate_game_data() runs at startup from main.
-_run_startup_validation(). Seven checks, all guarding the same failure
-shape: a .get(key, default) that returns a legal value for a bad key so
-nothing complains.
-
-  1. weapon damage types exist in CombatData.DAMAGE_TYPES
-  2. weapon families (item_class) exist in WEAPON_FAMILIES
-  3. family keystone refs point at real keystones
-  4. cert keystone refs point at real keystones
-  5. ability nodes have matching ability_definitions
-  6. enemy archetypes and factions resolve
-  7. INFO: damage types carried by no weapon
-
-Real problems: push_error + a red dismissible banner (click or ESC).
-Informational notes: print only.
-It reads ITEM_DEFINITIONS, so it survived the crafting removal.
+STARTUP DATA VALIDATION
+  Combat.validate_game_data(), called from main._run_startup_validation().
+  Seven checks guarding the .get(key, default) silent-failure shape.
+  Real problems -> push_error + red dismissible banner (click or ESC).
 
 -------------------------------------------------------------
-THE CRAFTING RIP-OUT (completed this session)
+CRAFTING SYSTEM
 -------------------------------------------------------------
-WHY: the spec is a complete redesign. Sampling was deleted, quality
-rescales, recipes become blueprints, items need craft_seed, materials
-need provenance, experimentation/sockets/durability/workshops did not
-exist. Refactoring toward it would have meant new code sitting beside
-dead code -- the exact half-state that caused earlier bugs.
+DESIGN DECISIONS
+  - Plain Dictionaries, NOT Resource/.tres. Save file is JSON, so they
+    round-trip with no conversion layer.
+  - Material Quality is 0-100. The legacy weapon "Quality" is 0-1000.
+    QUALITY SCALE BRIDGE in _grant_crafted_item multiplies by 10. Do
+    not "simplify" that away or every crafted weapon sits at the bottom
+    of its stat ranges.
+  - 4-of-15 keystone selection is CRAFTING ONLY. Combat keystones keep
+    the point-budget model.
+  - The crafting keystone gets its OWN panel, separate from the talent
+    viewer.
+  - Every crafting keystone node needs a DOWNSIDE (Material Insight and
+    Precision Calibration as specced are pure upside = auto-picks).
 
-STEP 1 - THE SEAM (done first, non-destructive):
-  `GameData.recipes` was doing DOUBLE DUTY: crafting recipe AND the
-  only weapon catalog in the game. Deleting it would have deleted every
-  weapon. So item identity was split out first:
+PHASE 1 - DATA FOUNDATION (done)
+  Material batches, crafted item instances, player profile, all with
+  factories and to_dict/from_dict. craft_seed stored from day one.
+  Provenance (source_id / floor_id / location_id) on every batch.
 
-    GameData.ITEM_DEFINITIONS   what an item IS (item_class,
-                                item_subclass, weapon_categorical_stats,
-                                weapon_stat_ranges, max_charges)
-    GameData.get_item_definition(name)
-
-  Combat, equipment and inventory read ITEM_DEFINITIONS and never touch
-  recipes. Only ONE surviving function depended on recipes
-  (_grant_starting_weapon) plus the validator; both repointed.
-
-STEP 2 - THE CUT:
-  main.gd     5760 -> 4371 lines, 193 -> 152 functions
-  GameData.gd 1053 -> 685 lines
-
-  41 functions deleted: crafting book, recipe tree, assembly flow,
-  result popup, survey book, hotspot generation, sampling, plus
-  orphaned helpers (_matches_requirement, _get_weighted_stack_score,
-  _get_unlocked_classes, _get_ingredient_breakdown_text, and others).
-  39 declarations deleted. Survey state stripped from save/load.
-  The `recipes` array is gone entirely.
-
-  KEPT: all 13 inventory functions, _generate_unique_resource_name,
-  and _attempt_forage (the dumpster) -- deliberately, as the seed of
-  the new scavenging model.
-
-  ITEM_DEFINITIONS retained 23 entries: 19 weapons + 4 medicine.
-  Deleted 8: 5 Tools (survey tools, crafting kits), 3 Components
-  (Syringe, Empty IV Bag, Weapon Muzzle -- the last a test item).
-
-CONSEQUENCES TO KNOW:
-  - MEDICINE IS NOW UNOBTAINABLE beyond the starting grant. Bandages,
-    Salve, Tonic and Adrenaline Shot still exist and still work, but
-    nothing produces more. Finite supply per save.
-  - CRAFTING XP HAS NO SINK. It still accrues; nothing spends it.
-    Deliberately deferred -- the game is not in a playable state yet.
-  - Loot tables still drop Copper/Iron etc. Those items are now inert.
-    Data debt, cheap to fix once the new material model is settled.
-
--------------------------------------------------------------
-NEW CRAFTING SYSTEM (rebuild in progress)
--------------------------------------------------------------
-LOCATION: C:\My Game\Steamtek-RPG\systems\crafting\
-No autoload registration needed -- all use `class_name` with static
-functions, reachable as CraftingData.X etc from anywhere.
-
-FILES:
-  crafting_data.gd               CraftingData
-      static definitions only. 22 resource families, 6 traits,
-      5 instabilities, 6 quality tiers, 2 starter blueprints,
-      Silo structure (60 floors / 3 eras), 15 floor identities,
-      resource guarantees.
-  crafting_models.gd             CraftingModels
-      the three runtime shapes + factories + to_dict/from_dict:
-      MaterialBatch, CraftedItemInstance, PlayerCraftingProfile.
-  crafting_service.gd            CraftingService
-      the only file that CHANGES state: batch generation, material
-      potential, validation, craft(), keystone 4-node cap, save/load.
-  crafting_resource_generator.gd CraftingResourceGenerator
-      seeded campaign map generation, guarantee enforcement,
-      extract_from_source(), save/load.
-
-DESIGN DECISIONS MADE:
-  - Plain Dictionaries, NOT Resource/.tres. The save file is JSON so
-    Dictionaries round-trip with no conversion layer; no editor assets
-    to hand-manage; avoids the shared-mutable-state footgun the spec
-    itself warns about for per-item instances.
-  - Material Quality is 0-100 (spec). This is a DIFFERENT scale from
-    the legacy weapon "Quality" (0-1000) still used by equipment.
-    Do not mix them.
-  - 4-of-15 keystone selection applies to CRAFTING ONLY. Combat
-    keystones keep the point-budget model. (Spec s2.2 implies 4-of-15
-    for every class keystone; Josh scoped it to crafting, which avoids
-    a full keystone-system and KeystoneViewer rewrite.)
-  - The crafting keystone gets its OWN UI/panel, separate from the
-    talent viewer. Current UI is placeholder throughout.
-  - Every crafting keystone node needs a DOWNSIDE. As written in the
-    spec, Material Insight and Precision Calibration are pure upside
-    and would be auto-picks, violating the spec's own "avoid four
-    universally optimal picks" rule.
-
-PHASE 1 - DATA FOUNDATION (DONE)
-  Acceptance met: one blueprint + three material batches produce a
-  saved crafted item instance; reload preserves all values (verified
-  by simulation).
-  craft_seed is stored on the item FROM DAY ONE -- later phases must
-  derive randomness from it, never roll fresh, or reload-scumming
-  becomes possible.
-  Provenance (source_id / floor_id / location_id) is on every batch.
-
-PHASE 2 - CAMPAIGN RESOURCE GENERATOR (DONE)
+PHASE 2 - CAMPAIGN RESOURCE GENERATOR (done)
   60 floors: Survivors 1-20 (quality bias -8), Expansion 21-40 (0),
-  Builders 41-60 (+12). Deeper is OLDER but cleaner and better made.
-  15 floor identities distributed by era. 22 resource families.
-  All four acceptance criteria verified:
-    same seed -> identical map; different seeds -> different valid
-    maps; reload never rerolls (generation runs once at new game);
-    guarantees always satisfiable.
-  extract_from_source() is the seam the new scavenging loop plugs into.
+  Builders 41-60 (+12). Deeper is OLDER but cleaner. 15 floor
+  identities, 22 resource families. Same seed -> identical map;
+  reload never rerolls; guarantees always satisfiable via deterministic
+  repair. NOTE: guarantees are met naturally on only ~33% of seeds;
+  the rest get repaired. Placeholder numbers, needs playtesting.
 
-  TUNING CAVEAT: guarantees are satisfied naturally on ~33% of seeds;
-  the other ~67% get deterministic repair. Repairs produce valid maps,
-  but firing that often means the safety net is doing more work than
-  intended. An earlier pass was far worse (90% repaired) because the
-  guarantee thresholds contradicted the quality curve -- Survivors-era
-  common sources cap near 72 but the rule demanded 80+. Thresholds
-  were retuned and gunmetal_steel widened from 2 to 4 floor
-  identities. These are placeholder numbers (spec s24); real
-  calibration needs playtesting.
+PHASE 3 - BASIC CRAFTING (done, wired in)
+  Alley dumpster yields real MaterialBatches. Blueprint panel with
+  material slots. Medicine blueprints (bp_bandages, bp_antiseptic_salve)
+  restored medicine after the rip-out.
 
-REMAINING SPEC PHASES:
-  4 experimentation
-  5 mod sockets
-  6 mods
-  7 crafting keystone (the 15-node, choose-4 tree)
+PHASE 4 - EXPERIMENTATION (done, wired in)
+  8 categories (Output, Precision, Efficiency, Thermal Control,
+  Durability, Handling, Potency, Mod Architecture), each mapped to a
+  stat and to the material traits that help it.
+
+  Point generation: Base 3 + familiarity 0-3 + materials 0-2
+  + workshop 0-2 (Phase 8) + tools 0-2 (Phase 8) + keystone 0-3
+  (Phase 7). Workshop/tool/keystone all contribute 0 today, so the
+  ceiling rises automatically when those land.
+
+  Result tiers: Breakthrough 95+ (x1.6), Exceptional 82 (x1.3),
+  Great 68 (x1.0), Good 52 (x0.75), Standard 35 (x0.5), Poor 18
+  (x0.25), Failure below (x0.0).
+
+  Risk modes: Stable (+5 score, +/-8 spread, 0% flaw chance),
+  Standard (0, +/-15, 25%), Aggressive (+12, +/-30, 55%).
+
+  FAILURE COSTS THREE THINGS (Josh's call): points wasted, a
+  risk-scaled chance of a permanent instability on the item, and a
+  socket_chance_modifier penalty read by Phase 5. Failed categories
+  also cost 8 durability each.
+
+  ANTI-SAVE-SCUM: craft_seed is DERIVED from blueprint + sorted material
+  batch ids, NOT randomised. Reload + same materials + same allocation
+  + same risk = identical result. Allocating DIFFERENTLY gives a
+  different result, which is correct -- that is a choice, not a reroll.
+
+  TUNING NOTE: concentrating points in one category yields more total
+  benefit than spreading them. Real choice, but spreading is currently
+  the weaker play rather than a genuine alternative.
+
+PHASE 5 - MOD SOCKETS (done, wired in)
+  Opportunity score feeds four probability bands:
+    low <25       90/10
+    moderate 25-49  55/40/5
+    strong 50-74    20/60/18/2
+    exceptional 75+  5/45/40/10
+  Mod Architecture allocation is the dominant term (x12 per point),
+  plus tier multiplier x10, familiarity, material compatibility,
+  workshop; minus difficulty x0.20 and 5 per instability, plus the
+  Phase 4 failure penalty. Rolls derive from craft_seed via an
+  independent derivation, so reopening the UI cannot reroll.
+  Consumables declare max_sockets 0 and are skipped.
+
+PHASE 6 - MODS (LOGIC BUILT, NOT WIRED IN)
+  BATCH 1 SHIPPED: 8 weapon mods, 5 grades, install rules, stat
+  effects. Scope is WEAPON mods only -- the spec also lists Armor and
+  Cybernetics but Steamtek has no such item types yet.
+
+  Grades: Standard 1.0, Refined 1.4, Advanced 1.8, Prototype 2.3
+  (drawback x1.6), Masterwork 2.1 (drawback x0.0). Masterwork gives
+  LESS raw power than Prototype but removes the penalty, so the top
+  grade is a choice not a strict upgrade.
+
+  Socket tags gate meaningfully:
+    Piston Blade (Kinetic/Utility): Balanced Haft, Pressure Chamber,
+      Recoil Stabilizer, Reinforced Binding, Targeting Optic
+    Arc Rod (Arc/Thermal/Utility): Conductive Accelerator, Heat Sink,
+      Status Module, Reinforced Binding, Targeting Optic
+  Incompatibility tags stop stacking (no two damage cores).
+
+  BATCH 2 STILL TO DO: main.gd integration (mods affecting equipped
+  stats, granting mods), and the install/remove UI.
+
+REMAINING SPEC PHASES
+  7 crafting keystone (15-node choose-4, own panel, needs downsides)
   8 repair / dismantle / rebuild
 
 -------------------------------------------------------------
-PHASE 3 - BASIC CRAFTING (DONE, wired into the game)
+KEY INTEGRATION POINTS IN main.gd
 -------------------------------------------------------------
-Built in three stages deliberately, because main.gd is large and
-function-span deletion has bitten twice (see INCIDENTS).
+_realise_item_stats(item_key, definition, quality)
+  SHARED by _grant_starting_weapon and _grant_crafted_item. Reads
+  weapon_stat_ranges and scales each stat by quality, computes DPS.
+  Extracted because crafted weapons were previously granted with ONLY
+  a Quality value -- no damage, speed, accuracy or damage type. They
+  were blank items dealing the fallback 5 damage. Keep both grant
+  paths going through this so they cannot drift again.
 
-3a - DATA (standalone files, zero risk to main.gd)
-  Two MEDICINE blueprints added: bp_bandages, bp_antiseptic_salve.
-  Both max_sockets 0 -- consumables take no mods. Bandages are the
-  cheapest recipe in the game on purpose: medicine had become
-  unobtainable when the old system was cut, and this ends that.
-  SURFACE SALVAGE added. The Surface sits outside the Silo's 60
-  generated floors, so it gets its own synthetic source set:
-    Alley Dumpster   scrap_plating (40), cultivated_fiber (30),
-                     insulating_polymer (20)
-    Stripped Wiring  copper (24)
-    Rusted Railing   black_iron (24)
-  Quality band 12-34 of 100 -- street salvage is picked over BY
-  DESIGN. Surface-crafted gear is poor; real quality means descending.
-  Bandages are craftable from surface materials alone, so a player can
-  craft before ever entering the Silo.
-  generate_surface_sources() is seeded like everything else and never
-  touches the Silo map.
+crafted_item_instance_of  inventory item_key -> crafted instance_id.
+  Lets the inventory detail panel show traits, flaws, socket types and
+  durability. Persisted in save/load.
 
-3b - MAIN.GD INTEGRATION
-  New state: campaign_seed, campaign_map, surface_sources,
-  material_batches, crafted_items, crafting_profile.
-  New functions: _init_crafting_campaign, _store_material_batch,
-  _batches_for_slot, _consume_selection, _grant_crafted_item,
-  _perform_craft, _load_crafting_state.
-  THE DUMPSTER IS NOW A REAL SCAVENGING SOURCE. It pulls from the
-  Surface sources via extract_from_source(), yielding a MaterialBatch
-  with quality, trait, provenance and a depleting `remaining`. The flat
-  Plastic drop is gone. This is the same call the Silo scavenging loop
-  will use.
-  Batches of identical family/quality/trait/instability/source MERGE so
-  repeated scavenging does not flood the store; anything differing stays
-  separate, because quality and provenance are meaningful.
-  Campaign map generates ONCE on new game and is saved WHOLE. A load
-  restores it verbatim and never regenerates -- the anti-reroll rule.
+_scavenge_dumpster()  draws from EVERY live surface source, not just
+  the ones located at "Alley Dumpster". Copper (Stripped Wiring) and
+  black iron (Rusted Railing) exist in SURFACE_SOURCES but have no
+  physical props, so they were unreachable. When props are added,
+  split them back into separate interactables.
 
-3c - CRAFTING PANEL (scenes/CraftingPanel.gd)
-  Built in code, mirroring KeystoneViewer (extends Node, setup(parent)).
-  Blueprint list, per-slot material dropdowns showing name/quality/held,
-  live material-potential preview with quality tier, craft button that
-  disables until the selection validates. Viewport-anchored from the
-  start; closes via X or ESC.
-  REQUIRES an input action named "crafting_menu" (Project Settings ->
-  Input Map). Guarded by InputMap.has_action() so a missing action
-  cannot crash the game -- the panel simply will not open.
+-------------------------------------------------------------
+KNOWN DEBTS AND LIMITATIONS
+-------------------------------------------------------------
+TESTING VALUES LEFT IN (restore before any balance pass)
+  - DUMPSTER_RESPAWN_TIME = 5.0, was 45.0. At 5s the surface salvage
+    economy is meaningless. Josh asked to leave it for now.
 
-QUALITY SCALE BRIDGE -- THE ONE PLACE THE TWO SCALES MEET:
-  crafting quality is 0-100; the legacy weapon model realises stats as
-  min + (Quality / 1000) * (max - min). _grant_crafted_item() scales the
-  crafted score x10 into inventory_stats["Quality"]. Without that every
-  crafted weapon would sit at the bottom of its range. Do not "simplify"
-  this away.
+CONSUMABLES DO NOT SCALE WITH QUALITY
+  Bandages heal a flat BANDAGE_HEAL_AMOUNT (100) regardless of craft
+  quality, and the heal constant is used directly at the point of use.
+  So Efficiency and Potency experimentation do NOTHING on the item
+  players craft most. Blood Bag already scales via _scale_by_quality --
+  the machinery exists, bandages just do not use it. Fix: give bandages
+  a min/max heal range and have Efficiency reduce BANDAGE_ACTION_COST.
 
-KNOWN LIMITS (expected, not bugs):
-  - Crafted quality is material potential passed straight through, so
-    the same materials always give the same result. Phase 4
-    (experimentation) is what makes allocation a decision.
-  - Loot tables still drop Copper/Iron etc. as inert plain items. They
-    are NOT MaterialBatches. Data debt, cheap to fix.
-  - Crafting XP still has no sink.
+BATCH POOLING
+  A material slot must be filled from ONE batch (_batches_for_slot
+  requires a single batch with amount >= needed). Batches only merge
+  when family, quality, trait, instability AND source all match. In the
+  Silo, where many sources of the same family exist, a player will be
+  able to carry plenty of a material and still not fill a slot. The
+  panel now says "not enough in one batch -- N held across all
+  batches" so it is at least honest. Options: leave it (one lot per
+  slot is defensible), allow pooling with averaged quality (preferred,
+  needs multi-select UI), or merge more aggressively (destroys
+  provenance, which the spec wants).
+
+LOOT STILL DROPS INERT MATERIALS
+  Loot tables drop Copper/Iron etc. from the old system. Those items
+  have no consumer now. Data debt, cheap to fix once the new material
+  model is settled.
+
+ORPHANED ITEMS IN OLD SAVES
+  Mineral Survey Tool, Rusty Crafting Kit etc. remain in inventories
+  from before the rip-out. Their ITEM_DEFINITIONS were removed so they
+  do nothing.
+
+-------------------------------------------------------------
+OPEN DECISIONS
+-------------------------------------------------------------
+- SCAVENGING XP: Josh is working out a separate XP track for it.
+  Crafting XP is deliberately PARKED -- it accrues with no sink and
+  that is fine for now. Do not build an XP economy around it yet.
+- CL 41-100 anchors undefined (table only covers CL 1-40).
+- Does killing a CL30 enemy pay more Combat XP than a CL5 one? Kill XP
+  is currently a flat per-enemy constant ignoring CL.
+- Player crit is DEAD: conditioning_nodes is a legacy path-based hook
+  that returns 0 under keystones.
+- Auxiliary's 12 points cover both combat and future crafting nodes.
 
 -------------------------------------------------------------
 OTHER OPEN WORK
 -------------------------------------------------------------
-PHASE 6c - runtime enemy spawning. Needs Godot EDITOR work from Josh
-  (Enemy.tscn, dynamic health bars / name labels / indicators). Kills
-  the last 26 hardcoded refs in main.gd, all in _update_health_bars,
-  _update_enemy_hud, _setup_health_bars, _cycle_target,
-  _try_click_target, _get_tracked_enemy_id.
+COMBAT PHASE 6c - runtime enemy spawning. Needs Godot EDITOR work from
+  Josh (Enemy.tscn, dynamic health bars / name labels / indicators).
+  Kills the last 26 hardcoded refs in main.gd.
 
-PHASE 8 (combat) - enemy AI. RESCOPED: enemies have NO movement or AI
-  at all. They are stationary and attack only when the player walks
-  into ENEMY_ATTACK_RANGE. This is BUILD AI, then tier it by CL.
-  Multi-session. Also the change that most affects how the game FEELS.
-
-OPEN DECISIONS
-  - Does SCAVENGING award Crafting XP, or does XP come only from
-    MAKING things? Blocks crafting XP economy and node pricing.
-  - Loot-dropped materials (Copper, Iron, Torn Cloth...) are inert
-    plain items, not MaterialBatches. Decided EARLIER that enemy loot
-    is NOT a material channel: the spec sources all materials from
-    seeded permanent sources with provenance, and gives loot a
-    different role -- BLUEPRINTS ("looting schematic data", recovering
-    Steamtek artifacts, technical manuals). So these loot entries
-    should probably become blueprint/schematic drops or salvage
-    components, not raw materials.
-  - CL 41-100 anchors are undefined (table only covers CL 1-40).
-  - Does killing a CL30 enemy pay more Combat XP than a CL5 one?
-    Kill XP is currently a flat per-enemy constant, ignoring CL.
-  - Player crit still driven by `conditioning_nodes`, a legacy
-    path-based hook that returns 0 under keystones -- player crit is
-    effectively dead. Needs a decision on its keystone-era source.
-  - Auxiliary's 12 points cover both combat and (future) crafting
-    nodes; a player can spend everything on combat.
+COMBAT PHASE 8 - enemy AI. Enemies have NO movement or AI at all; they
+  are stationary and attack only when the player walks into
+  ENEMY_ATTACK_RANGE. This is BUILD AI, then tier it by CL.
+  Multi-session, and the change that most affects how the game FEELS.
 
 CLEANUP
-  - Auxiliary keystone: 18 nodes, points_max 12 (was briefly 24 while
-    holding 16 crafting nodes; those were removed).
-  - KeystoneViewer.gd COLORS/CENTER items: DONE. Dead "Crafting" colour
-    removed; CENTER is now _graph_center(), measured from the canvas
-    Control with a viewport fallback.
-  - $UILayer/SurveyUI is STILL IN THE SCENE. The rip-out deleted the
-    survey_ui declaration and its hide-line but left the node and its
-    child declarations (resource_tree, sample_message_label), so the
-    Sample panel was permanently on screen. Now hidden defensively via
-    has_node() in _ready. The node itself should be deleted from
-    main.tscn in the editor.
-  - scenes/CraftingBook.gd is DEAD. It is the old crafting UI, still
-    referencing GameData.recipes, _matches_requirement and the
-    pre-keystone paths system. Not wired to anything. Delete it, or
-    keep only as a reference artifact.
+  - KeystoneViewer.gd has a dead "Crafting" entry in COLORS and a
+    hardcoded CENTER = Vector2(960, 540).
   - Legacy skill_xp_thresholds / skill_point_costs / skill_cogs_costs
     arrays may be dead.
   - ACTION_BAR_BOTTOM_MARGIN = 70 for embedded testing; drop to 20-30
-    for final export.
+    for release.
 
 -------------------------------------------------------------
 INCIDENTS AND LESSONS
 -------------------------------------------------------------
-1. GAMEDATA DESYNC. GameData.gd was stale on BOTH machines through
-   combat Phases 4c-7, carrying pre-4b damage type names. Twelve
-   weapons matched no resistance key, got rating 0, and bypassed enemy
-   armor entirely -- the archetype resistance system was inert in play
-   the whole time it was being built on. Failed silently because a
-   missing key returns a legal zero.
-   LESSON: install delivered files on both machines the same day. The
-   startup validation guard now catches this class of bug, but only
-   AFTER the fact.
+1. GAMEDATA DESYNC. A stale GameData.gd on both machines carried
+   pre-4b damage type names. Twelve weapons matched no resistance key,
+   got rating 0, and bypassed enemy armor entirely for several sessions
+   while the system was being built on top of. Failed silently because
+   a missing key returns a legal zero.
+   LESSON: install on both machines the same day. The startup guard now
+   catches this class of bug, but only AFTER the fact.
 
-2. FUNCTION-SPAN DELETION (happened TWICE, once in combat 6b and again
-   during the crafting cut). A bulk edit defined a function's end as
-   the NEXT `func` keyword. Any top-level declaration block sitting
-   between two functions was swallowed. First time: ~725 lines and 30+
-   unrelated functions. Second time: 80 declarations including
-   BASE_HIT_CHANCE, MELEE_RANGE, inventory, equipped_weapon_name.
-   Both recovered from a pre-edit backup with no loss.
-   LESSON: a function ends at the first COLUMN-0 non-blank line, not
-   at the next func. Take a backup before any bulk edit. Compare
-   DECLARATION COUNT before and after -- that is the check that
-   catches this immediately. Dry-run large cuts before executing.
+2. FUNCTION-SPAN DELETION (happened TWICE). A bulk edit defined a
+   function's end as the NEXT `func` keyword, swallowing any top-level
+   declaration block between them. Once ~725 lines and 30+ functions;
+   once 80 declarations including BASE_HIT_CHANCE, MELEE_RANGE,
+   inventory, equipped_weapon_name. Both recovered from a pre-edit
+   backup.
+   LESSON: a function ends at the first COLUMN-0 non-blank line. Back
+   up before bulk edits. Compare DECLARATION COUNT before and after --
+   that is the check that catches it immediately. Dry-run large cuts.
 
 3. LOST DECLARATION AFTER RECOVERY. Restoring from a snapshot rolled
-   back a `var enemy_nodes` declaration while the redo rebuilt only
-   the functions USING it -- 9 "not declared in current scope" errors.
-   LESSON: after recovering from a snapshot, re-check that every
-   declaration the refactor introduced still exists.
+   back a `var enemy_nodes` declaration while the redo rebuilt only the
+   functions USING it -- 9 "not declared in current scope" errors.
+   LESSON: after recovering, re-check that every declaration the
+   refactor introduced still exists.
 
 4. RIGHT_X ORPHAN. A refactor REMOVED a declaration while two child
    controls still referenced it.
-   LESSON: the mirror of #2. Grep for users before deleting a
-   declaration. The undeclared-identifier sweep now runs before every
-   export.
-5. GUESSED FIELD NAMES ON THE CRAFTING MODELS (three times).
-   main.gd was written against assumed key names: item_id (really
-   instance_id), stats (really final_stats), generated_name (really
-   display_name). Each failed SILENTLY because .get(key, default)
-   returns the default for a wrong key -- the same shape as the
-   GameData desync and the quality-50 drag.
-   LESSON: read the model factory before reading its dictionaries. An
-   audit now runs before export, checking every key main.gd reads
-   against the keys the factories actually produce. It reports 0.
+   LESSON: grep for users before deleting a declaration.
 
-6. CANVASITEM API ON A NODE SCRIPT.
-   _graph_center() used get_viewport_rect(), which is CanvasItem-only,
-   in KeystoneViewer.gd -- a script that extends Node. The earlier
-   tooltip fix worked only because it was called on tooltip_panel (a
-   Control), not on self.
-   LESSON: check the base class before using node-type-specific API.
-   GDScript only surfaces this at parse time.
+5. PASTE-INSTEAD-OF-REPLACE. main.gd ended up containing the new file
+   followed immediately by the old one ("...visible = falseextends
+   Node2D"), producing 447 errors. The delivered file was clean; the
+   corruption happened at install.
+   LESSON: install by REPLACING THE FILE in File Explorer. Do not paste
+   contents into the Godot script editor -- the paste lands at the
+   caret rather than overwriting.
 
-7. A CUT SYSTEM LEAVES READERS BEHIND.
-   After the crafting rip-out, KeystoneViewer._append_cert_and_recipe_lines
-   still read GameData.recipes and threw at runtime every time the talent
-   panel opened. It had been repointed from "Crafting" to "Auxiliary"
-   during the keystone consolidation -- correct then, a landmine once the
-   array was deleted.
-   LESSON: when a system is cut, grep for EVERY reader of its data,
-   including UI files that are not in the working set at the time.
+6. UI BUILT WITH ABSOLUTE OFFSETS. The crafting panel was positioned
+   with pixel offsets measured up from the bottom of the screen, then
+   with full-screen containers. The first broke at any viewport height
+   other than the one assumed; the second smeared sparse content across
+   1080px. Third attempt -- a FIXED-SIZE CENTRED window (1180x764) --
+   works.
+   LESSON: for code-built panels, use a fixed-size centred frame with
+   containers inside. There is a comment in CraftingPanel._build_ui
+   recording this so it does not get "fixed" back.
+
+7. LABEL TOOLTIPS SILENTLY DO NOTHING. Godot Labels default to
+   MOUSE_FILTER_IGNORE, so they never receive hover and tooltip_text is
+   never shown. Category tooltips existed for a whole phase without
+   ever appearing.
+   LESSON: set mouse_filter = MOUSE_FILTER_STOP on any Label carrying a
+   tooltip.

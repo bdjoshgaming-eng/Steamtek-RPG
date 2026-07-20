@@ -310,6 +310,9 @@ var enhancement_definitions = {
 }
 
 var crafted_item_class: Dictionary = {}
+# inventory item_key -> crafted instance_id, so the inventory detail
+# panel can look up sockets, traits and flaws for a crafted item.
+var crafted_item_instance_of: Dictionary = {}
 var crafted_item_subclass: Dictionary = {}
 var consumable_base_name: Dictionary = {}
 
@@ -524,7 +527,10 @@ const FORAGE_XP = 10
 # game right now (the earlier test herb patch has been removed).
 var dumpster_available: bool = true
 const DUMPSTER_RANGE = 150.0
-const DUMPSTER_RESPAWN_TIME = 45.0
+# TESTING VALUE -- was 45.0. Dropped to 5s so material scavenging can
+# be tested quickly. RESTORE TO 45.0 before any real balance pass or
+# release; at 5s the surface salvage economy is meaningless.
+const DUMPSTER_RESPAWN_TIME = 5.0
 const DUMPSTER_COGS_MIN = 2
 const DUMPSTER_COGS_MAX = 2
 
@@ -1089,6 +1095,7 @@ func _save_game() -> void:
 		"resource_stats": resource_stats,
 		"used_resource_names": used_resource_names,
 		"crafted_item_class": crafted_item_class,
+		"crafted_item_instance_of": crafted_item_instance_of,
 		"consumable_base_name": consumable_base_name,
 		"equipped_weapon_name": equipped_weapon_name,
 		"novice_professions": GameData.novice_professions,
@@ -1153,6 +1160,7 @@ func _load_game() -> void:
 	used_resource_names = save_data.get("used_resource_names", [])
 
 	crafted_item_class = save_data.get("crafted_item_class", {})
+	crafted_item_instance_of = save_data.get("crafted_item_instance_of", {})
 	consumable_base_name = save_data.get("consumable_base_name", {})
 	equipped_weapon_name = save_data.get("equipped_weapon_name", "")
 
@@ -2712,39 +2720,29 @@ func _get_con_color(enemy_id: String) -> Color:
 	return _get_threat_for_enemy(enemy_id)["color"]
 
 
-func _grant_starting_weapon(weapon_name: String, quality: int) -> void:
-	# Reads the ITEM definition, not a crafting recipe. A starting weapon
-	# is granted outright, so it must not depend on the crafting system
-	# existing at all.
-	var recipe: Dictionary = GameData.get_item_definition(weapon_name)
-	if recipe.is_empty():
-		return
-
-	# Unique per grant, same rule as crafted items -- even a starting
-	# weapon has its own generated stats and shouldn't stack/share an
-	# identity with another copy of the same weapon name.
-	var item_key = _generate_unique_resource_name()
-	consumable_base_name[item_key] = weapon_name
-
-	_add_to_inventory(item_key, 1)
-
+# Realises an item's actual stats from its ITEM_DEFINITION at a given
+# quality (0-1000). Shared by starting-weapon grants and crafted-item
+# grants so the two can never drift apart -- crafted weapons were
+# previously granted with ONLY a Quality value, which left them with no
+# damage, speed, accuracy or damage type at all.
+func _realise_item_stats(item_key: String, definition: Dictionary, quality: int) -> void:
 	if not inventory_stats.has(item_key):
 		inventory_stats[item_key] = {}
-	inventory_stats[item_key]["Quality"] = quality
+	var output_stats = inventory_stats[item_key]
+	output_stats["Quality"] = quality
 
-	if recipe.has("item_class"):
-		crafted_item_class[item_key] = recipe["item_class"]
-	if recipe.has("item_subclass"):
-		crafted_item_subclass[item_key] = recipe["item_subclass"]
+	if definition.has("item_class"):
+		crafted_item_class[item_key] = definition["item_class"]
+	if definition.has("item_subclass"):
+		crafted_item_subclass[item_key] = definition["item_subclass"]
 
-	if recipe.has("weapon_categorical_stats"):
-		for stat_name in recipe["weapon_categorical_stats"].keys():
-			inventory_stats[item_key][stat_name] = recipe["weapon_categorical_stats"][stat_name]
+	if definition.has("weapon_categorical_stats"):
+		for stat_name in definition["weapon_categorical_stats"].keys():
+			output_stats[stat_name] = definition["weapon_categorical_stats"][stat_name]
 
-	if recipe.has("weapon_stat_ranges"):
-		var output_stats = inventory_stats[item_key]
-		for stat_name in recipe["weapon_stat_ranges"].keys():
-			var stat_range = recipe["weapon_stat_ranges"][stat_name]
+	if definition.has("weapon_stat_ranges"):
+		for stat_name in definition["weapon_stat_ranges"].keys():
+			var stat_range = definition["weapon_stat_ranges"][stat_name]
 			var min_val = stat_range[0]
 			var max_val = stat_range[1]
 			var raw_value = min_val + (quality / 1000.0) * (max_val - min_val)
@@ -2754,14 +2752,31 @@ func _grant_starting_weapon(weapon_name: String, quality: int) -> void:
 				scaled_value = round(raw_value * 10.0) / 10.0
 			else:
 				scaled_value = round(raw_value)
-
 			output_stats[stat_name] = scaled_value
 
 		if output_stats.has("Speed") and output_stats.has("Damage Rating"):
 			var speed_value = output_stats["Speed"]
 			var damage_value = output_stats["Damage Rating"]
-			var dps_value = round((damage_value / speed_value) * 10.0) / 10.0
-			output_stats["Damage Per Second"] = dps_value
+			if speed_value > 0:
+				output_stats["Damage Per Second"] = round((damage_value / speed_value) * 10.0) / 10.0
+
+
+func _grant_starting_weapon(weapon_name: String, quality: int) -> void:
+	# Reads the ITEM definition, not a crafting recipe. A starting weapon
+	# is granted outright, so it must not depend on the crafting system
+	# existing at all.
+	var definition: Dictionary = GameData.get_item_definition(weapon_name)
+	if definition.is_empty():
+		return
+
+	# Unique per grant, same rule as crafted items -- even a starting
+	# weapon has its own generated stats and shouldn't stack/share an
+	# identity with another copy of the same weapon name.
+	var item_key = _generate_unique_resource_name()
+	consumable_base_name[item_key] = weapon_name
+	_add_to_inventory(item_key, 1)
+	_realise_item_stats(item_key, definition, quality)
+
 
 # --- Scavenging ---
 
@@ -2786,9 +2801,15 @@ func _scavenge_dumpster() -> void:
 	# Surface's synthetic salvage sources, instead of a flat Plastic drop.
 	# Same call the Silo scavenging loop will use, just against surface
 	# sources rather than a generated floor.
-	var pile = CraftingResourceGenerator.surface_sources_at(surface_sources, "Alley Dumpster")
+	# Draws from EVERY live Surface source, not just the bin itself.
+	# All the surface salvage -- the dumpster, the stripped wiring, the
+	# rusted railing -- sits in this same alley, but only the dumpster has
+	# a physical prop, so the other sources were unreachable and their
+	# materials (copper, black iron) could never be obtained. Until those
+	# props exist, this one interactable works the whole alley.
 	var live: Array = []
-	for src in pile:
+	for sid in surface_sources.keys():
+		var src = surface_sources[sid]
 		if int(src.get("remaining", 0)) > 0:
 			live.append(src)
 
@@ -2812,7 +2833,9 @@ func _scavenge_dumpster() -> void:
 	_update_inventory_display()
 	_update_cogs_display()
 
-	_show_combat_message("You scavenge and find: " + str(int(batch.get("amount", 0))) + " " + String(batch.get("display_name", "material")) + " (Quality " + str(int(batch.get("quality", 0))) + ")")
+	_show_combat_message("You search the " + String(chosen.get("location_name", "alley"))
+		+ " and find: " + str(int(batch.get("amount", 0))) + " " + String(batch.get("display_name", "material"))
+		+ " (Quality " + str(int(batch.get("quality", 0))) + ")")
 
 	dumpster_available = false
 	dumpster.visible = false
@@ -4258,9 +4281,42 @@ func _select_inventory_book_item(item_key: String) -> void:
 		stat_lines.append_array(_get_consumable_effect_lines(base_name, stats.get("Quality", 500)))
 
 		for stat_name in stats.keys():
+			# Raw 0-1000 Quality stays hidden on gear -- it is an internal
+			# scale. Crafted items show "Craft Quality" (0-100) instead,
+			# which is the number the crafting UI actually used.
 			if stat_name == "Quality" and not is_resource:
 				continue
 			stat_lines.append(stat_name + ": " + _format_number(stats[stat_name]))
+
+		# --- crafted-item detail: traits, flaws, socket tags ---
+		var instance_id = String(crafted_item_instance_of.get(item_key, ""))
+		if instance_id != "" and crafted_items.has(instance_id):
+			var inst: Dictionary = crafted_items[instance_id]
+
+			var trait_names: Array = []
+			for t in inst.get("inherited_trait_ids", []):
+				trait_names.append(String(CraftingData.get_trait(String(t)).get("display_name", t)))
+			if not trait_names.is_empty():
+				stat_lines.append("")
+				stat_lines.append("Traits: " + ", ".join(trait_names))
+
+			var flaw_names: Array = []
+			for f in inst.get("inherited_instability_ids", []):
+				flaw_names.append(String(CraftingData.get_instability(String(f)).get("display_name", f)))
+			if not flaw_names.is_empty():
+				stat_lines.append("Flaws: " + ", ".join(flaw_names))
+
+			var socket_tags: Array = inst.get("socket_tags", [])
+			if int(inst.get("socket_count", 0)) > 0 and not socket_tags.is_empty():
+				var tag_names: Array = []
+				for tg in socket_tags:
+					tag_names.append(String(CraftingData.get_socket_tag(String(tg)).get("display_name", tg)))
+				stat_lines.append("Socket types: " + ", ".join(tag_names))
+
+			var dur = float(inst.get("maximum_durability", 0.0))
+			if dur > 0.0:
+				stat_lines.append("Durability: " + str(int(round(float(inst.get("current_durability", dur)))))
+					+ " / " + str(int(round(dur))))
 
 		if stat_lines.size() == 0:
 			lines.append("No additional stats.")
@@ -4536,27 +4592,49 @@ func _grant_crafted_item(crafted: Dictionary) -> String:
 	consumable_base_name[item_key] = item_name
 	_add_to_inventory(item_key, 1)
 
-	if not inventory_stats.has(item_key):
-		inventory_stats[item_key] = {}
+	# QUALITY SCALE BRIDGE: crafting works on 0-100, the legacy item model
+	# on 0-1000. Without the x10 every crafted weapon would sit at the
+	# very bottom of its stat ranges. Do not "simplify" this away.
 	var realised = int(round(float(crafted.get("craft_quality_score", 0.0))))
-	inventory_stats[item_key]["Quality"] = clampi(realised * 10, 0, 1000)
+	var legacy_quality = clampi(realised * 10, 0, 1000)
 
-	if definition.has("item_class"):
-		crafted_item_class[item_key] = definition["item_class"]
+	# Realise the full stat block, exactly as a starting weapon would get.
+	# Previously only Quality was set here, so crafted weapons had no
+	# damage, speed, accuracy or damage type -- they were blank items.
+	_realise_item_stats(item_key, definition, legacy_quality)
+
+	# Crafting-specific detail, shown in the inventory and used later by
+	# the mod system.
+	var stats = inventory_stats[item_key]
+	stats["Craft Quality"] = realised
+	var sockets = int(crafted.get("socket_count", 0))
+	if sockets > 0:
+		stats["Mod Sockets"] = sockets
 
 	crafted_items[String(crafted.get("instance_id", item_key))] = crafted
+	crafted_item_instance_of[item_key] = String(crafted.get("instance_id", ""))
 	return item_key
 
 
 # Runs a craft end to end: validate, build the item, consume materials,
 # put the result in the player's hands.
-func _perform_craft(blueprint_id: String, selection: Dictionary) -> Dictionary:
+# Phase 4: allocation and risk_mode_id carry the player's experimentation
+# choices. Both default to "no experimentation", so an empty allocation
+# produces exactly the Phase 3 result.
+func _perform_craft(blueprint_id: String, selection: Dictionary,
+		allocation: Dictionary = {}, risk_mode_id: String = "") -> Dictionary:
 	var problems = CraftingService.validate_selection(blueprint_id, selection)
 	if not problems.is_empty():
 		_show_combat_message("Cannot craft: " + String(problems[0]))
 		return {}
 
-	var crafted = CraftingService.craft(blueprint_id, selection)
+	var points = CraftingService.generate_experimentation_points(blueprint_id, selection, crafting_profile)
+	var alloc_problems = CraftingService.validate_allocation(blueprint_id, allocation, int(points["total"]))
+	if not alloc_problems.is_empty():
+		_show_combat_message("Cannot craft: " + String(alloc_problems[0]))
+		return {}
+
+	var crafted = CraftingService.craft(blueprint_id, selection, 0.0, allocation, risk_mode_id, crafting_profile)
 	if crafted.is_empty():
 		_show_combat_message("The craft failed.")
 		return {}
@@ -4567,7 +4645,26 @@ func _perform_craft(blueprint_id: String, selection: Dictionary) -> Dictionary:
 		return {}
 
 	_update_inventory_display()
-	_show_combat_message("Crafted: " + String(crafted.get("display_name", "item")) + " (Quality " + str(int(round(float(crafted.get("craft_quality_score", 0.0))))) + ")")
+	var msg = "Crafted: " + String(crafted.get("display_name", "item")) + " (Quality " + str(int(round(float(crafted.get("craft_quality_score", 0.0))))) + ")"
+	# Surface experimentation outcomes -- especially failures, which are
+	# otherwise invisible until the player inspects the item.
+	var results: Dictionary = crafted.get("experimentation_results", {})
+	var failed: Array = []
+	var flaws: Array = []
+	for cid in results.keys():
+		if bool(results[cid].get("failed", false)):
+			failed.append(String(CraftingData.get_category(cid).get("display_name", cid)))
+		var flaw = String(results[cid].get("gained_instability", ""))
+		if flaw != "":
+			flaws.append(String(CraftingData.get_instability(flaw).get("display_name", flaw)))
+	if not failed.is_empty():
+		msg += "\nFailed: " + ", ".join(failed)
+	if not flaws.is_empty():
+		msg += "\nGained flaw: " + ", ".join(flaws)
+	var sockets = int(crafted.get("socket_count", 0))
+	if sockets > 0:
+		msg += "\nSockets: " + str(sockets)
+	_show_combat_message(msg)
 	return crafted
 
 

@@ -1,0 +1,2 @@
+# Raw Meshy sources, reference sheets, previews, and upload views are pipeline
+# inputs only. Production Godot assets live under res://assets and res://scenes.

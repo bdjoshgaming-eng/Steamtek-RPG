@@ -12,6 +12,12 @@ const BOOKSHELF_PROFILE_ID := "steamtek_bookshelf_v1"
 const BOOKSHELF_BASE_SCENE_PATH := "res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Bookshelf_A.tscn"
 const BOOKSHELF_TEMPLATE_MATERIAL_PATH := "res://assets/environment/live3d/materials/apartment_interior_variants/bookshelf/STK_MAT_Bookshelf_A_SourceMatte.tres"
 const BOOKSHELF_REGIONS := ["Frame_PaintedMetal", "Shelf_PaintedMetal", "Accent_Powered"]
+const SECTIONAL_PROFILE_ID := "steamtek_sectional_couch_v1"
+const SECTIONAL_BASE_SCENE_PATH := "res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Couch_L4_Left.tscn"
+const SECTIONAL_TEMPLATE_MATERIAL_PATH := "res://assets/environment/live3d/materials/apartment_interior_variants/couch_l4_left/STK_MAT_Couch_L4_Left_SourceMatte.tres"
+const SECTIONAL_RIGHT_BASE_SCENE_PATH := "res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Couch_L4_Right.tscn"
+const SECTIONAL_RIGHT_TEMPLATE_MATERIAL_PATH := "res://assets/environment/live3d/materials/apartment_interior_variants/couch_l4_right/STK_MAT_Couch_L4_Right_SourceMatte.tres"
+const SECTIONAL_REGIONS := ["Cushion_Leather", "Frame_PaintedMetal", "Accent_Metal"]
 const VARIANT_SCRIPT_PATH := "res://scenes/environment/live3d/props/static_prop_material_variant.gd"
 const BOOKSHELF_VARIANT_SCRIPT_PATH := VARIANT_SCRIPT_PATH
 const GENERATED_MATERIAL_DIR := "res://assets/environment/live3d/materials/apartment_interior_variants/generated"
@@ -76,7 +82,7 @@ func _exit_tree() -> void:
 
 func _create_dock() -> void:
 	dock = ScrollContainer.new()
-	dock.name = "Material Variants"
+	dock.name = "STK Variants"
 	dock.custom_minimum_size = Vector2(280.0, 0.0)
 	dock.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	dock_content = VBoxContainer.new()
@@ -175,10 +181,13 @@ func _create_dock() -> void:
 	dock_content.add_child(_make_button("Save as Variant", _save_variant))
 
 	status_label = Label.new()
-	status_label.text = "Ready. Select a supported couch, bed, or bookshelf."
+	status_label.text = "Ready. Select a supported couch, bed, bookshelf, or sectional."
 	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	dock_content.add_child(status_label)
 
+	# Share the lower-right area with the Builder as a separate named tab. The
+	# unique dock name prevents restored layouts from crossing tab identity and
+	# content when the two editor plugins reload in a different order.
 	add_control_to_dock(DOCK_SLOT_RIGHT_BL, dock)
 
 
@@ -236,6 +245,11 @@ func _update_selected_asset() -> void:
 		if module_changed:
 			_load_bookshelf_state_from_scene_override(module)
 		_set_regions(BOOKSHELF_REGIONS)
+	elif profile == SECTIONAL_PROFILE_ID:
+		asset_status.text = "Selected asset: %s\nProfile: Sectional couch material regions" % module.name
+		if module_changed:
+			_load_sectional_state_from_scene_override(module)
+		_set_regions(SECTIONAL_REGIONS)
 	else:
 		asset_status.text = "Selected asset: %s\nProfile: Couch upholstery" % module.name
 		_set_regions(["Upholstery"])
@@ -252,7 +266,7 @@ func _selected_supported_module() -> Node3D:
 	while current != null:
 		if current is Node3D:
 			var profile := str(current.get_meta("material_variant_profile", ""))
-			if profile == COUCH_PROFILE_ID or profile == BED_PROFILE_ID or profile == BOOKSHELF_PROFILE_ID:
+			if profile == COUCH_PROFILE_ID or profile == BED_PROFILE_ID or profile == BOOKSHELF_PROFILE_ID or profile == SECTIONAL_PROFILE_ID:
 				return current as Node3D
 		current = current.get_parent()
 	return null
@@ -304,7 +318,7 @@ func _on_region_selected(_index: int) -> void:
 func _update_region_controls() -> void:
 	var region := _selected_region()
 	var powered := region == "Accent_Powered"
-	var painted_metal := region == "Frame_PaintedMetal"
+	var painted_metal := region == "Frame_PaintedMetal" or region == "Accent_Metal"
 	if is_instance_valid(tint_strength):
 		tint_strength.editable = not powered
 	if is_instance_valid(brightness):
@@ -363,17 +377,39 @@ func _default_bookshelf_region_state(region: String) -> Dictionary:
 	}
 
 
+func _default_sectional_region_state(region: String) -> Dictionary:
+	var default_color := Color(0.28, 0.055, 0.065)
+	match region:
+		"Frame_PaintedMetal":
+			default_color = Color(0.055, 0.10, 0.13)
+		"Accent_Metal":
+			default_color = Color(0.45, 0.22, 0.09)
+	return {
+		"color": default_color,
+		"tint_strength": 0.86,
+		"brightness": 1.0,
+		"roughness_offset": 0.0,
+		"metallic_offset": 0.0,
+		"emission_strength": 0.0,
+		"emission_enabled": false,
+	}
+
+
 func _active_profile_regions(profile: String) -> Array:
 	if profile == BED_PROFILE_ID:
 		return BED_REGIONS
 	if profile == BOOKSHELF_PROFILE_ID:
 		return BOOKSHELF_REGIONS
+	if profile == SECTIONAL_PROFILE_ID:
+		return SECTIONAL_REGIONS
 	return []
 
 
 func _default_active_region_state(profile: String, region: String) -> Dictionary:
 	if profile == BOOKSHELF_PROFILE_ID:
 		return _default_bookshelf_region_state(region)
+	if profile == SECTIONAL_PROFILE_ID:
+		return _default_sectional_region_state(region)
 	return _default_bed_region_state(region)
 
 
@@ -399,6 +435,27 @@ func _module_variant_material(module: Node3D) -> Material:
 	if module == null or not _module_has_property(module, &"variant_material"):
 		return null
 	return module.get("variant_material") as Material
+
+
+func _is_right_sectional(module: Node3D) -> bool:
+	if module == null or _module_profile(module) != SECTIONAL_PROFILE_ID:
+		return false
+	return (
+		str(module.get_meta("sectional_orientation", "")) == "right"
+		or str(module.get_meta("module_variant", "")) == "STK_PROP_Couch_L4_Right"
+	)
+
+
+func _sectional_template_material_path(module: Node3D) -> String:
+	return SECTIONAL_RIGHT_TEMPLATE_MATERIAL_PATH if _is_right_sectional(module) else SECTIONAL_TEMPLATE_MATERIAL_PATH
+
+
+func _sectional_base_scene_path(module: Node3D) -> String:
+	return SECTIONAL_RIGHT_BASE_SCENE_PATH if _is_right_sectional(module) else SECTIONAL_BASE_SCENE_PATH
+
+
+func _sectional_asset_stem(module: Node3D) -> String:
+	return "Couch_L4_Right" if _is_right_sectional(module) else "Couch_L4_Left"
 
 
 func _shader_color(material: ShaderMaterial, parameter: StringName, fallback: Color) -> Color:
@@ -464,6 +521,23 @@ func _load_bookshelf_state_from_scene_override(module: Node3D) -> void:
 		"emission_strength": float(material.get_shader_parameter("emission_strength")),
 		"emission_enabled": float(material.get_shader_parameter("emission_enabled")) > 0.5,
 	}
+
+
+func _load_sectional_state_from_scene_override(module: Node3D) -> void:
+	if not bool(module.get_meta(SCENE_OVERRIDE_META, false)):
+		return
+	var material := _module_variant_material(module) as ShaderMaterial
+	if material == null:
+		return
+	bed_region_state["Cushion_Leather"] = _bed_region_state_from_material(material, "cushion", Color(0.28, 0.055, 0.065))
+	var frame_state := _bed_region_state_from_material(material, "frame", Color(0.055, 0.10, 0.13))
+	frame_state["metallic_offset"] = float(material.get_shader_parameter("frame_metallic_offset"))
+	bed_region_state["Frame_PaintedMetal"] = frame_state
+	var accent_state := _bed_region_state_from_material(material, "accent", Color(0.45, 0.22, 0.09))
+	accent_state["metallic_offset"] = float(material.get_shader_parameter("accent_metallic_offset"))
+	accent_state["emission_strength"] = 0.0
+	accent_state["emission_enabled"] = false
+	bed_region_state["Accent_Metal"] = accent_state
 
 
 func _load_couch_controls_from_scene_override(module: Node3D) -> void:
@@ -562,6 +636,8 @@ func _make_variant_material() -> ShaderMaterial:
 		template_path = BED_TEMPLATE_MATERIAL_PATH
 	elif profile == BOOKSHELF_PROFILE_ID:
 		template_path = BOOKSHELF_TEMPLATE_MATERIAL_PATH
+	elif profile == SECTIONAL_PROFILE_ID:
+		template_path = _sectional_template_material_path(module)
 	var template := load(template_path) as ShaderMaterial
 	if template == null:
 		return null
@@ -575,6 +651,10 @@ func _make_variant_material() -> ShaderMaterial:
 		for region in BOOKSHELF_REGIONS:
 			if bed_region_state.has(region):
 				_apply_bookshelf_region_state(material, region, bed_region_state[region])
+	elif profile == SECTIONAL_PROFILE_ID:
+		for region in SECTIONAL_REGIONS:
+			if bed_region_state.has(region):
+				_apply_sectional_region_state(material, region, bed_region_state[region])
 	else:
 		material.set_shader_parameter("upholstery_tint", chosen)
 		material.set_shader_parameter("tint_strength", float(tint_strength.value))
@@ -616,6 +696,19 @@ func _apply_bookshelf_region_state(material: ShaderMaterial, region: String, sta
 			material.set_shader_parameter("emission_enabled", 1.0 if bool(state.get("emission_enabled", true)) else 0.0)
 
 
+func _apply_sectional_region_state(material: ShaderMaterial, region: String, state: Dictionary) -> void:
+	var chosen: Color = state.get("color", Color.WHITE)
+	match region:
+		"Cushion_Leather":
+			_set_bed_region_parameters(material, "cushion", chosen, state)
+		"Frame_PaintedMetal":
+			_set_bed_region_parameters(material, "frame", chosen, state)
+			material.set_shader_parameter("frame_metallic_offset", float(state.get("metallic_offset", 0.0)))
+		"Accent_Metal":
+			_set_bed_region_parameters(material, "accent", chosen, state)
+			material.set_shader_parameter("accent_metallic_offset", float(state.get("metallic_offset", 0.0)))
+
+
 func _set_bed_region_parameters(material: ShaderMaterial, prefix: String, chosen: Color, state: Dictionary) -> void:
 	material.set_shader_parameter(prefix + "_tint", chosen)
 	material.set_shader_parameter(prefix + "_strength", float(state.get("tint_strength", 0.94)))
@@ -626,13 +719,13 @@ func _set_bed_region_parameters(material: ShaderMaterial, prefix: String, chosen
 func _mesh_accepts_variant_preview(module: Node3D, mesh_instance: MeshInstance3D) -> bool:
 	if _module_profile(module) != BOOKSHELF_PROFILE_ID:
 		return true
-	return mesh_instance.name == "ProjectedShell"
+	return mesh_instance.name in ["ProjectedShell", "STK_PROP_Bookshelf_A_Mesh", "STK_PROP_Bookshelf_A"]
 
 
 func _preview_selected() -> void:
 	var module := _selected_supported_module()
 	if module == null:
-		_set_status("Select a supported couch, bed, or bookshelf first.")
+		_set_status("Select a supported couch, bed, bookshelf, or sectional first.")
 		return
 	_capture_active_region_state()
 	_revert_preview(false)
@@ -686,7 +779,7 @@ func _scene_directly_owns_module(module: Node3D) -> bool:
 func _apply_to_scene() -> void:
 	var module := _selected_supported_module()
 	if module == null:
-		_set_status("Select a supported couch, bed, or bookshelf first.")
+		_set_status("Select a supported couch, bed, bookshelf, or sectional first.")
 		return
 	if not _scene_directly_owns_module(module):
 		_set_status("Open the scene that directly contains this prop, such as the v02 apartment assembly, then select it there.")
@@ -725,7 +818,7 @@ func _apply_to_scene() -> void:
 func _remove_scene_override() -> void:
 	var module := _selected_supported_module()
 	if module == null:
-		_set_status("Select a supported couch, bed, or bookshelf first.")
+		_set_status("Select a supported couch, bed, bookshelf, or sectional first.")
 		return
 	if not _scene_directly_owns_module(module):
 		_set_status("Open the scene that directly contains this prop before removing its scene override.")
@@ -747,7 +840,7 @@ func _remove_scene_override() -> void:
 	undo_redo.add_do_method(module, "set_meta", SCENE_OVERRIDE_META, false)
 	undo_redo.add_undo_method(module, "set_meta", SCENE_OVERRIDE_META, true)
 	undo_redo.commit_action()
-	if _module_profile(module) == BED_PROFILE_ID or _module_profile(module) == BOOKSHELF_PROFILE_ID:
+	if _module_profile(module) == BED_PROFILE_ID or _module_profile(module) == BOOKSHELF_PROFILE_ID or _module_profile(module) == SECTIONAL_PROFILE_ID:
 		bed_region_state.clear()
 	_set_status("Removed the scene-only material from %s. Press Ctrl+S to save the scene." % module.name)
 
@@ -755,7 +848,7 @@ func _remove_scene_override() -> void:
 func _save_variant() -> void:
 	var module := _selected_supported_module()
 	if module == null:
-		_set_status("Select a supported couch, bed, or bookshelf first.")
+		_set_status("Select a supported couch, bed, bookshelf, or sectional first.")
 		return
 	_capture_active_region_state()
 	var clean_name := _clean_variant_name(variant_name.text)
@@ -766,11 +859,14 @@ func _save_variant() -> void:
 	var profile := _module_profile(module)
 	var is_bed := profile == BED_PROFILE_ID
 	var is_bookshelf := profile == BOOKSHELF_PROFILE_ID
+	var is_sectional := profile == SECTIONAL_PROFILE_ID
 	var asset_stem := "Couch_A"
 	if is_bed:
 		asset_stem = "Bed_A"
 	elif is_bookshelf:
 		asset_stem = "Bookshelf_A"
+	elif is_sectional:
+		asset_stem = _sectional_asset_stem(module)
 	var variant_id := "STK_PROP_%s_%s" % [asset_stem, suffix]
 	var material_id := "STK_MAT_%s_%s" % [asset_stem, suffix]
 	var material_path := "%s/%s.tres" % [GENERATED_MATERIAL_DIR, material_id]
@@ -803,6 +899,9 @@ func _save_variant() -> void:
 		asset_label = "Bookshelf"
 		base_scene_path = BOOKSHELF_BASE_SCENE_PATH
 		variant_script_path = BOOKSHELF_VARIANT_SCRIPT_PATH
+	elif is_sectional:
+		asset_label = "Sectional"
+		base_scene_path = _sectional_base_scene_path(module)
 	var builder_label := "Apartment - %s %s" % [asset_label, clean_name.capitalize()]
 	var scene_text := _build_variant_scene_text(variant_id, material_path, color_variant, builder_label, base_scene_path, profile, region, variant_script_path)
 	var scene_file := FileAccess.open(scene_path, FileAccess.WRITE)

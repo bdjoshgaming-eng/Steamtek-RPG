@@ -1,0 +1,73 @@
+[gd_scene format=3 uid="uid://d0v4k7k5142yh"]
+
+[ext_resource type="Script" uid="uid://bgwlsl53xtg2o" path="res://scenes/environment/live3d/qa/sectional_couch_right_candidate_review.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Couch_L4_Right.tscn" id="2_right"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Couch_L4_Left.tscn" id="3_left"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Couch_A.tscn" id="4_two_seat"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Workstation_A.tscn" id="5_workstation"]
+[ext_resource type="PackedScene" path="res://scenes/characters/player/VesperKane_PlayerCharacter_v01.tscn" id="6_character"]
+
+[sub_resource type="Environment" id="ReviewEnvironment"]
+background_mode = 1
+background_color = Color(0.025, 0.03, 0.04, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.36, 0.43, 0.52, 1)
+ambient_light_energy = 0.52
+reflected_light_source = 2
+
+[sub_resource type="StandardMaterial3D" id="FloorMaterial"]
+albedo_color = Color(0.075, 0.08, 0.09, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="FloorMesh"]
+material = SubResource("FloorMaterial")
+size = Vector3(12, 0.05, 9)
+
+[sub_resource type="BoxShape3D" id="FloorShape"]
+size = Vector3(12, 0.05, 9)
+
+[node name="SectionalCouchRightCandidateReview" type="Node3D" unique_id=2011550496]
+script = ExtResource("1_script")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=828181391]
+environment = SubResource("ReviewEnvironment")
+
+[node name="CouchCandidate" parent="." unique_id=2077877604 instance=ExtResource("2_right")]
+
+[node name="ApprovedLeftSectional" parent="." unique_id=2099853216 instance=ExtResource("3_left")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.1, 0, -0.15)
+
+[node name="ApprovedTwoSeat" parent="." unique_id=1604512207 instance=ExtResource("4_two_seat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -0.15)
+
+[node name="ApprovedWorkstation" parent="." unique_id=1362496992 instance=ExtResource("5_workstation")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="ReviewC001" parent="." unique_id=70820440 instance=ExtResource("6_character")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.45, 0, 1.15)
+
+[node name="ReviewCamera" type="Camera3D" parent="." unique_id=464658398]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 3.3, 7.2)
+current = true
+fov = 42.0
+
+[node name="KeyLight" type="DirectionalLight3D" parent="." unique_id=163130321]
+transform = Transform3D(0.8480481, 0.3545852, -0.39380676, 0, 0.7431448, 0.6691306, 0.52991927, -0.56745493, 0.63022256, 0, 0, 0)
+light_color = Color(1, 0.78, 0.62, 1)
+light_energy = 1.35
+shadow_enabled = true
+
+[node name="FillLight" type="OmniLight3D" parent="." unique_id=643155416]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 2.2, 3.4)
+light_color = Color(0.38, 0.68, 1, 1)
+light_energy = 2.4
+omni_range = 9.0
+
+[node name="Floor" type="StaticBody3D" parent="." unique_id=1316083209]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.025, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="Floor" unique_id=620615672]
+mesh = SubResource("FloorMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Floor" unique_id=1322191768]
+shape = SubResource("FloorShape")
