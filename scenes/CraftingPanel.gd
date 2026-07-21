@@ -24,6 +24,7 @@ var main
 var root: Control
 var blueprint_list: VBoxContainer
 var slot_container: VBoxContainer
+var materials_list: VBoxContainer
 var preview_label: Label
 var craft_button: Button
 var status_label: Label
@@ -72,6 +73,11 @@ func _build_ui(parent: Control) -> void:
 	#      sparse content got smeared across 1080px with huge dead gaps.
 	# The fix is a FIXED-SIZE CENTERED window. Content sizes to the
 	# window, not to the monitor. Do not make this full-screen again.
+	# A third column (carried materials) was added. Widening the window to
+	# fit it pushed the column off-screen on narrower viewports, so the
+	# window stays at a size that fits and the columns are narrower
+	# instead. Still a FIXED centered window -- do not make this
+	# full-screen, and do not widen past what the viewport can show.
 	var PANEL_W := 1180
 	var PANEL_H := 764
 
@@ -138,7 +144,7 @@ func _build_ui(parent: Control) -> void:
 
 	# ---------- LEFT ----------
 	var left_col = VBoxContainer.new()
-	left_col.custom_minimum_size = Vector2(300, 0)
+	left_col.custom_minimum_size = Vector2(230, 0)
 	left_col.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	body.add_child(left_col)
 
@@ -163,7 +169,7 @@ func _build_ui(parent: Control) -> void:
 	left_col.add_child(results_scroll)
 
 	results_label = Label.new()
-	results_label.custom_minimum_size = Vector2(280, 0)
+	results_label.custom_minimum_size = Vector2(215, 0)
 	results_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	results_label.add_theme_font_size_override("font_size", 12)
 	results_label.add_theme_color_override("font_color", TEXT_DIM)
@@ -198,6 +204,28 @@ func _build_ui(parent: Control) -> void:
 	preview_label.add_theme_color_override("font_color", TEXT_DIM)
 	right_col.add_child(preview_label)
 
+	# ---------- CARRIED MATERIALS ----------
+	# Material batches live in their own store (they carry quality, trait,
+	# instability and provenance, so they are not plain inventory stacks).
+	# Before this column they were only visible inside a slot dropdown,
+	# which made scavenging feel like it produced nothing.
+	var mats_col = VBoxContainer.new()
+	mats_col.custom_minimum_size = Vector2(250, 0)
+	mats_col.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	body.add_child(mats_col)
+
+	mats_col.add_child(_section_label("Carried Materials"))
+
+	var mats_scroll = ScrollContainer.new()
+	mats_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	mats_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	mats_col.add_child(mats_scroll)
+
+	materials_list = VBoxContainer.new()
+	materials_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	materials_list.add_theme_constant_override("separation", 8)
+	mats_scroll.add_child(materials_list)
+
 	craft_button = Button.new()
 	craft_button.text = "Craft"
 	craft_button.custom_minimum_size = Vector2(180, 36)
@@ -219,6 +247,7 @@ func _section_label(text: String) -> Label:
 # ------------------------------------------------------------
 
 func refresh() -> void:
+	_refresh_materials_list()
 	_refresh_blueprint_list()
 	_refresh_slots()
 	_refresh_experimentation()
@@ -549,11 +578,18 @@ func _refresh_experimentation() -> void:
 	points_label.text = ("Points: " + str(spent) + " / " + str(available_points)
 		+ "    (" + ", ".join(parts) + ")")
 
-	# True once at least one slot has a material in it.
-	var has_materials := false
-	for sid in selection.keys():
-		if not (selection[sid] as Dictionary).is_empty():
-			has_materials = true
+	# The compatibility hint is a ratio measured against the weight of
+	# EVERY slot, so a part-filled selection can never score well no
+	# matter how good the chosen material is -- Piston Blade's binding
+	# slot is only 0.15 of the recipe, so a perfect match there still
+	# reads "do not help". Only show the hint once the selection is
+	# COMPLETE, when the number actually means something.
+	var has_materials := true
+	var bp_for_hint = CraftingData.get_blueprint(selected_blueprint_id)
+	for slot_def in bp_for_hint.get("material_slots", []):
+		var sid = String(slot_def.get("slot_id", ""))
+		if not selection.has(sid) or (selection[sid] as Dictionary).is_empty():
+			has_materials = false
 			break
 
 	for category_id in CraftingData.categories_for_blueprint(selected_blueprint_id):
@@ -648,3 +684,71 @@ func _refresh_results() -> void:
 	if not flaws.is_empty():
 		lines.append("  Gained flaw: " + ", ".join(flaws))
 	results_label.text = "\n".join(lines)
+
+
+# Lists every material batch the player is carrying, with the provenance
+# that makes a batch more than a stack: quality, trait, flaw and where it
+# came from. Read-only -- selection still happens in the slot dropdowns.
+func _refresh_materials_list() -> void:
+	if materials_list == null:
+		return
+	for child in materials_list.get_children():
+		child.queue_free()
+
+	var batches = main.material_batches
+	if batches.is_empty():
+		var empty = Label.new()
+		empty.text = "Nothing carried.\n\nScavenge the alley dumpster to recover materials."
+		empty.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		empty.custom_minimum_size = Vector2(235, 0)
+		empty.add_theme_color_override("font_color", TEXT_DIM)
+		materials_list.add_child(empty)
+		return
+
+	# Best quality first -- that is what a crafter actually looks for.
+	var ids = batches.keys()
+	ids.sort_custom(func(a, b): return int(batches[a].get("quality", 0)) > int(batches[b].get("quality", 0)))
+
+	for bid in ids:
+		var b: Dictionary = batches[bid]
+		var entry = VBoxContainer.new()
+		entry.add_theme_constant_override("separation", 0)
+
+		var name_lbl = Label.new()
+		name_lbl.text = String(b.get("display_name", "Material"))
+		name_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		name_lbl.custom_minimum_size = Vector2(235, 0)
+		name_lbl.add_theme_color_override("font_color", ACCENT)
+		entry.add_child(name_lbl)
+
+		var qty_lbl = Label.new()
+		qty_lbl.text = "   Quality " + str(int(b.get("quality", 0))) + "/100     x" + str(int(b.get("amount", 0))) + " units"
+		qty_lbl.add_theme_font_size_override("font_size", 12)
+		qty_lbl.add_theme_color_override("font_color", TEXT_OK)
+		entry.add_child(qty_lbl)
+
+		var trait_id = String(b.get("primary_trait_id", ""))
+		if trait_id != "":
+			var tl = Label.new()
+			tl.text = "   Trait: " + String(CraftingData.get_trait(trait_id).get("display_name", trait_id))
+			tl.add_theme_font_size_override("font_size", 12)
+			tl.add_theme_color_override("font_color", TEXT_DIM)
+			entry.add_child(tl)
+
+		var flaw_id = String(b.get("instability_id", ""))
+		if flaw_id != "":
+			var fl = Label.new()
+			fl.text = "   Flaw: " + String(CraftingData.get_instability(flaw_id).get("display_name", flaw_id))
+			fl.add_theme_font_size_override("font_size", 12)
+			fl.add_theme_color_override("font_color", TEXT_BAD)
+			entry.add_child(fl)
+
+		var origin = String(b.get("floor_id", ""))
+		if origin != "":
+			var ol = Label.new()
+			ol.text = "   Source: " + origin.capitalize()
+			ol.add_theme_font_size_override("font_size", 11)
+			ol.add_theme_color_override("font_color", TEXT_DIM)
+			entry.add_child(ol)
+
+		materials_list.add_child(entry)

@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://yed7bue6uqik"]
+
+[ext_resource type="Texture2D" uid="uid://chfgqy6a0foc0" path="res://pipo-enemy018.png" id="1_7p1mj"]
+
+[node name="Enemy" type="Node2D" unique_id=636276269]
+
+[node name="Visual" type="Sprite2D" parent="." unique_id=1198355399]
+texture = ExtResource("1_7p1mj")
+
+[node name="HealthBarBg" type="Polygon2D" parent="." unique_id=1036893625]
+position = Vector2(-30, -60)
+
+[node name="HealthBarFill" type="Polygon2D" parent="." unique_id=1347768834]
+position = Vector2(-30, -60)
+
+[node name="ActionBarBg" type="Polygon2D" parent="." unique_id=1403100786]
+position = Vector2(-30, -48)
+
+[node name="ActionBarFill" type="Polygon2D" parent="." unique_id=794294663]
+position = Vector2(-30, -48)
+
+[node name="NameLabel" type="Label" parent="." unique_id=859456271]
+offset_left = -60.0
+offset_top = -84.0
+offset_right = -20.0
+offset_bottom = -62.0
+
+[node name="TargetIndicator" type="Line2D" parent="." unique_id=1404254732]
+
+[node name="AttackCooldownTimer" type="Timer" parent="." unique_id=374863227]
+
+[node name="RespawnTimer" type="Timer" parent="." unique_id=1451614356]

@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3]
+
+[sub_resource type="StandardMaterial3D" id="ChairSeatMaterial"]
+albedo_color = Color(0.105, 0.12, 0.14, 1)
+metallic = 0.28
+roughness = 0.76
+
+[sub_resource type="StandardMaterial3D" id="ChairFrameMaterial"]
+albedo_color = Color(0.045, 0.055, 0.065, 1)
+metallic = 0.55
+roughness = 0.66
+
+[sub_resource type="BoxMesh" id="ChairSeatMesh"]
+material = SubResource("ChairSeatMaterial")
+size = Vector3(0.48, 0.08, 0.48)
+
+[sub_resource type="BoxMesh" id="ChairBackMesh"]
+material = SubResource("ChairFrameMaterial")
+size = Vector3(0.48, 0.52, 0.08)
+
+[node name="STK_QA_DiningChairProxy" type="Node3D"]
+metadata/qa_only = true
+metadata/seat_height_m = 0.45
+
+[node name="Seat" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.45, 0)
+mesh = SubResource("ChairSeatMesh")
+
+[node name="Back" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.69, 0.2)
+mesh = SubResource("ChairBackMesh")

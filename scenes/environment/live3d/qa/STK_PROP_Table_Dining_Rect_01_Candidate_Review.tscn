@@ -1,0 +1,95 @@
+[gd_scene format=3 uid="uid://dlxmv7bc2xn3h"]
+
+[ext_resource type="Script" uid="uid://7payh6wntc1w" path="res://scenes/environment/live3d/qa/table_dining_rect_candidate_review.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Table_Dining_Rect_01.tscn" id="2_table"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/qa/STK_QA_DiningChairProxy.tscn" id="3_chair"]
+[ext_resource type="PackedScene" path="res://scenes/characters/player/VesperKane_PlayerCharacter_v01.tscn" id="4_character"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Couch_A.tscn" id="5_couch"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Workstation_A.tscn" id="6_workstation"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Bed_A.tscn" id="7_bed"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Bookshelf_A.tscn" id="8_bookshelf"]
+
+[sub_resource type="Environment" id="ReviewEnvironment"]
+background_mode = 1
+background_color = Color(0.025, 0.03, 0.04, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.34, 0.41, 0.5, 1)
+ambient_light_energy = 0.5
+reflected_light_source = 2
+
+[sub_resource type="StandardMaterial3D" id="FloorMaterial"]
+albedo_color = Color(0.07, 0.075, 0.085, 1)
+roughness = 0.92
+
+[sub_resource type="BoxMesh" id="FloorMesh"]
+material = SubResource("FloorMaterial")
+size = Vector3(13, 0.05, 10)
+
+[node name="TableDiningRectCandidateReview" type="Node3D" unique_id=1350253875]
+script = ExtResource("1_script")
+metadata/qa_scope = "isolated_scale_matte_regions_collision_and_seating"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=725204884]
+environment = SubResource("ReviewEnvironment")
+
+[node name="TableCandidate" parent="." unique_id=1675317557 instance=ExtResource("2_table")]
+
+[node name="ChairFront01" parent="." unique_id=1430619547 instance=ExtResource("3_chair")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.8, 0, 0.92)
+
+[node name="ChairFront02" parent="." unique_id=790560428 instance=ExtResource("3_chair")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0.92)
+
+[node name="ChairFront03" parent="." unique_id=452177526 instance=ExtResource("3_chair")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0.8, 0, 0.92)
+
+[node name="ChairBack01" parent="." unique_id=2127566269 instance=ExtResource("3_chair")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 0, -0.92)
+
+[node name="ChairBack02" parent="." unique_id=38852122 instance=ExtResource("3_chair")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.92)
+
+[node name="ChairBack03" parent="." unique_id=352520821 instance=ExtResource("3_chair")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 0, -0.92)
+
+[node name="ChairLeftEnd" parent="." unique_id=1065045016 instance=ExtResource("3_chair")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.5, 0, 0)
+
+[node name="ChairRightEnd" parent="." unique_id=146803254 instance=ExtResource("3_chair")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 1.5, 0, 0)
+
+[node name="ReviewC001" parent="." unique_id=1479202247 instance=ExtResource("4_character")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+
+[node name="ApprovedCouch" parent="." unique_id=200055070 instance=ExtResource("5_couch")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.25, 0, 1.8)
+
+[node name="ApprovedWorkstation" parent="." unique_id=95581323 instance=ExtResource("6_workstation")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -1.7)
+
+[node name="ApprovedBed" parent="." unique_id=198456550 instance=ExtResource("7_bed")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.15, 0, -1.65)
+
+[node name="ApprovedBookshelf" parent="." unique_id=1552726212 instance=ExtResource("8_bookshelf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.35, 0, 1.85)
+
+[node name="ReviewCamera" type="Camera3D" parent="." unique_id=1676475055]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 4.8, 7.4)
+current = true
+fov = 42.0
+
+[node name="KeyLight" type="DirectionalLight3D" parent="." unique_id=691198915]
+transform = Transform3D(0.7880108, 0.4575257, -0.41195792, 0, 0.66913056, 0.74314487, 0.6156615, -0.58560616, 0.5272821, 0, 0, 0)
+light_color = Color(1, 0.76, 0.58, 1)
+light_energy = 1.25
+shadow_enabled = true
+
+[node name="FillLight" type="OmniLight3D" parent="." unique_id=1836523699]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 2.6, 3.4)
+light_color = Color(0.34, 0.66, 1, 1)
+light_energy = 2.0
+omni_range = 10.0
+
+[node name="Floor" type="MeshInstance3D" parent="." unique_id=520478098]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.025, 0)
+mesh = SubResource("FloorMesh")

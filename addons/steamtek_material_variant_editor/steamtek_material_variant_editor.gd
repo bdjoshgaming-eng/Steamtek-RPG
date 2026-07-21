@@ -18,6 +18,10 @@ const SECTIONAL_TEMPLATE_MATERIAL_PATH := "res://assets/environment/live3d/mater
 const SECTIONAL_RIGHT_BASE_SCENE_PATH := "res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Couch_L4_Right.tscn"
 const SECTIONAL_RIGHT_TEMPLATE_MATERIAL_PATH := "res://assets/environment/live3d/materials/apartment_interior_variants/couch_l4_right/STK_MAT_Couch_L4_Right_SourceMatte.tres"
 const SECTIONAL_REGIONS := ["Cushion_Leather", "Frame_PaintedMetal", "Accent_Metal"]
+const DINING_TABLE_PROFILE_ID := "steamtek_dining_table_rect_v1"
+const DINING_TABLE_BASE_SCENE_PATH := "res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Table_Dining_Rect_01.tscn"
+const DINING_TABLE_TEMPLATE_MATERIAL_PATH := "res://assets/environment/live3d/materials/apartment_interior_variants/table_dining_rect_01/STK_MAT_Table_Dining_Rect_01_SourceMatte.tres"
+const DINING_TABLE_REGIONS := ["Tabletop_DarkSurface", "Frame_PaintedMetal", "Accent_Metal", "Accent_Powered_Cyan", "Accent_Powered_Magenta"]
 const VARIANT_SCRIPT_PATH := "res://scenes/environment/live3d/props/static_prop_material_variant.gd"
 const BOOKSHELF_VARIANT_SCRIPT_PATH := VARIANT_SCRIPT_PATH
 const GENERATED_MATERIAL_DIR := "res://assets/environment/live3d/materials/apartment_interior_variants/generated"
@@ -181,7 +185,7 @@ func _create_dock() -> void:
 	dock_content.add_child(_make_button("Save as Variant", _save_variant))
 
 	status_label = Label.new()
-	status_label.text = "Ready. Select a supported couch, bed, bookshelf, or sectional."
+	status_label.text = "Ready. Select a supported couch, bed, bookshelf, sectional, or dining table."
 	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	dock_content.add_child(status_label)
 
@@ -250,6 +254,11 @@ func _update_selected_asset() -> void:
 		if module_changed:
 			_load_sectional_state_from_scene_override(module)
 		_set_regions(SECTIONAL_REGIONS)
+	elif profile == DINING_TABLE_PROFILE_ID:
+		asset_status.text = "Selected asset: %s\nProfile: Dining table material regions" % module.name
+		if module_changed:
+			_load_dining_table_state_from_scene_override(module)
+		_set_regions(DINING_TABLE_REGIONS)
 	else:
 		asset_status.text = "Selected asset: %s\nProfile: Couch upholstery" % module.name
 		_set_regions(["Upholstery"])
@@ -266,7 +275,7 @@ func _selected_supported_module() -> Node3D:
 	while current != null:
 		if current is Node3D:
 			var profile := str(current.get_meta("material_variant_profile", ""))
-			if profile == COUCH_PROFILE_ID or profile == BED_PROFILE_ID or profile == BOOKSHELF_PROFILE_ID or profile == SECTIONAL_PROFILE_ID:
+			if profile == COUCH_PROFILE_ID or profile == BED_PROFILE_ID or profile == BOOKSHELF_PROFILE_ID or profile == SECTIONAL_PROFILE_ID or profile == DINING_TABLE_PROFILE_ID:
 				return current as Node3D
 		current = current.get_parent()
 	return null
@@ -317,8 +326,8 @@ func _on_region_selected(_index: int) -> void:
 
 func _update_region_controls() -> void:
 	var region := _selected_region()
-	var powered := region == "Accent_Powered"
-	var painted_metal := region == "Frame_PaintedMetal" or region == "Accent_Metal"
+	var powered := region.begins_with("Accent_Powered")
+	var painted_metal := region == "Frame_PaintedMetal" or region == "Accent_Metal" or region == "Tabletop_DarkSurface"
 	if is_instance_valid(tint_strength):
 		tint_strength.editable = not powered
 	if is_instance_valid(brightness):
@@ -395,6 +404,34 @@ func _default_sectional_region_state(region: String) -> Dictionary:
 	}
 
 
+func _default_dining_table_region_state(region: String) -> Dictionary:
+	var default_color := Color(0.10, 0.14, 0.18)
+	var emission_default := 0.0
+	var powered := false
+	match region:
+		"Frame_PaintedMetal":
+			default_color = Color(0.055, 0.10, 0.13)
+		"Accent_Metal":
+			default_color = Color(0.45, 0.22, 0.09)
+		"Accent_Powered_Cyan":
+			default_color = Color(0.02, 0.57, 0.68)
+			emission_default = 0.90
+			powered = true
+		"Accent_Powered_Magenta":
+			default_color = Color(0.72, 0.07, 0.43)
+			emission_default = 0.55
+			powered = true
+	return {
+		"color": default_color,
+		"tint_strength": 1.0 if powered else 0.82,
+		"brightness": 1.0,
+		"roughness_offset": 0.0,
+		"metallic_offset": 0.0,
+		"emission_strength": emission_default,
+		"emission_enabled": powered,
+	}
+
+
 func _active_profile_regions(profile: String) -> Array:
 	if profile == BED_PROFILE_ID:
 		return BED_REGIONS
@@ -402,6 +439,8 @@ func _active_profile_regions(profile: String) -> Array:
 		return BOOKSHELF_REGIONS
 	if profile == SECTIONAL_PROFILE_ID:
 		return SECTIONAL_REGIONS
+	if profile == DINING_TABLE_PROFILE_ID:
+		return DINING_TABLE_REGIONS
 	return []
 
 
@@ -410,6 +449,8 @@ func _default_active_region_state(profile: String, region: String) -> Dictionary
 		return _default_bookshelf_region_state(region)
 	if profile == SECTIONAL_PROFILE_ID:
 		return _default_sectional_region_state(region)
+	if profile == DINING_TABLE_PROFILE_ID:
+		return _default_dining_table_region_state(region)
 	return _default_bed_region_state(region)
 
 
@@ -540,6 +581,41 @@ func _load_sectional_state_from_scene_override(module: Node3D) -> void:
 	bed_region_state["Accent_Metal"] = accent_state
 
 
+func _load_dining_table_state_from_scene_override(module: Node3D) -> void:
+	if not bool(module.get_meta(SCENE_OVERRIDE_META, false)):
+		return
+	var material := _module_variant_material(module) as ShaderMaterial
+	if material == null:
+		return
+	var tabletop_state := _bed_region_state_from_material(material, "tabletop", Color(0.10, 0.14, 0.18))
+	tabletop_state["metallic_offset"] = float(material.get_shader_parameter("tabletop_metallic_offset"))
+	bed_region_state["Tabletop_DarkSurface"] = tabletop_state
+	var frame_state := _bed_region_state_from_material(material, "frame", Color(0.055, 0.10, 0.13))
+	frame_state["metallic_offset"] = float(material.get_shader_parameter("frame_metallic_offset"))
+	bed_region_state["Frame_PaintedMetal"] = frame_state
+	var metal_state := _bed_region_state_from_material(material, "accent_metal", Color(0.45, 0.22, 0.09))
+	metal_state["metallic_offset"] = float(material.get_shader_parameter("accent_metal_metallic_offset"))
+	bed_region_state["Accent_Metal"] = metal_state
+	bed_region_state["Accent_Powered_Cyan"] = {
+		"color": _shader_color(material, &"accent_cyan_tint", Color(0.02, 0.57, 0.68)),
+		"tint_strength": 1.0,
+		"brightness": 1.0,
+		"roughness_offset": 0.0,
+		"metallic_offset": 0.0,
+		"emission_strength": float(material.get_shader_parameter("emission_cyan_strength")),
+		"emission_enabled": float(material.get_shader_parameter("emission_cyan_enabled")) > 0.5,
+	}
+	bed_region_state["Accent_Powered_Magenta"] = {
+		"color": _shader_color(material, &"accent_magenta_tint", Color(0.72, 0.07, 0.43)),
+		"tint_strength": 1.0,
+		"brightness": 1.0,
+		"roughness_offset": 0.0,
+		"metallic_offset": 0.0,
+		"emission_strength": float(material.get_shader_parameter("emission_magenta_strength")),
+		"emission_enabled": float(material.get_shader_parameter("emission_magenta_enabled")) > 0.5,
+	}
+
+
 func _load_couch_controls_from_scene_override(module: Node3D) -> void:
 	if not bool(module.get_meta(SCENE_OVERRIDE_META, false)) or not _core_controls_ready():
 		return
@@ -638,6 +714,8 @@ func _make_variant_material() -> ShaderMaterial:
 		template_path = BOOKSHELF_TEMPLATE_MATERIAL_PATH
 	elif profile == SECTIONAL_PROFILE_ID:
 		template_path = _sectional_template_material_path(module)
+	elif profile == DINING_TABLE_PROFILE_ID:
+		template_path = DINING_TABLE_TEMPLATE_MATERIAL_PATH
 	var template := load(template_path) as ShaderMaterial
 	if template == null:
 		return null
@@ -655,6 +733,10 @@ func _make_variant_material() -> ShaderMaterial:
 		for region in SECTIONAL_REGIONS:
 			if bed_region_state.has(region):
 				_apply_sectional_region_state(material, region, bed_region_state[region])
+	elif profile == DINING_TABLE_PROFILE_ID:
+		for region in DINING_TABLE_REGIONS:
+			if bed_region_state.has(region):
+				_apply_dining_table_region_state(material, region, bed_region_state[region])
 	else:
 		material.set_shader_parameter("upholstery_tint", chosen)
 		material.set_shader_parameter("tint_strength", float(tint_strength.value))
@@ -709,6 +791,28 @@ func _apply_sectional_region_state(material: ShaderMaterial, region: String, sta
 			material.set_shader_parameter("accent_metallic_offset", float(state.get("metallic_offset", 0.0)))
 
 
+func _apply_dining_table_region_state(material: ShaderMaterial, region: String, state: Dictionary) -> void:
+	var chosen: Color = state.get("color", Color.WHITE)
+	match region:
+		"Tabletop_DarkSurface":
+			_set_bed_region_parameters(material, "tabletop", chosen, state)
+			material.set_shader_parameter("tabletop_metallic_offset", float(state.get("metallic_offset", 0.0)))
+		"Frame_PaintedMetal":
+			_set_bed_region_parameters(material, "frame", chosen, state)
+			material.set_shader_parameter("frame_metallic_offset", float(state.get("metallic_offset", 0.0)))
+		"Accent_Metal":
+			_set_bed_region_parameters(material, "accent_metal", chosen, state)
+			material.set_shader_parameter("accent_metal_metallic_offset", float(state.get("metallic_offset", 0.0)))
+		"Accent_Powered_Cyan":
+			material.set_shader_parameter("accent_cyan_tint", chosen)
+			material.set_shader_parameter("emission_cyan_strength", float(state.get("emission_strength", 0.90)))
+			material.set_shader_parameter("emission_cyan_enabled", 1.0 if bool(state.get("emission_enabled", true)) else 0.0)
+		"Accent_Powered_Magenta":
+			material.set_shader_parameter("accent_magenta_tint", chosen)
+			material.set_shader_parameter("emission_magenta_strength", float(state.get("emission_strength", 0.55)))
+			material.set_shader_parameter("emission_magenta_enabled", 1.0 if bool(state.get("emission_enabled", true)) else 0.0)
+
+
 func _set_bed_region_parameters(material: ShaderMaterial, prefix: String, chosen: Color, state: Dictionary) -> void:
 	material.set_shader_parameter(prefix + "_tint", chosen)
 	material.set_shader_parameter(prefix + "_strength", float(state.get("tint_strength", 0.94)))
@@ -725,7 +829,7 @@ func _mesh_accepts_variant_preview(module: Node3D, mesh_instance: MeshInstance3D
 func _preview_selected() -> void:
 	var module := _selected_supported_module()
 	if module == null:
-		_set_status("Select a supported couch, bed, bookshelf, or sectional first.")
+		_set_status("Select a supported couch, bed, bookshelf, sectional, or dining table first.")
 		return
 	_capture_active_region_state()
 	_revert_preview(false)
@@ -779,7 +883,7 @@ func _scene_directly_owns_module(module: Node3D) -> bool:
 func _apply_to_scene() -> void:
 	var module := _selected_supported_module()
 	if module == null:
-		_set_status("Select a supported couch, bed, bookshelf, or sectional first.")
+		_set_status("Select a supported couch, bed, bookshelf, sectional, or dining table first.")
 		return
 	if not _scene_directly_owns_module(module):
 		_set_status("Open the scene that directly contains this prop, such as the v02 apartment assembly, then select it there.")
@@ -818,7 +922,7 @@ func _apply_to_scene() -> void:
 func _remove_scene_override() -> void:
 	var module := _selected_supported_module()
 	if module == null:
-		_set_status("Select a supported couch, bed, bookshelf, or sectional first.")
+		_set_status("Select a supported couch, bed, bookshelf, sectional, or dining table first.")
 		return
 	if not _scene_directly_owns_module(module):
 		_set_status("Open the scene that directly contains this prop before removing its scene override.")
@@ -840,7 +944,7 @@ func _remove_scene_override() -> void:
 	undo_redo.add_do_method(module, "set_meta", SCENE_OVERRIDE_META, false)
 	undo_redo.add_undo_method(module, "set_meta", SCENE_OVERRIDE_META, true)
 	undo_redo.commit_action()
-	if _module_profile(module) == BED_PROFILE_ID or _module_profile(module) == BOOKSHELF_PROFILE_ID or _module_profile(module) == SECTIONAL_PROFILE_ID:
+	if _module_profile(module) == BED_PROFILE_ID or _module_profile(module) == BOOKSHELF_PROFILE_ID or _module_profile(module) == SECTIONAL_PROFILE_ID or _module_profile(module) == DINING_TABLE_PROFILE_ID:
 		bed_region_state.clear()
 	_set_status("Removed the scene-only material from %s. Press Ctrl+S to save the scene." % module.name)
 
@@ -848,7 +952,7 @@ func _remove_scene_override() -> void:
 func _save_variant() -> void:
 	var module := _selected_supported_module()
 	if module == null:
-		_set_status("Select a supported couch, bed, bookshelf, or sectional first.")
+		_set_status("Select a supported couch, bed, bookshelf, sectional, or dining table first.")
 		return
 	_capture_active_region_state()
 	var clean_name := _clean_variant_name(variant_name.text)
@@ -860,6 +964,7 @@ func _save_variant() -> void:
 	var is_bed := profile == BED_PROFILE_ID
 	var is_bookshelf := profile == BOOKSHELF_PROFILE_ID
 	var is_sectional := profile == SECTIONAL_PROFILE_ID
+	var is_dining_table := profile == DINING_TABLE_PROFILE_ID
 	var asset_stem := "Couch_A"
 	if is_bed:
 		asset_stem = "Bed_A"
@@ -867,6 +972,8 @@ func _save_variant() -> void:
 		asset_stem = "Bookshelf_A"
 	elif is_sectional:
 		asset_stem = _sectional_asset_stem(module)
+	elif is_dining_table:
+		asset_stem = "Table_Dining_Rect_01"
 	var variant_id := "STK_PROP_%s_%s" % [asset_stem, suffix]
 	var material_id := "STK_MAT_%s_%s" % [asset_stem, suffix]
 	var material_path := "%s/%s.tres" % [GENERATED_MATERIAL_DIR, material_id]
@@ -902,6 +1009,9 @@ func _save_variant() -> void:
 	elif is_sectional:
 		asset_label = "Sectional"
 		base_scene_path = _sectional_base_scene_path(module)
+	elif is_dining_table:
+		asset_label = "Dining Table"
+		base_scene_path = DINING_TABLE_BASE_SCENE_PATH
 	var builder_label := "Apartment - %s %s" % [asset_label, clean_name.capitalize()]
 	var scene_text := _build_variant_scene_text(variant_id, material_path, color_variant, builder_label, base_scene_path, profile, region, variant_script_path)
 	var scene_file := FileAccess.open(scene_path, FileAccess.WRITE)

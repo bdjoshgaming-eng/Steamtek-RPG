@@ -25,18 +25,18 @@
 [ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_ExposedService_300x270_A.tscn" id="29_wall_service"]
 [ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_MagentaLight_300x270_A.tscn" id="30_wall_magenta"]
 [ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_NeutralMagenta_300x270_A.tscn" id="31_wall_neutral"]
-[ext_resource type="Shader" uid="uid://dmsyea18t8j5g" path="res://assets/environment/live3d/materials/apartment_interior_variants/STK_Couch_UpholsteryVariant.gdshader" id="32_gbj3k"]
-[ext_resource type="Texture2D" uid="uid://jdoqvaoxqivj" path="res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Couch_A_Production_Baked_BaseColor.png" id="33_sqefh"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Table_Dining_Rect_01.tscn" id="33_w7y0l"]
 [ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_RetrofitRepair_300x270_A.tscn" id="33_wall_retrofit"]
-[ext_resource type="Texture2D" uid="uid://duj3k21bqimws" path="res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Couch_A_Production_Baked_Emit.png" id="34_d3w08"]
 [ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_Door_300x270_Service.tscn" id="34_wall_door_secure"]
-[ext_resource type="Texture2D" uid="uid://ckorq7tdea8wk" path="res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Couch_A_Production_Baked_MetallicRoughness.png" id="35_acpdf"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/apartment_interior_variants/table_dining_rect_01/STK_MAT_Table_Dining_Rect_01_SourceMatte.tres" id="35_l7ssn"]
 [ext_resource type="Script" uid="uid://b1pvgemyghfrb" path="res://scenes/environment/live3d/interiors/apartments/steamtek_player_apartment_production_assembly_3d.gd" id="35_review_script"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Couch_L4_Right.tscn" id="36_t5kjx"]
+[ext_resource type="Script" uid="uid://d0th057ya7kd3" path="res://scenes/environment/live3d/props/static_prop_material_variant.gd" id="37_5k8ur"]
 [ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_Window_Slot_300x270.tscn" id="47_wall_window_slot"]
 [ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Workstation_A.tscn" id="48_workstation"]
 [ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Bed_A.tscn" id="51_bed"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_dikkp"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t1tge"]
 resource_local_to_scene = true
 resource_name = "Bed Scene Material"
 render_priority = 0
@@ -68,7 +68,7 @@ shader_parameter/frame_paint_metallic_offset = 0.0
 shader_parameter/emission_strength = 1.25
 shader_parameter/emission_enabled = 1.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_50t84"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t5kjx"]
 resource_local_to_scene = true
 resource_name = "Couch Scene Material"
 render_priority = 0
@@ -79,7 +79,7 @@ shader_parameter/emission_texture = ExtResource("24_t1tge")
 shader_parameter/mask_cushion_leather = ExtResource("26_5k8ur")
 shader_parameter/mask_frame_paint = ExtResource("27_8ioqo")
 shader_parameter/mask_accent_metal = ExtResource("25_t5kjx")
-shader_parameter/cushion_tint = Color(0.02, 0.57, 0.68, 1)
+shader_parameter/cushion_tint = Color(0.28, 0.055, 0.065, 1)
 shader_parameter/frame_tint = Color(0.055, 0.1, 0.13, 1)
 shader_parameter/accent_tint = Color(0.45, 0.22, 0.09, 1)
 shader_parameter/cushion_strength = 0.86
@@ -93,20 +93,6 @@ shader_parameter/frame_roughness_offset = 0.0
 shader_parameter/accent_roughness_offset = 0.0
 shader_parameter/frame_metallic_offset = 0.0
 shader_parameter/accent_metallic_offset = 0.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_06315"]
-resource_local_to_scene = true
-resource_name = "STK_PROP_Couch_A Scene Material"
-render_priority = 0
-shader = ExtResource("32_gbj3k")
-shader_parameter/base_color_texture = ExtResource("33_sqefh")
-shader_parameter/metallic_roughness_texture = ExtResource("35_acpdf")
-shader_parameter/emission_texture = ExtResource("34_d3w08")
-shader_parameter/upholstery_tint = Color(0.02, 0.57, 0.68, 1)
-shader_parameter/tint_strength = 0.86
-shader_parameter/brightness = 1.0
-shader_parameter/roughness_offset = 0.0
-shader_parameter/emission_strength = 1.0
 
 [sub_resource type="Environment" id="StandaloneReviewEnvironment"]
 background_mode = 1
@@ -257,15 +243,15 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -6, 
 
 [node name="Bed" parent="Furniture" unique_id=2125650935 instance=ExtResource("51_bed")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -4.35, 0.05, -0.37520647)
-variant_material = SubResource("ShaderMaterial_dikkp")
+variant_material = SubResource("ShaderMaterial_t1tge")
 metadata/placement_role = "opening_apartment_sleep_zone"
 metadata/replacement_asset = "STK_PROP_Bed_A"
 metadata/material_variant_scene_override = true
 metadata/material_variant_scene_override_base_material_path = "res://assets/environment/live3d/materials/apartment_interior_variants/bed/STK_MAT_Bed_A_SourceMatte.tres"
 
 [node name="Couch" parent="Furniture" unique_id=578725324 instance=ExtResource("13_couch")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7953373, 0.05, 0.850868)
-variant_material = SubResource("ShaderMaterial_50t84")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9598237, 0.05, -1.1044934)
+variant_material = SubResource("ShaderMaterial_t5kjx")
 metadata/replaces_asset = "APT_Couch_2Seat_Rust"
 metadata/replacement_asset = "STK_PROP_Couch_L4_Left"
 metadata/gameplay_approval = "approved_2026_07_20"
@@ -280,11 +266,44 @@ metadata/replacement_asset = "STK_PROP_Workstation_A"
 [node name="STK_PROP_Bookshelf_A" parent="Furniture" unique_id=681146312 instance=ExtResource("23_lfpr4")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5.589712, 0.05, -2.942727)
 
-[node name="STK_PROP_Couch_A" parent="Furniture" unique_id=951886837 instance=ExtResource("24_6efog")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.41381, 0, 2.5465848)
-variant_material = SubResource("ShaderMaterial_06315")
-metadata/material_variant_scene_override = true
-metadata/material_variant_scene_override_base_material_path = "res://assets/environment/live3d/materials/apartment_interior_variants/STK_MAT_Couch_A_SourceMatte.tres"
+[node name="STK_PROP_Couch_L4_Right" parent="Furniture" unique_id=107179493 instance=ExtResource("36_t5kjx")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 2.6125717, 0, 1.8718805)
+
+[node name="STK_PROP_Couch_A" parent="Furniture" unique_id=380134484 instance=ExtResource("24_6efog")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.08469486, 0, 1.7276123)
+
+[node name="STK_PROP_Table_Dining_Rect_01" type="Node3D" parent="Furniture" unique_id=1493031967 groups=["steamtek_live3d_modular"] instance=ExtResource("33_w7y0l")]
+transform = Transform3D(-0.99999994, 0, -8.742277e-08, 0, 1, 0, 8.742277e-08, 0, -0.99999994, -3.7499998, 0.05, 2.6927538)
+script = ExtResource("37_5k8ur")
+variant_material = ExtResource("35_l7ssn")
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "static_environment_prop_furniture"
+metadata/module_variant = "STK_PROP_Table_Dining_Rect_01"
+metadata/module_dimensions_m = Vector3(2.4, 0.75, 1.2)
+metadata/contact_pivot = "floor_center"
+metadata/front_axis = "+Z_toward_room_and_c001"
+metadata/scale_contract = "1_godot_unit_equals_1_meter"
+metadata/placement_profile = "furniture_0_3m"
+metadata/collision_contract = "three_simplified_boxes_preserve_knee_clearance_not_render_mesh"
+metadata/art_style = "gritty_hand_painted_stylized_game_art"
+metadata/world_design = "40_cyberpunk_20_neoindustrial_20_modern_steampunk_20_arcane_inspired_painterly_finish"
+metadata/source_intake = "res://incoming/meshy_apartment_assets/APT_Table_Dining_Rect_01/STK_PROP_Table_Dining_Rect_01_Meshy.glb"
+metadata/qa_report = "res://incoming/meshy_apartment_assets/APT_Table_Dining_Rect_01/STK_PROP_Table_Dining_Rect_01_QA.md"
+metadata/production_status = "production_approved_normal_editor_f6_2026_07_20"
+metadata/render_triangles = 18184
+metadata/render_vertices = 17901
+metadata/tabletop_height_m = 0.75
+metadata/tabletop_thickness_m = 0.13
+metadata/seating_capacity = "6_to_8"
+metadata/recolor_enabled = true
+metadata/recolor_profile = "steamtek_dining_table_rect_v1"
+metadata/material_variant_profile = "steamtek_dining_table_rect_v1"
+metadata/recolor_regions = PackedStringArray("Tabletop_DarkSurface", "Frame_PaintedMetal", "Accent_Metal", "Accent_Powered_Cyan", "Accent_Powered_Magenta")
+metadata/recolor_locked_regions = PackedStringArray("StructuralGunmetal", "Scratches", "Grime", "Rust", "EdgeWear", "AmbientOcclusion", "BakedShading", "SurfacePanelLines")
+metadata/recolor_material_mode = "geometry_aware_uv_masks_preserve_baked_source_detail_v1"
+metadata/builder_label = "Apartment - Dining Table Rect 01"
+metadata/builder_parent = "Furniture"
+metadata/builder_registration = "registered_base_asset_only_2026_07_20"
 
 [node name="Lighting" type="Node3D" parent="." unique_id=1099093845]
 
@@ -295,7 +314,7 @@ shadow_enabled = true
 omni_range = 3.8
 
 [node name="WarmDining" type="OmniLight3D" parent="Lighting" unique_id=2083229099]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6, 2.35, -0.35)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.820468, 1.8304281, 2.426878)
 light_color = Color(1, 0.58, 0.28, 1)
 light_energy = 1.1
 shadow_enabled = true

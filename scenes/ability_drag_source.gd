@@ -7,7 +7,7 @@ extends Button
 @export var ability_name: String = ""
 
 # Called automatically by Godot when a drag starts from this button.
-# Returning null means "this can't be dragged" — only matters if
+# Returning null means "this can't be dragged" -- only matters if
 # ability_name was left blank by mistake.
 func _get_drag_data(_at_position: Vector2) -> Variant:
 	if ability_name == "":

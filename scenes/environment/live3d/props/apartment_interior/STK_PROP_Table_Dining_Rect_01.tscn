@@ -1,0 +1,145 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Table_Dining_Rect_01_Production.glb" id="1_model"]
+[ext_resource type="Script" path="res://scenes/environment/live3d/props/static_prop_material_variant.gd" id="2_variant_script"]
+[ext_resource type="Material" path="res://assets/environment/live3d/materials/apartment_interior_variants/table_dining_rect_01/STK_MAT_Table_Dining_Rect_01_SourceMatte.tres" id="3_material"]
+
+[sub_resource type="BoxShape3D" id="TabletopShape"]
+size = Vector3(2.4, 0.13, 1.2)
+
+[sub_resource type="BoxShape3D" id="PedestalShape"]
+size = Vector3(0.95, 0.44, 0.58)
+
+[sub_resource type="BoxShape3D" id="FloorBaseShape"]
+size = Vector3(1.68, 0.12, 0.88)
+
+[node name="STK_PROP_Table_Dining_Rect_01" type="Node3D" groups=["steamtek_live3d_modular"]]
+script = ExtResource("2_variant_script")
+variant_material = ExtResource("3_material")
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "static_environment_prop_furniture"
+metadata/module_variant = "STK_PROP_Table_Dining_Rect_01"
+metadata/module_dimensions_m = Vector3(2.4, 0.75, 1.2)
+metadata/contact_pivot = "floor_center"
+metadata/front_axis = "+Z_toward_room_and_c001"
+metadata/scale_contract = "1_godot_unit_equals_1_meter"
+metadata/placement_profile = "furniture_0_3m"
+metadata/collision_contract = "three_simplified_boxes_preserve_knee_clearance_not_render_mesh"
+metadata/art_style = "gritty_hand_painted_stylized_game_art"
+metadata/world_design = "40_cyberpunk_20_neoindustrial_20_modern_steampunk_20_arcane_inspired_painterly_finish"
+metadata/source_intake = "res://incoming/meshy_apartment_assets/APT_Table_Dining_Rect_01/STK_PROP_Table_Dining_Rect_01_Meshy.glb"
+metadata/qa_report = "res://incoming/meshy_apartment_assets/APT_Table_Dining_Rect_01/STK_PROP_Table_Dining_Rect_01_QA.md"
+metadata/production_status = "production_approved_normal_editor_f6_2026_07_20"
+metadata/render_triangles = 18184
+metadata/render_vertices = 17901
+metadata/tabletop_height_m = 0.75
+metadata/tabletop_thickness_m = 0.13
+metadata/seating_capacity = "6_to_8"
+metadata/recolor_enabled = true
+metadata/recolor_profile = "steamtek_dining_table_rect_v1"
+metadata/material_variant_profile = "steamtek_dining_table_rect_v1"
+metadata/recolor_regions = PackedStringArray("Tabletop_DarkSurface", "Frame_PaintedMetal", "Accent_Metal", "Accent_Powered_Cyan", "Accent_Powered_Magenta")
+metadata/recolor_locked_regions = PackedStringArray("StructuralGunmetal", "Scratches", "Grime", "Rust", "EdgeWear", "AmbientOcclusion", "BakedShading", "SurfacePanelLines")
+metadata/recolor_material_mode = "geometry_aware_uv_masks_preserve_baked_source_detail_v1"
+metadata/builder_label = "Apartment - Dining Table Rect 01"
+metadata/builder_parent = "Furniture"
+metadata/builder_registration = "registered_base_asset_only_2026_07_20"
+
+[node name="Visual" parent="." instance=ExtResource("1_model")]
+
+[node name="StaticBody" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="TabletopCollision" type="CollisionShape3D" parent="StaticBody"]
+position = Vector3(0, 0.685, 0)
+shape = SubResource("TabletopShape")
+
+[node name="PedestalCollision" type="CollisionShape3D" parent="StaticBody"]
+position = Vector3(0, 0.37, 0)
+shape = SubResource("PedestalShape")
+
+[node name="FloorBaseCollision" type="CollisionShape3D" parent="StaticBody"]
+position = Vector3(0, 0.06, 0)
+shape = SubResource("FloorBaseShape")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="FurnitureChain_Front_01" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-0.8, 0, 0.6)
+metadata/socket_role = "furniture_chain"
+
+[node name="FurnitureChain_Front_02" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0.8, 0, 0.6)
+metadata/socket_role = "furniture_chain"
+
+[node name="FurnitureChain_Rear_01" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-0.8, 0, -0.6)
+metadata/socket_role = "furniture_chain"
+
+[node name="FurnitureChain_Rear_02" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0.8, 0, -0.6)
+metadata/socket_role = "furniture_chain"
+
+[node name="FurnitureChain_LeftEnd" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-1.2, 0, 0)
+metadata/socket_role = "furniture_chain"
+
+[node name="FurnitureChain_RightEnd" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(1.2, 0, 0)
+metadata/socket_role = "furniture_chain"
+
+[node name="FrontAlignment" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, 0.6)
+metadata/socket_role = "furniture_front_alignment"
+
+[node name="RearAlignment" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, -0.6)
+metadata/socket_role = "furniture_rear_alignment"
+
+[node name="ChairSockets" type="Node3D" parent="."]
+
+[node name="ChairSocket_Front_01" type="Marker3D" parent="ChairSockets"]
+position = Vector3(-0.8, 0, 0.92)
+rotation = Vector3(0, 3.141593, 0)
+metadata/socket_role = "chair_alignment"
+metadata/seat_index = 1
+
+[node name="ChairSocket_Front_02" type="Marker3D" parent="ChairSockets"]
+position = Vector3(0, 0, 0.92)
+rotation = Vector3(0, 3.141593, 0)
+metadata/socket_role = "chair_alignment"
+metadata/seat_index = 2
+
+[node name="ChairSocket_Front_03" type="Marker3D" parent="ChairSockets"]
+position = Vector3(0.8, 0, 0.92)
+rotation = Vector3(0, 3.141593, 0)
+metadata/socket_role = "chair_alignment"
+metadata/seat_index = 3
+
+[node name="ChairSocket_Back_01" type="Marker3D" parent="ChairSockets"]
+position = Vector3(-0.8, 0, -0.92)
+metadata/socket_role = "chair_alignment"
+metadata/seat_index = 4
+
+[node name="ChairSocket_Back_02" type="Marker3D" parent="ChairSockets"]
+position = Vector3(0, 0, -0.92)
+metadata/socket_role = "chair_alignment"
+metadata/seat_index = 5
+
+[node name="ChairSocket_Back_03" type="Marker3D" parent="ChairSockets"]
+position = Vector3(0.8, 0, -0.92)
+metadata/socket_role = "chair_alignment"
+metadata/seat_index = 6
+
+[node name="ChairSocket_LeftEnd" type="Marker3D" parent="ChairSockets"]
+position = Vector3(-1.5, 0, 0)
+rotation = Vector3(0, 1.570796, 0)
+metadata/socket_role = "chair_alignment"
+metadata/seat_index = 7
+
+[node name="ChairSocket_RightEnd" type="Marker3D" parent="ChairSockets"]
+position = Vector3(1.5, 0, 0)
+rotation = Vector3(0, -1.570796, 0)
+metadata/socket_role = "chair_alignment"
+metadata/seat_index = 8

@@ -46,29 +46,31 @@ The production workstation was made more matte after gameplay review. Its desk a
 - Wake clearance is on the open side at approximately `(-4.3, 0.08, 1.55)`.
 - Final gameplay-camera F6 approval remains pending in the QA record.
 
-### Bookshelf production state
+### Approved bookshelf production state
 
 - Intake: `res://incoming/meshy_apartment_assets/APT_Bookshelf_A/`
 - Production GLB: `res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Bookshelf_A_Production.glb`
 - Wrapper: `res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Bookshelf_A.tscn`
 - QA: `res://incoming/meshy_apartment_assets/APT_Bookshelf_A/STK_PROP_Bookshelf_A_QA.md`
 - Dimensions: 1.20 m wide x 0.38 m deep x 2.00 m high.
+- Topology: 15,679 triangles and 16,521 runtime vertices.
 - Pivot: bottom center; floor contact Y = 0; +Z front; scale `1,1,1`.
 - Collision: one simplified box.
 - Recolorable regions: `Frame_PaintedMetal`, `Shelf_PaintedMetal`, and `Accent_Powered`.
+- Status: user-approved, promoted into the canonical production paths, normal-runtime validated, and registered in the Builder.
+- Apartment placement: approximately `(-5.589712, 0.05, -2.942727)` with +90 degrees Y rotation.
 
-The original Meshy result was rejected visually. Its shape and surface layout did not reproduce the five authoritative PNG views. The replacement uses those PNGs directly in a multi-view projected atlas with shallow shelf-bay offsets. The production shell is 76 vertices and 38 triangles, while gameplay collision remains a separate closed box.
+The final asset is the conservatively cleaned Meshy production mesh, not the earlier projected prototype. It preserves the original 4096 BaseColor, MetallicRoughness, and Emit maps and uses geometry-aware UV masks. Books, papers, boxes, display objects, structural hardware, scratches, grime, edge wear, and baked shading remain locked.
 
-This is a deliberately narrow exception to the true-3D/no-flat-card rule later in this handoff. It exists because the user explicitly required the visible asset to look identical to the supplied front, back, left, right, and top PNG artwork. It is not a reusable default for future furniture. Normal F6 review must confirm that the limited parallax is acceptable before it is placed in the apartment.
+The obsolete 38-triangle projected-atlas prototype and its atlas import files were removed after the real Meshy candidate passed isolated and apartment-comparison review. Do not restore the projected version. Retained source warnings are 103 non-manifold edges, 61 boundary edges, two meaningful connected components, and subtle top/back Meshy waviness.
 
 ### Current next actions
 
-1. Let the normal Godot editor import the bookshelf GLB, atlas, masks, shader, and materials.
-2. Open and F6 `STK_PROP_Bookshelf_A.tscn`.
-3. Compare its source-matte front and angled view against the authoritative PNGs.
-4. Test all three recolor regions and verify that books, paper, objects, copper, wear, and grime remain locked.
-5. Place the bookshelf in the apartment only after user gameplay approval.
-6. Continue validating one meaningful prop at a time in normal Godot; never use headless Godot as visual approval.
+1. Use the newer July 20, 4:59 PM handoff as the current apartment/couch authority.
+2. Preserve the approved production bookshelf, its Builder entry, and its existing v02 apartment placement.
+3. Preserve the approved left-facing L4 sectional and matte two-seat couch already in the apartment.
+4. The approved right-facing L4 sectional is available once in the Builder and remains unplaced until the user requests a layout change.
+5. Continue validating one meaningful prop at a time in normal Godot; never use headless Godot as visual approval.
 
 ## Immediate state
 

@@ -1,0 +1,14 @@
+{
+  "face_classification": {
+    "tabletop": 2588,
+    "frame": 12028,
+    "locked": 3568
+  },
+  "coverage_percent": {
+    "MASK_TableDining_Tabletop.png": 19.905829,
+    "MASK_TableDining_FramePaint.png": 30.727702,
+    "MASK_TableDining_AccentMetal.png": 5.307359,
+    "MASK_TableDining_EmissionCyan.png": 1.759869,
+    "MASK_TableDining_EmissionMagenta.png": 0.197941
+  }
+}

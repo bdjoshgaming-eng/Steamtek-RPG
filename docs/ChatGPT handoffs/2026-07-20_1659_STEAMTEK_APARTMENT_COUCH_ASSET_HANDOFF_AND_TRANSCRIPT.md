@@ -10,6 +10,20 @@
 
 The transcript excludes internal reasoning, system/developer instructions, tool-call payloads, command output, and file-change event records. Those are not visible chat messages. User attachment paths and visible prompt text are retained.
 
++## Post-capture repository reconciliation
+
+This note was added after the 4:59 PM transcript capture. The full transcript below remains frozen at 109 visible entries and was not rewritten.
+
+- The canonical bookshelf remains the user-approved 15,679-triangle Meshy production asset with 16,521 runtime vertices, original 4096 source maps, geometry-aware UV masks, matte response, one simplified collision box, and the established Builder registration.
+- The obsolete 38-triangle projected-atlas bookshelf prototype is not production. Its atlas PNGs and import sidecars were removed after the real Meshy candidate passed isolated and apartment-comparison review. Do not restore it.
+- The approved bookshelf is currently present in the v02 apartment at approximately `(-5.589712, 0.05, -2.942727)` with +90 degrees Y rotation.
+- The production bed remains in the v02 apartment at approximately `(-4.35, 0.05, -0.37520647)` with +90 degrees Y rotation. Its scene-local material override, independent bedding regions, matte response, collision, and sockets remain intact.
+- The player wake marker remains at approximately `(-4.3, 0.12, 1.55)`.
+- The left-facing L4 sectional remains placed and approved. The right-facing L4 sectional remains approved and registered once in the Builder but is not automatically placed.
+- The workstation and two-seat couch retain their approved matte corrections.
+- Use the normal Godot editor and F6 for visual approval; never treat headless rendering as visual approval.
+
+
 ## Executive state
 
 The apartment asset workflow is caught up and stable enough to continue prop placement.

@@ -1,0 +1,49 @@
+[gd_resource type="ShaderMaterial" load_steps=10 format=3]
+
+[ext_resource type="Shader" path="res://assets/environment/live3d/materials/apartment_interior_variants/table_dining_rect_01/STK_TableDining_MaterialVariant.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Table_Dining_Rect_01_Production_Baked_BaseColor.png" id="2_base"]
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Table_Dining_Rect_01_Production_Baked_MetallicRoughness.png" id="3_mr"]
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Table_Dining_Rect_01_Production_Baked_Emit.png" id="4_emit"]
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/materials/apartment_interior_variants/table_dining_rect_01/MASK_TableDining_Tabletop.png" id="5_tabletop"]
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/materials/apartment_interior_variants/table_dining_rect_01/MASK_TableDining_FramePaint.png" id="6_frame"]
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/materials/apartment_interior_variants/table_dining_rect_01/MASK_TableDining_AccentMetal.png" id="7_metal"]
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/materials/apartment_interior_variants/table_dining_rect_01/MASK_TableDining_EmissionCyan.png" id="8_cyan"]
+[ext_resource type="Texture2D" path="res://assets/environment/live3d/materials/apartment_interior_variants/table_dining_rect_01/MASK_TableDining_EmissionMagenta.png" id="9_magenta"]
+
+[resource]
+resource_name = "STK_MAT_Table_Dining_Rect_01_SourceMatte"
+shader = ExtResource("1_shader")
+shader_parameter/base_color_texture = ExtResource("2_base")
+shader_parameter/metallic_roughness_texture = ExtResource("3_mr")
+shader_parameter/emission_texture = ExtResource("4_emit")
+shader_parameter/mask_tabletop = ExtResource("5_tabletop")
+shader_parameter/mask_frame_paint = ExtResource("6_frame")
+shader_parameter/mask_accent_metal = ExtResource("7_metal")
+shader_parameter/mask_emission_cyan = ExtResource("8_cyan")
+shader_parameter/mask_emission_magenta = ExtResource("9_magenta")
+shader_parameter/tabletop_tint = Color(0.10, 0.14, 0.18, 1)
+shader_parameter/tabletop_strength = 0.0
+shader_parameter/tabletop_brightness = 1.0
+shader_parameter/tabletop_roughness_offset = 0.0
+shader_parameter/tabletop_metallic_offset = 0.0
+shader_parameter/frame_tint = Color(0.055, 0.10, 0.13, 1)
+shader_parameter/frame_strength = 0.0
+shader_parameter/frame_brightness = 1.0
+shader_parameter/frame_roughness_offset = 0.0
+shader_parameter/frame_metallic_offset = 0.0
+shader_parameter/accent_metal_tint = Color(0.45, 0.22, 0.09, 1)
+shader_parameter/accent_metal_strength = 0.0
+shader_parameter/accent_metal_brightness = 1.0
+shader_parameter/accent_metal_roughness_offset = 0.0
+shader_parameter/accent_metal_metallic_offset = 0.0
+shader_parameter/accent_cyan_tint = Color(0.02, 0.57, 0.68, 1)
+shader_parameter/emission_cyan_strength = 0.90
+shader_parameter/emission_cyan_enabled = 1.0
+shader_parameter/accent_magenta_tint = Color(0.72, 0.07, 0.43, 1)
+shader_parameter/emission_magenta_strength = 0.55
+shader_parameter/emission_magenta_enabled = 1.0
+shader_parameter/roughness_gain = 1.25
+shader_parameter/locked_roughness_floor = 0.64
+shader_parameter/tabletop_roughness_floor = 0.76
+shader_parameter/frame_roughness_floor = 0.70
+shader_parameter/accent_metal_roughness_floor = 0.54

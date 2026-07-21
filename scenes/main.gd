@@ -23,7 +23,6 @@ extends Node2D
 @onready var enemy_hud_health_label: Label = %EnemyHUDHealthLabel
 @onready var enemy_hud_action_label: Label = %EnemyHUDActionLabel
 
-@onready var dummy: Node2D = %Dummy
 
 # --- Phase 6b: enemy node registry ---
 # Maps each enemy id to its scene nodes, timers and per-enemy constants.
@@ -33,26 +32,48 @@ extends Node2D
 # with runtime-instanced ones; until then this is the seam that lets the
 # rest of main.gd stop caring which enemy it is dealing with.
 var enemy_nodes: Dictionary = {}
+
+# --- Runtime enemy spawning (Phase 6c) ------------------------------
+# Enemies are no longer hand-placed nodes in main.tscn. Each entry here
+# is instantiated from Enemy.tscn at startup and wired up in code, so
+# adding an enemy is a TABLE ENTRY, not editor work plus a dozen
+# @onready declarations.
+const ENEMY_SCENE_PATH := "res://scenes/enemy.tscn"
+const ENEMY_SPRITE_PATH := "res://pipo-enemy018.png"
+
+const ENEMY_SPAWN_TABLE: Dictionary = {
+	"dummy": {
+		"display_name": "Scrap Thief",
+		"cl": 1,
+		"archetype": "brawler",
+		"faction": "rust_syndicate",
+		"position": Vector2(400, 300),
+		"sprite_scale": Vector2(0.16875005, 0.18072915),
+		"tint": Color(1, 1, 1, 1),
+		"kill_xp": 50,
+		"loot_key": "Dummy",
+		"attack_cooldown": 2.5,
+		"respawn_time": 8.0,
+	},
+	"enemy2": {
+		"display_name": "Rust Marauder",
+		"cl": 5,
+		"archetype": "assault",
+		"faction": "rust_syndicate",
+		"position": Vector2(800, 125),
+		"sprite_scale": Vector2(0.181, 0.181),
+		"tint": Color(0.09019608, 0.5019608, 1, 1),
+		"kill_xp": 67,
+		"loot_key": "Enemy2",
+		"attack_cooldown": 2.5,
+		"respawn_time": 8.0,
+	},
+}
 @onready var player_health_bar_bg: Polygon2D = %PlayerHealthBarBg
 @onready var player_health_bar_fill: Polygon2D = %PlayerHealthBarFill
 @onready var player_action_bar_bg: Polygon2D = %PlayerActionBarBg
 @onready var player_action_bar_fill: Polygon2D = %PlayerActionBarFill
-@onready var dummy_health_bar_bg: Polygon2D = %DummyHealthBarBg
-var dummy_target_indicator: Line2D = null
-@onready var dummy_health_bar_fill: Polygon2D = %DummyHealthBarFill
-@onready var dummy_action_bar_bg: Polygon2D = %DummyActionBarBg
-@onready var dummy_action_bar_fill: Polygon2D = %DummyActionBarFill
-@onready var dummy_name_label: Label = %DummyNameLabel
 
-@onready var enemy2: Node2D = %Enemy2
-@onready var enemy2_health_bar_bg: Polygon2D = %Enemy2HealthBarBg
-var enemy2_target_indicator: Line2D = null
-@onready var enemy2_health_bar_fill: Polygon2D = %Enemy2HealthBarFill
-@onready var enemy2_action_bar_bg: Polygon2D = %Enemy2ActionBarBg
-@onready var enemy2_action_bar_fill: Polygon2D = %Enemy2ActionBarFill
-@onready var enemy2_name_label: Label = %Enemy2NameLabel
-@onready var enemy2_attack_cooldown_timer: Timer = $Enemy2AttackCooldownTimer
-@onready var enemy2_respawn_timer: Timer = $Enemy2RespawnTimer
 
 @onready var trainer: Node2D = %Trainer
 @onready var trainer_sprite: CanvasItem = %Trainer/CharacterVisual/Visual
@@ -80,11 +101,9 @@ var quest_system: Node
 @onready var dumpster_cooldown_timer: Timer = $DumpsterCooldownTimer
 @onready var bandage_cooldown_timer: Timer = $BandageCooldownTimer
 @onready var attack_cooldown_timer: Timer = $AttackCooldownTimer
-@onready var dummy_attack_cooldown_timer: Timer = $DummyAttackCooldownTimer
 @onready var player_respawn_timer: Timer = $PlayerRespawnTimer
 @onready var player_regen_timer: Timer = $PlayerRegenTimer
 @onready var player_action_regen_timer: Timer = $PlayerActionRegenTimer
-@onready var dummy_respawn_timer: Timer = $DummyRespawnTimer
 @onready var combat_message_label: Label = $UILayer/CombatMessageLabel
 var enemy_combat_message_label: Label
 @onready var message_clear_timer: Timer = $MessageClearTimer
@@ -313,6 +332,27 @@ var crafted_item_class: Dictionary = {}
 # inventory item_key -> crafted instance_id, so the inventory detail
 # panel can look up sockets, traits and flaws for a crafted item.
 var crafted_item_instance_of: Dictionary = {}
+
+# --- Mods (crafting Phase 6) ----------------------------------------
+# Mod instances the player owns, keyed by instance_id. A mod that is
+# INSTALLED still lives here; the owning weapon's crafted instance lists
+# it in installed_mod_instance_ids.
+var mod_instances: Dictionary = {}
+
+# Inventory item_key -> mod instance_id, for UNINSTALLED mods only. This
+# is what makes a mod a draggable inventory item. Installing removes the
+# inventory entry, because mods are PERMANENT once fitted.
+var mod_instance_of: Dictionary = {}
+
+# Socket UI state. Mods dropped into a socket are PENDING until Apply --
+# nothing is committed without an explicit confirmation, because fitting
+# a mod is irreversible. Cleared whenever the selected item changes.
+const MOD_DRAG_SOURCE_SCRIPT_PATH = "res://scenes/mod_drag_source.gd"
+const MOD_SOCKET_SLOT_SCRIPT_PATH = "res://scenes/mod_socket_slot.gd"
+var pending_mod_installs: Dictionary = {}
+var inventory_book_selected_key: String = ""
+var inventory_book_socket_area: VBoxContainer
+var mod_confirm_dialog: ConfirmationDialog
 var crafted_item_subclass: Dictionary = {}
 var consumable_base_name: Dictionary = {}
 
@@ -712,7 +752,6 @@ func _ready() -> void:
 	_grant_starting_bandages()
 
 	attack_cooldown_timer.timeout.connect(_on_attack_cooldown_finished)
-	dummy_attack_cooldown_timer.timeout.connect(_on_enemy_attack_cooldown_finished.bind("dummy"))
 	player_respawn_timer.timeout.connect(_on_player_respawn)
 	player_regen_timer.timeout.connect(_on_player_regen_tick)
 	player_regen_timer.start()
@@ -720,9 +759,6 @@ func _ready() -> void:
 	player_action_regen_timer.start()
 
 	player_spawn_position = player.position
-	dummy_respawn_timer.timeout.connect(_on_enemy_respawn.bind("dummy"))
-	enemy2_attack_cooldown_timer.timeout.connect(_on_enemy_attack_cooldown_finished.bind("enemy2"))
-	enemy2_respawn_timer.timeout.connect(_on_enemy_respawn.bind("enemy2"))
 	dumpster_cooldown_timer.timeout.connect(_on_dumpster_cooldown_finished)
 	bandage_cooldown_timer.timeout.connect(_on_bandage_cooldown_finished)
 
@@ -1096,6 +1132,8 @@ func _save_game() -> void:
 		"used_resource_names": used_resource_names,
 		"crafted_item_class": crafted_item_class,
 		"crafted_item_instance_of": crafted_item_instance_of,
+		"mod_instances": mod_instances,
+		"mod_instance_of": mod_instance_of,
 		"consumable_base_name": consumable_base_name,
 		"equipped_weapon_name": equipped_weapon_name,
 		"novice_professions": GameData.novice_professions,
@@ -1161,6 +1199,9 @@ func _load_game() -> void:
 
 	crafted_item_class = save_data.get("crafted_item_class", {})
 	crafted_item_instance_of = save_data.get("crafted_item_instance_of", {})
+	mod_instances = save_data.get("mod_instances", {})
+	mod_instance_of = save_data.get("mod_instance_of", {})
+	_reapply_all_mod_stats()
 	consumable_base_name = save_data.get("consumable_base_name", {})
 	equipped_weapon_name = save_data.get("equipped_weapon_name", "")
 
@@ -1497,7 +1538,7 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 	var player_accuracy_bonus = float(proficiency["accuracy"]) + float(Combat.uncertified_accuracy_penalty(is_uncertified))
 
 	var target_defense = enemies[target_id]["defense"]
-	var target_node_for_range = dummy if target_id == "dummy" else enemy2
+	var target_node_for_range = enemy_nodes[target_id]["body"]
 	var dist_to_target = player.global_position.distance_to(target_node_for_range.global_position)
 	var range_penalty = _get_range_accuracy_penalty(weapon_class, dist_to_target)
 
@@ -1673,7 +1714,7 @@ func _get_nearest_enemy_in_range() -> String:
 	if targeted_enemy == "":
 		return ""
 
-	var target_node = dummy if targeted_enemy == "dummy" else enemy2
+	var target_node = enemy_nodes[targeted_enemy]["body"]
 	var target_alive = enemies[targeted_enemy]["alive"] if enemies.has(targeted_enemy) else false
 
 	if not target_alive:
@@ -1687,40 +1728,98 @@ func _get_nearest_enemy_in_range() -> String:
 	return ""
 
 func _build_enemy_node_registry() -> void:
-	# Phase 6b: enemy id -> its scene nodes, timers and per-enemy
-	# constants. Everything that used to be duplicated per enemy now reads
-	# from here, so enemy code is written ONCE against an enemy_id.
-	enemy_nodes = {
-		"dummy": {
-			"body": dummy,
-			"health_bg": dummy_health_bar_bg,
-			"health_fill": dummy_health_bar_fill,
-			"action_bg": dummy_action_bar_bg,
-			"action_fill": dummy_action_bar_fill,
-			"name_label": dummy_name_label,
-			"attack_timer": dummy_attack_cooldown_timer,
-			"respawn_timer": dummy_respawn_timer,
-			"kill_xp": DUMMY_KILL_XP,
-			"loot_key": "Dummy",
-			"attack_cooldown": DUMMY_ATTACK_COOLDOWN,
-		},
-		"enemy2": {
-			"body": enemy2,
-			"health_bg": enemy2_health_bar_bg,
-			"health_fill": enemy2_health_bar_fill,
-			"action_bg": enemy2_action_bar_bg,
-			"action_fill": enemy2_action_bar_fill,
-			"name_label": enemy2_name_label,
-			"attack_timer": enemy2_attack_cooldown_timer,
-			"respawn_timer": enemy2_respawn_timer,
-			"kill_xp": ENEMY2_KILL_XP,
-			"loot_key": "Enemy2",
-			"attack_cooldown": ENEMY2_ATTACK_COOLDOWN,
-		},
+	# Phase 6c: enemies are INSTANTIATED from Enemy.tscn rather than being
+	# hand-placed nodes. Each spawned instance carries its own bars, name
+	# label, target indicator and timers as CHILDREN, so they follow the
+	# enemy automatically -- the old per-frame global repositioning is gone.
+	enemy_nodes.clear()
+	for enemy_id in ENEMY_SPAWN_TABLE.keys():
+		_spawn_enemy(String(enemy_id))
+
+
+# Instantiates one enemy and registers its nodes. Safe to call again for
+# the same id -- the previous instance is freed first.
+func _spawn_enemy(enemy_id: String) -> void:
+	var spawn: Dictionary = ENEMY_SPAWN_TABLE.get(enemy_id, {})
+	if spawn.is_empty():
+		push_error("[ENEMY] No spawn entry for id: " + enemy_id)
+		return
+
+	var scene = load(ENEMY_SCENE_PATH)
+	if scene == null:
+		push_error("[ENEMY] Could not load " + ENEMY_SCENE_PATH)
+		return
+
+	var parent = get_node_or_null("World/YSortLayer/Enemies")
+	if parent == null:
+		parent = get_node_or_null("World/YSortLayer")
+	if parent == null:
+		push_error("[ENEMY] No World/YSortLayer to spawn into.")
+		return
+
+	if enemy_nodes.has(enemy_id) and is_instance_valid(enemy_nodes[enemy_id]["body"]):
+		enemy_nodes[enemy_id]["body"].queue_free()
+
+	var body: Node2D = scene.instantiate()
+	body.name = enemy_id
+	body.position = spawn.get("position", Vector2.ZERO)
+	parent.add_child(body)
+
+	var visual: Sprite2D = body.get_node("Visual")
+	var tex = load(ENEMY_SPRITE_PATH)
+	if tex != null:
+		visual.texture = tex
+	visual.scale = spawn.get("sprite_scale", Vector2.ONE)
+	visual.modulate = spawn.get("tint", Color(1, 1, 1, 1))
+
+	var health_bg: Polygon2D = body.get_node("HealthBarBg")
+	var health_fill: Polygon2D = body.get_node("HealthBarFill")
+	var action_bg: Polygon2D = body.get_node("ActionBarBg")
+	var action_fill: Polygon2D = body.get_node("ActionBarFill")
+	var name_label: Label = body.get_node("NameLabel")
+	var indicator: Line2D = body.get_node("TargetIndicator")
+	var attack_timer: Timer = body.get_node("AttackCooldownTimer")
+	var respawn_timer: Timer = body.get_node("RespawnTimer")
+
+	# Bars are children now, so these local offsets are set ONCE and the
+	# bars track the enemy for free.
+	var bar_offset = Vector2(-HEALTH_BAR_WIDTH / 2.0, -60.0)
+	health_bg.position = bar_offset
+	health_fill.position = bar_offset
+	action_bg.position = bar_offset + Vector2(0, ACTION_BAR_GAP)
+	action_fill.position = bar_offset + Vector2(0, ACTION_BAR_GAP)
+
+	name_label.position = Vector2(-NAME_LABEL_WIDTH / 2.0, bar_offset.y - 24.0)
+	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name_label.custom_minimum_size = Vector2(NAME_LABEL_WIDTH, 0)
+
+	_style_target_indicator(indicator)
+	indicator.position = bar_offset
+	indicator.visible = false
+
+	attack_timer.one_shot = true
+	attack_timer.wait_time = float(spawn.get("attack_cooldown", 2.5))
+	attack_timer.timeout.connect(_on_enemy_attack_cooldown_finished.bind(enemy_id))
+
+	respawn_timer.one_shot = true
+	respawn_timer.wait_time = float(spawn.get("respawn_time", 8.0))
+	respawn_timer.timeout.connect(_on_enemy_respawn.bind(enemy_id))
+
+	enemy_nodes[enemy_id] = {
+		"body": body,
+		"health_bg": health_bg,
+		"health_fill": health_fill,
+		"action_bg": action_bg,
+		"action_fill": action_fill,
+		"name_label": name_label,
+		"indicator": indicator,
+		"attack_timer": attack_timer,
+		"respawn_timer": respawn_timer,
+		"kill_xp": int(spawn.get("kill_xp", 0)),
+		"loot_key": String(spawn.get("loot_key", enemy_id)),
+		"attack_cooldown": float(spawn.get("attack_cooldown", 2.5)),
 	}
 
-
-# Shows or hides every visual belonging to an enemy in one call.
 func _set_enemy_visible(enemy_id: String, is_visible: bool) -> void:
 	if not enemy_nodes.has(enemy_id):
 		return
@@ -2212,32 +2311,34 @@ func _make_bar_polygon(width: float, height: float) -> PackedVector2Array:
 	])
 
 func _setup_health_bars() -> void:
+	# Enemy bars are configured per-instance in _spawn_enemy now; this
+	# handles the player HUD and the tracked-enemy HUD only.
 	var bg_color = Color(0.1, 0.1, 0.1)
 	var health_color = Color(0.8, 0.1, 0.1)
 	var action_color = Color(0.1, 0.8, 0.1)
-
-	for bar in [dummy_health_bar_bg, dummy_action_bar_bg, enemy2_health_bar_bg, enemy2_action_bar_bg]:
-		bar.color = bg_color
-		bar.polygon = _make_bar_polygon(HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT)
 
 	for bar in [player_health_bar_bg, player_action_bar_bg, enemy_hud_health_bar_bg, enemy_hud_action_bar_bg]:
 		bar.color = bg_color
 		bar.polygon = _make_bar_polygon(HUD_BAR_WIDTH, HUD_BAR_HEIGHT)
 
 	player_health_bar_fill.color = health_color
-	dummy_health_bar_fill.color = health_color
-	enemy2_health_bar_fill.color = health_color
 	enemy_hud_health_bar_fill.color = health_color
 	player_action_bar_fill.color = action_color
-	dummy_action_bar_fill.color = action_color
-	enemy2_action_bar_fill.color = action_color
 	enemy_hud_action_bar_fill.color = action_color
-
-	for fill in [dummy_health_bar_fill, dummy_action_bar_fill, enemy2_health_bar_fill, enemy2_action_bar_fill]:
-		fill.polygon = _make_bar_polygon(HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT)
 
 	for fill in [player_health_bar_fill, player_action_bar_fill, enemy_hud_health_bar_fill, enemy_hud_action_bar_fill]:
 		fill.polygon = _make_bar_polygon(HUD_BAR_WIDTH, HUD_BAR_HEIGHT)
+
+	# Every spawned enemy's own bars.
+	for enemy_id in enemy_nodes.keys():
+		var n = enemy_nodes[enemy_id]
+		n["health_bg"].color = bg_color
+		n["action_bg"].color = bg_color
+		n["health_fill"].color = health_color
+		n["action_fill"].color = action_color
+		for p in [n["health_bg"], n["health_fill"], n["action_bg"], n["action_fill"]]:
+			p.polygon = _make_bar_polygon(HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT)
+		n["name_label"].text = _get_enemy_display_text(String(enemy_id))
 
 	# Player bars live inside a single PlayerHUD node under UILayer.
 	# Its actual screen position is calculated in _layout_hud(), relative
@@ -2247,17 +2348,12 @@ func _setup_health_bars() -> void:
 	player_action_bar_bg.position = Vector2(0, HUD_BAR_HEIGHT + HUD_BAR_GAP)
 	player_action_bar_fill.position = Vector2(0, HUD_BAR_HEIGHT + HUD_BAR_GAP)
 
-	# EnemyHUD mirrors PlayerHUD's bar layout -- no name label, just the
-	# health/action bars for whichever enemy is currently tracked.
 	enemy_hud_health_bar_bg.position = Vector2.ZERO
 	enemy_hud_health_bar_fill.position = Vector2.ZERO
 	enemy_hud_action_bar_bg.position = Vector2(0, HUD_BAR_HEIGHT + HUD_BAR_GAP)
 	enemy_hud_action_bar_fill.position = Vector2(0, HUD_BAR_HEIGHT + HUD_BAR_GAP)
 	enemy_hud.visible = false
 
-	# Numeric "current / max" readouts overlaid on top of the PlayerHUD
-	# and EnemyHUD bars only -- the floating world-space bars above
-	# enemy heads stay plain, unlabeled bars.
 	for label in [player_hud_health_label, player_hud_action_label, enemy_hud_health_label, enemy_hud_action_label]:
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -2269,25 +2365,6 @@ func _setup_health_bars() -> void:
 	player_hud_action_label.position = Vector2(0, HUD_BAR_HEIGHT + HUD_BAR_GAP)
 	enemy_hud_health_label.position = Vector2.ZERO
 	enemy_hud_action_label.position = Vector2(0, HUD_BAR_HEIGHT + HUD_BAR_GAP)
-
-	dummy_name_label.text = _get_enemy_display_text("dummy")
-	dummy_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	dummy_name_label.custom_minimum_size = Vector2(NAME_LABEL_WIDTH, 0)
-
-	enemy2_name_label.text = _get_enemy_display_text("enemy2")
-	enemy2_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	enemy2_name_label.custom_minimum_size = Vector2(NAME_LABEL_WIDTH, 0)
-
-	# Target indicator -- a single amber border drawn around both world-
-	# space bars (health + action together) when that enemy is targeted.
-	# Built as a hollow Polygon2D using a Line2D loop so we don't have
-	# to fiddle with StyleBox on Polygon2D nodes.
-	dummy_target_indicator = _make_target_indicator()
-	get_node("World/YSortLayer").add_child(dummy_target_indicator)
-
-	enemy2_target_indicator = _make_target_indicator()
-	get_node("World/YSortLayer").add_child(enemy2_target_indicator)
-
 func _make_target_indicator() -> Line2D:
 	var line = Line2D.new()
 	line.default_color = Color(0.95, 0.75, 0.2)
@@ -2331,61 +2408,33 @@ func _update_health_bars() -> void:
 	player_hud_action_label.text = str(player_current_action) + " / " + str(player_max_action)
 	player_hud_action_label.size = Vector2(HUD_BAR_WIDTH, HUD_BAR_HEIGHT)
 
-	if enemies["dummy"]["alive"]:
-		var dummy_bar_position = dummy.global_position + Vector2(-HEALTH_BAR_WIDTH / 2, -60)
-		dummy_health_bar_bg.position = dummy_bar_position
-		dummy_health_bar_fill.position = dummy_bar_position
+	# Bars are CHILDREN of each enemy now, so nothing needs repositioning
+	# here -- only the fill widths, name text/colour and target highlight.
+	for enemy_id in enemy_nodes.keys():
+		var eid = String(enemy_id)
+		if not enemies.has(eid):
+			continue
+		var n = enemy_nodes[eid]
+		var e = enemies[eid]
+		if not e["alive"]:
+			n["indicator"].visible = false
+			continue
 
-		var bar_center_x = dummy_bar_position.x + (HEALTH_BAR_WIDTH / 2)
-		dummy_name_label.position = Vector2(bar_center_x - (NAME_LABEL_WIDTH / 2), dummy_bar_position.y - 24)
-		dummy_name_label.modulate = _get_con_color("dummy")
-		dummy_name_label.text = _get_enemy_display_text("dummy")
+		var health_pct = clamp(float(e["current_health"]) / float(max(1, e["max_health"])), 0.0, 1.0)
+		n["health_fill"].polygon = _make_bar_polygon(HEALTH_BAR_WIDTH * health_pct, HEALTH_BAR_HEIGHT)
 
-		var dummy_action_bar_position = dummy_bar_position + Vector2(0, ACTION_BAR_GAP)
-		dummy_action_bar_bg.position = dummy_action_bar_position
-		dummy_action_bar_fill.position = dummy_action_bar_position
+		var action_pct = clamp(float(e["current_action"]) / float(max(1, e["max_action"])), 0.0, 1.0)
+		n["action_fill"].polygon = _make_bar_polygon(HEALTH_BAR_WIDTH * action_pct, HEALTH_BAR_HEIGHT)
 
-		var dummy_health_pct = clamp(float(enemies["dummy"]["current_health"]) / float(enemies["dummy"]["max_health"]), 0.0, 1.0)
-		dummy_health_bar_fill.polygon = _make_bar_polygon(HEALTH_BAR_WIDTH * dummy_health_pct, HEALTH_BAR_HEIGHT)
-
-		var dummy_action_pct = clamp(float(enemies["dummy"]["current_action"]) / float(enemies["dummy"]["max_action"]), 0.0, 1.0)
-		dummy_action_bar_fill.polygon = _make_bar_polygon(HEALTH_BAR_WIDTH * dummy_action_pct, HEALTH_BAR_HEIGHT)
-
-		if dummy_target_indicator:
-			dummy_target_indicator.visible = (targeted_enemy == "dummy")
-			dummy_target_indicator.position = dummy_bar_position
-
-	if enemies["enemy2"]["alive"]:
-		var enemy2_bar_position = enemy2.global_position + Vector2(-HEALTH_BAR_WIDTH / 2, -60)
-		enemy2_health_bar_bg.position = enemy2_bar_position
-		enemy2_health_bar_fill.position = enemy2_bar_position
-
-		var enemy2_bar_center_x = enemy2_bar_position.x + (HEALTH_BAR_WIDTH / 2)
-		enemy2_name_label.position = Vector2(enemy2_bar_center_x - (NAME_LABEL_WIDTH / 2), enemy2_bar_position.y - 24)
-		enemy2_name_label.modulate = _get_con_color("enemy2")
-		enemy2_name_label.text = _get_enemy_display_text("enemy2")
-
-		var enemy2_action_bar_position = enemy2_bar_position + Vector2(0, ACTION_BAR_GAP)
-		enemy2_action_bar_bg.position = enemy2_action_bar_position
-		enemy2_action_bar_fill.position = enemy2_action_bar_position
-
-		var enemy2_health_pct = clamp(float(enemies["enemy2"]["current_health"]) / float(enemies["enemy2"]["max_health"]), 0.0, 1.0)
-		enemy2_health_bar_fill.polygon = _make_bar_polygon(HEALTH_BAR_WIDTH * enemy2_health_pct, HEALTH_BAR_HEIGHT)
-
-		var enemy2_action_pct = clamp(float(enemies["enemy2"]["current_action"]) / float(enemies["enemy2"]["max_action"]), 0.0, 1.0)
-		enemy2_action_bar_fill.polygon = _make_bar_polygon(HEALTH_BAR_WIDTH * enemy2_action_pct, HEALTH_BAR_HEIGHT)
-
-		if enemy2_target_indicator:
-			enemy2_target_indicator.visible = (targeted_enemy == "enemy2")
-			enemy2_target_indicator.position = enemy2_bar_position
-
-	if dummy_target_indicator and not enemies["dummy"]["alive"]:
-		dummy_target_indicator.visible = false
-	if enemy2_target_indicator and not enemies["enemy2"]["alive"]:
-		enemy2_target_indicator.visible = false
+		n["name_label"].modulate = _get_con_color(eid)
+		n["name_label"].text = _get_enemy_display_text(eid)
+		n["indicator"].visible = (targeted_enemy == eid)
 
 	_update_enemy_hud()
-
+# Mirrors the player's fixed HUD bars, but for whichever enemy is
+# currently nearest to the player (alive). Hides itself entirely when
+# no enemies are alive. This is separate from -- and doesn't replace --
+# the floating health/action bars each enemy shows above its own head.
 # Mirrors the player's fixed HUD bars, but for whichever enemy is
 # currently nearest to the player (alive). Hides itself entirely when
 # no enemies are alive. This is separate from -- and doesn't replace --
@@ -2393,45 +2442,29 @@ func _update_health_bars() -> void:
 func _update_enemy_hud() -> void:
 	var tracked_id = _get_tracked_enemy_id()
 
-	if tracked_id == "":
+	if tracked_id == "" or not enemies.has(tracked_id):
 		enemy_hud.visible = false
 		return
 
 	enemy_hud.visible = true
+	var e = enemies[tracked_id]
 
-	var current_health: int
-	var max_health: int
-	var current_action: int
-	var max_action: int
-
-	if tracked_id == "dummy":
-		current_health = enemies["dummy"]["current_health"]
-		max_health = enemies["dummy"]["max_health"]
-		current_action = enemies["dummy"]["current_action"]
-		max_action = enemies["dummy"]["max_action"]
-	else:
-		current_health = enemies["enemy2"]["current_health"]
-		max_health = enemies["enemy2"]["max_health"]
-		current_action = enemies["enemy2"]["current_action"]
-		max_action = enemies["enemy2"]["max_action"]
-
-	var tracked_health_pct = clamp(float(current_health) / float(max_health), 0.0, 1.0)
+	var tracked_health_pct = clamp(float(e["current_health"]) / float(max(1, e["max_health"])), 0.0, 1.0)
 	enemy_hud_health_bar_fill.polygon = _make_bar_polygon(HUD_BAR_WIDTH * tracked_health_pct, HUD_BAR_HEIGHT)
-	enemy_hud_health_label.text = str(current_health) + " / " + str(max_health)
+	enemy_hud_health_label.text = str(e["current_health"]) + " / " + str(e["max_health"])
 	enemy_hud_health_label.size = Vector2(HUD_BAR_WIDTH, HUD_BAR_HEIGHT)
 
-	var tracked_action_pct = clamp(float(current_action) / float(max_action), 0.0, 1.0)
+	var tracked_action_pct = clamp(float(e["current_action"]) / float(max(1, e["max_action"])), 0.0, 1.0)
 	enemy_hud_action_bar_fill.polygon = _make_bar_polygon(HUD_BAR_WIDTH * tracked_action_pct, HUD_BAR_HEIGHT)
-	enemy_hud_action_label.text = str(current_action) + " / " + str(max_action)
+	enemy_hud_action_label.text = str(e["current_action"]) + " / " + str(e["max_action"])
 	enemy_hud_action_label.size = Vector2(HUD_BAR_WIDTH, HUD_BAR_HEIGHT)
-
 func _cycle_target() -> void:
 	var ids: Array = []
-	if enemies["dummy"]["alive"]:
-		ids.append("dummy")
-	if enemies["enemy2"]["alive"]:
-		ids.append("enemy2")
-	if ids.size() == 0:
+	for enemy_id in enemy_nodes.keys():
+		var eid = String(enemy_id)
+		if enemies.has(eid) and enemies[eid]["alive"]:
+			ids.append(eid)
+	if ids.is_empty():
 		targeted_enemy = ""
 		_show_combat_message("No enemies to target.")
 		return
@@ -2440,27 +2473,21 @@ func _cycle_target() -> void:
 		targeted_enemy = ids[0]
 	else:
 		targeted_enemy = ids[current_index + 1]
-	var target_name = "Training Dummy" if targeted_enemy == "dummy" else "Rust Marauder"
-	_show_combat_message("Target: " + target_name)
-
+	_show_combat_message("Target: " + _get_enemy_name(targeted_enemy))
 func _try_click_target(world_pos: Vector2) -> void:
 	var clicked: String = ""
 	var closest_dist = INF
-	if enemies["dummy"]["alive"]:
-		var d = world_pos.distance_to(dummy.global_position)
+	for enemy_id in enemy_nodes.keys():
+		var eid = String(enemy_id)
+		if not enemies.has(eid) or not enemies[eid]["alive"]:
+			continue
+		var d = world_pos.distance_to(enemy_nodes[eid]["body"].global_position)
 		if d <= ENEMY_CLICK_RADIUS and d < closest_dist:
 			closest_dist = d
-			clicked = "dummy"
-	if enemies["enemy2"]["alive"]:
-		var d2 = world_pos.distance_to(enemy2.global_position)
-		if d2 <= ENEMY_CLICK_RADIUS and d2 < closest_dist:
-			closest_dist = d2
-			clicked = "enemy2"
+			clicked = eid
 	if clicked != "":
 		targeted_enemy = clicked
-		var target_name = "Training Dummy" if targeted_enemy == "dummy" else "Rust Marauder"
-		_show_combat_message("Target: " + target_name)
-
+		_show_combat_message("Target: " + _get_enemy_name(targeted_enemy))
 func _get_tracked_enemy_id() -> String:
 	# Prefer the explicitly targeted enemy -- that's what the player
 	# is looking at and expecting to see health bars for.
@@ -2486,22 +2513,19 @@ func _get_tracked_enemy_id() -> String:
 		track_range = ENGAGE_RANGE_HEAVY
 	else:
 		track_range = MELEE_RANGE
+
 	var candidates = []
-	if enemies["dummy"]["alive"]:
-		var dummy_distance = player.global_position.distance_to(dummy.global_position)
-		if dummy_distance <= track_range:
-			candidates.append(["dummy", dummy_distance])
-	if enemies["enemy2"]["alive"]:
-		var enemy2_distance = player.global_position.distance_to(enemy2.global_position)
-		if enemy2_distance <= track_range:
-			candidates.append(["enemy2", enemy2_distance])
-	if candidates.size() == 0:
+	for enemy_id in enemy_nodes.keys():
+		var eid = String(enemy_id)
+		if not enemies.has(eid) or not enemies[eid]["alive"]:
+			continue
+		var d = player.global_position.distance_to(enemy_nodes[eid]["body"].global_position)
+		if d <= track_range:
+			candidates.append([eid, d])
+	if candidates.is_empty():
 		return ""
 	candidates.sort_custom(func(a, b): return a[1] < b[1])
 	return candidates[0][0]
-
-# --- Enemy Attacks ---
-
 func _apply_cl_derivation(enemy_id: String) -> void:
 	# Fills an enemy's derived combat values from its hidden Combat Level.
 	# Health/action/damage/defense/armor come from the CL anchor table via
@@ -4117,12 +4141,30 @@ func _build_inventory_book_ui() -> void:
 	details_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	details_panel.add_child(details_scroll)
 
+	# A VBox rather than the label directly, so the socket widgets can sit
+	# beneath the stat text inside the same scroll region.
+	var details_vbox = VBoxContainer.new()
+	details_vbox.custom_minimum_size = Vector2(285, 0)
+	details_vbox.add_theme_constant_override("separation", 6)
+	details_scroll.add_child(details_vbox)
+
 	inventory_book_stats_label = Label.new()
 	inventory_book_stats_label.custom_minimum_size = Vector2(285, 0)
 	inventory_book_stats_label.autowrap_mode = TextServer.AUTOWRAP_WORD
 	inventory_book_stats_label.text = "Select an item to view its details."
 	inventory_book_stats_label.modulate = Color(0.85, 0.95, 0.95)
-	details_scroll.add_child(inventory_book_stats_label)
+	details_vbox.add_child(inventory_book_stats_label)
+
+	inventory_book_socket_area = VBoxContainer.new()
+	inventory_book_socket_area.custom_minimum_size = Vector2(285, 0)
+	inventory_book_socket_area.add_theme_constant_override("separation", 4)
+	details_vbox.add_child(inventory_book_socket_area)
+
+	mod_confirm_dialog = ConfirmationDialog.new()
+	mod_confirm_dialog.title = "Fit mods permanently?"
+	mod_confirm_dialog.ok_button_text = "Fit permanently"
+	mod_confirm_dialog.confirmed.connect(_on_mod_install_confirmed)
+	inventory_book_ui.add_child(mod_confirm_dialog)
 
 	# Right panel -- scrollable list of every item currently held.
 	var list_panel = Panel.new()
@@ -4193,6 +4235,9 @@ func _refresh_inventory_book() -> void:
 		child.queue_free()
 
 	inventory_book_stats_label.text = "Select an item to view its details."
+	inventory_book_selected_key = ""
+	pending_mod_installs.clear()
+	_refresh_socket_area()
 
 	for item_key in inventory.keys():
 		if inventory[item_key] <= 0:
@@ -4230,10 +4275,18 @@ func _refresh_inventory_book() -> void:
 		# have randomly-generated instance keys, but _use_ability_by_name
 		# (called on drop) dispatches based on the recognizable display
 		# name instead.
-		var drag_script = load(ABILITY_DRAG_SOURCE_SCRIPT_PATH)
-		if drag_script != null:
-			btn.set_script(drag_script)
-			btn.set("ability_name", display_name)
+		# A mod drags with a DIFFERENT payload key than an ability, so
+		# action-bar slots and socket slots each silently reject the other.
+		if mod_instance_of.has(item_key):
+			var mod_drag_script = load(MOD_DRAG_SOURCE_SCRIPT_PATH)
+			if mod_drag_script != null:
+				btn.set_script(mod_drag_script)
+				btn.set("mod_item_key", item_key)
+		else:
+			var drag_script = load(ABILITY_DRAG_SOURCE_SCRIPT_PATH)
+			if drag_script != null:
+				btn.set_script(drag_script)
+				btn.set("ability_name", display_name)
 
 		inventory_book_list_container.add_child(btn)
 
@@ -4255,6 +4308,10 @@ func _get_consumable_effect_lines(base_name: String, quality: int) -> Array:
 			return []
 
 func _select_inventory_book_item(item_key: String) -> void:
+	# Changing selection abandons anything staged but not applied.
+	if item_key != inventory_book_selected_key:
+		pending_mod_installs.clear()
+	inventory_book_selected_key = item_key
 	var display_name = _get_inventory_display_name(item_key)
 	var qty = inventory.get(item_key, 0)
 	var stats = inventory_stats.get(item_key, {})
@@ -4324,6 +4381,7 @@ func _select_inventory_book_item(item_key: String) -> void:
 			lines.append_array(stat_lines)
 
 	inventory_book_stats_label.text = "\n".join(lines)
+	_refresh_socket_area()
 
 const MELEE_WEAPON_CLASSES = ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick"]
 const RANGED_WEAPON_CLASSES = ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"]
@@ -4704,3 +4762,348 @@ func _build_crafting_panel_ui() -> void:
 func close_crafting_panel() -> void:
 	if crafting_panel_ui != null:
 		crafting_panel_ui.visible = false
+
+
+# ====================================================================
+# MODS (crafting Phase 6 -- integration)
+# ====================================================================
+
+# The mod instances currently fitted to an inventory item.
+func _installed_mods_for(item_key: String) -> Array:
+	var out: Array = []
+	var instance_id = String(crafted_item_instance_of.get(item_key, ""))
+	if instance_id == "" or not crafted_items.has(instance_id):
+		return out
+	for mid in crafted_items[instance_id].get("installed_mod_instance_ids", []):
+		if mod_instances.has(String(mid)):
+			out.append(mod_instances[String(mid)])
+	return out
+
+
+# Recomputes an item's stats from scratch and then layers mod deltas on
+# top. IDEMPOTENT by design: the base is always rebuilt from the item
+# definition and quality, so calling this repeatedly can never
+# double-count a mod or lose the base stats. Both grant paths still go
+# through _realise_item_stats, so they cannot drift apart.
+func _apply_item_stats_with_mods(item_key: String) -> void:
+	var definition: Dictionary = {}
+	var base_name = String(consumable_base_name.get(item_key, item_key))
+	definition = GameData.get_item_definition(base_name)
+	if definition.is_empty():
+		return
+
+	var quality = int(inventory_stats.get(item_key, {}).get("Quality", 500))
+	_realise_item_stats(item_key, definition, quality)
+
+	var mods = _installed_mods_for(item_key)
+	if mods.is_empty():
+		return
+
+	var deltas = CraftingService.mod_stat_deltas(mods)
+	var stats = inventory_stats[item_key]
+	for stat_name in deltas.keys():
+		var base_value = float(stats.get(stat_name, 0.0))
+		var new_value = base_value + float(deltas[stat_name])
+		if stat_name == "Speed" or stat_name == "Reload Speed":
+			stats[stat_name] = max(0.1, round(new_value * 10.0) / 10.0)
+		else:
+			stats[stat_name] = max(0.0, round(new_value))
+
+	# Damage Per Second is derived, so recompute it AFTER mods land.
+	if stats.has("Speed") and stats.has("Damage Rating"):
+		var spd = float(stats["Speed"])
+		if spd > 0.0:
+			stats["Damage Per Second"] = round((float(stats["Damage Rating"]) / spd) * 10.0) / 10.0
+
+
+# Called after a load, since installed mods are restored but the stat
+# values written into inventory_stats came from the save as-is.
+func _reapply_all_mod_stats() -> void:
+	for item_key in crafted_item_instance_of.keys():
+		if inventory.has(item_key):
+			_apply_item_stats_with_mods(String(item_key))
+
+
+# Preview of what a mod would do to an item, WITHOUT installing it.
+# Returns stat_name -> {"from": x, "to": y}. Drives the confirmation UI,
+# which matters because installation cannot be undone.
+func _preview_mod_install(item_key: String, mod_item_key: String) -> Dictionary:
+	var out: Dictionary = {}
+	var mod_id = String(mod_instance_of.get(mod_item_key, ""))
+	if mod_id == "" or not mod_instances.has(mod_id):
+		return out
+
+	var current = _installed_mods_for(item_key)
+	var proposed = current.duplicate()
+	proposed.append(mod_instances[mod_id])
+
+	var before = CraftingService.mod_stat_deltas(current)
+	var after = CraftingService.mod_stat_deltas(proposed)
+	var stats = inventory_stats.get(item_key, {})
+	for stat_name in after.keys():
+		var delta_before = float(before.get(stat_name, 0.0))
+		var delta_after = float(after.get(stat_name, 0.0))
+		if is_equal_approx(delta_before, delta_after):
+			continue
+		var shown = float(stats.get(stat_name, 0.0))
+		out[stat_name] = {"from": shown, "to": shown + (delta_after - delta_before)}
+	return out
+
+
+# Why a mod cannot be fitted to an item, as player-facing strings.
+func _mod_install_problems(item_key: String, mod_item_key: String) -> Array:
+	var instance_id = String(crafted_item_instance_of.get(item_key, ""))
+	if instance_id == "" or not crafted_items.has(instance_id):
+		return ["This item cannot take mods."]
+	var mod_id = String(mod_instance_of.get(mod_item_key, ""))
+	if mod_id == "" or not mod_instances.has(mod_id):
+		return ["That is not a mod."]
+	return CraftingService.mod_install_problems(
+		crafted_items[instance_id], mod_instances[mod_id], _installed_mods_for(item_key))
+
+
+# PERMANENTLY fits a mod. The mod's inventory entry is consumed: mods
+# cannot be removed once installed, so there is nothing to give back.
+# Callers MUST confirm with the player first.
+func _install_mod(item_key: String, mod_item_key: String) -> bool:
+	var problems = _mod_install_problems(item_key, mod_item_key)
+	if not problems.is_empty():
+		_show_combat_message(String(problems[0]))
+		return false
+
+	var instance_id = String(crafted_item_instance_of.get(item_key, ""))
+	var mod_id = String(mod_instance_of.get(mod_item_key, ""))
+	var installed: Array = crafted_items[instance_id].get("installed_mod_instance_ids", [])
+	installed.append(mod_id)
+	crafted_items[instance_id]["installed_mod_instance_ids"] = installed
+
+	# Consume the mod's inventory entry -- it now lives in the weapon.
+	mod_instance_of.erase(mod_item_key)
+	if inventory.has(mod_item_key):
+		inventory[mod_item_key] -= 1
+		if inventory[mod_item_key] <= 0:
+			inventory.erase(mod_item_key)
+	consumable_base_name.erase(mod_item_key)
+	_cleanup_empty_inventory_stacks()
+
+	# Record the owning item on the mod instance itself.
+	mod_instances[mod_id]["installed_in"] = instance_id
+
+	_apply_item_stats_with_mods(item_key)
+	_update_inventory_display()
+
+	var mod_def = CraftingData.get_mod(String(mod_instances[mod_id].get("mod_id", "")))
+	_show_combat_message("Fitted " + String(mod_def.get("display_name", "mod")) + " -- permanent.")
+	return true
+
+
+# Creates a mod and puts it in the player's inventory as a draggable
+# item. Acquisition proper (vendor / craftable / drops) is a later batch;
+# this is the grant path everything will funnel through.
+func _grant_mod(mod_id: String, grade_id: String = "standard") -> String:
+	var mod = CraftingService.create_mod(mod_id, grade_id)
+	if mod.is_empty():
+		return ""
+	var instance_id = String(mod.get("mod_instance_id", ""))
+	mod_instances[instance_id] = mod
+
+	var item_key = _generate_unique_resource_name()
+	var mod_def = CraftingData.get_mod(mod_id)
+	var grade = CraftingData.get_mod_grade(grade_id)
+	consumable_base_name[item_key] = String(grade.get("display_name", grade_id)) + " " + String(mod_def.get("display_name", mod_id))
+	mod_instance_of[item_key] = instance_id
+	_add_to_inventory(item_key, 1)
+	_update_inventory_display()
+	return item_key
+
+
+# ====================================================================
+# MOD SOCKET UI (crafting Phase 6 -- staging, preview, confirmation)
+# ====================================================================
+
+# Rebuilds the socket row for whichever item is selected. Called after
+# selection changes, after staging, and after a successful install.
+func _refresh_socket_area() -> void:
+	if inventory_book_socket_area == null:
+		return
+	for child in inventory_book_socket_area.get_children():
+		child.queue_free()
+
+	var item_key = inventory_book_selected_key
+	if item_key == "":
+		return
+	var instance_id = String(crafted_item_instance_of.get(item_key, ""))
+	if instance_id == "" or not crafted_items.has(instance_id):
+		return
+	var inst: Dictionary = crafted_items[instance_id]
+	var socket_count = int(inst.get("socket_count", 0))
+	if socket_count <= 0:
+		return
+
+	var header = Label.new()
+	header.text = "Mod Sockets"
+	header.modulate = Color(0.6, 0.9, 0.9)
+	inventory_book_socket_area.add_child(header)
+
+	var installed = _installed_mods_for(item_key)
+	var socket_tags: Array = inst.get("socket_tags", [])
+
+	for i in range(socket_count):
+		var slot = Panel.new()
+		slot.custom_minimum_size = Vector2(280, 34)
+		var slot_script = load(MOD_SOCKET_SLOT_SCRIPT_PATH)
+		if slot_script != null:
+			slot.set_script(slot_script)
+			slot.set("main", self)
+			slot.set("socket_index", i)
+
+		var label = Label.new()
+		label.position = Vector2(8, 6)
+
+		var tag_name = ""
+		if i < socket_tags.size():
+			tag_name = String(CraftingData.get_socket_tag(String(socket_tags[i])).get("display_name", socket_tags[i]))
+
+		if i < installed.size():
+			# Permanently fitted.
+			var def = CraftingData.get_mod(String(installed[i].get("mod_id", "")))
+			var grade = CraftingData.get_mod_grade(String(installed[i].get("grade_id", "standard")))
+			label.text = String(grade.get("display_name", "")) + " " + String(def.get("display_name", "Mod"))
+			label.modulate = Color(0.65, 0.85, 0.65)
+			if slot_script != null:
+				slot.set("accepts_drop", false)
+			slot.add_theme_stylebox_override("panel", _make_flat_style(Color(0.06, 0.12, 0.08)))
+		elif pending_mod_installs.has(i):
+			var pend_key = String(pending_mod_installs[i])
+			label.text = _get_inventory_display_name(pend_key) + "  (pending)"
+			label.modulate = Color(0.95, 0.8, 0.35)
+			slot.add_theme_stylebox_override("panel", _make_flat_style(Color(0.15, 0.12, 0.04)))
+
+			var clear_btn = Button.new()
+			clear_btn.text = "x"
+			clear_btn.position = Vector2(246, 4)
+			clear_btn.custom_minimum_size = Vector2(26, 26)
+			clear_btn.focus_mode = Control.FOCUS_NONE
+			clear_btn.pressed.connect(_on_clear_pending_socket.bind(i))
+			slot.add_child(clear_btn)
+		else:
+			label.text = "Empty" + ("  [" + tag_name + "]" if tag_name != "" else "")
+			label.modulate = Color(0.55, 0.6, 0.62)
+			slot.add_theme_stylebox_override("panel", _make_flat_style(Color(0.05, 0.08, 0.09)))
+
+		slot.add_child(label)
+		inventory_book_socket_area.add_child(slot)
+
+	if not pending_mod_installs.is_empty():
+		var preview = Label.new()
+		preview.autowrap_mode = TextServer.AUTOWRAP_WORD
+		preview.custom_minimum_size = Vector2(280, 0)
+		preview.text = _pending_change_summary(item_key)
+		preview.modulate = Color(0.9, 0.85, 0.6)
+		inventory_book_socket_area.add_child(preview)
+
+		var apply_btn = Button.new()
+		apply_btn.text = "Apply mods (permanent)"
+		apply_btn.custom_minimum_size = Vector2(280, 34)
+		apply_btn.focus_mode = Control.FOCUS_NONE
+		apply_btn.pressed.connect(_on_apply_pending_mods)
+		inventory_book_socket_area.add_child(apply_btn)
+
+
+# Combined before/after for everything currently staged.
+func _pending_change_summary(item_key: String) -> String:
+	var lines: Array = []
+	var totals: Dictionary = {}
+	for idx in pending_mod_installs.keys():
+		var preview = _preview_mod_install(item_key, String(pending_mod_installs[idx]))
+		for stat_name in preview.keys():
+			var d = float(preview[stat_name]["to"]) - float(preview[stat_name]["from"])
+			totals[stat_name] = float(totals.get(stat_name, 0.0)) + d
+	if totals.is_empty():
+		return ""
+	lines.append("Change if applied:")
+	var stats = inventory_stats.get(item_key, {})
+	for stat_name in totals.keys():
+		var base_value = float(stats.get(stat_name, 0.0))
+		var sign_text = "+" if float(totals[stat_name]) >= 0.0 else ""
+		lines.append("  " + stat_name + ": " + _format_number(base_value)
+			+ " -> " + _format_number(base_value + float(totals[stat_name]))
+			+ "  (" + sign_text + _format_number(totals[stat_name]) + ")")
+	return "\n".join(lines)
+
+
+# Called by mod_socket_slot.gd before accepting a drop.
+func can_stage_mod_in_socket(socket_index: int, mod_item_key: String) -> bool:
+	var item_key = inventory_book_selected_key
+	if item_key == "" or not mod_instance_of.has(mod_item_key):
+		return false
+	if pending_mod_installs.has(socket_index):
+		return false
+	# Already staged in another socket -- one mod cannot fill two.
+	for idx in pending_mod_installs.keys():
+		if String(pending_mod_installs[idx]) == mod_item_key:
+			return false
+	return _mod_install_problems(item_key, mod_item_key).is_empty()
+
+
+# Called by mod_socket_slot.gd on a successful drop. Stages only.
+func stage_mod_in_socket(socket_index: int, mod_item_key: String) -> void:
+	if not can_stage_mod_in_socket(socket_index, mod_item_key):
+		var problems = _mod_install_problems(inventory_book_selected_key, mod_item_key)
+		if not problems.is_empty():
+			_show_combat_message(String(problems[0]))
+		return
+	pending_mod_installs[socket_index] = mod_item_key
+	_refresh_socket_area()
+
+
+func _on_clear_pending_socket(socket_index: int) -> void:
+	pending_mod_installs.erase(socket_index)
+	_refresh_socket_area()
+
+
+func _on_apply_pending_mods() -> void:
+	if pending_mod_installs.is_empty() or mod_confirm_dialog == null:
+		return
+	var names: Array = []
+	for idx in pending_mod_installs.keys():
+		names.append(_get_inventory_display_name(String(pending_mod_installs[idx])))
+	mod_confirm_dialog.dialog_text = (
+		"Fit " + ", ".join(names) + "?\n\n"
+		+ "THIS CANNOT BE UNDONE. Once fitted, a mod stays in the item "
+		+ "permanently and the socket can never be reused."
+	)
+	mod_confirm_dialog.popup_centered()
+
+
+func _on_mod_install_confirmed() -> void:
+	var item_key = inventory_book_selected_key
+	var keys = pending_mod_installs.keys()
+	keys.sort()
+	for idx in keys:
+		_install_mod(item_key, String(pending_mod_installs[idx]))
+	pending_mod_installs.clear()
+	_refresh_inventory_book()
+	_select_inventory_book_item(item_key)
+
+
+# Display name for an enemy id, from the spawn table.
+func _get_enemy_name(enemy_id: String) -> String:
+	return String(ENEMY_SPAWN_TABLE.get(enemy_id, {}).get("display_name", enemy_id))
+
+
+# Configures an enemy's TargetIndicator Line2D. Same amber border the old
+# _make_target_indicator() built, but applied to the node that now ships
+# with Enemy.tscn instead of being created and parented separately.
+func _style_target_indicator(line: Line2D) -> void:
+	var w = HEALTH_BAR_WIDTH
+	var h = (HEALTH_BAR_HEIGHT * 2.0) + ACTION_BAR_GAP
+	line.clear_points()
+	line.add_point(Vector2(0, 0))
+	line.add_point(Vector2(w, 0))
+	line.add_point(Vector2(w, h))
+	line.add_point(Vector2(0, h))
+	line.add_point(Vector2(0, 0))
+	line.width = 2.0
+	line.default_color = Color(0.95, 0.75, 0.2)
+	line.z_index = 1

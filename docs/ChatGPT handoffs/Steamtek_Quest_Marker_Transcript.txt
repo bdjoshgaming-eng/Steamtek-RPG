@@ -1,0 +1,39 @@
+Steamtek Quest Marker Conversation Transcript
+
+User: How to make an animated small ! for a quest marker for my game
+
+Assistant: Explained using a Sprite3D, billboard mode, floating
+animation, and visibility control.
+
+User: can you attach it to certain items where if that item moves in the
+scene, the quest marker moves with it?
+
+Assistant: Yes. Make the quest marker a child of the quest item or NPC
+so it inherits movement automatically.
+
+User: Could you make me an animated gif showing this in the apartment
+mock up. Put it over a note on a table
+
+Assistant: Generated a visual demonstration.
+
+User: Can you color it a main quest color
+
+Assistant: Generated a version using a magenta quest marker.
+
+User: I meant the quest icon. Use the magenta quest icon but use the
+other apartment image
+
+Assistant: Generated the requested revision using the original apartment
+and magenta quest icon.
+
+User: I will have the quest markers static for a majority of the time.
+
+Assistant: Recommended keeping almost all markers static. Suggested: -
+Main Quest = Magenta - Side Quest = Cyan - Important/Chain = Gold -
+Interactable = White
+
+Suggested only animating: - Currently tracked quest - Player proximity -
+Special story moments
+
+Conclusion: Motion should communicate importance rather than exist as
+decoration.

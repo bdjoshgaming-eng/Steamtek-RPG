@@ -182,63 +182,6 @@ unique_name_in_owner = true
 offset_right = 40.0
 offset_bottom = 23.0
 
-[node name="Enemies" type="Node2D" parent="World/YSortLayer" unique_id=836059221]
-
-[node name="Dummy" type="Node2D" parent="World/YSortLayer/Enemies" unique_id=733159711]
-unique_name_in_owner = true
-position = Vector2(400, 300)
-
-[node name="DummyHealthLabel" type="Label" parent="World/YSortLayer/Enemies/Dummy" unique_id=18012949]
-offset_right = 40.0
-offset_bottom = 23.0
-
-[node name="EnemySprite" type="Sprite2D" parent="World/YSortLayer/Enemies/Dummy" unique_id=1643220392]
-scale = Vector2(0.16875005, 0.18072915)
-texture = ExtResource("5_tbgi4")
-
-[node name="DummyHealthBarBg" type="Polygon2D" parent="World/YSortLayer/Enemies" unique_id=1131554676]
-unique_name_in_owner = true
-
-[node name="DummyHealthBarFill" type="Polygon2D" parent="World/YSortLayer/Enemies" unique_id=301999456]
-unique_name_in_owner = true
-
-[node name="DummyActionBarBg" type="Polygon2D" parent="World/YSortLayer/Enemies" unique_id=1442192416]
-unique_name_in_owner = true
-
-[node name="DummyActionBarFill" type="Polygon2D" parent="World/YSortLayer/Enemies" unique_id=128211421]
-unique_name_in_owner = true
-
-[node name="DummyNameLabel" type="Label" parent="World/YSortLayer/Enemies" unique_id=2096945663]
-unique_name_in_owner = true
-offset_right = 40.0
-offset_bottom = 23.0
-
-[node name="Enemy2" type="Node2D" parent="World/YSortLayer/Enemies" unique_id=1142055689]
-unique_name_in_owner = true
-position = Vector2(800, 125)
-
-[node name="Enemy2Sprite" type="Sprite2D" parent="World/YSortLayer/Enemies/Enemy2" unique_id=1044020790]
-modulate = Color(0.09019608, 0.5019608, 1, 1)
-scale = Vector2(0.181, 0.181)
-texture = ExtResource("5_tbgi4")
-
-[node name="Enemy2HealthBarBg" type="Polygon2D" parent="World/YSortLayer/Enemies" unique_id=185528751]
-unique_name_in_owner = true
-
-[node name="Enemy2HealthBarFill" type="Polygon2D" parent="World/YSortLayer/Enemies" unique_id=1021387460]
-unique_name_in_owner = true
-
-[node name="Enemy2ActionBarBg" type="Polygon2D" parent="World/YSortLayer/Enemies" unique_id=2135878608]
-unique_name_in_owner = true
-
-[node name="Enemy2ActionBarFill" type="Polygon2D" parent="World/YSortLayer/Enemies" unique_id=14136115]
-unique_name_in_owner = true
-
-[node name="Enemy2NameLabel" type="Label" parent="World/YSortLayer/Enemies" unique_id=1053251550]
-unique_name_in_owner = true
-offset_right = 40.0
-offset_bottom = 23.0
-
 [node name="Props" type="Node2D" parent="World/YSortLayer" unique_id=1483618446]
 y_sort_enabled = true
 

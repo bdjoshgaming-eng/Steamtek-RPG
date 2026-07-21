@@ -1,0 +1,54 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://incoming/meshy_apartment_assets/APT_Table_Dining_Rect_01/staged_pipeline/STK_PROP_Table_Dining_Rect_01_ProductionCandidate.glb" id="1_model"]
+
+[sub_resource type="BoxShape3D" id="BaseShape"]
+size = Vector3(2.4, 0.39, 1.2)
+
+[sub_resource type="BoxShape3D" id="BackShape"]
+size = Vector3(2.4, 0.36, 0.2)
+
+[sub_resource type="BoxShape3D" id="ArmShape"]
+size = Vector3(0.24, 0.36, 1.2)
+
+[node name="STK_PROP_Table_Dining_Rect_01" type="Node3D" groups=["steamtek_live3d_modular"]]
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "static_environment_prop_furniture"
+metadata/module_variant = "STK_PROP_Table_Dining_Rect_01"
+metadata/module_dimensions_m = Vector3(2.4, 0.75, 1.2)
+metadata/contact_pivot = "floor_center"
+metadata/front_axis = "+Z_toward_room_and_c001"
+metadata/scale_contract = "1_godot_unit_equals_1_meter"
+metadata/collision_contract = "four_simplified_box_shapes_not_render_mesh"
+
+[node name="Visual" parent="." instance=ExtResource("1_model")]
+
+[node name="StaticBody" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="BaseCollision" type="CollisionShape3D" parent="StaticBody"]
+position = Vector3(0, 0.195, 0)
+shape = SubResource("BaseShape")
+
+[node name="BackCollision" type="CollisionShape3D" parent="StaticBody"]
+position = Vector3(0, 0.57, -0.5)
+shape = SubResource("BackShape")
+
+[node name="LeftArmCollision" type="CollisionShape3D" parent="StaticBody"]
+position = Vector3(-1.08, 0.57, 0)
+shape = SubResource("ArmShape")
+
+[node name="RightArmCollision" type="CollisionShape3D" parent="StaticBody"]
+position = Vector3(1.08, 0.57, 0)
+shape = SubResource("ArmShape")
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="LeftFurniture" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-1.2, 0, 0)
+metadata/socket_role = "furniture_chain"
+
+[node name="RightFurniture" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(1.2, 0, 0)
+metadata/socket_role = "furniture_chain"

@@ -352,6 +352,7 @@ static func generate_surface_sources(campaign_seed: int) -> Dictionary:
 			continue
 		var quality = rng.randi_range(CraftingData.SURFACE_QUALITY_MIN, CraftingData.SURFACE_QUALITY_MAX)
 		var capacity = int(entry.get("capacity", 20))
+		var fam_traits: Array = families[family_id].get("eligible_traits", [])
 		var source_id = "src_surface_" + family_id + "_" + str(slot)
 		sources[source_id] = {
 			"source_id": source_id,
@@ -361,7 +362,14 @@ static func generate_surface_sources(campaign_seed: int) -> Dictionary:
 			"location_id": "loc_surface_" + str(slot),
 			"location_name": String(entry.get("location_name", "Street Salvage")),
 			"quality": quality,
-			"primary_trait_id": "",
+			# Surface materials DO carry a trait. Without one, no
+			# experimentation category can ever benefit from them, and the
+			# crafting UI reads "materials do not help here" on every line
+			# for the whole early game -- which makes experimentation look
+			# broken. Low QUALITY is the surface penalty, not no traits.
+			# Instabilities stay off up here: the surface is where the
+			# player learns the system, without flaws muddying it.
+			"primary_trait_id": "" if fam_traits.is_empty() else String(fam_traits[rng.randi() % fam_traits.size()]),
 			"instability_id": "",
 			"extraction_purity": rng.randi_range(55, 80),
 			"source_type": String(entry.get("source_type", "repeatable_salvage")),

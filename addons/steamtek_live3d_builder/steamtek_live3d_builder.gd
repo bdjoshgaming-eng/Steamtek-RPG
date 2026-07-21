@@ -304,6 +304,11 @@ func _production_apartment_library() -> Array:
 			"path": "res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Bookshelf_A.tscn",
 			"parent": "Furniture",
 		},
+		{
+			"label": "Apartment - Dining Table Rect 01",
+			"path": "res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Table_Dining_Rect_01.tscn",
+			"parent": "Furniture",
+		},
 	# APARTMENT_LIBRARY_D_END
 	]
 
