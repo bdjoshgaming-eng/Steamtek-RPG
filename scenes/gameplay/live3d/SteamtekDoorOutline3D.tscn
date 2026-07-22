@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Shader" path="res://assets/environment/live3d/shaders/steamtek_door_outline.gdshader" id="1_shader"]
+
+[sub_resource type="ShaderMaterial" id="OutlineMaterial"]
+render_priority = 2
+shader = ExtResource("1_shader")
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/outline_thickness = 0.025
+shader_parameter/pulse_speed = 0.6
+shader_parameter/pulse_min = 0.08
+shader_parameter/pulse_max = 1.0
+
+[sub_resource type="QuadMesh" id="OutlineQuad"]
+size = Vector2(1.4, 2.3)
+
+[node name="SteamtekDoorOutline3D" type="MeshInstance3D"]
+mesh = SubResource("OutlineQuad")
+material_override = SubResource("OutlineMaterial")

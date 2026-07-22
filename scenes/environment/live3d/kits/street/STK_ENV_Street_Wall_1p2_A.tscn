@@ -1,0 +1,115 @@
+[gd_scene load_steps=7 format=3]
+
+[sub_resource type="StandardMaterial3D" id="MainWallMaterial"]
+resource_name = "STK Street Wall Structural Neutral"
+albedo_color = Color(0.16, 0.17, 0.18, 1)
+metallic = 0.05
+roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="TrimMaterial"]
+resource_name = "STK Street Wall Structural Gunmetal"
+albedo_color = Color(0.045, 0.055, 0.07, 1)
+metallic = 0.55
+roughness = 0.68
+
+[sub_resource type="BoxMesh" id="MainWallMesh"]
+material = SubResource("MainWallMaterial")
+size = Vector3(1.2, 2.72, 0.12)
+
+[sub_resource type="BoxMesh" id="LowerTrimMesh"]
+material = SubResource("TrimMaterial")
+size = Vector3(1.2, 0.32, 0.16)
+
+[sub_resource type="BoxMesh" id="TopTrimMesh"]
+material = SubResource("TrimMaterial")
+size = Vector3(1.2, 0.16, 0.16)
+
+[sub_resource type="BoxShape3D" id="StructuralWallShape"]
+size = Vector3(1.2, 3.2, 0.16)
+
+[node name="STK_ENV_Street_Wall_1p2_A" type="StaticBody3D" groups=["steamtek_live3d_modular"]]
+editor_description = "Clean 1.2 m street-wall structural test module. Bottom-center pivot; local +Z is the visible/attachment face. Decorative systems are intentionally excluded."
+collision_layer = 1
+collision_mask = 0
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "street_structural_wall"
+metadata/module_variant = "STK_ENV_Street_Wall_1p2_A"
+metadata/module_dimensions_m = Vector3(1.2, 3.2, 0.16)
+metadata/grid_step_m = 1.2
+metadata/horizontal_snap_role = "facade_horizontal"
+metadata/contact_pivot = "bottom_center"
+metadata/front_axis = "+Z_visible_wall_face"
+metadata/scale_contract = "1_godot_unit_equals_1_meter"
+metadata/structural_status = "clean_base_test_asset"
+metadata/permanent_detail_status = "none"
+
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="MainWallSurface" type="MeshInstance3D" parent="Visual"]
+position = Vector3(0, 1.68, 0)
+mesh = SubResource("MainWallMesh")
+metadata/logical_area = "main_wall_surface"
+
+[node name="MetalLowerTrim" type="MeshInstance3D" parent="Visual"]
+position = Vector3(0, 0.16, 0)
+mesh = SubResource("LowerTrimMesh")
+metadata/logical_area = "metal_lower_trim"
+
+[node name="TopTrim" type="MeshInstance3D" parent="Visual"]
+position = Vector3(0, 3.12, 0)
+mesh = SubResource("TopTrimMesh")
+metadata/logical_area = "top_trim"
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.6, 0)
+shape = SubResource("StructuralWallShape")
+
+[node name="FrontAttachmentArea" type="Node3D" parent="."]
+position = Vector3(0, 1.68, 0.081)
+metadata/logical_area = "optional_front_attachment_area"
+metadata/attachment_area_m = Vector2(0.9, 2.2)
+metadata/attachment_normal = Vector3(0, 0, 1)
+metadata/permanent_content = "none"
+metadata/optional_uses = "lights_pipes_signs_utility_props"
+
+[node name="UtilityMountCenter" type="Marker3D" parent="FrontAttachmentArea" groups=["steamtek_live3d_snap"]]
+metadata/socket_role = "wall_prop_surface"
+metadata/attachment_use = "general_utility_prop"
+
+[node name="LightMountUpperCenter" type="Marker3D" parent="FrontAttachmentArea" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0.78, 0)
+metadata/socket_role = "wall_prop_surface"
+metadata/attachment_use = "light_or_sign"
+
+[node name="PipeMountLeftUpper" type="Marker3D" parent="FrontAttachmentArea" groups=["steamtek_live3d_snap"]]
+position = Vector3(-0.36, 0.52, 0)
+metadata/socket_role = "wall_prop_surface"
+metadata/attachment_use = "pipe_support_or_utility_prop"
+
+[node name="PipeMountLeftLower" type="Marker3D" parent="FrontAttachmentArea" groups=["steamtek_live3d_snap"]]
+position = Vector3(-0.36, -0.52, 0)
+metadata/socket_role = "wall_prop_surface"
+metadata/attachment_use = "pipe_support_or_utility_prop"
+
+[node name="PipeMountRightUpper" type="Marker3D" parent="FrontAttachmentArea" groups=["steamtek_live3d_snap"]]
+position = Vector3(0.36, 0.52, 0)
+metadata/socket_role = "wall_prop_surface"
+metadata/attachment_use = "pipe_support_or_utility_prop"
+
+[node name="PipeMountRightLower" type="Marker3D" parent="FrontAttachmentArea" groups=["steamtek_live3d_snap"]]
+position = Vector3(0.36, -0.52, 0)
+metadata/socket_role = "wall_prop_surface"
+metadata/attachment_use = "pipe_support_or_utility_prop"
+
+[node name="Sockets" type="Node3D" parent="."]
+
+[node name="WallLeft" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-0.6, 0, 0)
+metadata/socket_role = "facade_horizontal"
+
+[node name="WallRight" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(0.6, 0, 0)
+metadata/socket_role = "facade_horizontal"
+
+[node name="FloorReference" type="Marker3D" parent="Sockets"]
+metadata/reference_role = "bottom_center_floor_contact"

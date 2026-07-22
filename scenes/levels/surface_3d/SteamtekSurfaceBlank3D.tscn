@@ -1,0 +1,93 @@
+[gd_scene format=3 uid="uid://b2at252oh151q"]
+
+[ext_resource type="Script" uid="uid://bb15yjfvqnx1l" path="res://scenes/levels/transition_tests/steamtek_transition_level_3d.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/characters/player/VesperKane_PlayerCharacter_v01.tscn" id="2_character"]
+[ext_resource type="PackedScene" path="res://scenes/interactions/SteamtekZoneDoor3D.tscn" id="3_zone_door"]
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 1
+background_color = Color(0.05, 0.055, 0.065, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.55, 0.58, 0.62, 1)
+tonemap_mode = 2
+
+[sub_resource type="BoxMesh" id="GroundMesh"]
+size = Vector3(60, 0.2, 60)
+
+[sub_resource type="BoxShape3D" id="GroundShape"]
+size = Vector3(60, 0.2, 60)
+
+[sub_resource type="LabelSettings" id="LabelSettings"]
+font_size = 18
+font_color = Color(0.88, 0.94, 1, 1)
+outline_size = 5
+outline_color = Color(0.004, 0.008, 0.018, 0.96)
+
+[node name="SteamtekSurfaceBlank3D" type="Node3D" unique_id=1102961099]
+editor_description = "Blank placeholder for outside the apartment door. No content yet — a clean slate to build on."
+script = ExtResource("1_script")
+metadata/status = "surface_blank_placeholder_v1"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=313590252]
+environment = SubResource("Environment")
+
+[node name="KeyLight" type="DirectionalLight3D" parent="." unique_id=2138884664]
+transform = Transform3D(0.7880108, 0.48514786, -0.37903908, 0, 0.6156615, 0.7880107, 0.6156615, -0.62096095, 0.4851479, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Ground" type="StaticBody3D" parent="." unique_id=1839224913]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="Ground" unique_id=1618475682]
+mesh = SubResource("GroundMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Ground" unique_id=337560963]
+shape = SubResource("GroundShape")
+
+[node name="ApartmentReturnDoor" parent="." unique_id=468517604 instance=ExtResource("3_zone_door")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 3)
+target_scene_path = "res://scenes/levels/apartment_3d/SteamtekApartment.tscn"
+target_spawn_id = "ApartmentReturnFromSurface"
+interaction_prompt = "Return to apartment"
+
+[node name="SurfaceEntryWest" type="Marker3D" parent="." unique_id=278342672]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0.18, 0)
+
+[node name="VesperKane_PlayerCharacter_v01" parent="." unique_id=1777520219 instance=ExtResource("2_character")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0.18, 0)
+
+[node name="CameraRig" type="Node3D" parent="." unique_id=381585907]
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig" unique_id=879435971]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.142, 15.004, 14.142)
+projection = 1
+current = true
+size = 12.5
+
+[node name="TransitionUI" type="CanvasLayer" parent="." unique_id=1614943402]
+
+[node name="InteractionPrompt" type="Label" parent="TransitionUI" unique_id=944842668]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -340.0
+offset_top = -96.0
+offset_right = 340.0
+offset_bottom = -48.0
+grow_horizontal = 2
+grow_vertical = 0
+label_settings = SubResource("LabelSettings")
+horizontal_alignment = 1
+
+[node name="Fade" type="ColorRect" parent="TransitionUI" unique_id=2006611122]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)

@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Shader" path="res://assets/environment/live3d/shaders/steamtek_window_rain.gdshader" id="1_shader"]
+
+[sub_resource type="ShaderMaterial" id="RainMaterial"]
+render_priority = 1
+shader = ExtResource("1_shader")
+shader_parameter/rain_color = Color(0.4, 0.55, 0.7, 0.35)
+shader_parameter/streak_speed = 1.8
+shader_parameter/streak_density = 18.0
+shader_parameter/streak_thickness = 0.04
+shader_parameter/drip_speed = 0.6
+shader_parameter/drip_density = 5.0
+shader_parameter/lightning_boost = 0.0
+
+[sub_resource type="QuadMesh" id="RainQuad"]
+size = Vector2(2.6, 1.8)
+
+[node name="SteamtekWindowRainOverlay3D" type="MeshInstance3D"]
+mesh = SubResource("RainQuad")
+material_override = SubResource("RainMaterial")

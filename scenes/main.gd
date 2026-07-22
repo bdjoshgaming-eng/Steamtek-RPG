@@ -739,10 +739,7 @@ const FORAGE_XP = 10
 # game right now (the earlier test herb patch has been removed).
 var dumpster_available: bool = true
 const DUMPSTER_RANGE = 150.0
-# TESTING VALUE -- was 45.0. Dropped to 5s so material scavenging can
-# be tested quickly. RESTORE TO 45.0 before any real balance pass or
-# release; at 5s the surface salvage economy is meaningless.
-const DUMPSTER_RESPAWN_TIME = 5.0
+const DUMPSTER_RESPAWN_TIME = 45.0
 const DUMPSTER_COGS_MIN = 2
 const DUMPSTER_COGS_MAX = 2
 

@@ -13,7 +13,7 @@ config_version=5
 [application]
 
 config/name="My 1st Game!"
-run/main_scene="uid://cgd1farjlth7i"
+run/main_scene="res://scenes/menus/SteamtekMainMenu.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 

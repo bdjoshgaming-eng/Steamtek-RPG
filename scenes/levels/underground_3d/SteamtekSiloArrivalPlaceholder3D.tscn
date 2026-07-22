@@ -96,7 +96,7 @@ shape = SubResource("BoundaryZShape")
 [node name="ReturnLiftDoor" parent="." instance=ExtResource("3_zone_door")]
 position = Vector3(-4.8, 1.1, 0)
 interaction_prompt = "Return to the Surface"
-target_scene_path = "res://scenes/levels/surface_3d/SteamtekSurfaceTutorialPlayable3D.tscn"
+target_scene_path = "res://scenes/levels/surface_3d/SteamtekSurfaceBlank3D.tscn"
 target_spawn_id = "MaintenanceLiftReturn"
 
 [node name="SiloArrival" type="Marker3D" parent="."]

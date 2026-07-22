@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scenes/gameplay/live3d/steamtek_quest_marker_3d.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/STK_UI_Quest_Main_Master.png" id="2_icon"]
+
+[node name="SteamtekQuestMarker3D" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="Icon" type="Sprite3D" parent="."]
+billboard = 1
+no_depth_test = true
+shaded = false
+texture_filter = 1
+pixel_size = 0.0012
+texture = ExtResource("2_icon")

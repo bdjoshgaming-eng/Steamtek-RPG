@@ -1,0 +1,40 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scenes/gameplay/live3d/steamtek_item_grid_panel.gd" id="1_script"]
+
+[sub_resource type="LabelSettings" id="LabelSettings"]
+font_size = 20
+font_color = Color(1, 0.76, 0.32, 1)
+outline_size = 6
+outline_color = Color(0.004, 0.008, 0.018, 0.98)
+
+[node name="SteamtekItemGridPanel" type="Control"]
+custom_minimum_size = Vector2(360, 320)
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.015, 0.025, 0.04, 0.96)
+
+[node name="Title" type="Label" parent="."]
+offset_left = 20.0
+offset_top = 14.0
+offset_right = 340.0
+offset_bottom = 46.0
+label_settings = SubResource("LabelSettings")
+
+[node name="Grid" type="GridContainer" parent="."]
+offset_left = 16.0
+offset_top = 54.0
+offset_right = 344.0
+offset_bottom = 300.0
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 5

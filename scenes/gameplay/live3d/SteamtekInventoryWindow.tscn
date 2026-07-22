@@ -1,0 +1,161 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scenes/gameplay/live3d/steamtek_inventory_window.gd" id="1_script"]
+
+[sub_resource type="LabelSettings" id="TitleSettings"]
+font_size = 22
+font_color = Color(1, 0.76, 0.32, 1)
+outline_size = 6
+outline_color = Color(0.004, 0.008, 0.018, 0.98)
+
+[sub_resource type="LabelSettings" id="CapacitySettings"]
+font_size = 15
+font_color = Color(0.75, 0.8, 0.9, 1)
+outline_size = 3
+outline_color = Color(0.004, 0.008, 0.018, 0.9)
+
+[sub_resource type="LabelSettings" id="CurrencySettings"]
+font_size = 15
+font_color = Color(0.6, 0.95, 0.65, 1)
+outline_size = 3
+outline_color = Color(0.004, 0.008, 0.018, 0.9)
+
+[sub_resource type="LabelSettings" id="DetailsTitleSettings"]
+font_size = 18
+font_color = Color(0.55, 0.95, 0.6, 1)
+outline_size = 4
+outline_color = Color(0.004, 0.008, 0.018, 0.96)
+
+[sub_resource type="LabelSettings" id="DetailsStatsSettings"]
+font_size = 15
+font_color = Color(0.85, 0.9, 0.95, 1)
+outline_size = 3
+outline_color = Color(0.004, 0.008, 0.018, 0.9)
+
+[node name="SteamtekInventoryWindow" type="Control"]
+custom_minimum_size = Vector2(700, 646)
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.015, 0.025, 0.04, 0.96)
+
+[node name="Details" type="Panel" parent="."]
+offset_left = 18.0
+offset_top = 12.0
+offset_right = 278.0
+offset_bottom = 630.0
+
+[node name="Header" type="Label" parent="Details"]
+offset_left = 10.0
+offset_top = 8.0
+offset_right = 250.0
+offset_bottom = 32.0
+text = "Details"
+label_settings = SubResource("DetailsTitleSettings")
+
+[node name="ItemName" type="Label" parent="Details"]
+offset_left = 10.0
+offset_top = 38.0
+offset_right = 250.0
+offset_bottom = 62.0
+text = "Select an item to view its details."
+autowrap_mode = 2
+label_settings = SubResource("DetailsStatsSettings")
+
+[node name="Stats" type="Label" parent="Details"]
+offset_left = 10.0
+offset_top = 68.0
+offset_right = 250.0
+offset_bottom = 600.0
+autowrap_mode = 2
+label_settings = SubResource("DetailsStatsSettings")
+
+[node name="Header" type="Control" parent="."]
+offset_left = 298.0
+offset_top = 12.0
+offset_right = 680.0
+offset_bottom = 66.0
+
+[node name="Title" type="Label" parent="Header"]
+offset_right = 300.0
+offset_bottom = 28.0
+text = "INVENTORY"
+label_settings = SubResource("TitleSettings")
+
+[node name="CapacityLabel" type="Label" parent="Header"]
+offset_top = 32.0
+offset_right = 300.0
+offset_bottom = 52.0
+text = "CAPACITY  0/48"
+label_settings = SubResource("CapacitySettings")
+
+[node name="Close" type="Button" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -46.0
+offset_top = 12.0
+offset_right = -12.0
+offset_bottom = 46.0
+text = "X"
+
+[node name="Tabs" type="HBoxContainer" parent="."]
+offset_left = 298.0
+offset_top = 72.0
+offset_right = 682.0
+offset_bottom = 104.0
+theme_override_constants/separation = 4
+
+[node name="Inventory" type="Button" parent="Tabs"]
+custom_minimum_size = Vector2(120, 32)
+layout_mode = 2
+toggle_mode = true
+button_pressed = true
+text = "INVENTORY"
+
+[node name="MissionItems" type="Button" parent="Tabs"]
+custom_minimum_size = Vector2(120, 32)
+layout_mode = 2
+toggle_mode = true
+text = "MISSION ITEMS"
+
+[node name="Currency" type="Button" parent="Tabs"]
+custom_minimum_size = Vector2(120, 32)
+layout_mode = 2
+toggle_mode = true
+text = "CURRENCY"
+
+[node name="Grid" type="GridContainer" parent="."]
+offset_left = 298.0
+offset_top = 112.0
+offset_right = 682.0
+offset_bottom = 570.0
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 6
+columns = 6
+
+[node name="Footer" type="Control" parent="."]
+offset_left = 298.0
+offset_top = 580.0
+offset_right = 682.0
+offset_bottom = 630.0
+
+[node name="CurrencyLabel" type="Label" parent="Footer"]
+offset_right = 380.0
+offset_bottom = 22.0
+text = "Cogs carried: 0"
+label_settings = SubResource("CurrencySettings")
+
+[node name="StatusLabel" type="Label" parent="Footer"]
+offset_top = 24.0
+offset_right = 380.0
+offset_bottom = 46.0
+label_settings = SubResource("CapacitySettings")

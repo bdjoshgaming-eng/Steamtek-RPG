@@ -1,0 +1,152 @@
+[gd_scene load_steps=22 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Floor_Calibration_200_A.tscn" id="1_floor"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_Window_Wide_300x270.tscn" id="2_window_wide"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_Calibration_300x270_A.tscn" id="3_calibration"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_Window_Slot_300x270.tscn" id="6_window_slot"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_Door_300x270_Service.tscn" id="9_door"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_MagentaLight_300x270_A.tscn" id="11_magentalight"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/apartment_interior/APT_Wall_ExposedService_300x270_A.tscn" id="12_exposedservice"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Bed_A.tscn" id="13_bed"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Workstation_A.tscn" id="14_workstation"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Couch_A.tscn" id="15_couch"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Table_Dining_Rect_01.tscn" id="16_table"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Bookshelf_A.tscn" id="17_bookshelf"]
+
+[node name="SteamtekApartmentInterior_Production" type="Node3D" groups=["steamtek_live3d_interior"]]
+editor_description = "Production apartment interior. Only the two far walls (north, west) are built -- the camera looks in from the south-east, so those sides stay open by design (matching the earlier production apartment's convention) rather than blocking the view. Bed nook under the north window, workstation against the west wall, exit door on the north wall's east end, living area (couch + dining table) in the open south-east area alongside the storage crate."
+metadata/status = "apartment_interior_production_v1"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/room_size_m = Vector2(9, 9)
+metadata/wall_module_m = Vector3(3, 2.7, 0.14)
+metadata/floor_module_m = Vector2(2, 2)
+
+[node name="Floor" type="Node3D" parent="."]
+
+[node name="FloorX0Z0" parent="Floor" instance=ExtResource("1_floor")]
+position = Vector3(-4, 0, -4)
+[node name="FloorX1Z0" parent="Floor" instance=ExtResource("1_floor")]
+position = Vector3(-2, 0, -4)
+[node name="FloorX2Z0" parent="Floor" instance=ExtResource("1_floor")]
+position = Vector3(0, 0, -4)
+[node name="FloorX3Z0" parent="Floor" instance=ExtResource("1_floor")]
+position = Vector3(2, 0, -4)
+[node name="FloorX4Z0" parent="Floor" instance=ExtResource("1_floor")]
+position = Vector3(4, 0, -4)
+
+[node name="FloorX0Z1" parent="Floor" instance=ExtResource("1_floor")]
+position = Vector3(-4, 0, -2)
+[node name="FloorX1Z1" parent="Floor" instance=ExtResource("1_floor")]
+position = Vector3(-2, 0, -2)
+[node name="FloorX2Z1" parent="Floor" instance=ExtResource("1_floor")]
+position = Vector3(0, 0, -2)
+[node name="FloorX3Z1" parent="Floor" instance=ExtResource("1_floor")]
+position = Vector3(2, 0, -2)
+[node name="FloorX4Z1" parent="Floor" instance=ExtResource("1_floor")]
+position = Vector3(4, 0, -2)
+
+[node name="FloorX0Z2" parent="Floor" instance=ExtResource("1_floor")]
+position = Vector3(-4, 0, 0)
+[node name="FloorX1Z2" parent="Floor" instance=ExtResource("1_floor")]
+position = Vector3(-2, 0, 0)
+[node name="FloorX2Z2" parent="Floor" instance=ExtResource("1_floor")]
+position = Vector3(0, 0, 0)
+[node name="FloorX3Z2" parent="Floor" instance=ExtResource("1_floor")]
+position = Vector3(2, 0, 0)
+[node name="FloorX4Z2" parent="Floor" instance=ExtResource("1_floor")]
+position = Vector3(4, 0, 0)
+
+[node name="FloorX0Z3" parent="Floor" instance=ExtResource("1_floor")]
+position = Vector3(-4, 0, 2)
+[node name="FloorX1Z3" parent="Floor" instance=ExtResource("1_floor")]
+position = Vector3(-2, 0, 2)
+[node name="FloorX2Z3" parent="Floor" instance=ExtResource("1_floor")]
+position = Vector3(0, 0, 2)
+[node name="FloorX3Z3" parent="Floor" instance=ExtResource("1_floor")]
+position = Vector3(2, 0, 2)
+[node name="FloorX4Z3" parent="Floor" instance=ExtResource("1_floor")]
+position = Vector3(4, 0, 2)
+
+[node name="FloorX0Z4" parent="Floor" instance=ExtResource("1_floor")]
+position = Vector3(-4, 0, 4)
+[node name="FloorX1Z4" parent="Floor" instance=ExtResource("1_floor")]
+position = Vector3(-2, 0, 4)
+[node name="FloorX2Z4" parent="Floor" instance=ExtResource("1_floor")]
+position = Vector3(0, 0, 4)
+[node name="FloorX3Z4" parent="Floor" instance=ExtResource("1_floor")]
+position = Vector3(2, 0, 4)
+[node name="FloorX4Z4" parent="Floor" instance=ExtResource("1_floor")]
+position = Vector3(4, 0, 4)
+
+[node name="Walls" type="Node3D" parent="."]
+
+[node name="NorthWindow" parent="Walls" instance=ExtResource("2_window_wide")]
+position = Vector3(-3, 0, -4.5)
+[node name="NorthCalibration" parent="Walls" instance=ExtResource("3_calibration")]
+position = Vector3(0, 0, -4.5)
+[node name="NorthDoor" parent="Walls" instance=ExtResource("9_door")]
+position = Vector3(3, 0, -4.5)
+metadata/gameplay_role = "apartment_exit"
+
+[node name="WestMagentaLight" parent="Walls" instance=ExtResource("11_magentalight")]
+position = Vector3(-4.5, 0, -3)
+rotation_degrees = Vector3(0, 90, 0)
+[node name="WestExposedService" parent="Walls" instance=ExtResource("12_exposedservice")]
+position = Vector3(-4.5, 0, 0)
+rotation_degrees = Vector3(0, 90, 0)
+[node name="WestWindowSlot" parent="Walls" instance=ExtResource("6_window_slot")]
+position = Vector3(-4.5, 0, 3)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="Furniture" type="Node3D" parent="."]
+
+[node name="Bed" parent="Furniture" instance=ExtResource("13_bed")]
+position = Vector3(-2.6, 0.05, -3.35)
+metadata/placement_role = "sleep_zone_north_wall"
+
+[node name="Workstation" parent="Furniture" instance=ExtResource("14_workstation")]
+position = Vector3(-4.0, 0.05, 0)
+rotation_degrees = Vector3(0, 90, 0)
+metadata/placement_role = "work_zone_west_wall"
+
+[node name="Bookshelf" parent="Furniture" instance=ExtResource("17_bookshelf")]
+position = Vector3(-4.0, 0.05, -3.3)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="Couch" parent="Furniture" instance=ExtResource("15_couch")]
+position = Vector3(-1.8, 0.05, 1.2)
+rotation_degrees = Vector3(0, 90, 0)
+metadata/placement_role = "living_zone_west"
+
+[node name="DiningTable" parent="Furniture" instance=ExtResource("16_table")]
+position = Vector3(1.8, 0.05, 0.9)
+rotation_degrees = Vector3(0, 90, 0)
+metadata/placement_role = "living_zone_east"
+
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="WarmBed" type="OmniLight3D" parent="Lighting"]
+position = Vector3(-2.6, 1.9, -3.0)
+light_color = Color(1, 0.62, 0.34, 1)
+light_energy = 1.1
+shadow_enabled = true
+omni_range = 3.8
+
+[node name="CyanWorkstation" type="OmniLight3D" parent="Lighting"]
+position = Vector3(-3.5, 1.45, 0)
+light_color = Color(0.08, 0.72, 0.82, 1)
+light_energy = 0.68
+omni_range = 3.4
+
+[node name="WarmLounge" type="OmniLight3D" parent="Lighting"]
+position = Vector3(0, 2.5, 1.2)
+light_color = Color(1, 0.72, 0.5, 1)
+light_energy = 1.2
+shadow_enabled = true
+omni_range = 4.2
+
+[node name="MagentaAccentWest" type="OmniLight3D" parent="Lighting"]
+position = Vector3(-3.8, 2.0, -2.9)
+light_color = Color(1, 0.12, 0.54, 1)
+light_energy = 0.5
+omni_range = 3.0

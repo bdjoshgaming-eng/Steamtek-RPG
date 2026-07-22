@@ -1,0 +1,56 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/STK_ENV_Street_Wall_1p2_A.tscn" id="1_wall"]
+
+[sub_resource type="StandardMaterial3D" id="FloorMaterial"]
+albedo_color = Color(0.055, 0.06, 0.07, 1)
+metallic = 0.1
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="FloorMesh"]
+material = SubResource("FloorMaterial")
+size = Vector3(4.2, 0.08, 1.4)
+
+[sub_resource type="Environment" id="ReviewEnvironment"]
+background_mode = 1
+background_color = Color(0.025, 0.03, 0.038, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.55, 0.62, 0.72, 1)
+ambient_light_energy = 0.65
+
+[node name="STK_ENV_Street_Wall_1p2_A_ThreeModuleTest" type="Node3D"]
+editor_description = "Three snap-compatible 1.2 m wall modules. Their facade_horizontal edge sockets coincide at both seams, producing a 3.6 m run with zero gap and zero overlap."
+metadata/test_contract = "builder_compatible_snap_sockets_and_three_modules_side_by_side"
+metadata/module_width_m = 1.2
+metadata/module_centers_x_m = PackedFloat32Array(-1.2, 0, 1.2)
+metadata/combined_span_m = 3.6
+metadata/calculated_gap_m = 0.0
+metadata/calculated_overlap_m = 0.0
+metadata/snap_socket_role = "facade_horizontal"
+metadata/snap_contract = "steamtek_live3d_builder_approved_role"
+
+[node name="ReviewEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("ReviewEnvironment")
+
+[node name="ReviewFloor" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.04, 0)
+mesh = SubResource("FloorMesh")
+
+[node name="Wall_Left" parent="." instance=ExtResource("1_wall")]
+position = Vector3(-1.2, 0, 0)
+
+[node name="Wall_Center" parent="." instance=ExtResource("1_wall")]
+
+[node name="Wall_Right" parent="." instance=ExtResource("1_wall")]
+position = Vector3(1.2, 0, 0)
+
+[node name="ReviewLight" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-25, -25, 0)
+light_color = Color(0.86, 0.9, 1, 1)
+light_energy = 1.4
+shadow_enabled = true
+
+[node name="ReviewCamera" type="Camera3D" parent="."]
+position = Vector3(0, 1.6, 6)
+current = true
+fov = 42.0

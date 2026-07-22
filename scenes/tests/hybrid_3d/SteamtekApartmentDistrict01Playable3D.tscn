@@ -1,6 +1,6 @@
-[gd_scene load_steps=17 format=3]
+[gd_scene format=3 uid="uid://b1wk8c84mj2fk"]
 
-[ext_resource type="Script" path="res://scenes/tests/hybrid_3d/steamtek_apartment_district_01_playable.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://cv38vf717un6n" path="res://scenes/tests/hybrid_3d/steamtek_apartment_district_01_playable.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://scenes/environment/live3d/districts/SteamtekApartmentDistrict01Assembly3D.tscn" id="2_district"]
 [ext_resource type="PackedScene" path="res://scenes/characters/player/VesperKane_PlayerCharacter_v01.tscn" id="3_character"]
 [ext_resource type="PackedScene" path="res://scenes/effects/live3d/SteamtekRainVolume3D.tscn" id="4_rain"]
@@ -22,26 +22,20 @@ ambient_light_color = Color(0.3, 0.38, 0.56, 1)
 ambient_light_energy = 0.76
 tonemap_mode = 2
 
-[sub_resource type="LabelSettings" id="LabelSettings"]
-font_size = 18
-font_color = Color(0.86, 0.93, 1, 1)
-outline_size = 5
-outline_color = Color(0.004, 0.008, 0.016, 0.94)
-
 [sub_resource type="BoxShape3D" id="GroundShape"]
 size = Vector3(29, 0.2, 29)
+
+[sub_resource type="BoxShape3D" id="ApartmentDShape"]
+size = Vector3(7.5, 6.4, 7.7)
 
 [sub_resource type="BoxShape3D" id="ApartmentAShape"]
 size = Vector3(7.5, 6.4, 5.3)
 
-[sub_resource type="BoxShape3D" id="ApartmentBShape"]
-size = Vector3(5.3, 6.4, 9.9)
-
 [sub_resource type="BoxShape3D" id="ApartmentCShape"]
 size = Vector3(7.5, 9.6, 5.3)
 
-[sub_resource type="BoxShape3D" id="ApartmentDShape"]
-size = Vector3(7.5, 6.4, 7.7)
+[sub_resource type="BoxShape3D" id="ApartmentBShape"]
+size = Vector3(5.3, 6.4, 9.9)
 
 [sub_resource type="BoxShape3D" id="GateShape"]
 size = Vector3(2.4, 1.9, 0.22)
@@ -52,7 +46,13 @@ size = Vector3(29, 2.4, 0.4)
 [sub_resource type="BoxShape3D" id="BoundaryVerticalShape"]
 size = Vector3(0.4, 2.4, 29)
 
-[node name="SteamtekApartmentDistrict01Playable3D" type="Node3D"]
+[sub_resource type="LabelSettings" id="LabelSettings"]
+font_size = 18
+font_color = Color(0.86, 0.93, 1, 1)
+outline_size = 5
+outline_color = Color(0.004, 0.008, 0.016, 0.94)
+
+[node name="SteamtekApartmentDistrict01Playable3D" type="Node3D" unique_id=1965955260]
 editor_description = "Playable normal-editor F6 wrapper for Apartment District 01. Reuses the approved C001 character scene, shared humanoid controller, camera-follow rain, and The Ascent-like outdoor framing without changing world or character scale."
 script = ExtResource("1_script")
 metadata/status = "district_playable_movement_and_collision_review_v01"
@@ -64,139 +64,134 @@ metadata/framing_reference = "The Ascent-like outdoor gameplay scale; meter-auth
 metadata/c001_contract = "C001 wrapper remains scale (1,1,1); environment collision fits the character"
 metadata/collision_status = "temporary_playtest_proxies_separate_from_replaceable_visual_assemblies"
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1928917232]
 environment = SubResource("Environment")
 
-[node name="MoonKey" type="DirectionalLight3D" parent="."]
-rotation_degrees = Vector3(-52, -38, 0)
+[node name="MoonKey" type="DirectionalLight3D" parent="." unique_id=1477533508]
+transform = Transform3D(0.7880108, 0.48514786, -0.37903908, 0, 0.6156615, 0.7880107, 0.6156615, -0.62096095, 0.4851479, 0, 0, 0)
 light_color = Color(0.48, 0.64, 1, 1)
 light_energy = 1.08
 shadow_enabled = true
 
-[node name="NeutralFill" type="DirectionalLight3D" parent="."]
-rotation_degrees = Vector3(-38, 145, 0)
+[node name="NeutralFill" type="DirectionalLight3D" parent="." unique_id=25111642]
+transform = Transform3D(-0.81915206, -0.35312894, 0.45198444, 0, 0.7880108, 0.6156615, -0.57357645, 0.5043204, -0.64550066, 0, 0, 0)
 light_color = Color(0.72, 0.8, 1, 1)
 light_energy = 0.62
-shadow_enabled = false
 
-[node name="DistrictAssembly" parent="." instance=ExtResource("2_district")]
+[node name="DistrictAssembly" parent="." unique_id=988629118 instance=ExtResource("2_district")]
 
-[node name="CollisionProxies" type="Node3D" parent="."]
+[node name="CollisionProxies" type="Node3D" parent="." unique_id=1407884492]
 
-[node name="GroundBody" type="StaticBody3D" parent="CollisionProxies"]
-position = Vector3(0, -0.1, 0)
-collision_layer = 1
+[node name="GroundBody" type="StaticBody3D" parent="CollisionProxies" unique_id=141922636]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 collision_mask = 0
 
-[node name="Collision" type="CollisionShape3D" parent="CollisionProxies/GroundBody"]
+[node name="Collision" type="CollisionShape3D" parent="CollisionProxies/GroundBody" unique_id=1331216067]
 shape = SubResource("GroundShape")
 
-[node name="ApartmentD_Blocker" type="StaticBody3D" parent="CollisionProxies"]
-position = Vector3(-8.4, 3.38, -8.25)
+[node name="ApartmentD_Blocker" type="StaticBody3D" parent="CollisionProxies" unique_id=2132864998]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.4, 3.38, -8.25)
 collision_layer = 5
 collision_mask = 0
 metadata/occlusion_target_path = NodePath("DistrictAssembly/Buildings/ApartmentD_ServiceCorner_SW")
 
-[node name="Collision" type="CollisionShape3D" parent="CollisionProxies/ApartmentD_Blocker"]
+[node name="Collision" type="CollisionShape3D" parent="CollisionProxies/ApartmentD_Blocker" unique_id=162834562]
 shape = SubResource("ApartmentDShape")
 
-[node name="ApartmentA_Blocker" type="StaticBody3D" parent="CollisionProxies"]
-position = Vector3(10.8, 3.38, -7.05)
+[node name="ApartmentA_Blocker" type="StaticBody3D" parent="CollisionProxies" unique_id=531323880]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.8, 3.38, -7.05)
 collision_layer = 5
 collision_mask = 0
 metadata/occlusion_target_path = NodePath("DistrictAssembly/Buildings/ApartmentA_AlleyBlock_SE")
 
-[node name="Collision" type="CollisionShape3D" parent="CollisionProxies/ApartmentA_Blocker"]
+[node name="Collision" type="CollisionShape3D" parent="CollisionProxies/ApartmentA_Blocker" unique_id=1684502003]
 shape = SubResource("ApartmentAShape")
 
-[node name="ApartmentC_Blocker" type="StaticBody3D" parent="CollisionProxies"]
-position = Vector3(-8.4, 4.98, 7.05)
+[node name="ApartmentC_Blocker" type="StaticBody3D" parent="CollisionProxies" unique_id=800505187]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.4, 4.98, 7.05)
 collision_layer = 5
 collision_mask = 0
 metadata/occlusion_target_path = NodePath("DistrictAssembly/Buildings/ApartmentC_VerticalBlock_NW")
 
-[node name="Collision" type="CollisionShape3D" parent="CollisionProxies/ApartmentC_Blocker"]
+[node name="Collision" type="CollisionShape3D" parent="CollisionProxies/ApartmentC_Blocker" unique_id=1638248670]
 shape = SubResource("ApartmentCShape")
 
-[node name="ApartmentB_Blocker" type="StaticBody3D" parent="CollisionProxies"]
-position = Vector3(7.05, 3.38, 8.4)
+[node name="ApartmentB_Blocker" type="StaticBody3D" parent="CollisionProxies" unique_id=2009582127]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.05, 3.38, 8.4)
 collision_layer = 5
 collision_mask = 0
 metadata/occlusion_target_path = NodePath("DistrictAssembly/Buildings/ApartmentB_WideBlock_NE")
 
-[node name="Collision" type="CollisionShape3D" parent="CollisionProxies/ApartmentB_Blocker"]
+[node name="Collision" type="CollisionShape3D" parent="CollisionProxies/ApartmentB_Blocker" unique_id=1749233137]
 shape = SubResource("ApartmentBShape")
 
-[node name="AlleyGate_Blocker" type="StaticBody3D" parent="CollisionProxies"]
-position = Vector3(6, 0.95, -12.8)
-collision_layer = 1
+[node name="AlleyGate_Blocker" type="StaticBody3D" parent="CollisionProxies" unique_id=1447067351]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.95, -12.8)
 collision_mask = 0
 
-[node name="Collision" type="CollisionShape3D" parent="CollisionProxies/AlleyGate_Blocker"]
+[node name="Collision" type="CollisionShape3D" parent="CollisionProxies/AlleyGate_Blocker" unique_id=655032671]
 shape = SubResource("GateShape")
 
-[node name="NorthBoundary" type="StaticBody3D" parent="CollisionProxies"]
-position = Vector3(0, 1.2, 12.25)
-collision_layer = 1
+[node name="NorthBoundary" type="StaticBody3D" parent="CollisionProxies" unique_id=1440063925]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 12.25)
 collision_mask = 0
 
-[node name="Collision" type="CollisionShape3D" parent="CollisionProxies/NorthBoundary"]
+[node name="Collision" type="CollisionShape3D" parent="CollisionProxies/NorthBoundary" unique_id=1083352645]
 shape = SubResource("BoundaryHorizontalShape")
 
-[node name="SouthBoundary" type="StaticBody3D" parent="CollisionProxies"]
-position = Vector3(0, 1.2, -12.25)
-collision_layer = 1
+[node name="SouthBoundary" type="StaticBody3D" parent="CollisionProxies" unique_id=232746277]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -12.25)
 collision_mask = 0
 
-[node name="Collision" type="CollisionShape3D" parent="CollisionProxies/SouthBoundary"]
+[node name="Collision" type="CollisionShape3D" parent="CollisionProxies/SouthBoundary" unique_id=2102098248]
 shape = SubResource("BoundaryHorizontalShape")
 
-[node name="EastBoundary" type="StaticBody3D" parent="CollisionProxies"]
-position = Vector3(12.25, 1.2, 0)
-collision_layer = 1
+[node name="EastBoundary" type="StaticBody3D" parent="CollisionProxies" unique_id=1540122041]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.25, 1.2, 0)
 collision_mask = 0
 
-[node name="Collision" type="CollisionShape3D" parent="CollisionProxies/EastBoundary"]
+[node name="Collision" type="CollisionShape3D" parent="CollisionProxies/EastBoundary" unique_id=223842382]
 shape = SubResource("BoundaryVerticalShape")
 
-[node name="WestBoundary" type="StaticBody3D" parent="CollisionProxies"]
-position = Vector3(-12.25, 1.2, 0)
-collision_layer = 1
+[node name="WestBoundary" type="StaticBody3D" parent="CollisionProxies" unique_id=1686298623]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.25, 1.2, 0)
 collision_mask = 0
 
-[node name="Collision" type="CollisionShape3D" parent="CollisionProxies/WestBoundary"]
+[node name="Collision" type="CollisionShape3D" parent="CollisionProxies/WestBoundary" unique_id=1643644156]
 shape = SubResource("BoundaryVerticalShape")
 
-[node name="PlayerEntry_South" type="Marker3D" parent="."]
-position = Vector3(0, 0.02, -9.2)
+[node name="PlayerEntry_South" type="Marker3D" parent="." unique_id=1933546913]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, -9.2)
 metadata/marker_role = "playtest_spawn"
 metadata/facing_axis = "+Z"
 
-[node name="VesperKane_PlayerCharacter_v01" parent="." instance=ExtResource("3_character")]
-position = Vector3(0, 0.02, -9.2)
+[node name="VesperKane_PlayerCharacter_v01" parent="." unique_id=2119047564 instance=ExtResource("3_character")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, -9.2)
 
-[node name="CameraRig" type="Node3D" parent="."]
+[node name="CameraRig" type="Node3D" parent="." unique_id=547380120]
 
-[node name="SteamtekRainVolume3D" parent="CameraRig" instance=ExtResource("4_rain")]
-position = Vector3(0, 6.8, 0)
+[node name="SteamtekRainVolume3D" parent="CameraRig" unique_id=1377898521 instance=ExtResource("4_rain")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.8, 0)
 
-[node name="Camera3D" type="Camera3D" parent="CameraRig"]
-position = Vector3(17.32, 12.547, 10)
+[node name="Camera3D" type="Camera3D" parent="CameraRig" unique_id=1286215838]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.32, 12.547, 10)
 projection = 1
-size = 12.5
 current = true
+size = 12.5
 
-[node name="PlayableUI" type="CanvasLayer" parent="."]
+[node name="PlayableUI" type="CanvasLayer" parent="." unique_id=233324656]
 
-[node name="Instructions" type="Label" parent="PlayableUI"]
+[node name="Instructions" type="Label" parent="PlayableUI" unique_id=1078983407]
 offset_left = 24.0
 offset_top = 20.0
 offset_right = 1080.0
 offset_bottom = 122.0
-text = "STEAMTEK — APARTMENT DISTRICT 01 PLAYABLE TEST\nWASD: walk  |  SHIFT + WASD: run\nWalk the four street arms, circle each building, and enter the southeast service alley."
+text = "STEAMTEK — APARTMENT DISTRICT 01 PLAYABLE TEST
+WASD: walk  |  SHIFT + WASD: run
+Walk the four street arms, circle each building, and enter the southeast service alley."
 label_settings = SubResource("LabelSettings")
 
-[node name="Status" type="Label" parent="PlayableUI"]
+[node name="Status" type="Label" parent="PlayableUI" unique_id=1066997748]
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
@@ -208,11 +203,12 @@ offset_right = -24.0
 offset_bottom = -24.0
 grow_horizontal = 0
 grow_vertical = 0
-text = "LIVE 3D SCALE AUTHORITY\nLinked district + temporary collision proxies; C001 remains unchanged at scale (1,1,1)."
+text = "LIVE 3D SCALE AUTHORITY
+Linked district + temporary collision proxies; C001 remains unchanged at scale (1,1,1)."
 label_settings = SubResource("LabelSettings")
 horizontal_alignment = 2
 
-[node name="Fade" type="ColorRect" parent="PlayableUI"]
+[node name="Fade" type="ColorRect" parent="PlayableUI" unique_id=895019568]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

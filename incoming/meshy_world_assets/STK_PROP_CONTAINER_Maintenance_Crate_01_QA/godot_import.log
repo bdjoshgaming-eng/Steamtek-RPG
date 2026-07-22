@@ -1,0 +1,9 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 610.62 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 4070 Ti SUPER
+
+WARNING: Detected another project.godot at res://Steamtek-Character-Validation. The folder will be ignored.
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3485)
+_ready: editor_interface initialization status: true
+res://assets/environment/live3d/models/industrial/meshy/STK_PROP_CONTAINER_Maintenance_Crate_01_Production_Baked_BaseColor.png: Texture detected as used in 3D. Enabling mipmap generation and setting the texture compression mode to VRAM Compressed (S3TC/ETC/BPTC).
+res://assets/environment/live3d/models/industrial/meshy/STK_PROP_CONTAINER_Maintenance_Crate_01_Production_Baked_MetallicRoughness.png: Texture detected as used in 3D. Enabling mipmap generation and setting the texture compression mode to VRAM Compressed (S3TC/ETC/BPTC).
+res://assets/environment/live3d/models/industrial/meshy/STK_PROP_CONTAINER_Maintenance_Crate_01_Production_Baked_Emit.png: Texture detected as used in 3D. Enabling mipmap generation and setting the texture compression mode to VRAM Compressed (S3TC/ETC/BPTC).

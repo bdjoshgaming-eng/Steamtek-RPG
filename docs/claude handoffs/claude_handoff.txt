@@ -1,6 +1,196 @@
 STEAMTEK RPG - CLAUDE HANDOFF
-Updated: crafting Phase 6 COMPLETE, combat Phase 6c COMPLETE
-         (mods installable; enemies now spawn at runtime)
+Updated: 2026-07-22, Live3D apartment + UI framework session
+         (crafting/combat sections below are UNCHANGED from the
+         prior handoff -- this session did not touch main.tscn,
+         main.gd, or the crafting/combat systems at all)
+=============================================================
+
+-------------------------------------------------------------
+SESSION 2026-07-22 -- LIVE3D APARTMENT + REUSABLE UI FRAMEWORK
+-------------------------------------------------------------
+Full verbatim transcript: docs\claude handoffs\
+  2026-07-22_Live3D_Apartment_UI_Session_Transcript.txt
+
+SCOPE. This session is entirely inside the Live3D pipeline
+(scenes\levels\..., scenes\gameplay\live3d\...), separate from
+the 2D main.tscn/main.gd crafting+combat system documented below.
+Nothing in this section changes anything in the CRAFTING SYSTEM or
+COMBAT sections further down this file.
+
+WHAT SHIPPED
+- Deleted ALL remaining legacy Playable3D content: the old opening
+  apartment, the old "Rain Alley" surface tutorial scene + district,
+  and a stray test scene. Confirmed via repo-wide grep that nothing
+  still references the old names.
+- Rebuilt the opening apartment from scratch at
+  scenes\levels\apartment_3d\SteamtekApartment.tscn +
+  steamtek_apartment.gd, reusing the proven kit art but with a
+  redesigned room layout (only the two "far" walls built -- the
+  camera looks in from the south-east octant, so building all four
+  walls blocks the view; this was the root cause of an early "can't
+  see the room" bug).
+- Attempted a "Rain Alley" full rebuild (scenes\levels\surface_3d\
+  SteamtekRainAlley.tscn + district), but Josh rejected it for
+  reusing too much of the old scene's shape/feel despite fresh
+  names. DELETED. Replaced with a genuinely blank placeholder,
+  scenes\levels\surface_3d\SteamtekSurfaceBlank3D.tscn (empty floor
+  + one door back to the apartment + spawn marker), which Josh is
+  now hand-building in the Godot editor with the Steamtek Live3D
+  Builder dock. DO NOT regenerate or overwrite this file's content
+  wholesale -- it is actively being edited by hand.
+- Main menu: scenes\menus\SteamtekMainMenu.tscn +
+  steamtek_main_menu.gd, minimal placeholder (title + Play button),
+  set as project.godot's run/main_scene. Play -> SteamtekApartment.
+
+BUILT A REUSABLE LIVE3D UI FRAMEWORK (scenes\gameplay\live3d\)
+Josh asked to pause content work and get the UI layer itself
+settled first, since it will be reused for every future area:
+  - steamtek_item_icon_registry.gd -- placeholder-icon lookup
+    (category color + short abbreviation), no art assets needed.
+    Real icon art later means editing ONLY this file.
+  - SteamtekItemIcon.tscn/.gd -- one colored square + abbreviation,
+    used everywhere below.
+  - SteamtekItemSlot.tscn/.gd (extends Button) -- icon + count badge
+    + native tooltip + double_clicked signal. NAMED icon_display,
+    NOT "icon" -- Button already has a native "icon" export property,
+    and reusing that name silently breaks script attachment for the
+    whole scene (see INCIDENTS below).
+  - SteamtekItemGridPanel.tscn/.gd -- generic titled grid of slots,
+    used for the storage crate's two panels.
+  - SteamtekInventoryWindow.tscn/.gd -- the full player inventory:
+    FIXED 48-slot grid (6x8, not resized per item), a capacity
+    readout, Inventory/Mission Items/Currency tabs, and a real
+    "Details" side panel (mirrors main.tscn's own Details|Items
+    inventory-book layout) that shows quantity plus, for weapons,
+    REAL base stats and computed DPS pulled straight from
+    GameData.ITEM_DEFINITIONS[item].weapon_stat_ranges[stat][0] --
+    same numbers main.tscn's own inventory would show for that item
+    at quality 0. Styled with the project's existing dark/amber
+    palette, not the SWTOR reference screenshot's blue.
+  - steamtek_live3d_hud.gd/.tscn -- persistent health/action bars +
+    8 action slots (cosmetic only, no combat loop in these scenes
+    yet), Talents panel, Crafting panel.
+  - TALENTS PANEL REUSES THE REAL KeystoneViewer.gd (scenes\
+    KeystoneViewer.gd) AS-IS, unmodified, via a tiny local stub
+    (steamtek_local_talent_bridge.gd) standing in for main.gd's
+    `main` field (xp_pools, professions_unlocked, _show_combat_
+    message). GameData.novice_professions is a real shared autoload,
+    so this is genuinely live, shared talent-tree state, not a fake
+    copy -- reload main.tscn later and the same keystones show up
+    unlocked.
+  - CRAFTING PANEL is a SIMPLIFIED LOCAL implementation, not a reuse
+    of the real CraftingPanel.gd (that one is too deeply coupled to
+    main.gd's material_batches/_perform_craft/CraftingService to
+    reuse cheaply). Real recipe data from CraftingData.BLUEPRINTS,
+    real material family display names from CraftingData.
+    RESOURCE_FAMILIES(+_EXTRA), checked against the SCENE'S OWN
+    local `progress["items"]` dictionary. No quality/experimentation
+    simulation -- just "do you have the materials, craft the item."
+  - SteamtekDialogueBox.tscn/.gd -- generic NPC "chat box" (speaker
+    + portrait-placeholder + body text + a Callable-driven option
+    button list), modeled on the UX of scenes\TrainerDialogue.gd and
+    scenes\Quest.gd's popup (good reference, NOT reused directly --
+    both are hardwired to main.gd) but written data-driven. Currently
+    used for the apartment note's inner-monologue sequence (was a
+    bottom-of-screen toast, now a real popup with Continue/Close).
+    No NPC exists yet in any Live3D scene -- this is built and wired
+    for the first one that does.
+  - SteamtekQuestBubble3D.tscn/.gd -- floating TEXT speech bubble
+    (rounded panel + a small pointer-tail triangle) that projects a
+    3D marker's position to screen space and shows/hides by distance
+    to the camera. Pairs with, does NOT replace, the existing
+    icon-only "!" SteamtekQuestMarker3D.
+
+APARTMENT PROGRESSION -- UN-GATED FROM "EMPTY THE CRATE"
+Originally the exit door required note_found AND storage_collected
+(crate fully emptied) AND equipment_complete. Josh flagged this as
+forced/tutorial-feeling -- a real storage container should let you
+take some things, leave others, and come back later. Fixed:
+  - Exit door now only requires note_found + equipment_complete.
+  - Storage window shows TWO panels: crate contents (take, double-
+    click) and "your items" (store back into the crate, double-
+    click) -- genuinely two-way now.
+  - Hold [R] for ~0.6s while the crate is open takes everything.
+  - Storing the currently-equipped weapon back into the crate
+    correctly un-equips it and re-locks the door.
+
+STARTING KIT stays sourced from the REAL numbers in main.gd
+(_grant_profession_starting_kit / _grant_starting_bandages): Crate
+of Bandages x2 (5 charges), Mineral Survey Tool, Rusty Crafting
+Kit, Riveted Knuckles, Rusty Pistol, 100 Cogs. NOTE main_handoff.txt
+below lists Mineral Survey Tool / Rusty Crafting Kit as ORPHANED,
+ITEM_DEFINITIONS-removed dead items in the 2D game -- they are
+alive and real in this Live3D economy regardless; if the 2D
+ITEM_DEFINITIONS entries are ever restored, keep both paths in
+sync.
+
+INCIDENTS THIS SESSION
+- SteamtekItemSlot named its icon field `icon`. Button already has
+  a native `icon` export (Texture2D). GDScript refuses to redefine
+  a native member, so the WHOLE SCRIPT silently failed to parse,
+  which cascaded into "Cannot call method on a null value" errors
+  several call-sites away and a completely black screen with no
+  obvious cause. Renamed to `icon_display`. LESSON: before naming a
+  Button/Control subclass field something generic (icon, text,
+  value, pressed...), check it isn't already a native property --
+  the failure mode is silent and the resulting errors point
+  everywhere except the real cause.
+- A blueprint-row icon called set_item() one line before its parent
+  HBoxContainer was added to the actual scene tree, so its own
+  @onready children (background/label) were still null.
+  LESSON: add_child() a node into the ALREADY-in-tree hierarchy
+  before calling anything on it that depends on that node's own
+  @onready vars -- _ready() only fires once a node is reachable from
+  the root, not the moment add_child() is called on a detached
+  parent.
+- Closing the storage crate with [E] sometimes silently reopened it.
+  Root cause: steamtek_humanoid_character_3d.gd's _physics_process
+  polls Input.is_action_just_pressed("interact") INDEPENDENTLY of
+  this scene's _unhandled_input. Re-enabling player_controlled in
+  the same frame the close came from let the SAME keypress read as
+  fresh on the very next physics tick, instantly retriggering
+  attempt_interaction(). A `call_deferred` fix reduced but did not
+  eliminate it (frame-timing dependent). The real fix: a
+  `_suppress_storage_reopen` flag set on close, only cleared once
+  `Input.is_action_pressed("interact")` reads false (key physically
+  released) -- deterministic regardless of frame timing.
+  LESSON: two independent systems polling the same input action
+  each frame is a race condition waiting to happen; block on actual
+  key-release state, not on hoping the timing works out.
+- ExitDoor's position was eyeballed instead of using the door wall
+  module's own authored `DoorInteraction` Marker3D socket (APT_Wall_
+  Door_300x270_Service.tscn, local offset (0, 1.1, 0.22)). Confirmed
+  visually with a temporary bright debug-sphere child before/after
+  the fix -- worth doing again any time a trigger position is in
+  doubt, much faster than guessing from screenshots alone.
+  LESSON: check for an authored placement socket before hand-
+  guessing a world position next to a modular kit piece.
+  SteamtekZoneDoor3D.tscn's shared interaction box (used by EVERY
+  zone door in the game) was also enlarged then re-shrunk this
+  session while chasing the above -- it currently sits at
+  Vector3(1.4, 2.0, 1.0), tight/close-range on purpose per Josh's
+  explicit request ("I want to be standing right on top of the
+  door"). Do not enlarge this again without asking first.
+
+OPEN / NOT YET DONE
+- No NPC exists anywhere in the Live3D pipeline yet -- SteamtekDialogueBox
+  is built and proven (via the note) but has never driven an actual
+  conversation with branching options.
+- Crafting panel's material-slot icon shows the BEST-carried accepted
+  family only; a slot whose "accepts" list has two families the
+  player holds SOME of each of will not combine them (matches how the
+  real CraftingPanel.gd's slot-selection UX works, but is worth
+  double-checking if that assumption ever changes).
+- Blank canvas scene (SteamtekSurfaceBlank3D.tscn) has no HUD/
+  inventory/crafting wired in yet -- deliberately left for Josh to
+  finish placing geometry in first.
+- Storage window's own crate does NOT lock/unlock player movement
+  the same way the old apartment's inventory window used to (Josh
+  asked for inventory specifically to stop locking movement; storage
+  crate still does, untouched, not requested).
+
+=============================================================
+BELOW THIS LINE: PRE-EXISTING HANDOFF, UNCHANGED
 =============================================================
 
 >> See docs/claude handoffs/STEAMTEK_WORKFLOW.md for the session

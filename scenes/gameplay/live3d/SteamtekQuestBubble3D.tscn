@@ -1,0 +1,64 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scenes/gameplay/live3d/steamtek_quest_bubble_3d.gd" id="1_script"]
+
+[sub_resource type="LabelSettings" id="LabelSettings"]
+font_size = 15
+font_color = Color(0.95, 0.9, 0.7, 1)
+outline_size = 3
+outline_color = Color(0.004, 0.008, 0.018, 0.9)
+
+[sub_resource type="StyleBoxFlat" id="BubbleStyle"]
+bg_color = Color(0.06, 0.09, 0.12, 0.92)
+border_color = Color(0.95, 0.75, 0.35, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_left = 10
+corner_radius_bottom_right = 10
+shadow_color = Color(0, 0, 0, 0.35)
+shadow_size = 4
+
+[node name="SteamtekQuestBubble3D" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Panel" type="Panel" parent="CanvasLayer"]
+visible = false
+size = Vector2(170, 40)
+theme_override_styles/panel = SubResource("BubbleStyle")
+
+[node name="Label" type="Label" parent="CanvasLayer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_right = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+label_settings = SubResource("LabelSettings")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Tail" type="Polygon2D" parent="CanvasLayer/Panel"]
+position = Vector2(85, 40)
+color = Color(0.06, 0.09, 0.12, 0.92)
+polygon = PackedVector2Array(-8, 0, 8, 0, 0, 12)
+
+[node name="TailBorderLeft" type="Line2D" parent="CanvasLayer/Panel"]
+position = Vector2(85, 40)
+points = PackedVector2Array(-8, 0, 0, 12)
+width = 2.0
+default_color = Color(0.95, 0.75, 0.35, 0.9)
+
+[node name="TailBorderRight" type="Line2D" parent="CanvasLayer/Panel"]
+position = Vector2(85, 40)
+points = PackedVector2Array(8, 0, 0, 12)
+width = 2.0
+default_color = Color(0.95, 0.75, 0.35, 0.9)

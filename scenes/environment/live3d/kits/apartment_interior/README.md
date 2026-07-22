@@ -6,7 +6,8 @@ This is the production-facing kit for building the opening apartment in Godot. E
 
 - Blank workspace: `res://scenes/tests/hybrid_3d/SteamtekApartmentInteriorAssemblyBlank3D.tscn`
 - Furnished production apartment: `res://scenes/environment/live3d/interiors/apartments/SteamtekPlayerApartmentProductionAssembly3D_v02.tscn`
-- Playable opening: `res://scenes/levels/apartment_3d/SteamtekOpeningApartmentPlayable3D.tscn`
+- Production apartment interior (art only): `res://scenes/environment/live3d/interiors/apartments/SteamtekApartmentInterior_Production.tscn`
+- Playable opening: `res://scenes/levels/apartment_3d/SteamtekApartment.tscn`
 
 ## Fast builder workflow
 

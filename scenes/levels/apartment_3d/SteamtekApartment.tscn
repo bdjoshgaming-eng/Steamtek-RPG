@@ -1,0 +1,284 @@
+[gd_scene format=3 uid="uid://bptevuffso8g6"]
+
+[ext_resource type="Script" uid="uid://c25faxvd2j7kt" path="res://scenes/levels/apartment_3d/steamtek_apartment.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/interiors/apartments/SteamtekApartmentInterior_Production.tscn" id="2_interior"]
+[ext_resource type="PackedScene" path="res://scenes/characters/player/VesperKane_PlayerCharacter_v01.tscn" id="3_character"]
+[ext_resource type="PackedScene" path="res://scenes/gameplay/live3d/SteamtekTutorialInteractable3D.tscn" id="4_interactable"]
+[ext_resource type="PackedScene" path="res://scenes/interactions/SteamtekZoneDoor3D.tscn" id="5_zone_door"]
+[ext_resource type="PackedScene" path="res://scenes/gameplay/live3d/SteamtekQuestMarker3D.tscn" id="6_quest_marker"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/props/industrial/STK_PROP_CONTAINER_Maintenance_Crate_01.tscn" id="7_storage_crate"]
+[ext_resource type="PackedScene" path="res://scenes/effects/live3d/SteamtekStormAtmosphere3D.tscn" id="8_storm"]
+[ext_resource type="PackedScene" path="res://scenes/effects/live3d/SteamtekWindowRainOverlay3D.tscn" id="9_window_rain"]
+[ext_resource type="PackedScene" path="res://scenes/gameplay/live3d/SteamtekDoorOutline3D.tscn" id="10_door_outline"]
+[ext_resource type="PackedScene" path="res://scenes/gameplay/live3d/SteamtekLive3DHud.tscn" id="12_hud"]
+[ext_resource type="PackedScene" path="res://scenes/gameplay/live3d/SteamtekItemGridPanel.tscn" id="13_item_grid"]
+[ext_resource type="PackedScene" path="res://scenes/gameplay/live3d/SteamtekQuestBubble3D.tscn" id="14_quest_bubble"]
+[ext_resource type="PackedScene" path="res://scenes/gameplay/live3d/SteamtekInventoryWindow.tscn" id="15_inventory_window"]
+[ext_resource type="PackedScene" path="res://scenes/gameplay/live3d/SteamtekDialogueBox.tscn" id="16_dialogue_box"]
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 1
+background_color = Color(0.004, 0.006, 0.009, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.42, 0.45, 0.5, 1)
+ambient_light_energy = 0.92
+tonemap_mode = 2
+
+[sub_resource type="BoxShape3D" id="BoundaryXShape"]
+size = Vector3(0.24, 2.4, 9.9)
+
+[sub_resource type="BoxShape3D" id="BoundaryZShape"]
+size = Vector3(9.9, 2.4, 0.24)
+
+[sub_resource type="LabelSettings" id="LabelSettings"]
+font_size = 18
+font_color = Color(0.9, 0.94, 1, 1)
+outline_size = 5
+outline_color = Color(0.005, 0.008, 0.012, 0.96)
+
+[sub_resource type="LabelSettings" id="ObjectiveSettings"]
+font_size = 20
+font_color = Color(1, 0.76, 0.32, 1)
+outline_size = 6
+outline_color = Color(0.005, 0.008, 0.012, 0.98)
+
+[sub_resource type="LabelSettings" id="MessageSettings"]
+font_size = 21
+font_color = Color(0.3, 0.9, 1, 1)
+outline_size = 7
+outline_color = Color(0.005, 0.008, 0.012, 0.98)
+
+[node name="SteamtekApartment" type="Node3D" unique_id=195688292]
+editor_description = "Production opening apartment: wake beside the bed (north wall), read the note, cross the open south-east living area to the storage crate, equip a weapon, exit through the door on the north wall's east end. The east/south sides are deliberately open (no walls) so the camera, looking in from the south-east, has a clear view of the room."
+script = ExtResource("1_script")
+metadata/status = "apartment_production_v1"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/room_size_m = Vector2(9, 9)
+metadata/camera_contract = "locked_ortho_9_14_45deg_azimuth_35deg_elevation"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1048345866]
+environment = SubResource("Environment")
+
+[node name="StormAtmosphere" parent="." unique_id=1255785480 instance=ExtResource("8_storm")]
+visible = false
+ambient_rain_volume_db = -80.0
+thunder_volume_db = -80.0
+
+[node name="WindowRainNorth" parent="." unique_id=312060297 instance=ExtResource("9_window_rain")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 1.45, -4.35)
+visible = false
+
+[node name="WindowRainWest" parent="." unique_id=714568053 instance=ExtResource("9_window_rain")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -4.15, 1.45, 3)
+visible = false
+
+[node name="Interior" parent="." unique_id=1236053500 instance=ExtResource("2_interior")]
+
+[node name="RoomBoundaries" type="Node3D" parent="." unique_id=233966974]
+
+[node name="West" type="StaticBody3D" parent="RoomBoundaries" unique_id=1459966597]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6, 1.2, 0)
+collision_mask = 0
+
+[node name="Collision" type="CollisionShape3D" parent="RoomBoundaries/West" unique_id=669168211]
+shape = SubResource("BoundaryXShape")
+
+[node name="East" type="StaticBody3D" parent="RoomBoundaries" unique_id=1727927211]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.6, 1.2, 0)
+collision_mask = 0
+
+[node name="Collision" type="CollisionShape3D" parent="RoomBoundaries/East" unique_id=1886937906]
+shape = SubResource("BoundaryXShape")
+
+[node name="South" type="StaticBody3D" parent="RoomBoundaries" unique_id=967772766]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 4.6)
+collision_mask = 0
+
+[node name="Collision" type="CollisionShape3D" parent="RoomBoundaries/South" unique_id=1278393284]
+shape = SubResource("BoundaryZShape")
+
+[node name="North" type="StaticBody3D" parent="RoomBoundaries" unique_id=737023084]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -4.6)
+collision_mask = 0
+
+[node name="Collision" type="CollisionShape3D" parent="RoomBoundaries/North" unique_id=385103353]
+shape = SubResource("BoundaryZShape")
+
+[node name="QuestNoteInteractable" parent="." unique_id=1716475157 instance=ExtResource("4_interactable")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 0.9, 0.9)
+action_id = "opening_note"
+interaction_prompt = "Read the note"
+
+[node name="NoteQuestMarker" parent="QuestNoteInteractable" unique_id=571757893 instance=ExtResource("6_quest_marker")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+animated = true
+
+[node name="NoteQuestBubble" parent="QuestNoteInteractable" unique_id=1822255926 instance=ExtResource("14_quest_bubble")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+bubble_text = "Read the note"
+
+[node name="StorageCrate" parent="." unique_id=47561229 instance=ExtResource("7_storage_crate")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 3)
+
+[node name="StarterStorageInteractable" parent="." unique_id=141306867 instance=ExtResource("4_interactable")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.9, 3)
+action_id = "starter_storage"
+interaction_prompt = "Open your storage crate"
+
+[node name="StorageQuestMarker" parent="StarterStorageInteractable" unique_id=677313047 instance=ExtResource("6_quest_marker")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0)
+visible = false
+marker_type = 3
+
+[node name="ExitDoor" parent="." unique_id=1071942950 instance=ExtResource("5_zone_door")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1.1, -4.28)
+target_scene_path = "res://scenes/levels/surface_3d/SteamtekSurfaceBlank3D.tscn"
+target_spawn_id = "SurfaceEntryWest"
+interaction_prompt = "Exit the apartment"
+
+[node name="DoorOutline" parent="ExitDoor" unique_id=376383750 instance=ExtResource("10_door_outline")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0.75)
+visible = false
+
+[node name="ApartmentWakeSpawn" type="Marker3D" parent="." unique_id=1693471574]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.3, 0.08, -1.8)
+
+[node name="ApartmentReturnFromSurface" type="Marker3D" parent="." unique_id=202462365]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.08, -3.8)
+
+[node name="VesperKane_PlayerCharacter_v01" parent="." unique_id=1701757240 instance=ExtResource("3_character")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.3, 0.08, -1.8)
+
+[node name="CameraRig" type="Node3D" parent="." unique_id=1459350238]
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig" unique_id=1967907298]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.142, 15.004, 14.142)
+projection = 1
+current = true
+size = 9.14
+
+[node name="Live3DHud" parent="." unique_id=734401985 instance=ExtResource("12_hud")]
+
+[node name="TransitionUI" type="CanvasLayer" parent="." unique_id=924406731]
+
+[node name="Title" type="Label" parent="TransitionUI" unique_id=34287077]
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 980.0
+offset_bottom = 54.0
+text = "STEAMTEK - THE APARTMENT"
+label_settings = SubResource("LabelSettings")
+
+[node name="Objective" type="Label" parent="TransitionUI" unique_id=969656860]
+offset_left = 24.0
+offset_top = 56.0
+offset_right = 1460.0
+offset_bottom = 94.0
+label_settings = SubResource("ObjectiveSettings")
+
+[node name="Message" type="Label" parent="TransitionUI" unique_id=880273249]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -620.0
+offset_top = -152.0
+offset_right = 620.0
+offset_bottom = -112.0
+grow_horizontal = 2
+grow_vertical = 0
+label_settings = SubResource("MessageSettings")
+horizontal_alignment = 1
+
+[node name="InteractionPrompt" type="Label" parent="TransitionUI" unique_id=875323170]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -96.0
+offset_right = 300.0
+offset_bottom = -48.0
+grow_horizontal = 2
+grow_vertical = 0
+label_settings = SubResource("LabelSettings")
+horizontal_alignment = 1
+
+[node name="StorageWindow" type="Control" parent="TransitionUI" unique_id=684166267]
+visible = false
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -380.0
+offset_top = -200.0
+offset_right = 380.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" parent="TransitionUI/StorageWindow" unique_id=1852183356 instance=ExtResource("13_item_grid")]
+layout_mode = 1
+offset_right = 360.0
+offset_bottom = 320.0
+
+[node name="YourItemsPanel" parent="TransitionUI/StorageWindow" unique_id=1995132205 instance=ExtResource("13_item_grid")]
+layout_mode = 1
+offset_left = 380.0
+offset_right = 740.0
+offset_bottom = 320.0
+
+[node name="Hint" type="Label" parent="TransitionUI/StorageWindow" unique_id=433468157]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 326.0
+offset_right = 740.0
+offset_bottom = 352.0
+text = "Double-click to take or store an item  •  Hold [ R ] to take everything"
+label_settings = SubResource("LabelSettings")
+
+[node name="Close" type="Label" parent="TransitionUI/StorageWindow" unique_id=1985118922]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -180.0
+offset_top = -30.0
+offset_right = 180.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "[ E ]  Close"
+label_settings = SubResource("LabelSettings")
+horizontal_alignment = 1
+
+[node name="InventoryWindow" parent="TransitionUI" unique_id=55157741 instance=ExtResource("15_inventory_window")]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -350.0
+offset_top = -323.0
+offset_right = 350.0
+offset_bottom = 323.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DialogueBox" parent="TransitionUI" instance=ExtResource("16_dialogue_box")]
+
+[node name="Fade" type="ColorRect" parent="TransitionUI" unique_id=1470030698]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)

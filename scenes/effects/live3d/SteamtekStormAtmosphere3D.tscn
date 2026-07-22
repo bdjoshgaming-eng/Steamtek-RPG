@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scenes/effects/live3d/steamtek_storm_atmosphere_3d.gd" id="1_script"]
+[ext_resource type="Script" path="res://scenes/effects/live3d/steamtek_procedural_rain_audio.gd" id="2_rain_audio"]
+[ext_resource type="Script" path="res://scenes/effects/live3d/steamtek_procedural_thunder_audio.gd" id="3_thunder_audio"]
+
+[node name="SteamtekStormAtmosphere3D" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="LightningWindowBack" type="OmniLight3D" parent="."]
+position = Vector3(-4.5, 1.8, -5.4)
+light_color = Color(0.85, 0.9, 1.0, 1)
+light_energy = 0.0
+omni_range = 8.0
+shadow_enabled = true
+
+[node name="LightningWindowWest" type="OmniLight3D" parent="."]
+position = Vector3(-6.4, 1.8, 2.5)
+light_color = Color(0.85, 0.9, 1.0, 1)
+light_energy = 0.0
+omni_range = 8.0
+shadow_enabled = true
+
+[node name="RainAmbient" type="AudioStreamPlayer" parent="."]
+script = ExtResource("2_rain_audio")
+bus = &"Master"
+
+[node name="ThunderOneShot" type="AudioStreamPlayer" parent="."]
+script = ExtResource("3_thunder_audio")
+bus = &"Master"

@@ -1,0 +1,56 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/environment/live3d/models/industrial/meshy/STK_PROP_CONTAINER_Maintenance_Crate_01_Production.glb" id="1_model"]
+
+[sub_resource type="BoxShape3D" id="CrateBodyShape"]
+size = Vector3(1.06, 0.61, 0.61)
+
+[node name="STK_PROP_CONTAINER_Maintenance_Crate_01" type="Node3D" groups=["steamtek_live3d_modular"]]
+editor_description = "Production Maintenance Supply Crate. The imported source is a single combined body-and-lid mesh; the hinge marker reserves the future lid-animation pivot without modifying the approved geometry."
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "static_environment_prop_container"
+metadata/module_variant = "STK_PROP_CONTAINER_Maintenance_Crate_01"
+metadata/module_dimensions_m = Vector3(1.1, 0.65, 0.65)
+metadata/contact_pivot = "floor_center"
+metadata/front_axis = "+Z_service_face"
+metadata/scale_contract = "1_godot_unit_equals_1_meter"
+metadata/facing_contract = "yaw_0_90_180_270_no_negative_scale"
+metadata/collision_contract = "one_simplified_box_shape_not_render_mesh"
+metadata/source_intake = "res://incoming/meshy_world_assets/STK_PROP_CONTAINER_Maintenance_Crate_01.glb"
+metadata/qa_report = "res://incoming/meshy_world_assets/STK_PROP_CONTAINER_Maintenance_Crate_01_QA/STK_PROP_CONTAINER_Maintenance_Crate_01_QA.md"
+metadata/production_status = "pipeline_complete_pending_normal_editor_visual_approval"
+metadata/render_triangles = 6896
+metadata/source_vertices = 9531
+metadata/material_count = 1
+metadata/lid_is_separate_object = false
+metadata/lid_animation_status = "future_animation_requires_authored_separate_lid_mesh"
+metadata/material_response = "source_embedded_pbr_preserved_matte_low_satin"
+
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="CrateBodyAndLid" parent="Visual" instance=ExtResource("1_model")]
+
+[node name="Collision" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="MainBodyCollision" type="CollisionShape3D" parent="Collision"]
+position = Vector3(0, 0.305, 0)
+shape = SubResource("CrateBodyShape")
+
+[node name="InteractionPoint" type="Marker3D" parent="." groups=["steamtek_interaction_anchor"]]
+position = Vector3(0, 0.325, 0.38)
+metadata/socket_role = "interaction_anchor"
+metadata/interaction_type = "maintenance_supply_crate"
+
+[node name="LootSpawnPoint" type="Marker3D" parent="." groups=["steamtek_loot_spawn"]]
+position = Vector3(0, 0.36, 0)
+metadata/socket_role = "loot_spawn"
+metadata/placement = "inside_crate"
+
+[node name="LidHingePoint" type="Marker3D" parent="."]
+position = Vector3(0, 0.61, -0.285)
+metadata/socket_role = "animation_pivot"
+metadata/animation_status = "reserved_for_future_separate_lid_mesh"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]

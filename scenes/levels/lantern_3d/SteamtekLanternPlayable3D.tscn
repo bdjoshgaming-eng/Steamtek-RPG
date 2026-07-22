@@ -164,7 +164,7 @@ action_id = "bartender_vendor"
 [node name="SurfaceExitDoor" parent="." instance=ExtResource("5_zone_door")]
 position = Vector3(-6.45, 1.0, 1.6)
 interaction_prompt = "Return to Main Street"
-target_scene_path = "res://scenes/levels/surface_3d/SteamtekSurfaceTutorialPlayable3D.tscn"
+target_scene_path = "res://scenes/levels/surface_3d/SteamtekSurfaceBlank3D.tscn"
 target_spawn_id = "LanternReturnFromInterior"
 
 [node name="LanternEntryFromSurface" type="Marker3D" parent="."]

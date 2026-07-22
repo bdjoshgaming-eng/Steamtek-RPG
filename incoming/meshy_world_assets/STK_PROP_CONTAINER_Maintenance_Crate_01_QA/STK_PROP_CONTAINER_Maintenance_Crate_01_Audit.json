@@ -1,0 +1,128 @@
+{
+  "asset_name": "STK_PROP_CONTAINER_Maintenance_Crate_01",
+  "clean_names": {
+    "materials": [
+      "MAT_MaintenanceCrate_Source"
+    ],
+    "meshes": [
+      "STK_PROP_CONTAINER_Maintenance_Crate_01_Mesh"
+    ],
+    "objects": [
+      "CrateBodyAndLid"
+    ]
+  },
+  "final_maximum_blender_xyz": [
+    0.55,
+    0.325,
+    0.65
+  ],
+  "final_minimum_blender_xyz": [
+    -0.55,
+    -0.325,
+    0.0
+  ],
+  "lid_is_separate_object": false,
+  "material_modified": false,
+  "original_bottom_center": [
+    -0.000546,
+    0.000612,
+    -0.325598
+  ],
+  "output": "C:\\My Game\\Steamtek-RPG\\assets\\environment\\live3d\\models\\industrial\\meshy\\STK_PROP_CONTAINER_Maintenance_Crate_01_Production.glb",
+  "pre_scale_dimensions_blender_xyz": [
+    1.896113,
+    1.096872,
+    0.977046
+  ],
+  "previews": [
+    "C:\\My Game\\Steamtek-RPG\\incoming\\meshy_world_assets\\STK_PROP_CONTAINER_Maintenance_Crate_01_QA\\previews\\STK_PROP_CONTAINER_Maintenance_Crate_01_QA_Front.png",
+    "C:\\My Game\\Steamtek-RPG\\incoming\\meshy_world_assets\\STK_PROP_CONTAINER_Maintenance_Crate_01_QA\\previews\\STK_PROP_CONTAINER_Maintenance_Crate_01_QA_Back.png",
+    "C:\\My Game\\Steamtek-RPG\\incoming\\meshy_world_assets\\STK_PROP_CONTAINER_Maintenance_Crate_01_QA\\previews\\STK_PROP_CONTAINER_Maintenance_Crate_01_QA_Left.png",
+    "C:\\My Game\\Steamtek-RPG\\incoming\\meshy_world_assets\\STK_PROP_CONTAINER_Maintenance_Crate_01_QA\\previews\\STK_PROP_CONTAINER_Maintenance_Crate_01_QA_Right.png",
+    "C:\\My Game\\Steamtek-RPG\\incoming\\meshy_world_assets\\STK_PROP_CONTAINER_Maintenance_Crate_01_QA\\previews\\STK_PROP_CONTAINER_Maintenance_Crate_01_QA_Top.png",
+    "C:\\My Game\\Steamtek-RPG\\incoming\\meshy_world_assets\\STK_PROP_CONTAINER_Maintenance_Crate_01_QA\\previews\\STK_PROP_CONTAINER_Maintenance_Crate_01_QA_ThreeQuarter.png"
+  ],
+  "removed_nonproduction_objects": {
+    "cameras": [],
+    "helpers": [],
+    "lights": []
+  },
+  "roughness_green_channel_sample": null,
+  "scale_factors_xyz": [
+    0.580134,
+    0.592594,
+    0.665271
+  ],
+  "source": "C:\\My Game\\Steamtek-RPG\\incoming\\meshy_world_assets\\STK_PROP_CONTAINER_Maintenance_Crate_01.glb",
+  "source_info": {
+    "dimensions_blender_xyz": [
+      1.896113,
+      1.096872,
+      0.977046
+    ],
+    "images": [
+      "Baked_BaseColor",
+      "Baked_Emit",
+      "Baked_MetallicRoughness"
+    ],
+    "materials": [
+      "Material_0.001"
+    ],
+    "mesh_objects": 1,
+    "triangles": 6896,
+    "uv_layers": 1,
+    "vertices": 9531
+  },
+  "target_dimensions_blender_xyz": [
+    1.1,
+    0.65,
+    0.65
+  ],
+  "textures": [
+    {
+      "colorspace": "sRGB",
+      "path": "C:\\My Game\\Steamtek-RPG\\assets\\environment\\live3d\\models\\industrial\\meshy\\STK_PROP_CONTAINER_Maintenance_Crate_01_Production_Baked_BaseColor.png",
+      "role": "Baked_BaseColor",
+      "size": [
+        4096,
+        4096
+      ]
+    },
+    {
+      "colorspace": "sRGB",
+      "path": "C:\\My Game\\Steamtek-RPG\\assets\\environment\\live3d\\models\\industrial\\meshy\\STK_PROP_CONTAINER_Maintenance_Crate_01_Production_Baked_Emit.png",
+      "role": "Baked_Emit",
+      "size": [
+        4096,
+        4096
+      ]
+    },
+    {
+      "colorspace": "Non-Color",
+      "path": "C:\\My Game\\Steamtek-RPG\\assets\\environment\\live3d\\models\\industrial\\meshy\\STK_PROP_CONTAINER_Maintenance_Crate_01_Production_Baked_MetallicRoughness.png",
+      "role": "Baked_MetallicRoughness",
+      "size": [
+        4096,
+        4096
+      ]
+    }
+  ],
+  "topology_signature_after": [
+    [
+      9531,
+      14966,
+      6896,
+      6896
+    ]
+  ],
+  "topology_signature_before": [
+    [
+      9531,
+      14966,
+      6896,
+      6896
+    ]
+  ],
+  "topology_unchanged": true,
+  "yaw_degrees": 0.0
+}
