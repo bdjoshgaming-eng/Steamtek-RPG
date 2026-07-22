@@ -276,12 +276,47 @@ static func craft(blueprint_id: String, selection: Dictionary, campaign_time: fl
 	var sockets = resolve_sockets(blueprint_id, selection, allocation, results,
 		instabilities.size(), socket_modifier, craft_seed, profile)
 	item["socket_count"] = int(sockets["count"])
-	item["socket_tags"] = sockets["tags"]
 	item["socket_band_id"] = String(sockets["band_id"])
 	item["socket_opportunity"] = float(sockets["opportunity"])
 	return item
 
 
+static func craft_mod(blueprint_id: String, selection: Dictionary) -> Dictionary:
+	var problems = validate_selection(blueprint_id, selection)
+	if problems.size() > 0:
+		push_error("[CRAFTING] Cannot craft mod " + blueprint_id + ": " + "; ".join(problems))
+		return {}
+
+	var reagent_batch = selection.get("reagent", {})
+	var family_id = String(reagent_batch.get("family_id", ""))
+	var damage_type = CraftingData.damage_type_for_family(family_id)
+	if damage_type == "":
+		push_error("[CRAFTING] Family '" + family_id + "' has no damage type mapping.")
+		return {}
+
+	var mod_id = "core_" + damage_type.to_lower()
+	if not CraftingData.MOD_DEFINITIONS.has(mod_id):
+		push_error("[CRAFTING] No mod definition for " + mod_id)
+		return {}
+
+	var potential = compute_material_potential(blueprint_id, selection)
+	var quality = clampf(potential, 0.0, 100.0)
+	var grade_id = "standard"
+	if quality >= 85.0:
+		grade_id = "masterwork"
+	elif quality >= 70.0:
+		grade_id = "prototype"
+	elif quality >= 55.0:
+		grade_id = "advanced"
+	elif quality >= 35.0:
+		grade_id = "refined"
+
+	var effect_strength = clampf(quality / 100.0, 0.05, 1.0)
+
+	var mod = CraftingModels.new_mod_instance(_next_id("mod"), mod_id, grade_id)
+	mod["effect_strength"] = effect_strength
+	mod["craft_quality"] = quality
+	return mod
 
 
 # --- Keystone selection (authoritative cap) ------------------------
@@ -617,7 +652,6 @@ static func resolve_sockets(
 		"count": clampi(guaranteed + extra, 0, maximum),
 		"band_id": String(band["band_id"]),
 		"opportunity": opportunity,
-		"tags": bp.get("allowed_socket_tags", []),
 	}
 
 
@@ -637,11 +671,12 @@ static func create_mod(mod_id: String, grade_id: String = "standard") -> Diction
 # --- Installation rules -------------------------------------------
 # Returns an array of reasons the mod CANNOT go in. Empty means it can.
 #
-# Three checks, in the order a player would think about them:
+# Four checks:
 #   1. is there a free socket
-#   2. does the mod fit the socket types this item has
-#   3. does it clash with something already installed
-static func mod_install_problems(item: Dictionary, mod: Dictionary, installed_mods: Array) -> Array:
+#   2. is the mod type eligible for this weapon's range (melee/ranged)
+#   3. is there already a mod of this type installed (one per type)
+#   4. CL suitability (placeholder -- not enforced yet)
+static func mod_install_problems(item: Dictionary, mod: Dictionary, installed_mods: Array, weapon_range: String = "") -> Array:
 	var problems: Array = []
 	var mod_def = CraftingData.get_mod(String(mod.get("mod_id", "")))
 	if mod_def.is_empty():
@@ -655,27 +690,18 @@ static func mod_install_problems(item: Dictionary, mod: Dictionary, installed_mo
 	if installed_mods.size() >= sockets:
 		problems.append("All " + str(sockets) + " sockets are full.")
 
-	# Socket-type match.
-	var item_tags: Array = item.get("socket_tags", [])
-	var fits := false
-	for t in mod_def.get("socket_tags", []):
-		if item_tags.has(String(t)):
-			fits = true
-			break
-	if not fits:
-		var want: Array = []
-		for t2 in mod_def.get("socket_tags", []):
-			want.append(String(CraftingData.get_socket_tag(String(t2)).get("display_name", t2)))
-		problems.append("Needs a " + " or ".join(want) + " socket.")
+	var mod_type_id = String(mod_def.get("mod_type", ""))
 
-	# Incompatibility with what is already in.
-	var my_tags: Array = mod_def.get("incompatible_tags", [])
+	if weapon_range != "" and not CraftingData.is_mod_type_eligible(mod_type_id, weapon_range):
+		var name = CraftingData.mod_display_name(mod_type_id, weapon_range)
+		problems.append(name + " mods cannot be installed in " + weapon_range.to_lower() + " weapons.")
+
 	for other in installed_mods:
 		var other_def = CraftingData.get_mod(String(other.get("mod_id", "")))
-		for t3 in other_def.get("incompatible_tags", []):
-			if my_tags.has(String(t3)):
-				problems.append("Conflicts with " + String(other_def.get("display_name", "an installed mod"))
-					+ " (" + String(CraftingData.MOD_INCOMPATIBILITY_TAGS.get(String(t3), t3)) + ").")
+		if String(other_def.get("mod_type", "")) == mod_type_id:
+			var type_name = CraftingData.mod_display_name(mod_type_id, weapon_range)
+			problems.append("Already has a " + type_name + " mod installed.")
+			break
 	return problems
 
 

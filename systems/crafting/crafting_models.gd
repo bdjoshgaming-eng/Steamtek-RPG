@@ -122,9 +122,6 @@ static func new_crafted_item(
 		"risk_mode_id": CraftingData.DEFAULT_RISK_MODE,
 		"socket_chance_modifier": 0.0,
 		"socket_count": 0,
-		# Phase 5: which mod types this item's sockets accept, plus the
-		# band and score the roll came from (kept for display/debugging).
-		"socket_tags": [],
 		"socket_band_id": "none",
 		"socket_opportunity": 0.0,
 		"installed_mod_instance_ids": [],
@@ -163,7 +160,6 @@ static func crafted_item_from_dict(d: Dictionary) -> Dictionary:
 	item["risk_mode_id"] = String(d.get("risk_mode_id", CraftingData.DEFAULT_RISK_MODE))
 	item["socket_chance_modifier"] = float(d.get("socket_chance_modifier", 0.0))
 	item["socket_count"] = int(d.get("socket_count", 0))
-	item["socket_tags"] = d.get("socket_tags", [])
 	item["socket_band_id"] = String(d.get("socket_band_id", "none"))
 	item["socket_opportunity"] = float(d.get("socket_opportunity", 0.0))
 	item["installed_mod_instance_ids"] = d.get("installed_mod_instance_ids", [])
@@ -235,4 +231,8 @@ static func mod_instance_from_dict(d: Dictionary) -> Dictionary:
 		String(d.get("grade_id", "standard"))
 	)
 	m["installed_in"] = String(d.get("installed_in", ""))
+	if d.has("effect_strength"):
+		m["effect_strength"] = float(d["effect_strength"])
+	if d.has("craft_quality"):
+		m["craft_quality"] = float(d["craft_quality"])
 	return m

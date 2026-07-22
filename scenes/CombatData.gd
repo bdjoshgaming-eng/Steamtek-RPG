@@ -81,9 +81,9 @@ func new_combat_stats() -> Dictionary:
 # one of these, and armor resists each independently. Kinetic = melee
 # impact (blades/blunt/fists), Ballistic = projectiles, Thermal = fire/
 # heat/steam-burn, Pressure = steam blast/concussion/explosive, Arc =
-# electricity, Chemical = acid/toxin, EMP = anti-electronic. Chemical and
-# EMP have no weapons yet -- reserved for later families.
-const DAMAGE_TYPES: Array = ["Kinetic", "Ballistic", "Thermal", "Pressure", "Arc", "Chemical", "EMP"]
+# electricity, Chemical = acid/toxin. All types default to Kinetic on
+# unmodded weapons; other types come from Core mods (Phase 6 rework).
+const DAMAGE_TYPES: Array = ["Kinetic", "Ballistic", "Thermal", "Pressure", "Arc", "Chemical"]
 
 
 # --- Phase 4c: per-archetype resistance profiles ---
@@ -101,21 +101,19 @@ const DAMAGE_TYPES: Array = ["Kinetic", "Ballistic", "Thermal", "Pressure", "Arc
 #
 # Design intent: every damage type is the right answer against something.
 # Brawlers/Heavies/Shield Specialists soak physical but fold to Arc.
-# Engineers and Hackers run on electronics, so Arc and EMP are their hard
-# counter. Medics work with chemicals so they resist them. Snipers are
-# glass. Chemical and EMP have no weapons yet, so those columns are
-# inert until those weapon families exist.
+# Engineers and Hackers run on electronics, so Arc is their hard counter.
+# Medics work with chemicals so they resist them. Snipers are glass.
 const ARCHETYPE_RESISTANCE_PROFILES: Dictionary = {
-	"Brawler":           {"Kinetic": 1.3, "Ballistic": 0.7, "Thermal": 0.6, "Pressure": 0.8, "Arc": 0.5, "Chemical": 0.6, "EMP": 1.0},
-	"Assault":           {"Kinetic": 1.0, "Ballistic": 1.2, "Thermal": 0.8, "Pressure": 0.8, "Arc": 0.7, "Chemical": 0.7, "EMP": 1.0},
-	"Rifleman":          {"Kinetic": 0.8, "Ballistic": 1.0, "Thermal": 0.8, "Pressure": 0.7, "Arc": 0.8, "Chemical": 0.8, "EMP": 1.0},
-	"Heavy":             {"Kinetic": 1.5, "Ballistic": 1.4, "Thermal": 1.0, "Pressure": 1.2, "Arc": 0.6, "Chemical": 0.8, "EMP": 0.8},
-	"Sniper":            {"Kinetic": 0.6, "Ballistic": 0.8, "Thermal": 0.7, "Pressure": 0.6, "Arc": 0.8, "Chemical": 0.8, "EMP": 1.0},
-	"Engineer":          {"Kinetic": 0.8, "Ballistic": 0.8, "Thermal": 1.3, "Pressure": 1.2, "Arc": 0.4, "Chemical": 1.2, "EMP": 0.3},
-	"Hacker":            {"Kinetic": 0.6, "Ballistic": 0.6, "Thermal": 0.7, "Pressure": 0.6, "Arc": 0.3, "Chemical": 0.8, "EMP": 0.2},
-	"Medic":             {"Kinetic": 0.7, "Ballistic": 0.7, "Thermal": 0.9, "Pressure": 0.8, "Arc": 0.8, "Chemical": 1.4, "EMP": 0.9},
-	"Commander":         {"Kinetic": 1.1, "Ballistic": 1.1, "Thermal": 1.0, "Pressure": 1.0, "Arc": 0.9, "Chemical": 0.9, "EMP": 0.8},
-	"Shield Specialist": {"Kinetic": 1.4, "Ballistic": 1.3, "Thermal": 1.0, "Pressure": 1.5, "Arc": 0.7, "Chemical": 0.9, "EMP": 0.7},
+	"Brawler":           {"Kinetic": 1.3, "Ballistic": 0.7, "Thermal": 0.6, "Pressure": 0.8, "Arc": 0.5, "Chemical": 0.6},
+	"Assault":           {"Kinetic": 1.0, "Ballistic": 1.2, "Thermal": 0.8, "Pressure": 0.8, "Arc": 0.7, "Chemical": 0.7},
+	"Rifleman":          {"Kinetic": 0.8, "Ballistic": 1.0, "Thermal": 0.8, "Pressure": 0.7, "Arc": 0.8, "Chemical": 0.8},
+	"Heavy":             {"Kinetic": 1.5, "Ballistic": 1.4, "Thermal": 1.0, "Pressure": 1.2, "Arc": 0.6, "Chemical": 0.8},
+	"Sniper":            {"Kinetic": 0.6, "Ballistic": 0.8, "Thermal": 0.7, "Pressure": 0.6, "Arc": 0.8, "Chemical": 0.8},
+	"Engineer":          {"Kinetic": 0.8, "Ballistic": 0.8, "Thermal": 1.3, "Pressure": 1.2, "Arc": 0.4, "Chemical": 1.2},
+	"Hacker":            {"Kinetic": 0.6, "Ballistic": 0.6, "Thermal": 0.7, "Pressure": 0.6, "Arc": 0.3, "Chemical": 0.8},
+	"Medic":             {"Kinetic": 0.7, "Ballistic": 0.7, "Thermal": 0.9, "Pressure": 0.8, "Arc": 0.8, "Chemical": 1.4},
+	"Commander":         {"Kinetic": 1.1, "Ballistic": 1.1, "Thermal": 1.0, "Pressure": 1.0, "Arc": 0.9, "Chemical": 0.9},
+	"Shield Specialist": {"Kinetic": 1.4, "Ballistic": 1.3, "Thermal": 1.0, "Pressure": 1.5, "Arc": 0.7, "Chemical": 0.9},
 }
 
 
@@ -231,15 +229,80 @@ func generate_enemy(display_name: String, cl: int, archetype: String, faction: S
 		"crit_resist": 0.0,
 		"alive": true,
 		"attack_ready": true,
+		"ai_state": "idle",
+		"ai_target": "",
 		"damage_debuff": 0.0,
 		"accuracy_debuff": 0.0,
 		"attack_speed_debuff": 0.0,
 		"bleed_ticks_remaining": 0,
 		"bleed_damage_per_tick": 0,
+		"burn_ticks_remaining": 0,
+		"burn_damage_per_tick": 0,
+		"poison_ticks_remaining": 0,
+		"poison_damage_per_tick": 0,
+		"stagger_until_msec": 0,
 		"taunted_until_msec": 0,
 		"damage_by_weapon_class": {},
+		"is_nm": false,
 		"stats": new_combat_stats(),
 	}
+
+
+# --- Secondary effects (Phase D) ---
+# Each damage type has a secondary effect that can proc on hit.
+# base_chance is the % chance at effect_strength 1.0 (scales linearly).
+# Kinetic and Ballistic always apply (chance 100) since their effects
+# are percentage-based and scale with strength directly.
+const SECONDARY_EFFECTS: Dictionary = {
+	"Kinetic": {
+		"effect": "damage_debuff",
+		"label": "Bruise",
+		"base_chance": 100.0,
+		"base_amount": 0.15,
+		"duration": 6.0,
+		"description": "Reduces target damage output.",
+	},
+	"Ballistic": {
+		"effect": "armor_pierce",
+		"label": "Pierce",
+		"base_chance": 100.0,
+		"base_amount": 15.0,
+		"duration": 0.0,
+		"description": "Ignores a portion of armor.",
+	},
+	"Thermal": {
+		"effect": "burn_dot",
+		"label": "Burn",
+		"base_chance": 50.0,
+		"base_amount": 8.0,
+		"duration": 4.0,
+		"description": "Fire damage over time.",
+	},
+	"Chemical": {
+		"effect": "poison_dot",
+		"label": "Poison",
+		"base_chance": 50.0,
+		"base_amount": 6.0,
+		"duration": 5.0,
+		"description": "Toxic damage over time.",
+	},
+	"Arc": {
+		"effect": "attack_speed_debuff",
+		"label": "Shock",
+		"base_chance": 40.0,
+		"base_amount": 0.35,
+		"duration": 4.0,
+		"description": "Slows target attacks.",
+	},
+	"Pressure": {
+		"effect": "stagger",
+		"label": "Stagger",
+		"base_chance": 35.0,
+		"base_amount": 2.0,
+		"duration": 2.0,
+		"description": "Stuns the target briefly.",
+	},
+}
 
 
 func default_enemies() -> Dictionary:
@@ -248,6 +311,7 @@ func default_enemies() -> Dictionary:
 	return {
 		"dummy": generate_enemy("Scrap Thief", 1, "Brawler", "Rust Syndicate"),
 		"enemy2": generate_enemy("Rust Marauder", 5, "Assault", "Rust Syndicate"),
+		"heavy_cl12": generate_enemy("Blackline Enforcer", 12, "Heavy", "Blackline Security"),
 	}
 
 

@@ -41,6 +41,13 @@ var enemy_nodes: Dictionary = {}
 const ENEMY_SCENE_PATH := "res://scenes/enemy.tscn"
 const ENEMY_SPRITE_PATH := "res://pipo-enemy018.png"
 
+# AI defaults. Per-enemy overrides in the spawn table take priority.
+const DEFAULT_AGGRO_RANGE := 300.0
+const DEFAULT_CHASE_SPEED := 80.0
+const DEFAULT_LEASH_RANGE := 500.0
+const DEFAULT_PATROL_RADIUS := 60.0
+const LEASH_HEAL_RATE := 0.15
+
 const ENEMY_SPAWN_TABLE: Dictionary = {
 	"dummy": {
 		"display_name": "Scrap Thief",
@@ -54,6 +61,16 @@ const ENEMY_SPAWN_TABLE: Dictionary = {
 		"loot_key": "Dummy",
 		"attack_cooldown": 2.5,
 		"respawn_time": 8.0,
+		"aggro_range": 280.0,
+		"chase_speed": 70.0,
+		"nm": {
+			"display_name": "Ironjaw",
+			"cl": 5,
+			"tint": Color(1.0, 0.45, 0.0, 1),
+			"kill_xp": 250,
+			"loot_key": "NM_Ironjaw",
+			"spawn_chance": 0.05,
+		},
 	},
 	"enemy2": {
 		"display_name": "Rust Marauder",
@@ -67,8 +84,162 @@ const ENEMY_SPAWN_TABLE: Dictionary = {
 		"loot_key": "Enemy2",
 		"attack_cooldown": 2.5,
 		"respawn_time": 8.0,
+		"aggro_range": 320.0,
+		"chase_speed": 90.0,
+	},
+	"heavy_cl12": {
+		"display_name": "Blackline Enforcer",
+		"cl": 12,
+		"archetype": "Heavy",
+		"faction": "Blackline Security",
+		"position": Vector2(1100, 300),
+		"sprite_scale": Vector2(0.181, 0.181),
+		"tint": Color(0.85, 0.2, 0.2, 1),
+		"kill_xp": 200,
+		"loot_key": "Enemy2",
+		"attack_cooldown": 2.5,
+		"respawn_time": 8.0,
+		"aggro_range": 350.0,
+		"chase_speed": 60.0,
+		"leash_range": 600.0,
 	},
 }
+
+const LAIR_SPAWN_TABLE: Dictionary = {
+	"rust_outpost": {
+		"lair_type": "rust_outpost",
+		"display_name": "Rust Syndicate Outpost",
+		"center": Vector2(250, 600),
+		"spawn_radius": 100.0,
+		"respawn_time": 30.0,
+		"nm": {
+			"display_name": "Rusty Pete",
+			"cl": 6,
+			"archetype": "Brawler",
+			"faction": "Rust Syndicate",
+			"tint": Color(1.0, 0.3, 0.1, 1),
+			"kill_xp": 300,
+			"loot_key": "NM_RustyPete",
+			"spawn_chance": 0.05,
+			"replaces_index": 0,
+		},
+		"members": [
+			{
+				"display_name": "Rust Scrapper",
+				"cl": 2,
+				"archetype": "Brawler",
+				"faction": "Rust Syndicate",
+				"sprite_scale": Vector2(0.155, 0.165),
+				"tint": Color(0.85, 0.75, 0.55, 1),
+				"kill_xp": 35,
+				"loot_key": "Dummy",
+				"attack_cooldown": 2.8,
+				"aggro_range": 250.0,
+				"chase_speed": 65.0,
+			},
+			{
+				"display_name": "Rust Scrapper",
+				"cl": 2,
+				"archetype": "Brawler",
+				"faction": "Rust Syndicate",
+				"sprite_scale": Vector2(0.155, 0.165),
+				"tint": Color(0.85, 0.75, 0.55, 1),
+				"kill_xp": 35,
+				"loot_key": "Dummy",
+				"attack_cooldown": 2.8,
+				"aggro_range": 250.0,
+				"chase_speed": 65.0,
+			},
+			{
+				"display_name": "Rust Scrapper",
+				"cl": 2,
+				"archetype": "Brawler",
+				"faction": "Rust Syndicate",
+				"sprite_scale": Vector2(0.155, 0.165),
+				"tint": Color(0.85, 0.75, 0.55, 1),
+				"kill_xp": 35,
+				"loot_key": "Dummy",
+				"attack_cooldown": 2.8,
+				"aggro_range": 250.0,
+				"chase_speed": 65.0,
+			},
+			{
+				"display_name": "Rust Foreman",
+				"cl": 4,
+				"archetype": "Assault",
+				"faction": "Rust Syndicate",
+				"sprite_scale": Vector2(0.175, 0.185),
+				"tint": Color(0.7, 0.55, 0.35, 1),
+				"kill_xp": 60,
+				"loot_key": "Dummy",
+				"attack_cooldown": 2.3,
+				"aggro_range": 300.0,
+				"chase_speed": 75.0,
+			},
+		],
+	},
+	"blackline_checkpoint": {
+		"lair_type": "blackline_checkpoint",
+		"display_name": "Blackline Checkpoint",
+		"center": Vector2(1400, 400),
+		"spawn_radius": 90.0,
+		"respawn_time": 45.0,
+		"nm": {
+			"display_name": "Sergeant Volkov",
+			"cl": 14,
+			"archetype": "Commander",
+			"faction": "Blackline Security",
+			"tint": Color(0.8, 0.1, 0.1, 1),
+			"kill_xp": 500,
+			"loot_key": "NM_Volkov",
+			"spawn_chance": 0.04,
+			"replaces_index": 0,
+		},
+		"members": [
+			{
+				"display_name": "Blackline Sentry",
+				"cl": 8,
+				"archetype": "Rifleman",
+				"faction": "Blackline Security",
+				"sprite_scale": Vector2(0.17, 0.18),
+				"tint": Color(0.4, 0.45, 0.55, 1),
+				"kill_xp": 120,
+				"loot_key": "Enemy2",
+				"attack_cooldown": 2.2,
+				"aggro_range": 350.0,
+				"chase_speed": 75.0,
+			},
+			{
+				"display_name": "Blackline Sentry",
+				"cl": 8,
+				"archetype": "Rifleman",
+				"faction": "Blackline Security",
+				"sprite_scale": Vector2(0.17, 0.18),
+				"tint": Color(0.4, 0.45, 0.55, 1),
+				"kill_xp": 120,
+				"loot_key": "Enemy2",
+				"attack_cooldown": 2.2,
+				"aggro_range": 350.0,
+				"chase_speed": 75.0,
+			},
+			{
+				"display_name": "Blackline Lieutenant",
+				"cl": 10,
+				"archetype": "Commander",
+				"faction": "Blackline Security",
+				"sprite_scale": Vector2(0.185, 0.195),
+				"tint": Color(0.3, 0.35, 0.5, 1),
+				"kill_xp": 180,
+				"loot_key": "Enemy2",
+				"attack_cooldown": 2.0,
+				"aggro_range": 380.0,
+				"chase_speed": 80.0,
+				"leash_range": 550.0,
+			},
+		],
+	},
+}
+
 @onready var player_health_bar_bg: Polygon2D = %PlayerHealthBarBg
 @onready var player_health_bar_fill: Polygon2D = %PlayerHealthBarFill
 @onready var player_action_bar_bg: Polygon2D = %PlayerActionBarBg
@@ -321,7 +492,7 @@ var item_classes = {
 	"Flame Thrower": ["Flame Thrower"]
 }
 
-var weapon_stat_names = ["Speed", "Damage Type", "Damage Rating", "Damage Per Second", "Wound Type"]
+var weapon_stat_names = ["Speed", "Damage Rating", "Damage Per Second"]
 
 
 var enhancement_definitions = {
@@ -533,6 +704,7 @@ const ENEMY_ATTACK_RANGE = 180.0
 #   damage_by_weapon_class  cumulative damage per weapon class, for the
 #                        proportional kill-XP split; reset on respawn.
 var enemies: Dictionary = {}
+var nm_active_by_type: Dictionary = {}
 const ENEMY2_ATTACK_COOLDOWN = 2.5
 const ENEMY2_KILL_XP = 67
 
@@ -730,8 +902,17 @@ var selected_path: String = ""
 
 func _ready() -> void:
 	enemies = CombatData.default_enemies()
-	# Phase 6b: node registry must exist before any enemy code path or
-	# timer binding runs.
+	for lair_id in LAIR_SPAWN_TABLE.keys():
+		var lair = LAIR_SPAWN_TABLE[lair_id]
+		for i in range(lair["members"].size()):
+			var m = lair["members"][i]
+			var eid = lair_id + "_" + str(i)
+			enemies[eid] = CombatData.generate_enemy(
+				String(m["display_name"]),
+				int(m["cl"]),
+				String(m["archetype"]),
+				String(m["faction"])
+			)
 	_build_enemy_node_registry()
 	for _eid in enemies.keys():
 		_apply_cl_derivation(_eid)
@@ -964,6 +1145,11 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	if event.is_action_pressed("ui_cancel") and crafting_panel_ui != null and crafting_panel_ui.visible:
 		crafting_panel_ui.visible = false
+
+	if event is InputEventKey and event.pressed and event.keycode == KEY_F3:
+		_debug_grant_core_mods()
+	if event is InputEventKey and event.pressed and event.keycode == KEY_F8:
+		get_tree().quit()
 
 func _generate_unique_resource_name() -> String:
 	var new_name = ""
@@ -1511,8 +1697,18 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 	# Central damage number: variance roll, crit, profession cert (1.10)
 	# and the Phase 10 graded uncertified damage penalty all live in
 	# Combat.gd, so the whole damage formula is tuned in one place.
-	var weapon_damage_type = weapon_stats.get("Damage Type", "Kinetic")
+	var weapon_damage_type = "Kinetic"
+	var core_effect_strength = 0.0
+	for _mod in _installed_mods_for(equipped_weapon_name):
+		var _mdef = CraftingData.get_mod(String(_mod.get("mod_id", "")))
+		if String(_mdef.get("mod_type", "")) == "core":
+			weapon_damage_type = String(_mdef.get("damage_type", "Kinetic"))
+			core_effect_strength = float(_mod.get("effect_strength", 0.5))
+			break
 	var weapon_armor_pen = int(weapon_stats.get("Armor Penetration", 0))
+	if weapon_damage_type == "Ballistic" and core_effect_strength > 0.0:
+		var ballistic_def = CombatData.SECONDARY_EFFECTS.get("Ballistic", {})
+		weapon_armor_pen += int(float(ballistic_def.get("base_amount", 15.0)) * core_effect_strength)
 
 	var attack_result = Combat.compute_player_attack_damage({
 		"base_damage": base_damage,
@@ -1606,10 +1802,11 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 	if crit_hit:
 		hit_message += "CRITICAL HIT! "
 
+	var type_label = "" if weapon_damage_type == "Kinetic" and core_effect_strength <= 0.0 else " " + weapon_damage_type
 	if is_aoe and targets_to_hit.size() > 1:
-		hit_message += "You hit all nearby enemies for " + str(int(primary_damage)) + " damage each!"
+		hit_message += "You hit all nearby enemies for " + str(int(primary_damage)) + type_label + " damage each!"
 	else:
-		hit_message += "You hit " + target_name + " for " + str(int(primary_damage)) + " damage!"
+		hit_message += "You hit " + target_name + " for " + str(int(primary_damage)) + type_label + " damage!"
 
 	if action_cost > 0:
 		hit_message += " (-" + str(action_cost) + " Action)"
@@ -1634,11 +1831,14 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 		taunt_duration = ability_data.get("taunt_duration", 0.0)
 
 	var defeat_messages: Array = []
+	var secondary_procced := ""
+
+	var sec_def = CombatData.SECONDARY_EFFECTS.get(weapon_damage_type, {})
+	var sec_effect = String(sec_def.get("effect", ""))
 
 	for hit_target_id in targets_to_hit:
-		# Phase 5: each target rolls its OWN block. The primary target
-		# already rolled above (reuse it); additional AoE targets roll
-		# fresh so one enemy blocking never shields the rest.
+		if String(enemies[hit_target_id].get("ai_state", "idle")) == "leash":
+			continue
 		var target_block_mult = 1.0
 		if hit_target_id == target_id:
 			target_block_mult = roll["damage_mult"]
@@ -1647,7 +1847,6 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 			if block_pct > 0.0 and randf() * 100.0 < block_pct:
 				target_block_mult = CombatData.BLOCK_DAMAGE_MULTIPLIER
 		var dealt = Combat.apply_typed_mitigation(int(round(float(damage) * target_block_mult)), enemies[hit_target_id]["resistances"], weapon_damage_type, weapon_armor_pen)
-		# Phase 6b: one branch-free path for any enemy id.
 		var te = enemies[hit_target_id]
 		te["current_health"] -= int(dealt)
 		te["damage_by_weapon_class"][xp_class_key] = te["damage_by_weapon_class"].get(xp_class_key, 0) + int(dealt)
@@ -1659,6 +1858,26 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 			_apply_dot(hit_target_id, dot_damage_per_tick, dot_duration_ticks)
 		if taunt_duration > 0.0:
 			_apply_taunt(hit_target_id, taunt_duration)
+
+		if core_effect_strength > 0.0 and sec_effect != "" and sec_effect != "armor_pierce":
+			var chance = float(sec_def.get("base_chance", 0.0)) * core_effect_strength
+			if randf() * 100.0 < chance:
+				var amt = float(sec_def.get("base_amount", 0.0)) * core_effect_strength
+				var dur = float(sec_def.get("duration", 0.0))
+				secondary_procced = String(sec_def.get("label", ""))
+				if sec_effect == "damage_debuff":
+					_apply_debuff(hit_target_id, "damage", amt, dur)
+				elif sec_effect == "attack_speed_debuff":
+					_apply_debuff(hit_target_id, "attack_speed", amt, dur)
+				elif sec_effect == "burn_dot":
+					te["burn_damage_per_tick"] = int(round(amt))
+					te["burn_ticks_remaining"] = int(round(dur))
+				elif sec_effect == "poison_dot":
+					te["poison_damage_per_tick"] = int(round(amt))
+					te["poison_ticks_remaining"] = int(round(dur))
+				elif sec_effect == "stagger":
+					te["stagger_until_msec"] = Time.get_ticks_msec() + int(dur * 1000.0)
+
 		if te["current_health"] <= 0 or te["current_action"] <= 0:
 			defeat_messages.append(_defeat_enemy(hit_target_id))
 
@@ -1674,6 +1893,8 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 		hit_message += " (" + ability_name + " applied -- " + str(dot_damage_per_tick) + " damage/sec for " + str(dot_duration_ticks) + " seconds)"
 	if taunt_duration > 0.0:
 		hit_message += " (" + ability_name + " applied -- target is enraged)"
+	if secondary_procced != "":
+		hit_message += " [" + secondary_procced + "!]"
 
 	# Combine damage-dealt text with any defeat/loot messages into ONE
 	# message instead of two competing _show_combat_message() calls --
@@ -1728,19 +1949,39 @@ func _get_nearest_enemy_in_range() -> String:
 	return ""
 
 func _build_enemy_node_registry() -> void:
-	# Phase 6c: enemies are INSTANTIATED from Enemy.tscn rather than being
-	# hand-placed nodes. Each spawned instance carries its own bars, name
-	# label, target indicator and timers as CHILDREN, so they follow the
-	# enemy automatically -- the old per-frame global repositioning is gone.
 	enemy_nodes.clear()
 	for enemy_id in ENEMY_SPAWN_TABLE.keys():
 		_spawn_enemy(String(enemy_id))
+	_spawn_lair_enemies()
+
+
+func _spawn_lair_enemies() -> void:
+	for lair_id in LAIR_SPAWN_TABLE.keys():
+		var lair = LAIR_SPAWN_TABLE[lair_id]
+		var center: Vector2 = lair["center"]
+		var radius = float(lair.get("spawn_radius", 80.0))
+		var count = lair["members"].size()
+		for i in range(count):
+			var m = lair["members"][i]
+			var eid = lair_id + "_" + str(i)
+			var angle = (float(i) / float(count)) * TAU
+			var offset = Vector2(cos(angle), sin(angle)) * radius * 0.5
+			var spawn = m.duplicate(true)
+			spawn["position"] = center + offset
+			spawn["lair_id"] = lair_id
+			_spawn_enemy(eid, spawn)
+		var nm_def = lair.get("nm", {})
+		if not nm_def.is_empty():
+			var replace_idx = int(nm_def.get("replaces_index", 0))
+			var target_eid = lair_id + "_" + str(replace_idx)
+			if enemy_nodes.has(target_eid):
+				enemy_nodes[target_eid]["nm_def"] = nm_def
 
 
 # Instantiates one enemy and registers its nodes. Safe to call again for
 # the same id -- the previous instance is freed first.
-func _spawn_enemy(enemy_id: String) -> void:
-	var spawn: Dictionary = ENEMY_SPAWN_TABLE.get(enemy_id, {})
+func _spawn_enemy(enemy_id: String, spawn_override: Dictionary = {}) -> void:
+	var spawn: Dictionary = spawn_override if not spawn_override.is_empty() else ENEMY_SPAWN_TABLE.get(enemy_id, {})
 	if spawn.is_empty():
 		push_error("[ENEMY] No spawn entry for id: " + enemy_id)
 		return
@@ -1818,6 +2059,14 @@ func _spawn_enemy(enemy_id: String) -> void:
 		"kill_xp": int(spawn.get("kill_xp", 0)),
 		"loot_key": String(spawn.get("loot_key", enemy_id)),
 		"attack_cooldown": float(spawn.get("attack_cooldown", 2.5)),
+		"home_position": spawn.get("position", Vector2.ZERO),
+		"aggro_range": float(spawn.get("aggro_range", DEFAULT_AGGRO_RANGE)),
+		"chase_speed": float(spawn.get("chase_speed", DEFAULT_CHASE_SPEED)),
+		"leash_range": float(spawn.get("leash_range", DEFAULT_LEASH_RANGE)),
+		"patrol_radius": float(spawn.get("patrol_radius", DEFAULT_PATROL_RADIUS)),
+		"lair_id": String(spawn.get("lair_id", "")),
+		"spawn_data": spawn.duplicate(true),
+		"nm_def": spawn.get("nm", {}),
 	}
 
 func _set_enemy_visible(enemy_id: String, is_visible: bool) -> void:
@@ -1873,7 +2122,11 @@ func _defeat_enemy(enemy_id: String) -> String:
 	cogs += cogs_dropped
 	_update_cogs_display()
 
-	var defeat_message = e["name"] + " has been defeated!\n"
+	var defeat_message = ""
+	if e.get("is_nm", false):
+		defeat_message = "NOTORIOUS MONSTER " + e["name"] + " has been slain!\n"
+	else:
+		defeat_message = e["name"] + " has been defeated!\n"
 	if dropped_items.size() > 0:
 		defeat_message += "Loot: "
 		for i in range(dropped_items.size()):
@@ -1884,28 +2137,124 @@ func _defeat_enemy(enemy_id: String) -> String:
 	else:
 		defeat_message += "Loot: " + str(cogs_dropped) + " Cogs"
 
-	n["respawn_timer"].start()
+	var lair_id = String(n.get("lair_id", ""))
+	if e.get("is_nm", false) and lair_id != "":
+		var lair_def = LAIR_SPAWN_TABLE.get(lair_id, {})
+		var lair_type = String(lair_def.get("lair_type", lair_id))
+		nm_active_by_type[lair_type] = false
+
+	if lair_id == "":
+		n["respawn_timer"].start()
+	else:
+		_check_lair_cleared(lair_id)
 	return defeat_message
 
 
-# Replaces the old per-enemy respawn functions. Restores the enemy to
-# full and clears every combat state it may have died with.
-func _on_enemy_respawn(enemy_id: String) -> void:
+func _reset_enemy(enemy_id: String) -> void:
 	if not enemies.has(enemy_id):
 		return
 	var e = enemies[enemy_id]
-	e["current_health"] = e["max_health"]
-	e["current_action"] = e["max_action"]
 	e["alive"] = true
+	e["is_nm"] = false
 	e["damage_debuff"] = 0.0
 	e["accuracy_debuff"] = 0.0
 	e["attack_speed_debuff"] = 0.0
 	e["bleed_ticks_remaining"] = 0
 	e["bleed_damage_per_tick"] = 0
+	e["burn_ticks_remaining"] = 0
+	e["burn_damage_per_tick"] = 0
+	e["poison_ticks_remaining"] = 0
+	e["poison_damage_per_tick"] = 0
+	e["stagger_until_msec"] = 0
 	e["taunted_until_msec"] = 0
 	e["damage_by_weapon_class"] = {}
+	e["ai_state"] = "idle"
+	e["ai_target"] = ""
+	if enemy_nodes.has(enemy_id):
+		var n = enemy_nodes[enemy_id]
+		var base = n.get("spawn_data", {})
+		if not base.is_empty():
+			e["name"] = String(base.get("display_name", e["name"]))
+			e["cl"] = int(base.get("cl", e["cl"]))
+			e["archetype"] = String(base.get("archetype", e["archetype"]))
+			e["faction"] = String(base.get("faction", e["faction"]))
+			n["kill_xp"] = int(base.get("kill_xp", n["kill_xp"]))
+			n["loot_key"] = String(base.get("loot_key", n["loot_key"]))
+			var visual: Sprite2D = n["body"].get_node("Visual")
+			visual.modulate = base.get("tint", Color(1, 1, 1, 1))
+		_apply_cl_derivation(enemy_id)
+		n["name_label"].text = e["name"]
+		n["body"].position = n["home_position"]
+	else:
+		e["current_health"] = e["max_health"]
+		e["current_action"] = e["max_action"]
 	_set_enemy_visible(enemy_id, true)
-	_show_combat_message(e["name"] + " has respawned.")
+
+
+func _on_enemy_respawn(enemy_id: String) -> void:
+	if not enemies.has(enemy_id):
+		return
+	_reset_enemy(enemy_id)
+	_show_combat_message(enemies[enemy_id]["name"] + " has respawned.")
+	if enemy_nodes.has(enemy_id):
+		var nm_def = enemy_nodes[enemy_id].get("nm_def", {})
+		if not nm_def.is_empty():
+			if randf() < float(nm_def.get("spawn_chance", 0.0)):
+				_promote_to_nm(enemy_id)
+
+
+func _check_lair_cleared(lair_id: String) -> void:
+	for eid in enemies.keys():
+		if not enemy_nodes.has(eid):
+			continue
+		if String(enemy_nodes[eid].get("lair_id", "")) != lair_id:
+			continue
+		if enemies[eid]["alive"]:
+			return
+	var lair_def = LAIR_SPAWN_TABLE.get(lair_id, {})
+	_show_combat_message(String(lair_def.get("display_name", lair_id)) + " has been cleared!")
+	get_tree().create_timer(3.5).timeout.connect(_on_lair_nm_roll.bind(lair_id))
+
+
+func _on_lair_nm_roll(lair_id: String) -> void:
+	var lair_def = LAIR_SPAWN_TABLE.get(lair_id, {})
+	var lair_type = String(lair_def.get("lair_type", lair_id))
+	if nm_active_by_type.get(lair_type, false):
+		return
+	var nm_def = lair_def.get("nm", {})
+	if nm_def.is_empty():
+		return
+	if randf() >= float(nm_def.get("spawn_chance", 0.0)):
+		return
+	var replace_idx = int(nm_def.get("replaces_index", 0))
+	var target_eid = lair_id + "_" + str(replace_idx)
+	if not enemies.has(target_eid):
+		return
+	_reset_enemy(target_eid)
+	_promote_to_nm(target_eid)
+	nm_active_by_type[lair_type] = true
+
+
+func _promote_to_nm(enemy_id: String) -> void:
+	var e = enemies[enemy_id]
+	var n = enemy_nodes[enemy_id]
+	var nm_def = n.get("nm_def", {})
+	e["name"] = String(nm_def.get("display_name", e["name"]))
+	if nm_def.has("cl"):
+		e["cl"] = int(nm_def["cl"])
+	if nm_def.has("archetype"):
+		e["archetype"] = String(nm_def["archetype"])
+	if nm_def.has("faction"):
+		e["faction"] = String(nm_def["faction"])
+	n["kill_xp"] = int(nm_def.get("kill_xp", n["kill_xp"]))
+	n["loot_key"] = String(nm_def.get("loot_key", n["loot_key"]))
+	e["is_nm"] = true
+	_apply_cl_derivation(enemy_id)
+	n["name_label"].text = e["name"]
+	if nm_def.has("tint"):
+		var visual: Sprite2D = n["body"].get_node("Visual")
+		visual.modulate = nm_def["tint"]
+	_show_combat_message("A Notorious Monster has appeared: " + e["name"] + "!")
 
 
 
@@ -2379,10 +2728,10 @@ func _make_target_indicator() -> Line2D:
 	line.visible = false
 	return line
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	_update_health_bars()
 	for eid in enemies.keys():
-		_check_enemy_attack(eid)
+		_update_enemy_ai(eid, delta)
 
 func _update_health_bars() -> void:
 	for t in trainers:
@@ -2564,19 +2913,56 @@ func _apply_cl_derivation(enemy_id: String) -> void:
 	e["attack_max_damage"] = int(round(d["damage"] * 1.45))
 
 
-# Replaces the old per-enemy attack-check functions. Called once per
-# enemy from _process.
-func _check_enemy_attack(enemy_id: String) -> void:
+func _update_enemy_ai(enemy_id: String, delta: float) -> void:
 	if not enemies.has(enemy_id) or not enemy_nodes.has(enemy_id):
 		return
 	var e = enemies[enemy_id]
 	var n = enemy_nodes[enemy_id]
-
-	if not e["alive"] or not player_alive or not e["attack_ready"]:
+	if not e["alive"]:
 		return
 
-	var distance = n["body"].global_position.distance_to(player.global_position)
-	if distance > ENEMY_ATTACK_RANGE:
+	var body: Node2D = n["body"]
+	var pos = body.global_position
+	var player_pos = player.global_position
+	var dist_to_player = pos.distance_to(player_pos)
+	var home: Vector2 = n["home_position"]
+	var dist_to_home = pos.distance_to(home)
+	var state = String(e["ai_state"])
+
+	if state == "leash":
+		_ai_leash_tick(enemy_id, e, n, body, home, dist_to_home, delta)
+		return
+
+	if int(e.get("stagger_until_msec", 0)) > Time.get_ticks_msec():
+		return
+
+	if state == "idle":
+		if player_alive and dist_to_player <= n["aggro_range"]:
+			e["ai_state"] = "chase"
+			e["ai_target"] = "player"
+			_ai_call_for_help(enemy_id)
+		else:
+			_ai_patrol_tick(enemy_id, e, n, body, home, dist_to_home, delta)
+		return
+
+	if state == "chase":
+		if not player_alive:
+			e["ai_state"] = "leash"
+			return
+		if dist_to_home > n["leash_range"]:
+			e["ai_state"] = "leash"
+			return
+		if dist_to_player > ENEMY_ATTACK_RANGE:
+			var direction = (player_pos - pos).normalized()
+			body.position += direction * n["chase_speed"] * delta
+			var sprite: Sprite2D = body.get_node("Visual")
+			sprite.flip_h = direction.x < 0
+		else:
+			_ai_try_attack(enemy_id, e, n)
+
+
+func _ai_try_attack(_enemy_id: String, e: Dictionary, n: Dictionary) -> void:
+	if not e["attack_ready"] or not player_alive:
 		return
 
 	var damage = Combat.compute_enemy_attack_damage(e["attack_min_damage"], e["attack_max_damage"], e["damage_debuff"])
@@ -2593,6 +2979,71 @@ func _check_enemy_attack(enemy_id: String) -> void:
 	n["attack_timer"].start()
 
 
+func _ai_leash_tick(_enemy_id: String, e: Dictionary, n: Dictionary, body: Node2D, home: Vector2, dist_to_home: float, delta: float) -> void:
+	if dist_to_home < 5.0:
+		body.position = home
+		e["current_health"] = e["max_health"]
+		e["current_action"] = e["max_action"]
+		e["damage_debuff"] = 0.0
+		e["accuracy_debuff"] = 0.0
+		e["attack_speed_debuff"] = 0.0
+		e["bleed_ticks_remaining"] = 0
+		e["burn_ticks_remaining"] = 0
+		e["poison_ticks_remaining"] = 0
+		e["ai_state"] = "idle"
+		e["ai_target"] = ""
+		return
+	var direction = (home - body.global_position).normalized()
+	body.position += direction * n["chase_speed"] * 1.5 * delta
+	var heal_amt = int(round(float(e["max_health"]) * LEASH_HEAL_RATE * delta))
+	e["current_health"] = min(e["max_health"], e["current_health"] + heal_amt)
+
+
+func _ai_patrol_tick(_enemy_id: String, _e: Dictionary, n: Dictionary, body: Node2D, home: Vector2, dist_to_home: float, delta: float) -> void:
+	if not n.has("patrol_target"):
+		_ai_pick_patrol_target(n, home)
+	var wait = float(n.get("patrol_wait", 0.0))
+	if wait > 0.0:
+		n["patrol_wait"] = wait - delta
+		return
+	var target: Vector2 = n["patrol_target"]
+	var dist = body.global_position.distance_to(target)
+	if dist < 5.0 or dist_to_home > n["patrol_radius"] * 1.5:
+		_ai_pick_patrol_target(n, home)
+		return
+	var direction = (target - body.global_position).normalized()
+	body.position += direction * n["chase_speed"] * 0.3 * delta
+
+
+func _ai_pick_patrol_target(n: Dictionary, home: Vector2) -> void:
+	var angle = randf() * TAU
+	var radius = randf() * n["patrol_radius"]
+	n["patrol_target"] = home + Vector2(cos(angle), sin(angle)) * radius
+	n["patrol_wait"] = randf_range(2.0, 5.0)
+
+
+func _ai_call_for_help(aggroed_id: String) -> void:
+	if not enemy_nodes.has(aggroed_id):
+		return
+	var lair = String(enemy_nodes[aggroed_id].get("lair_id", ""))
+	if lair == "":
+		return
+	var aggroed_pos = enemy_nodes[aggroed_id]["body"].global_position
+	for eid in enemies.keys():
+		if eid == aggroed_id:
+			continue
+		if not enemies[eid]["alive"] or enemies[eid]["ai_state"] != "idle":
+			continue
+		if not enemy_nodes.has(eid):
+			continue
+		if String(enemy_nodes[eid].get("lair_id", "")) != lair:
+			continue
+		var dist = enemy_nodes[eid]["body"].global_position.distance_to(aggroed_pos)
+		if dist <= enemy_nodes[eid]["aggro_range"] * 1.5:
+			enemies[eid]["ai_state"] = "chase"
+			enemies[eid]["ai_target"] = "player"
+
+
 func _on_enemy_attack_cooldown_finished(enemy_id: String) -> void:
 	if enemies.has(enemy_id):
 		enemies[enemy_id]["attack_ready"] = true
@@ -2605,6 +3056,7 @@ func _defeat_player() -> void:
 
 func _on_player_respawn() -> void:
 	player_current_health = player_max_health
+	player_current_action = player_max_action
 	player_alive = true
 	player.position = player_spawn_position
 	_show_combat_message("You have respawned.")
@@ -2626,19 +3078,33 @@ func _on_player_regen_tick() -> void:
 		blood_bag_bonus_amount = 0
 		_show_combat_message("Your Blood Bag boost has worn off.")
 
-	# Bleed (Pressure Enforcer Master ability) -- same once-per-second
-	# tick cadence as the Apothecary HoTs above, just damage instead of
-	# healing, and applied to whichever enemy has it active.
-	# Phase 6b: ticks every bleeding enemy, not a hand-written pair.
 	for eid in enemies.keys():
 		var be = enemies[eid]
-		if not be["alive"] or be["bleed_ticks_remaining"] <= 0:
+		if not be["alive"]:
 			continue
-		be["current_health"] -= be["bleed_damage_per_tick"]
-		be["bleed_ticks_remaining"] -= 1
-		_show_enemy_combat_message("Bleed deals " + str(be["bleed_damage_per_tick"]) + " damage to " + be["name"] + "!")
-		if be["current_health"] <= 0:
-			_show_combat_message(_defeat_enemy(eid))
+		if String(be.get("ai_state", "idle")) == "leash":
+			continue
+		var defeated = false
+		if be["bleed_ticks_remaining"] > 0:
+			be["current_health"] -= be["bleed_damage_per_tick"]
+			be["bleed_ticks_remaining"] -= 1
+			_show_enemy_combat_message("Bleed deals " + str(be["bleed_damage_per_tick"]) + " damage to " + be["name"] + "!")
+			if be["current_health"] <= 0:
+				_show_combat_message(_defeat_enemy(eid))
+				defeated = true
+		if not defeated and be["burn_ticks_remaining"] > 0:
+			be["current_health"] -= be["burn_damage_per_tick"]
+			be["burn_ticks_remaining"] -= 1
+			_show_enemy_combat_message("Burn deals " + str(be["burn_damage_per_tick"]) + " damage to " + be["name"] + "!")
+			if be["current_health"] <= 0:
+				_show_combat_message(_defeat_enemy(eid))
+				defeated = true
+		if not defeated and be["poison_ticks_remaining"] > 0:
+			be["current_health"] -= be["poison_damage_per_tick"]
+			be["poison_ticks_remaining"] -= 1
+			_show_enemy_combat_message("Poison deals " + str(be["poison_damage_per_tick"]) + " damage to " + be["name"] + "!")
+			if be["current_health"] <= 0:
+				_show_combat_message(_defeat_enemy(eid))
 
 func _on_player_action_regen_tick() -> void:
 	if not player_alive:
@@ -2759,10 +3225,6 @@ func _realise_item_stats(item_key: String, definition: Dictionary, quality: int)
 		crafted_item_class[item_key] = definition["item_class"]
 	if definition.has("item_subclass"):
 		crafted_item_subclass[item_key] = definition["item_subclass"]
-
-	if definition.has("weapon_categorical_stats"):
-		for stat_name in definition["weapon_categorical_stats"].keys():
-			output_stats[stat_name] = definition["weapon_categorical_stats"][stat_name]
 
 	if definition.has("weapon_stat_ranges"):
 		for stat_name in definition["weapon_stat_ranges"].keys():
@@ -4363,12 +4825,9 @@ func _select_inventory_book_item(item_key: String) -> void:
 			if not flaw_names.is_empty():
 				stat_lines.append("Flaws: " + ", ".join(flaw_names))
 
-			var socket_tags: Array = inst.get("socket_tags", [])
-			if int(inst.get("socket_count", 0)) > 0 and not socket_tags.is_empty():
-				var tag_names: Array = []
-				for tg in socket_tags:
-					tag_names.append(String(CraftingData.get_socket_tag(String(tg)).get("display_name", tg)))
-				stat_lines.append("Socket types: " + ", ".join(tag_names))
+			var sc = int(inst.get("socket_count", 0))
+			if sc > 0:
+				stat_lines.append("Mod sockets: " + str(sc))
 
 			var dur = float(inst.get("maximum_durability", 0.0))
 			if dur > 0.0:
@@ -4665,9 +5124,6 @@ func _grant_crafted_item(crafted: Dictionary) -> String:
 	# the mod system.
 	var stats = inventory_stats[item_key]
 	stats["Craft Quality"] = realised
-	var sockets = int(crafted.get("socket_count", 0))
-	if sockets > 0:
-		stats["Mod Sockets"] = sockets
 
 	crafted_items[String(crafted.get("instance_id", item_key))] = crafted
 	crafted_item_instance_of[item_key] = String(crafted.get("instance_id", ""))
@@ -4685,6 +5141,11 @@ func _perform_craft(blueprint_id: String, selection: Dictionary,
 	if not problems.is_empty():
 		_show_combat_message("Cannot craft: " + String(problems[0]))
 		return {}
+
+	var bp = CraftingData.get_blueprint(blueprint_id)
+
+	if String(bp.get("output_type", "")) == "mod":
+		return _perform_mod_craft(blueprint_id, selection)
 
 	var points = CraftingService.generate_experimentation_points(blueprint_id, selection, crafting_profile)
 	var alloc_problems = CraftingService.validate_allocation(blueprint_id, allocation, int(points["total"]))
@@ -4704,8 +5165,6 @@ func _perform_craft(blueprint_id: String, selection: Dictionary,
 
 	_update_inventory_display()
 	var msg = "Crafted: " + String(crafted.get("display_name", "item")) + " (Quality " + str(int(round(float(crafted.get("craft_quality_score", 0.0))))) + ")"
-	# Surface experimentation outcomes -- especially failures, which are
-	# otherwise invisible until the player inspects the item.
 	var results: Dictionary = crafted.get("experimentation_results", {})
 	var failed: Array = []
 	var flaws: Array = []
@@ -4726,12 +5185,39 @@ func _perform_craft(blueprint_id: String, selection: Dictionary,
 	return crafted
 
 
+func _perform_mod_craft(blueprint_id: String, selection: Dictionary) -> Dictionary:
+	var mod = CraftingService.craft_mod(blueprint_id, selection)
+	if mod.is_empty():
+		_show_combat_message("The craft failed.")
+		return {}
+
+	_consume_selection(blueprint_id, selection)
+	var mod_id = String(mod.get("mod_id", ""))
+	var grade_id = String(mod.get("grade_id", "standard"))
+	var instance_id = String(mod.get("mod_instance_id", ""))
+	mod_instances[instance_id] = mod
+
+	var item_key = _generate_unique_resource_name()
+	var mod_def = CraftingData.get_mod(mod_id)
+	var grade = CraftingData.get_mod_grade(grade_id)
+	consumable_base_name[item_key] = String(grade.get("display_name", grade_id)) + " " + String(mod_def.get("display_name", mod_id))
+	mod_instance_of[item_key] = instance_id
+	_add_to_inventory(item_key, 1)
+	_update_inventory_display()
+
+	var quality = int(round(float(mod.get("craft_quality", 0.0))))
+	var msg = "Crafted: " + consumable_base_name[item_key] + " (Quality " + str(quality) + ")"
+	_show_combat_message(msg)
+	return mod
+
+
 # Restores crafting state from a save. The campaign map is restored WHOLE
 # and never regenerated -- that is the anti-reroll guarantee.
 func _load_crafting_state(save_data: Dictionary) -> void:
 	campaign_seed = int(save_data.get("campaign_seed", 0))
 	campaign_map = CraftingResourceGenerator.from_save_dict(save_data.get("campaign_map", {}))
 	surface_sources = save_data.get("surface_sources", {})
+	_migrate_traitless_surface_sources()
 
 	var restored = CraftingService.from_save_dict(save_data.get("crafting", {}))
 	material_batches = restored.get("batches", {})
@@ -4739,6 +5225,37 @@ func _load_crafting_state(save_data: Dictionary) -> void:
 	crafting_profile = restored.get("profile", {})
 	if crafting_profile.is_empty():
 		crafting_profile = CraftingModels.new_player_profile()
+
+
+func _migrate_traitless_surface_sources() -> void:
+	var dominated = false
+	for sid in surface_sources.keys():
+		if String(surface_sources[sid].get("primary_trait_id", "")) == "":
+			dominated = true
+			break
+	if not dominated:
+		return
+	var rng = RandomNumberGenerator.new()
+	var h: int = campaign_seed
+	for i in range("surface".length()):
+		h = (h * 31 + "surface".unicode_at(i)) & 0x7FFFFFFF
+	rng.seed = h
+	var families = CraftingData.all_families()
+	var slot = 0
+	for entry in CraftingData.SURFACE_SOURCES:
+		var family_id = String(entry.get("family_id", ""))
+		if not families.has(family_id):
+			slot += 1
+			continue
+		rng.randi_range(CraftingData.SURFACE_QUALITY_MIN, CraftingData.SURFACE_QUALITY_MAX)
+		var fam_traits: Array = families[family_id].get("eligible_traits", [])
+		var trait_id = "" if fam_traits.is_empty() else String(fam_traits[rng.randi() % fam_traits.size()])
+		var source_id = "src_surface_" + family_id + "_" + str(slot)
+		if surface_sources.has(source_id) and String(surface_sources[source_id].get("primary_trait_id", "")) == "":
+			surface_sources[source_id]["primary_trait_id"] = trait_id
+			print("[MIGRATE] Backfilled trait '" + trait_id + "' onto " + source_id)
+		rng.randi_range(55, 80)
+		slot += 1
 
 
 # Builds the blueprint crafting panel. Mirrors _build_talent_ui: a
@@ -4858,8 +5375,14 @@ func _mod_install_problems(item_key: String, mod_item_key: String) -> Array:
 	var mod_id = String(mod_instance_of.get(mod_item_key, ""))
 	if mod_id == "" or not mod_instances.has(mod_id):
 		return ["That is not a mod."]
+	var item_class = String(crafted_item_class.get(item_key, ""))
+	var weapon_range = ""
+	if MELEE_WEAPON_CLASSES.has(item_class):
+		weapon_range = "Melee"
+	elif RANGED_WEAPON_CLASSES.has(item_class):
+		weapon_range = "Ranged"
 	return CraftingService.mod_install_problems(
-		crafted_items[instance_id], mod_instances[mod_id], _installed_mods_for(item_key))
+		crafted_items[instance_id], mod_instances[mod_id], _installed_mods_for(item_key), weapon_range)
 
 
 # PERMANENTLY fits a mod. The mod's inventory entry is consumed: mods
@@ -4917,6 +5440,35 @@ func _grant_mod(mod_id: String, grade_id: String = "standard") -> String:
 	return item_key
 
 
+func _debug_grant_core_mods() -> void:
+	var weapon = CraftingModels.new_crafted_item(
+		CraftingService._next_id("item"), "bp_piston_blade", "Piston Blade",
+		[], {"Material Potential": 100.0, "Realised Quality": 100.0},
+		[], [], "masterwork", 100.0, 200.0, 12345, 0.0)
+	weapon["socket_count"] = 3
+	var wkey = _grant_crafted_item(weapon)
+	if wkey != "":
+		_show_combat_message("DEBUG: Granted Piston Blade with 3 sockets.")
+
+	var types = ["core_thermal", "core_arc", "core_chemical", "core_pressure", "core_ballistic", "core_kinetic"]
+	for mod_id in types:
+		var mod = CraftingService.create_mod(mod_id, "refined")
+		if mod.is_empty():
+			continue
+		mod["effect_strength"] = 0.7
+		mod["craft_quality"] = 60.0
+		var iid = String(mod.get("mod_instance_id", ""))
+		mod_instances[iid] = mod
+		var item_key = _generate_unique_resource_name()
+		var mdef = CraftingData.get_mod(mod_id)
+		var grade = CraftingData.get_mod_grade("refined")
+		consumable_base_name[item_key] = String(grade.get("display_name", "Refined")) + " " + String(mdef.get("display_name", mod_id))
+		mod_instance_of[item_key] = iid
+		_add_to_inventory(item_key, 1)
+	_update_inventory_display()
+	_show_combat_message("DEBUG: Granted 6 Core mods (one per damage type).")
+
+
 # ====================================================================
 # MOD SOCKET UI (crafting Phase 6 -- staging, preview, confirmation)
 # ====================================================================
@@ -4946,7 +5498,6 @@ func _refresh_socket_area() -> void:
 	inventory_book_socket_area.add_child(header)
 
 	var installed = _installed_mods_for(item_key)
-	var socket_tags: Array = inst.get("socket_tags", [])
 
 	for i in range(socket_count):
 		var slot = Panel.new()
@@ -4959,10 +5510,6 @@ func _refresh_socket_area() -> void:
 
 		var label = Label.new()
 		label.position = Vector2(8, 6)
-
-		var tag_name = ""
-		if i < socket_tags.size():
-			tag_name = String(CraftingData.get_socket_tag(String(socket_tags[i])).get("display_name", socket_tags[i]))
 
 		if i < installed.size():
 			# Permanently fitted.
@@ -4987,7 +5534,7 @@ func _refresh_socket_area() -> void:
 			clear_btn.pressed.connect(_on_clear_pending_socket.bind(i))
 			slot.add_child(clear_btn)
 		else:
-			label.text = "Empty" + ("  [" + tag_name + "]" if tag_name != "" else "")
+			label.text = "Empty"
 			label.modulate = Color(0.55, 0.6, 0.62)
 			slot.add_theme_stylebox_override("panel", _make_flat_style(Color(0.05, 0.08, 0.09)))
 
@@ -5087,8 +5634,9 @@ func _on_mod_install_confirmed() -> void:
 	_select_inventory_book_item(item_key)
 
 
-# Display name for an enemy id, from the spawn table.
 func _get_enemy_name(enemy_id: String) -> String:
+	if enemies.has(enemy_id):
+		return String(enemies[enemy_id].get("name", enemy_id))
 	return String(ENEMY_SPAWN_TABLE.get(enemy_id, {}).get("display_name", enemy_id))
 
 

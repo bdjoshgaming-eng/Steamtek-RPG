@@ -42,7 +42,6 @@ var points_breakdown: Dictionary = {}
 # Results of the LAST craft, shown until the next one.
 var last_results: Dictionary = {}
 var last_socket_count: int = 0
-var last_socket_tags: Array = []
 
 var exp_container: VBoxContainer
 var points_label: Label
@@ -440,7 +439,6 @@ func _on_blueprint_selected(bp_id: String) -> void:
 	allocation.clear()
 	last_results.clear()
 	last_socket_count = 0
-	last_socket_tags = []
 	selected_blueprint_id = bp_id
 	selections.clear()
 	refresh()
@@ -461,7 +459,6 @@ func _on_craft_pressed() -> void:
 	# generated fresh for each craft and do not carry over.
 	last_results = crafted.get("experimentation_results", {})
 	last_socket_count = int(crafted.get("socket_count", 0))
-	last_socket_tags = crafted.get("socket_tags", [])
 	allocation.clear()
 	# Materials were consumed, so previous choices may no longer be valid.
 	selections.clear()
@@ -667,11 +664,7 @@ func _refresh_results() -> void:
 
 	var lines: Array = ["Last craft:"]
 	if last_socket_count > 0:
-		var tag_names: Array = []
-		for t in last_socket_tags:
-			tag_names.append(String(CraftingData.get_socket_tag(String(t)).get("display_name", t)))
-		lines.append("  Sockets: " + str(last_socket_count)
-			+ ("  [" + ", ".join(tag_names) + "]" if not tag_names.is_empty() else ""))
+		lines.append("  Sockets: " + str(last_socket_count))
 	var flaws: Array = []
 	for cid in last_results.keys():
 		var r = last_results[cid]

@@ -423,37 +423,17 @@ func loot_tier_chances_for_cl(cl: int) -> Dictionary:
 func validate_game_data() -> Array:
 	var issues: Array = []
 
-	var valid_damage_types := {}
-	for t in CombatData.DAMAGE_TYPES:
-		valid_damage_types[t] = true
-
-	# --- 1. Weapon damage types must exist in CombatData.DAMAGE_TYPES ---
-	# A mismatch means the weapon takes ZERO typed mitigation.
-	var seen_damage_types := {}
+	# --- 1. Weapon families (item_class) must exist in WEAPON_FAMILIES ---
+	# A mismatch means no proficiency tier and no certification resolve.
 	for wname in GameData.ITEM_DEFINITIONS.keys():
 		var idef = GameData.ITEM_DEFINITIONS[wname]
-		if not idef.has("weapon_categorical_stats"):
+		if not idef.has("weapon_stat_ranges"):
 			continue
-		var cat = idef["weapon_categorical_stats"]
-		if not cat.has("Damage Type"):
-			issues.append("Weapon '" + wname + "' has no Damage Type.")
-			continue
-		var dt = cat["Damage Type"]
-		seen_damage_types[dt] = true
-		if not valid_damage_types.has(dt):
-			issues.append("Weapon '" + wname + "' has unknown Damage Type '" + str(dt) + "' -- it will bypass all armor.")
-
-	# --- 2. Weapon families (item_class) must exist in WEAPON_FAMILIES ---
-	# A mismatch means no proficiency tier and no certification resolve.
-	for wname2 in GameData.ITEM_DEFINITIONS.keys():
-		var idef2 = GameData.ITEM_DEFINITIONS[wname2]
-		if not idef2.has("weapon_categorical_stats"):
-			continue
-		var fam = idef2.get("item_class", "")
+		var fam = idef.get("item_class", "")
 		if fam == "":
-			issues.append("Weapon '" + wname2 + "' has no item_class (weapon family).")
+			issues.append("Weapon '" + wname + "' has no item_class (weapon family).")
 		elif not CombatData.WEAPON_FAMILIES.has(fam):
-			issues.append("Weapon '" + wname2 + "' has unknown family '" + str(fam) + "' -- proficiency and certs will not resolve.")
+			issues.append("Weapon '" + wname + "' has unknown family '" + str(fam) + "' -- proficiency and certs will not resolve.")
 
 	# --- 3. Weapon family keystones must be real keystones ---
 	# C1 retired the Crafting keystone; this catches anything still
@@ -502,14 +482,5 @@ func validate_game_data() -> Array:
 				issues.append("Enemy '" + enemy_id + "' archetype '" + arch + "' has no stat modifiers.")
 		if fac != "" and not CombatData.FACTION_DEFINITIONS.has(fac):
 			issues.append("Enemy '" + enemy_id + "' faction '" + fac + "' is not defined.")
-
-	# --- 7. Informational: damage types carried by no weapon ---
-	# Not an error. Their resistance columns simply do nothing in play.
-	var unused: Array = []
-	for t2 in CombatData.DAMAGE_TYPES:
-		if not seen_damage_types.has(t2):
-			unused.append(t2)
-	if unused.size() > 0:
-		issues.append("NOTE (not an error): no weapon deals " + ", ".join(unused) + " -- those resistance columns are inert.")
 
 	return issues

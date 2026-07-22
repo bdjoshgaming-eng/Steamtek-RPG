@@ -190,7 +190,6 @@ const BLUEPRINTS: Dictionary = {
 			{"slot_id": "binding", "slot_name": "Binding", "accepts": ["copper", "aluminum"], "amount": 1, "weight": 0.15},
 		],
 		"experimentation_categories": ["output_damage", "accuracy", "durability", "handling", "mod_architecture"],
-		"allowed_socket_tags": ["kinetic", "utility"],
 		"guaranteed_sockets": 0,
 		"max_sockets": 3,
 	},
@@ -204,7 +203,6 @@ const BLUEPRINTS: Dictionary = {
 			{"slot_id": "regulator", "slot_name": "Regulator", "accepts": ["quartz"], "amount": 1, "weight": 0.2},
 		],
 		"experimentation_categories": ["output_damage", "efficiency", "thermal_control", "durability", "mod_architecture"],
-		"allowed_socket_tags": ["arc", "thermal", "utility"],
 		"guaranteed_sockets": 0,
 		"max_sockets": 3,
 	},
@@ -234,6 +232,32 @@ const BLUEPRINTS: Dictionary = {
 			{"slot_id": "base", "slot_name": "Base", "accepts": ["industrial_solvent"], "amount": 1, "weight": 0.15},
 		],
 		"experimentation_categories": ["status_potency", "efficiency", "durability"],
+		"guaranteed_sockets": 0,
+		"max_sockets": 0,
+	},
+	# --- Core mods. The reagent slot determines the damage type via
+	# FAMILY_DAMAGE_TYPE. The housing provides structural support and
+	# influences quality but not the type.
+	"bp_core_mod": {
+		"display_name": "Weapon Core",
+		"output_type": "mod",
+		"difficulty": 35,
+		"material_slots": [
+			{"slot_id": "reagent", "slot_name": "Reagent", "accepts": [
+				"copper", "silver_alloy", "electronic_salvage", "conductive_ceramic",
+				"superconductive_filament", "battery_chemicals",
+				"graphite", "quartz",
+				"pressure_alloy", "sealant_compound", "hydraulic_fluid",
+				"gunmetal_steel", "titanium",
+				"industrial_solvent", "fungal_culture", "medical_reagent",
+				"black_iron", "aluminum", "scrap_plating",
+			], "amount": 3, "weight": 0.7},
+			{"slot_id": "housing", "slot_name": "Housing", "accepts": [
+				"black_iron", "aluminum", "copper", "insulating_polymer",
+				"scrap_plating", "pressure_alloy",
+			], "amount": 2, "weight": 0.3},
+		],
+		"experimentation_categories": ["efficiency", "durability"],
 		"guaranteed_sockets": 0,
 		"max_sockets": 0,
 	},
@@ -806,15 +830,57 @@ const TRAIT_CATEGORY_AFFINITY: Dictionary = {
 # (spec s10.6 / s10.7).
 
 
-# Tags describing what KIND of mod a socket accepts. Phase 6 matches mods
-# against these; for now they only mark intent.
-const SOCKET_TAGS: Dictionary = {
-	"kinetic": {"display_name": "Kinetic", "description": "Physical striking and structural mods."},
-	"arc": {"display_name": "Arc", "description": "Current, discharge and electrical mods."},
-	"thermal": {"display_name": "Thermal", "description": "Heat management and incendiary mods."},
-	"pressure": {"display_name": "Pressure", "description": "Pneumatic and pressure-system mods."},
-	"utility": {"display_name": "Utility", "description": "Handling, sighting and general-purpose mods."},
+const MOD_TYPES: Dictionary = {
+	"damage": {
+		"melee_name": "Edge",
+		"ranged_name": "Barrel",
+		"stat": "Damage Rating",
+		"eligible_range": ["melee", "ranged"],
+	},
+	"accuracy": {
+		"melee_name": "Counterweight",
+		"ranged_name": "Gyro",
+		"stat": "Accuracy",
+		"eligible_range": ["melee", "ranged"],
+	},
+	"speed": {
+		"melee_name": "Spring Mechanism",
+		"ranged_name": "Valve Assembly",
+		"stat": "Speed",
+		"eligible_range": ["melee", "ranged"],
+	},
+	"ammo": {
+		"melee_name": "",
+		"ranged_name": "Magazine",
+		"stat": "Ammo Capacity",
+		"eligible_range": ["ranged"],
+	},
+	"range": {
+		"melee_name": "",
+		"ranged_name": "Scope",
+		"stat": "Range",
+		"eligible_range": ["ranged"],
+	},
+	"core": {
+		"melee_name": "Core",
+		"ranged_name": "Core",
+		"stat": "Damage Type",
+		"eligible_range": ["melee", "ranged"],
+	},
 }
+
+
+static func get_mod_type(mod_type_id: String) -> Dictionary:
+	return MOD_TYPES.get(mod_type_id, {})
+
+
+static func mod_display_name(mod_type_id: String, weapon_range: String) -> String:
+	var mt: Dictionary = MOD_TYPES.get(mod_type_id, {})
+	if mt.is_empty():
+		return mod_type_id
+	if weapon_range == "Melee":
+		return String(mt.get("melee_name", mod_type_id))
+	return String(mt.get("ranged_name", mod_type_id))
 
 
 # --- Socket probability bands (spec s10.5) ---
@@ -843,8 +909,41 @@ const SOCKET_DIFFICULTY_WEIGHT: float = 0.20
 const SOCKET_INSTABILITY_PENALTY: float = 5.0   # per instability on the item
 
 
-static func get_socket_tag(tag_id: String) -> Dictionary:
-	return SOCKET_TAGS.get(tag_id, {})
+# Maps material families to the damage type they produce when used as
+# the primary reagent in a Core mod craft. Families not listed here
+# cannot be used as a Core reagent.
+const FAMILY_DAMAGE_TYPE: Dictionary = {
+	"copper": "Arc",
+	"silver_alloy": "Arc",
+	"electronic_salvage": "Arc",
+	"conductive_ceramic": "Arc",
+	"superconductive_filament": "Arc",
+	"battery_chemicals": "Arc",
+	"graphite": "Thermal",
+	"quartz": "Thermal",
+	"pressure_alloy": "Pressure",
+	"sealant_compound": "Pressure",
+	"hydraulic_fluid": "Pressure",
+	"gunmetal_steel": "Ballistic",
+	"titanium": "Ballistic",
+	"industrial_solvent": "Chemical",
+	"fungal_culture": "Chemical",
+	"medical_reagent": "Chemical",
+	"black_iron": "Kinetic",
+	"aluminum": "Kinetic",
+	"scrap_plating": "Kinetic",
+}
+
+
+static func damage_type_for_family(family_id: String) -> String:
+	return FAMILY_DAMAGE_TYPE.get(family_id, "")
+
+
+static func is_mod_type_eligible(mod_type_id: String, weapon_range: String) -> bool:
+	var mt: Dictionary = MOD_TYPES.get(mod_type_id, {})
+	if mt.is_empty():
+		return false
+	return mt.get("eligible_range", []).has(weapon_range.to_lower())
 
 
 # Returns {band_id, weights} for an opportunity score.
@@ -905,115 +1004,131 @@ const MOD_GRADES: Array = [
 ]
 
 
-# --- Mod definitions (spec s11.1 / s11.2) ---
-# socket_tags        which socket types will accept this mod
-# compatible_classes weapon families it fits ([] = any)
-# incompatible_tags  mods sharing a tag here cannot coexist on one item
-# stat_modifiers     stat -> amount at Standard grade; scaled by the
-#                    grade multiplier. Percentages are expressed as a
-#                    fraction of the item's own value.
-# drawback           stat -> amount applied as a PENALTY, scaled by the
-#                    grade's drawback multiplier
-# instability_cost   added strain; feeds durability loss
+# --- Mod definitions (reworked for type-based system) ---
+# mod_type       one of the keys in MOD_TYPES (damage/accuracy/speed/ammo/range/core)
+# stat_modifiers stat -> amount at Standard grade; scaled by grade multiplier
+# drawback       stat -> penalty amount, scaled by grade drawback multiplier
+# instability_cost  added strain; feeds durability loss
+# damage_type    (core mods only) which damage type this Core sets
 const MOD_DEFINITIONS: Dictionary = {
-	"conductive_accelerator": {
-		"display_name": "Conductive Accelerator",
-		"category": "weapon",
-		"socket_tags": ["arc"],
-		"compatible_classes": [],
-		"incompatible_tags": ["damage_core"],
+	"edge_standard": {
+		"display_name": "Sharpened Edge",
+		"mod_type": "damage",
 		"stat_modifiers": {"Damage Rating": 2.0},
-		"drawback": {"Thermal Resistance": 3.0},
-		"instability_cost": 0.10,
-		"description": "Steps up current through the striking surface. More damage, more heat.",
+		"drawback": {"Speed": 0.1},
+		"instability_cost": 0.05,
+		"description": "A honed striking surface. More force behind each swing.",
 	},
-	"recoil_stabilizer": {
-		"display_name": "Recoil Stabilizer",
-		"category": "weapon",
-		"socket_tags": ["kinetic"],
-		"compatible_classes": [],
-		"incompatible_tags": ["handling_core"],
+	"barrel_standard": {
+		"display_name": "Rifled Barrel",
+		"mod_type": "damage",
+		"stat_modifiers": {"Damage Rating": 2.0},
+		"drawback": {"Accuracy": 2.0},
+		"instability_cost": 0.05,
+		"description": "Tighter bore, heavier impact. Slight aim drift from the recoil.",
+	},
+	"counterweight_standard": {
+		"display_name": "Balanced Counterweight",
+		"mod_type": "accuracy",
 		"stat_modifiers": {"Accuracy": 5.0},
 		"drawback": {"Speed": 0.1},
 		"instability_cost": 0.05,
-		"description": "Dampens kick. Steadier aim, slightly slower recovery.",
+		"description": "Shifts the balance point for steadier swings.",
 	},
-	"heat_sink": {
-		"display_name": "Heat Sink",
-		"category": "weapon",
-		"socket_tags": ["thermal"],
-		"compatible_classes": [],
-		"incompatible_tags": [],
-		"stat_modifiers": {"Thermal Resistance": 6.0},
-		"drawback": {},
-		"instability_cost": 0.0,
-		"description": "Bleeds heat away from the working parts. No downside worth the name.",
-	},
-	"pressure_chamber": {
-		"display_name": "Pressure Chamber",
-		"category": "weapon",
-		"socket_tags": ["pressure", "kinetic"],
-		"compatible_classes": [],
-		"incompatible_tags": ["damage_core"],
-		"stat_modifiers": {"Damage Rating": 3.0},
-		"drawback": {"Accuracy": 4.0},
-		"instability_cost": 0.15,
-		"description": "Stores and dumps pressure on impact. Hits harder, aims worse.",
-	},
-	"targeting_optic": {
-		"display_name": "Targeting Optic",
-		"category": "weapon",
-		"socket_tags": ["utility"],
-		"compatible_classes": [],
-		"incompatible_tags": ["sighting"],
-		"stat_modifiers": {"Accuracy": 8.0},
-		"drawback": {},
+	"gyro_standard": {
+		"display_name": "Stabilising Gyro",
+		"mod_type": "accuracy",
+		"stat_modifiers": {"Accuracy": 5.0},
+		"drawback": {"Speed": 0.1},
 		"instability_cost": 0.05,
-		"description": "A simple sighting aid. Reliable, no cost beyond the socket.",
+		"description": "Spin-stabilised aim. Slightly heavier to bring on target.",
 	},
-	"balanced_haft": {
-		"display_name": "Balanced Haft",
-		"category": "weapon",
-		"socket_tags": ["kinetic"],
-		"compatible_classes": [],
-		"incompatible_tags": ["handling_core"],
+	"spring_mechanism_standard": {
+		"display_name": "Coiled Spring Mechanism",
+		"mod_type": "speed",
 		"stat_modifiers": {"Speed": -0.2},
 		"drawback": {"Damage Rating": 1.0},
 		"instability_cost": 0.05,
-		"description": "Rebalances the weapon forward. Faster swings, a little less behind them.",
+		"description": "Faster recovery between strikes. Less weight behind each one.",
 	},
-	"reinforced_binding": {
-		"display_name": "Reinforced Binding",
-		"category": "weapon",
-		"socket_tags": ["kinetic", "utility"],
-		"compatible_classes": [],
-		"incompatible_tags": [],
-		"stat_modifiers": {"Max Durability": 25.0},
-		"drawback": {"Speed": 0.1},
-		"instability_cost": 0.0,
-		"description": "Extra strapping and pins. Lasts longer, handles heavier.",
-	},
-	"status_module": {
-		"display_name": "Status Module",
-		"category": "weapon",
-		"socket_tags": ["arc", "thermal"],
-		"compatible_classes": [],
-		"incompatible_tags": ["status"],
-		"stat_modifiers": {"Effect Strength": 6.0},
+	"valve_assembly_standard": {
+		"display_name": "Tuned Valve Assembly",
+		"mod_type": "speed",
+		"stat_modifiers": {"Speed": -0.15},
 		"drawback": {"Damage Rating": 1.0},
-		"instability_cost": 0.10,
-		"description": "Delivers a payload on contact. Stronger effects, less raw force.",
+		"instability_cost": 0.05,
+		"description": "Smoother cycling. Fires faster, hits a little lighter.",
 	},
-}
-
-
-# Tags used for the incompatibility check -- mods declaring the same tag
-# cannot share an item. Keeps a player from stacking three damage mods.
-const MOD_INCOMPATIBILITY_TAGS: Dictionary = {
-	"damage_core": "Damage core",
-	"handling_core": "Handling core",
-	"sighting": "Sighting",
-	"status": "Status delivery",
+	"magazine_standard": {
+		"display_name": "Extended Magazine",
+		"mod_type": "ammo",
+		"stat_modifiers": {"Ammo Capacity": 5.0},
+		"drawback": {"Reload Speed": 0.5},
+		"instability_cost": 0.0,
+		"description": "Holds more rounds. Takes longer to swap out.",
+	},
+	"scope_standard": {
+		"display_name": "Iron Scope",
+		"mod_type": "range",
+		"stat_modifiers": {"Range": 10.0},
+		"drawback": {"Speed": 0.2},
+		"instability_cost": 0.0,
+		"description": "Extended sighting range. Slower to acquire targets up close.",
+	},
+	"core_thermal": {
+		"display_name": "Thermal Core",
+		"mod_type": "core",
+		"damage_type": "Thermal",
+		"stat_modifiers": {},
+		"drawback": {},
+		"instability_cost": 0.10,
+		"description": "Converts striking energy to heat. Burns on contact.",
+	},
+	"core_pressure": {
+		"display_name": "Pressure Core",
+		"mod_type": "core",
+		"damage_type": "Pressure",
+		"stat_modifiers": {},
+		"drawback": {},
+		"instability_cost": 0.10,
+		"description": "Channels concussive force. Blast damage on impact.",
+	},
+	"core_arc": {
+		"display_name": "Arc Core",
+		"mod_type": "core",
+		"damage_type": "Arc",
+		"stat_modifiers": {},
+		"drawback": {},
+		"instability_cost": 0.10,
+		"description": "Discharges stored current on contact. Electrical damage.",
+	},
+	"core_chemical": {
+		"display_name": "Chemical Core",
+		"mod_type": "core",
+		"damage_type": "Chemical",
+		"stat_modifiers": {},
+		"drawback": {},
+		"instability_cost": 0.10,
+		"description": "Delivers a toxic payload. Poison damage over time.",
+	},
+	"core_ballistic": {
+		"display_name": "Ballistic Core",
+		"mod_type": "core",
+		"damage_type": "Ballistic",
+		"stat_modifiers": {},
+		"drawback": {},
+		"instability_cost": 0.10,
+		"description": "Focuses penetrating force. Pierces through armor.",
+	},
+	"core_kinetic": {
+		"display_name": "Kinetic Core",
+		"mod_type": "core",
+		"damage_type": "Kinetic",
+		"stat_modifiers": {},
+		"drawback": {},
+		"instability_cost": 0.05,
+		"description": "Amplifies bruising impact. Stronger secondary effect.",
+	},
 }
 
 
@@ -1032,13 +1147,11 @@ static func get_mod_grade(grade_id: String) -> Dictionary:
 		"multiplier": float(d[2]), "drawback_multiplier": float(d[3])}
 
 
-# Mods whose socket_tags overlap any of the item's socket tags.
-static func mods_fitting_tags(socket_tags: Array) -> Array:
+static func mods_for_weapon_range(weapon_range: String) -> Array:
 	var out: Array = []
 	for mod_id in MOD_DEFINITIONS.keys():
-		for t in MOD_DEFINITIONS[mod_id].get("socket_tags", []):
-			if socket_tags.has(String(t)):
-				out.append(String(mod_id))
-				break
+		var mod_type_id = String(MOD_DEFINITIONS[mod_id].get("mod_type", ""))
+		if is_mod_type_eligible(mod_type_id, weapon_range):
+			out.append(String(mod_id))
 	out.sort()
 	return out
