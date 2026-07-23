@@ -22,11 +22,7 @@ func _ready() -> void:
 
 
 func _get_progress() -> Dictionary:
-	var stored: Variant = get_tree().root.get_meta(TUTORIAL_STATE_META, {})
-	if stored is Dictionary:
-		tutorial_state = (stored as Dictionary).duplicate(true)
-	else:
-		tutorial_state = {}
+	tutorial_state = SteamtekLive3DProgressStore.get_progress(TUTORIAL_STATE_META)
 	if tutorial_state.is_empty():
 		tutorial_state = {
 			"note_found": true,
@@ -43,7 +39,7 @@ func _get_progress() -> Dictionary:
 
 
 func _save_progress() -> void:
-	get_tree().root.set_meta(TUTORIAL_STATE_META, tutorial_state.duplicate(true))
+	SteamtekLive3DProgressStore.save_progress(TUTORIAL_STATE_META, tutorial_state)
 
 
 func _unhandled_input(event: InputEvent) -> void:

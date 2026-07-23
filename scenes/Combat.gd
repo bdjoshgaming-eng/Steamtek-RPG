@@ -175,8 +175,6 @@ func derive_stats_from_cl(cl: int, archetype: String = "", faction: String = "")
 		"damage": int(round(lerp(float(da["damage"]), float(db["damage"]), t))),
 		"defense": int(round(lerp(float(da["defense"]), float(db["defense"]), t))),
 		"armor": int(round(lerp(float(da["armor"]), float(db["armor"]), t))),
-		"dodge": lerp(float(da.get("dodge", 0.0)), float(db.get("dodge", 0.0)), t),
-		"block": lerp(float(da.get("block", 0.0)), float(db.get("block", 0.0)), t),
 		"crit_resist": lerp(float(da.get("crit_resist", 0.0)), float(db.get("crit_resist", 0.0)), t),
 	}, archetype, faction)
 
@@ -188,8 +186,6 @@ func _anchor_values(a: Dictionary) -> Dictionary:
 		"damage": int(a["damage"]),
 		"defense": int(a["defense"]),
 		"armor": int(a["armor"]),
-		"dodge": float(a.get("dodge", 0.0)),
-		"block": float(a.get("block", 0.0)),
 		"crit_resist": float(a.get("crit_resist", 0.0)),
 	}
 
@@ -227,6 +223,30 @@ func effective_health(base_health: int, armor_rating: int) -> int:
 	return int(round(float(base_health) / (1.0 - dr)))
 
 
+# --- Grit: player DoT/CC resistance (ranged-only combat redesign) ---
+# The replacement for the doc's "Defense/Toughness" stat: a separate
+# mitigation lever from Armor (direct-hit damage, above) and the Dodge
+# Roll (avoids damage entirely) that instead softens damage-over-time
+# ticks and shortens/weakens crowd-control (stun, knockback, debuffs)
+# landed on the PLAYER. Same diminishing-returns shape as armor, just a
+# lower constant since Grit's point pool (the Auxiliary keystone's Grit
+# nodes) is much smaller than Armor Rating's range.
+#
+# NOT YET CONSUMED ANYWHERE: no enemy DoT or CC ability exists yet for
+# this to resist. Wire these in against the player's Grit total once one
+# does -- the same unconsumed-stub state Melee/Ranged Defense are already
+# in above in the Auxiliary keystone.
+const GRIT_DR_CONSTANT: float = 60.0
+
+func grit_dot_reduction(grit_points: float) -> float:
+	if grit_points <= 0.0:
+		return 0.0
+	return grit_points / (grit_points + GRIT_DR_CONSTANT)
+
+func grit_cc_duration_mult(grit_points: float) -> float:
+	return 1.0 - grit_dot_reduction(grit_points)
+
+
 # --- Phase 4b/4c: typed mitigation ---
 # Reduces incoming damage by the target's resistance to THIS damage type.
 # resistances maps damage type -> rating; the matched rating (minus armor
@@ -242,39 +262,13 @@ func apply_typed_mitigation(damage, resistances: Dictionary, damage_type: String
 	return int(round(float(damage) * (1.0 - dr)))
 
 
-# --- Phase 5: combat roll layer ---
-# Resolves the defensive rolls that happen AFTER the attacker's hit
-# chance has already been computed by the caller. Order is deliberate:
-#
-#   1. Hit    -- Accuracy vs Defense (hit_chance, computed by caller)
-#   2. Dodge  -- full avoid, rolled only if the hit landed
-#   3. Block  -- partial mitigation (damage x BLOCK_DAMAGE_MULTIPLIER)
-#
-# Dodge is a SECOND way to whiff on top of the hit roll, so the CL table
-# keeps it capped low (15% at CL40); the two compounding is exactly why
-# it isn't allowed to scale like Defense does.
-#
-# Returns:
-#   hit          -- false if the attack missed outright
-#   dodged       -- true if the target evaded a landed hit
-#   blocked      -- true if the target blocked (damage halved)
-#   damage_mult  -- 0.0 on miss/dodge, 0.5 on block, else 1.0
-func resolve_defensive_rolls(hit_chance: float, dodge_pct: float, block_pct: float) -> Dictionary:
-	if randf() * 100.0 > hit_chance:
-		return {"hit": false, "dodged": false, "blocked": false, "damage_mult": 0.0}
-	if dodge_pct > 0.0 and randf() * 100.0 < dodge_pct:
-		return {"hit": true, "dodged": true, "blocked": false, "damage_mult": 0.0}
-	if block_pct > 0.0 and randf() * 100.0 < block_pct:
-		return {"hit": true, "dodged": false, "blocked": true, "damage_mult": CombatData.BLOCK_DAMAGE_MULTIPLIER}
-	return {"hit": true, "dodged": false, "blocked": false, "damage_mult": 1.0}
-
 
 # --- Phase 6a: identity modifiers ---
 # Applies the archetype + faction stat multipliers to a CL-derived stat
 # set. CL establishes the TIER (a CL40 enemy dwarfs a CL5 one); archetype
 # and faction shape the character within that tier. Health, damage,
-# defense and armor are scaled; the defensive percentages (dodge, block,
-# crit_resist) are left alone so they stay purely CL-driven as designed.
+# defense and armor are scaled; crit_resist is left alone so it stays
+# purely CL-driven as designed.
 #
 # Armor is scaled BEFORE resistances are built from it, so an armor
 # modifier flows through into every damage-type resistance automatically.

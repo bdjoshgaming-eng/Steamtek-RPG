@@ -11,17 +11,10 @@ extends Node2D
 @onready var resource_tree: Tree = $UILayer/SurveyUI/ResourceTree
 @onready var sample_message_label: Label = $UILayer/SurveyUI/SampleMessageLabel
 @onready var inventory_label: Label = $UILayer/InventoryLabel
-@onready var player: CharacterBody2D = %Player
+@onready var player: SteamtekPlayer = %Player
 @onready var player_hud: Node2D = %PlayerHUD
-@onready var enemy_hud: Node2D = %EnemyHUD
-@onready var enemy_hud_health_bar_bg: Polygon2D = %EnemyHUDHealthBarBg
-@onready var enemy_hud_health_bar_fill: Polygon2D = %EnemyHUDHealthBarFill
-@onready var enemy_hud_action_bar_bg: Polygon2D = %EnemyHUDActionBarBg
-@onready var enemy_hud_action_bar_fill: Polygon2D = %EnemyHUDActionBarFill
 @onready var player_hud_health_label: Label = %PlayerHUDHealthLabel
 @onready var player_hud_action_label: Label = %PlayerHUDActionLabel
-@onready var enemy_hud_health_label: Label = %EnemyHUDHealthLabel
-@onready var enemy_hud_action_label: Label = %EnemyHUDActionLabel
 
 
 # --- Phase 6b: enemy node registry ---
@@ -479,11 +472,6 @@ var inventory: Dictionary = {}
 var inventory_stats: Dictionary = {}
 
 var item_classes = {
-	"Sword": ["1 Handed", "2 Handed"],
-	"Axe": ["1 Handed", "2 Handed"],
-	"Hammer": ["2 Handed"],
-	"Brass Knuckles": ["1 Handed"],
-	"Stun Stick": ["1 Handed"],
 	"Shotgun": ["Shotgun"],
 	"Assault Rifle": ["Assault Rifle"],
 	"Sniper Rifle": ["Sniper Rifle"],
@@ -530,6 +518,31 @@ var consumable_base_name: Dictionary = {}
 # --- Combat ---
 var equipped_weapon_name: String = ""
 const MELEE_RANGE = 180.0
+
+# --- Buttstroke (universal melee disengage) ---
+# The sole remaining player melee action after the ranged-only combat
+# redesign: a fixed panic-button knockback + stun, always available
+# regardless of equipped weapon, not a weapon skill or trained ability.
+# Deliberately weak damage -- it's a "get off me" tool, not a DPS option.
+var buttstroke_ready_msec: int = 0
+const BUTTSTROKE_COOLDOWN := 4.0
+const BUTTSTROKE_STUN_DURATION := 1.5
+const BUTTSTROKE_KNOCKBACK_DISTANCE := 140.0
+const BUTTSTROKE_DAMAGE := 5
+
+# --- Charge Ability (Charged Shot and any future "chargeable" ability) ---
+# Generic hold-to-charge state: whichever ability is currently charging,
+# which slot-key started it (so only that key's release resolves it),
+# when it started, and the target locked in at charge-start (aim/target
+# locks the moment charging begins, same rule as ability telegraphs will
+# use later). Only one ability can charge at a time.
+var is_charging_ability: bool = false
+var charging_ability_name: String = ""
+var charging_action_name: String = ""
+var charging_started_msec: int = 0
+var charging_locked_target_id: String = ""
+const CHARGE_MOVEMENT_SLOW_MULT := 0.5
+
 # Hit-chance formula constants -- our own numbers/scale, not copied
 # from any external source. See _perform_attack() for the formula.
 const BASE_HIT_CHANCE = 50.0
@@ -681,6 +694,22 @@ var player_current_action: int = 850
 var player_alive: bool = true
 var player_spawn_position: Vector2 = Vector2.ZERO
 
+# --- Player DoT/CC state (Grit mitigates both -- see Combat.gd) ---
+# Mirrors the enemy-side bleed/stagger fields below. Only "bleed" is
+# wired up for now, applied by the Rust Marauder proc in _ai_try_attack;
+# burn/poison can be added the same way later if an enemy needs them.
+var player_bleed_ticks_remaining: int = 0
+var player_bleed_damage_per_tick: int = 0
+var player_stagger_until_msec: int = 0
+
+# Rust Marauder's melee proc: a chance per hit to also bleed + stagger
+# the player, giving Grit something concrete to mitigate. Deliberately
+# scoped to this one enemy rather than a general AI rework (on hold).
+const RUST_MARAUDER_BLEED_STAGGER_CHANCE := 0.25
+const RUST_MARAUDER_BLEED_DAMAGE_PER_TICK := 4
+const RUST_MARAUDER_BLEED_DURATION_TICKS := 3
+const RUST_MARAUDER_STAGGER_DURATION := 1.2
+
 const DUMMY_ATTACK_COOLDOWN = 2.5
 const ENEMY_ATTACK_RANGE = 180.0
 
@@ -731,14 +760,10 @@ const COGS_COST_TIER_2 = 150
 const COGS_COST_TIER_3 = 500
 const skill_cogs_costs = [1, 1, 1, 1]
 
-# --- Scavenging XP ---
-const FORAGE_XP = 10
-
 # --- Dumpster (Scavenging) ---
 # Fixed, non-moving scavenge point -- the only scavenge point in the
 # game right now (the earlier test herb patch has been removed).
 var dumpster_available: bool = true
-const DUMPSTER_RANGE = 150.0
 const DUMPSTER_RESPAWN_TIME = 45.0
 const DUMPSTER_COGS_MIN = 2
 const DUMPSTER_COGS_MAX = 2
@@ -750,8 +775,6 @@ const BANDAGE_COOLDOWN = 6.0
 const BANDAGE_ACTION_COST = 50
 var bandage_ready: bool = true
 var attack_ready: bool = true
-var targeted_enemy: String = ""
-const ENEMY_CLICK_RADIUS = 60.0
 
 # --- Healing abilities (IV Drip, Healing Vapor) ---
 # Duration assumptions (not specified by design yet -- flagged for review):
@@ -814,17 +837,12 @@ var loot_tables: Dictionary = {
 		"Common": [{"item": "Scrap Metal Chunk", "min_amount": 1, "max_amount": 3}],
 		"Uncommon": [{"item": "Damaged Circuit", "min_amount": 1, "max_amount": 2}],
 		"Rare": [{"item": "Overcharged Coil", "min_amount": 1, "max_amount": 1}],
-		"UltraRare": [{"item": "Piston Blade (Exceptional)", "chance": 0.00005, "min_amount": 1, "max_amount": 1}]
+		"UltraRare": [{"item": "Vented Long-Rifle (Exceptional)", "chance": 0.00005, "min_amount": 1, "max_amount": 1}]
 	},
 	"Enemy2": {
 		"Common": [{"item": "Rusted Gear", "min_amount": 1, "max_amount": 3}],
 		"Uncommon": [{"item": "Damaged Circuit", "min_amount": 1, "max_amount": 3}],
 		"Rare": [{"item": "Overcharged Coil", "min_amount": 1, "max_amount": 2}]
-	},
-	"ForageSpot": {
-		"Common": [{"item": "Torn Cloth", "min_amount": 1, "max_amount": 3}, {"item": "Plastic", "min_amount": 1, "max_amount": 3}],
-		"Uncommon": [{"item": "Antiseptic Moss", "min_amount": 1, "max_amount": 2}, {"item": "Healroot", "min_amount": 1, "max_amount": 2}],
-		"Rare": [{"item": "Bloomwort", "min_amount": 1, "max_amount": 1}]
 	}
 }
 # Grenade Launcher/Flame Thrower are no longer tied to a live Chrome
@@ -1069,12 +1087,13 @@ func _unhandled_input(event: InputEvent) -> void:
 		if inventory_book_ui.visible:
 			_refresh_inventory_book()
 
-	if event.is_action_pressed("inventory_menu"):
-		_cycle_target()
-
+	# Left click fires the equipped weapon's basic attack toward the mouse
+	# cursor -- Tab-cycle/click-target are retired, aim-and-shoot replaces
+	# them entirely (see _aim_fire_target()). Blocked while a UI panel is
+	# open so clicking a button doesn't also fire into the world.
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		var mouse_world = get_viewport().get_canvas_transform().affine_inverse() * event.position
-		_try_click_target(mouse_world)
+		if not _is_blocking_ui_open():
+			_attempt_attack()
 
 	if event.is_action_pressed("interact"):
 		_attempt_interact()
@@ -1094,21 +1113,29 @@ func _unhandled_input(event: InputEvent) -> void:
 			_refresh_ability_book()
 
 	if event.is_action_pressed("slot_1"):
-		_trigger_slot(slot_1)
+		_trigger_slot(slot_1, "slot_1")
 	if event.is_action_pressed("slot_2"):
-		_trigger_slot(slot_2)
+		_trigger_slot(slot_2, "slot_2")
 	if event.is_action_pressed("slot_3"):
-		_trigger_slot(slot_3)
+		_trigger_slot(slot_3, "slot_3")
 	if event.is_action_pressed("slot_4"):
-		_trigger_slot(slot_4)
+		_trigger_slot(slot_4, "slot_4")
 	if event.is_action_pressed("slot_5"):
-		_trigger_slot(slot_5)
+		_trigger_slot(slot_5, "slot_5")
 	if event.is_action_pressed("slot_6"):
-		_trigger_slot(slot_6)
+		_trigger_slot(slot_6, "slot_6")
 	if event.is_action_pressed("slot_7"):
-		_trigger_slot(slot_7)
+		_trigger_slot(slot_7, "slot_7")
 	if event.is_action_pressed("slot_8"):
-		_trigger_slot(slot_8)
+		_trigger_slot(slot_8, "slot_8")
+
+	# Release-to-fire for a held charge ability (e.g. Charged Shot) --
+	# only the slot key that started the charge can resolve/cancel it.
+	if is_charging_ability:
+		for slot_action in ["slot_1", "slot_2", "slot_3", "slot_4", "slot_5", "slot_6", "slot_7", "slot_8"]:
+			if event.is_action_released(slot_action) and charging_action_name == slot_action:
+				_release_charge()
+				break
 
 	if event.is_action_pressed("save_game"):
 		_save_game()
@@ -1145,6 +1172,9 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	if event is InputEventKey and event.pressed and event.keycode == KEY_F3:
 		_debug_grant_core_mods()
+
+	if InputMap.has_action("buttstroke") and event.is_action_pressed("buttstroke"):
+		_perform_buttstroke()
 	pass
 
 func _generate_unique_resource_name() -> String:
@@ -1468,12 +1498,209 @@ func _load_game() -> void:
 
 # --- Combat ---
 
+# Guards the left-click fire button: true while any full-screen or
+# modal panel is up, so clicking a UI button doesn't also fire a shot
+# into the world behind it.
+func _is_blocking_ui_open() -> bool:
+	return inventory_book_ui.visible or skill_ui.visible or ability_book_ui.visible \
+		or talent_ui.visible or crafting_panel_ui.visible or profession_select_ui.visible \
+		or trainer_ui.visible
+
 func _attempt_attack() -> void:
+	var weapon_class = crafted_item_class.get(equipped_weapon_name, "")
+	var mode = GameData.targeting_mode_for_class(weapon_class)
+	if mode == "ground_target":
+		_fire_ground_target_weapon()
+		return
+	if mode == "cone":
+		_fire_cone_weapon()
+		return
 	_perform_attack(1.0, _get_dynamic_attack_action_cost(), "Attack")
 
 func _attempt_ranged_attack() -> void:
 	# Legacy alias -- everything routes through the unified Attack now.
 	_attempt_attack()
+
+# --- Ground-target telegraph weapons (Grenade Launcher) ---
+const GRENADE_BLAST_RADIUS := 90.0
+const GRENADE_TRAVEL_TIME := 0.6
+const GRENADE_TELEGRAPH_COLOR := Color(0.95, 0.55, 0.15)
+
+func _fire_ground_target_weapon() -> void:
+	if not player_alive:
+		_show_combat_message("You are defeated! Waiting to respawn...")
+		return
+	if Time.get_ticks_msec() < player_stagger_until_msec:
+		_show_combat_message("You're staggered and can't act!")
+		return
+	if equipped_weapon_name == "":
+		_show_combat_message("No weapon equipped! Press I to equip one.")
+		return
+	if not attack_ready:
+		return
+
+	var action_cost = _get_dynamic_attack_action_cost()
+	if action_cost > 0 and player_current_action < action_cost:
+		_show_combat_message("Not enough Action! Need " + str(action_cost) + ", have " + str(player_current_action) + ".")
+		return
+
+	var target_pos = get_global_mouse_position()
+	var to_target = target_pos - player.global_position
+	var max_range = _weapon_engage_range()
+	if to_target.length() > max_range and to_target.length() > 0.001:
+		target_pos = player.global_position + to_target.normalized() * max_range
+
+	if action_cost > 0:
+		player_current_action -= action_cost
+
+	var telegraph = _show_telegraph_circle(target_pos, GRENADE_BLAST_RADIUS, GRENADE_TELEGRAPH_COLOR)
+	_resolve_telegraph_after(GRENADE_TRAVEL_TIME, telegraph, func(): _resolve_ground_target_blast(target_pos, GRENADE_BLAST_RADIUS, equipped_weapon_name))
+
+	var weapon_stats = inventory_stats.get(equipped_weapon_name, {})
+	attack_ready = false
+	attack_cooldown_timer.wait_time = weapon_stats.get("Speed", 2.0)
+	attack_cooldown_timer.start()
+
+# Resolves a ground-target blast at a world position after its travel
+# delay -- damages every living enemy within radius. weapon_name is
+# captured at fire time so a mid-flight weapon swap can't change what
+# the already-thrown grenade deals with.
+func _resolve_ground_target_blast(center: Vector2, radius: float, weapon_name: String) -> void:
+	if not player_alive:
+		return
+
+	var weapon_stats = inventory_stats.get(weapon_name, {})
+	var base_damage = weapon_stats.get("Damage Rating", 5)
+
+	var targets_hit: Array = []
+	for eid in enemies.keys():
+		if not enemies[eid]["alive"] or not enemy_nodes.has(eid):
+			continue
+		if String(enemies[eid].get("ai_state", "idle")) == "leash":
+			continue
+		if center.distance_to(enemy_nodes[eid]["body"].global_position) <= radius:
+			targets_hit.append(eid)
+
+	if targets_hit.is_empty():
+		_show_combat_message("The blast hits nothing but scrap and dust.")
+		return
+
+	var defeat_messages: Array = []
+	for eid in targets_hit:
+		var te = enemies[eid]
+		var attack_result = Combat.compute_player_attack_damage({
+			"base_damage": base_damage,
+			"damage_multiplier": 1.0,
+			"conditioning_nodes": 0,
+			"max_conditioning_nodes": 0,
+			"profession_certified": professions_unlocked.get("Street Thug", false),
+			"equipped_weapon_name": weapon_name,
+			"professions_unlocked": professions_unlocked,
+			"target_crit_resistance": te.get("crit_resist", 0.0)
+		})
+		var dealt = Combat.apply_typed_mitigation(attack_result["damage"], te["resistances"], "Pressure", 0)
+		te["current_health"] -= int(dealt)
+		te["damage_by_weapon_class"]["Grenade Launcher"] = te["damage_by_weapon_class"].get("Grenade Launcher", 0) + int(dealt)
+		if te["current_health"] <= 0:
+			defeat_messages.append(_defeat_enemy(eid))
+
+	var hit_message = "The grenade explodes, hitting " + str(targets_hit.size()) + " enem" + ("y" if targets_hit.size() == 1 else "ies") + "!"
+	for dm in defeat_messages:
+		hit_message += "\n" + dm
+	_show_combat_message(hit_message)
+
+# --- Cone telegraph weapons (Flame Thrower) ---
+const FLAMETHROWER_CONE_RANGE := 220.0
+const FLAMETHROWER_CONE_ANGLE_DEG := 40.0
+const FLAMETHROWER_TELEGRAPH_TIME := 0.15
+const FLAMETHROWER_TELEGRAPH_COLOR := Color(0.95, 0.35, 0.05)
+
+func _fire_cone_weapon() -> void:
+	if not player_alive:
+		_show_combat_message("You are defeated! Waiting to respawn...")
+		return
+	if Time.get_ticks_msec() < player_stagger_until_msec:
+		_show_combat_message("You're staggered and can't act!")
+		return
+	if equipped_weapon_name == "":
+		_show_combat_message("No weapon equipped! Press I to equip one.")
+		return
+	if not attack_ready:
+		return
+
+	var action_cost = _get_dynamic_attack_action_cost()
+	if action_cost > 0 and player_current_action < action_cost:
+		_show_combat_message("Not enough Action! Need " + str(action_cost) + ", have " + str(player_current_action) + ".")
+		return
+
+	var aim_dir = get_global_mouse_position() - player.global_position
+	aim_dir = aim_dir.normalized() if aim_dir.length() > 0.001 else Vector2.RIGHT
+
+	if action_cost > 0:
+		player_current_action -= action_cost
+
+	var origin = player.global_position
+	var weapon_name = equipped_weapon_name
+	var telegraph = _show_telegraph_cone(origin, aim_dir, FLAMETHROWER_CONE_RANGE, FLAMETHROWER_CONE_ANGLE_DEG, FLAMETHROWER_TELEGRAPH_COLOR)
+	_resolve_telegraph_after(FLAMETHROWER_TELEGRAPH_TIME, telegraph, func(): _resolve_cone_attack(origin, aim_dir, FLAMETHROWER_CONE_RANGE, FLAMETHROWER_CONE_ANGLE_DEG, weapon_name))
+
+	var weapon_stats = inventory_stats.get(equipped_weapon_name, {})
+	attack_ready = false
+	attack_cooldown_timer.wait_time = weapon_stats.get("Speed", 2.0)
+	attack_cooldown_timer.start()
+
+# Resolves a cone attack -- damages every living enemy within cone_range
+# whose angle from origin is within angle_deg/2 of direction. origin/
+# direction/weapon_name are all captured at fire time, before the brief
+# telegraph delay, so player movement during that delay doesn't retarget
+# the cone.
+func _resolve_cone_attack(origin: Vector2, direction: Vector2, cone_range: float, angle_deg: float, weapon_name: String) -> void:
+	if not player_alive:
+		return
+
+	var weapon_stats = inventory_stats.get(weapon_name, {})
+	var base_damage = weapon_stats.get("Damage Rating", 5)
+
+	var targets_hit: Array = []
+	for eid in enemies.keys():
+		if not enemies[eid]["alive"] or not enemy_nodes.has(eid):
+			continue
+		if String(enemies[eid].get("ai_state", "idle")) == "leash":
+			continue
+		var to_enemy = enemy_nodes[eid]["body"].global_position - origin
+		if to_enemy.length() > cone_range:
+			continue
+		if rad_to_deg(abs(to_enemy.angle_to(direction))) > angle_deg / 2.0:
+			continue
+		targets_hit.append(eid)
+
+	if targets_hit.is_empty():
+		_show_combat_message("The flames catch nothing but empty air.")
+		return
+
+	var defeat_messages: Array = []
+	for eid in targets_hit:
+		var te = enemies[eid]
+		var attack_result = Combat.compute_player_attack_damage({
+			"base_damage": base_damage,
+			"damage_multiplier": 1.0,
+			"conditioning_nodes": 0,
+			"max_conditioning_nodes": 0,
+			"profession_certified": professions_unlocked.get("Street Thug", false),
+			"equipped_weapon_name": weapon_name,
+			"professions_unlocked": professions_unlocked,
+			"target_crit_resistance": te.get("crit_resist", 0.0)
+		})
+		var dealt = Combat.apply_typed_mitigation(attack_result["damage"], te["resistances"], "Thermal", 0)
+		te["current_health"] -= int(dealt)
+		te["damage_by_weapon_class"]["Flame Thrower"] = te["damage_by_weapon_class"].get("Flame Thrower", 0) + int(dealt)
+		if te["current_health"] <= 0:
+			defeat_messages.append(_defeat_enemy(eid))
+
+	var hit_message = "The flames engulf " + str(targets_hit.size()) + " enem" + ("y" if targets_hit.size() == 1 else "ies") + "!"
+	for dm in defeat_messages:
+		hit_message += "\n" + dm
+	_show_combat_message(hit_message)
 
 func _attempt_ability(ability_name: String) -> void:
 	var ability = GameData.ability_definitions[ability_name]
@@ -1525,19 +1752,6 @@ func _attempt_ability(ability_name: String) -> void:
 
 	_perform_attack(ability["damage_multiplier"], ability["action_cost"], ability_name)
 
-# Maps a weapon's item_class + item_subclass to its Pressure Enforcer
-# weapon-type label ("One Hand"/"Two Hand"/"Unarmed"), used to look up
-# the matching per-type stat (e.g. "One Hand Speed") for whichever
-# weapon is currently equipped. Subclass (not just class) matters here
-# since some classes span both -- a Sword can be "1 Handed" (Piston
-# Blade) or "2 Handed" (Piston Greatblade), so item_class alone can't
-# tell them apart.
-func _get_pressure_weapon_type_label(weapon_class: String, weapon_subclass: String) -> String:
-	if weapon_class == "Brass Knuckles" or weapon_class == "":
-		return "Unarmed"
-	elif GameData.pressure_enforcer_weapons.has(weapon_class):
-		return "Two Hand" if weapon_subclass == "2 Handed" else "One Hand"
-	return ""
 
 # Sums a named passive stat (e.g. "One Hand Speed") across every owned
 # skill box in a profession, reading directly from GameData.TALENT_SKILL_REWARDS --
@@ -1560,6 +1774,26 @@ func _get_total_passive_stat(profession_name: String, stat_name: String) -> floa
 		for stat_pair in reward["stats"]:
 			if stat_pair[0] == stat_name:
 				total += stat_pair[1]
+
+	return total
+
+# Sums a named stat (e.g. "Grit") across every PURCHASED node in a
+# keystone-based profession's keystones -- the counterpart to
+# _get_total_passive_stat above, but for the new keystone/node system
+# instead of the legacy path/box system. First real consumer: the
+# player's Grit total (see Combat.grit_dot_reduction/grit_cc_duration_mult).
+func _get_total_keystone_stat(profession_name: String, stat_name: String) -> float:
+	var total = 0.0
+
+	var keystones = GameData.novice_professions.get(profession_name, {}).get("keystones", {})
+	for ks_name in keystones.keys():
+		var nodes = keystones[ks_name].get("nodes", {})
+		for node_name in nodes.keys():
+			var node_data = nodes[node_name]
+			if node_data.get("type", "") != "stat" or not node_data.get("purchased", false):
+				continue
+			if node_data.get("stat", "") == stat_name:
+				total += float(node_data.get("amount", 0))
 
 	return total
 
@@ -1605,9 +1839,18 @@ func _apply_taunt(target_id: String, duration: float) -> void:
 	enemies[target_id]["taunted_until_msec"] = Time.get_ticks_msec() + int(duration * 1000.0)
 
 
-func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: String) -> void:
+# locked_target_id: used by Charged Shot (and any future charge/lock-on
+# ability) to resolve against the target that was locked when charging
+# began, instead of re-picking the nearest enemy at release time. Empty
+# for every normal instant attack/ability, which keeps their existing
+# nearest-in-range behavior unchanged.
+func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: String, locked_target_id: String = "") -> void:
 	if not player_alive:
 		_show_combat_message("You are defeated! Waiting to respawn...")
+		return
+
+	if Time.get_ticks_msec() < player_stagger_until_msec:
+		_show_combat_message("You're staggered and can't act!")
 		return
 
 	# Bare-hands check: if nothing is equipped and the ability requires
@@ -1622,12 +1865,18 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 	if not attack_ready:
 		return
 
-	var target_id = _get_nearest_enemy_in_range()
+	var target_id = ""
+	if locked_target_id != "" and enemies.has(locked_target_id) and enemies[locked_target_id]["alive"] and enemy_nodes.has(locked_target_id):
+		var locked_dist = player.global_position.distance_to(enemy_nodes[locked_target_id]["body"].global_position)
+		if locked_dist <= _weapon_engage_range():
+			target_id = locked_target_id
+	if target_id == "" and locked_target_id == "":
+		target_id = _aim_fire_target()
 	if target_id == "":
-		if targeted_enemy == "":
-			_show_combat_message("No target! Press Tab or click an enemy to target.")
+		if locked_target_id != "":
+			_show_combat_message(ability_name + "'s target is out of range or gone!")
 		else:
-			_show_combat_message("Target out of range! Move closer.")
+			_show_combat_message("Nothing in your sights! Aim at an enemy in range.")
 		return
 
 	if action_cost > 0 and player_current_action < action_cost:
@@ -1640,21 +1889,15 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 
 
 	var weapon_class = crafted_item_class.get(equipped_weapon_name, "")
-	var weapon_subclass = crafted_item_subclass.get(equipped_weapon_name, "")
 
-	# Melee item_class alone can't tell a one-handed weapon from a
-	# two-handed one of the same class (e.g. Piston Blade vs Piston
-	# Greatblade are both "Sword") -- item_subclass ("1 Handed"/
-	# "2 Handed") is what actually distinguishes them, so that's what
-	# determines the XP-tracking category for melee weapons. Brass
-	# Knuckles stay Unarmed regardless of subclass; ranged weapon
-	# classes are unaffected since their subclass always matches their
-	# class 1:1 already.
+	# Ranged-only: weapon_class is always one of the six ranged classes
+	# (subclass always matches class 1:1 for those), so the XP-tracking
+	# category is just the weapon class itself. Bare-handed (buttstroke,
+	# nothing equipped) tracks as "Brass Knuckles" for continuity with
+	# existing save data/stat keys.
 	var xp_class_key = weapon_class
-	if weapon_class == "Brass Knuckles" or equipped_weapon_name == "":
+	if weapon_class == "" or equipped_weapon_name == "":
 		xp_class_key = "Brass Knuckles"
-	elif GameData.pressure_enforcer_weapons.has(weapon_class):
-		xp_class_key = "Two Hand" if weapon_subclass == "2 Handed" else "One Hand"
 
 	var profession_name = "Street Thug"
 	var conditioning_paths = ["Combat Training I", "Combat Training II", "Combat Training III"]
@@ -1670,7 +1913,7 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 		max_conditioning_nodes += path_data.get("max_nodes", NODES_PER_PATH)
 
 	# Phase 10: weapon families + proficiency. The governing keystone
-	# (Melee or Ranged) sets the proficiency tier for this weapon's family,
+	# (Ranged) sets the proficiency tier for this weapon's family,
 	# which grants an accuracy bonus and a faster swing. Certification is
 	# resolved HERE rather than inside the damage call, because an
 	# uncertified wielder also pays more Action and loses special
@@ -1739,23 +1982,23 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 	if action_cost > 0:
 		player_current_action -= action_cost
 
-	# Phase 5: hit -> dodge -> block resolved in Combat.gd. Miss and dodge
-	# both end the attack; a block lets it through at half damage.
-	var roll = Combat.resolve_defensive_rolls(hit_chance, enemies[target_id].get("dodge", 0.0), enemies[target_id].get("block", 0.0))
+	# Accuracy/Miss check only -- Dodge and Block were removed from this
+	# chain in the ranged-only combat redesign. Avoiding damage entirely
+	# is now the PLAYER's active Dodge Roll (player.gd), not a per-hit
+	# enemy stat rolled here; a landed hit always deals full damage,
+	# mitigated only by armor/resistance below.
+	var hit_landed = randf() * 100.0 <= hit_chance
 
-	if not roll["hit"] or roll["dodged"]:
+	if not hit_landed:
 		var miss_target_name = enemies[target_id]["name"]
 		var miss_message = ""
 		if ability_name != "":
 			miss_message = ability_name + "! "
-		if roll["dodged"]:
-			miss_message += miss_target_name + " dodges your attack!"
-		else:
-			miss_message += "You miss " + miss_target_name + "!"
-			if range_penalty >= RANGE_PENALTY_WAY_LESS:
-				miss_message += " (Way out of optimal range!)"
-			elif range_penalty >= RANGE_PENALTY_REDUCED:
-				miss_message += " (Out of optimal range)"
+		miss_message += "You miss " + miss_target_name + "!"
+		if range_penalty >= RANGE_PENALTY_WAY_LESS:
+			miss_message += " (Way out of optimal range!)"
+		elif range_penalty >= RANGE_PENALTY_REDUCED:
+			miss_message += " (Out of optimal range)"
 		if action_cost > 0:
 			miss_message += " (-" + str(action_cost) + " Action)"
 		_show_combat_message(miss_message)
@@ -1764,8 +2007,6 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 		attack_cooldown_timer.wait_time = speed
 		attack_cooldown_timer.start()
 		return
-
-	var was_blocked = roll["blocked"]
 
 	var target_name = enemies[target_id]["name"]
 
@@ -1785,16 +2026,12 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 
 	# Phase 4a/4c: post-armor damage for the primary target (shown in the
 	# hit message). Each target is mitigated individually in the apply loop
-	# below. Phase 5: the primary target's block (if any) is folded in here
-	# for display; other AoE targets roll their own block in the loop.
-	var primary_block_mult = roll["damage_mult"] if was_blocked else 1.0
-	var primary_damage = Combat.apply_typed_mitigation(int(round(float(damage) * primary_block_mult)), enemies[target_id]["resistances"], weapon_damage_type, weapon_armor_pen)
+	# below.
+	var primary_damage = Combat.apply_typed_mitigation(damage, enemies[target_id]["resistances"], weapon_damage_type, weapon_armor_pen)
 
 	var hit_message = ""
 	if ability_name != "":
 		hit_message = ability_name + "! "
-	if was_blocked:
-		hit_message += "BLOCKED! "
 	if crit_hit:
 		hit_message += "CRITICAL HIT! "
 
@@ -1835,14 +2072,7 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 	for hit_target_id in targets_to_hit:
 		if String(enemies[hit_target_id].get("ai_state", "idle")) == "leash":
 			continue
-		var target_block_mult = 1.0
-		if hit_target_id == target_id:
-			target_block_mult = roll["damage_mult"]
-		else:
-			var block_pct = enemies[hit_target_id].get("block", 0.0)
-			if block_pct > 0.0 and randf() * 100.0 < block_pct:
-				target_block_mult = CombatData.BLOCK_DAMAGE_MULTIPLIER
-		var dealt = Combat.apply_typed_mitigation(int(round(float(damage) * target_block_mult)), enemies[hit_target_id]["resistances"], weapon_damage_type, weapon_armor_pen)
+		var dealt = Combat.apply_typed_mitigation(damage, enemies[hit_target_id]["resistances"], weapon_damage_type, weapon_armor_pen)
 		var te = enemies[hit_target_id]
 		te["current_health"] -= int(dealt)
 		te["damage_by_weapon_class"][xp_class_key] = te["damage_by_weapon_class"].get(xp_class_key, 0) + int(dealt)
@@ -1908,40 +2138,271 @@ func _perform_attack(damage_multiplier: float, action_cost: int, ability_name: S
 func _on_attack_cooldown_finished() -> void:
 	attack_ready = true
 
-func _get_nearest_enemy_in_range() -> String:
+# --- Charge Ability (generic hold-to-charge handling) ---
+# _start_charge() runs on slot-key press when the assigned ability is
+# flagged "chargeable" in GameData; validates weapon/learned/target
+# exactly like a normal ability attempt, then locks the target and
+# starts the timer instead of resolving immediately -- aim/target locks
+# the moment charging begins, the same rule ability telegraphs will use
+# later. _release_charge() runs on that same key's release, picking the
+# tap/partial/full damage tier from how long it was held and firing
+# through _perform_attack()'s locked_target_id path.
+func _start_charge(ability_name: String, action_name: String) -> void:
+	if is_charging_ability or not player_alive or action_name == "":
+		return
+
+	if Time.get_ticks_msec() < player_stagger_until_msec:
+		_show_combat_message("You're staggered and can't act!")
+		return
+
+	var ability = GameData.ability_definitions.get(ability_name, {})
+	if ability.is_empty():
+		return
+
+	if not _is_ability_learned(ability_name):
+		_show_combat_message("You haven't learned " + ability_name + " yet!")
+		return
+
 	var weapon_class = crafted_item_class.get(equipped_weapon_name, "")
-	var attack_range: float
-	if weapon_class == "Pistol":
-		attack_range = ENGAGE_RANGE_PISTOL
-	elif weapon_class == "Sniper Rifle":
-		attack_range = ENGAGE_RANGE_SNIPER
-	elif GameData.rifle_weapons.has(weapon_class):
-		attack_range = ENGAGE_RANGE_RIFLE
-	elif weapon_class == "Shotgun":
-		attack_range = ENGAGE_RANGE_SHOTGUN
-	elif GameData.heavy_weapon_types.has(weapon_class):
-		attack_range = ENGAGE_RANGE_HEAVY
+	if equipped_weapon_name == "" or not ability["weapons"].has(weapon_class):
+		_show_combat_message(ability_name + " only works with " + ", ".join(ability["weapons"]) + " weapons.")
+		return
+
+	if not attack_ready:
+		return
+
+	var action_cost = int(ability.get("action_cost", 0))
+	if action_cost > 0 and player_current_action < action_cost:
+		_show_combat_message("Not enough Action! Need " + str(action_cost) + ", have " + str(player_current_action) + ".")
+		return
+
+	var target_id = _aim_fire_target()
+	if target_id == "":
+		_show_combat_message("Nothing in your sights! Aim at an enemy in range.")
+		return
+
+	is_charging_ability = true
+	charging_ability_name = ability_name
+	charging_action_name = action_name
+	charging_started_msec = Time.get_ticks_msec()
+	charging_locked_target_id = target_id
+	player.movement_speed_mult = CHARGE_MOVEMENT_SLOW_MULT
+	_show_combat_message("Charging " + ability_name + "...")
+
+func _release_charge() -> void:
+	if not is_charging_ability:
+		return
+
+	var ability_name = charging_ability_name
+	var target_id = charging_locked_target_id
+	var elapsed_sec = float(Time.get_ticks_msec() - charging_started_msec) / 1000.0
+
+	is_charging_ability = false
+	charging_ability_name = ""
+	charging_action_name = ""
+	charging_locked_target_id = ""
+	player.movement_speed_mult = 1.0
+
+	var ability = GameData.ability_definitions.get(ability_name, {})
+	if ability.is_empty():
+		return
+
+	# No minimum charge threshold -- any release fires, at whichever
+	# tier the hold duration reached.
+	var tier_multiplier = float(ability.get("damage_multiplier", 1.0))
+	if elapsed_sec >= float(ability.get("charge_full_time", 2.0)):
+		tier_multiplier = float(ability.get("charge_full_multiplier", tier_multiplier))
+	elif elapsed_sec >= float(ability.get("charge_partial_time", 1.0)):
+		tier_multiplier = float(ability.get("charge_partial_multiplier", tier_multiplier))
+
+	_perform_attack(tier_multiplier, int(ability.get("action_cost", 0)), ability_name, target_id)
+
+# Cancels an in-progress charge without firing -- getting hit or
+# staggered mid-charge breaks it and loses all progress (design intent:
+# charging near danger is a real risk/reward decision).
+func _cancel_charge(reason: String) -> void:
+	if not is_charging_ability:
+		return
+	_show_combat_message(charging_ability_name + " interrupted! " + reason)
+	is_charging_ability = false
+	charging_ability_name = ""
+	charging_action_name = ""
+	charging_locked_target_id = ""
+	player.movement_speed_mult = 1.0
+
+# --- Telegraph system (minimal seed of the full WildStar-style system) ---
+# A telegraph is: show a warning shape -> wait windup_time -> run the
+# resolve callback -> remove the visual. Only circle (ground-target,
+# e.g. Grenade Launcher) and cone (e.g. Flame Thrower) shapes exist for
+# now; more shapes (line, cross) and persistent DoT zones are future
+# work, not needed until enemy/boss telegraphs are built.
+const TELEGRAPH_CIRCLE_SEGMENTS := 24
+const TELEGRAPH_CONE_SEGMENTS := 12
+const TELEGRAPH_FILL_ALPHA := 0.35
+const TELEGRAPH_BORDER_ALPHA := 0.85
+
+func _telegraph_parent() -> Node:
+	var parent = get_node_or_null("World/YSortLayer")
+	return parent if parent != null else self
+
+func _show_telegraph_circle(world_pos: Vector2, radius: float, color: Color) -> Node2D:
+	var holder = Node2D.new()
+	holder.position = world_pos
+	holder.z_index = 50
+
+	var pts = PackedVector2Array()
+	for i in range(TELEGRAPH_CIRCLE_SEGMENTS):
+		var angle = (float(i) / float(TELEGRAPH_CIRCLE_SEGMENTS)) * TAU
+		pts.append(Vector2(cos(angle), sin(angle)) * radius)
+
+	var fill = Polygon2D.new()
+	fill.polygon = pts
+	fill.color = Color(color.r, color.g, color.b, TELEGRAPH_FILL_ALPHA)
+	holder.add_child(fill)
+
+	var border = Line2D.new()
+	var border_pts = pts.duplicate()
+	border_pts.append(pts[0])
+	border.points = border_pts
+	border.width = 3.0
+	border.default_color = Color(color.r, color.g, color.b, TELEGRAPH_BORDER_ALPHA)
+	holder.add_child(border)
+
+	_telegraph_parent().add_child(holder)
+	return holder
+
+func _show_telegraph_cone(origin: Vector2, direction: Vector2, cone_range: float, angle_deg: float, color: Color) -> Node2D:
+	var holder = Node2D.new()
+	holder.position = origin
+	holder.z_index = 50
+
+	var half_angle = deg_to_rad(angle_deg) / 2.0
+	var base_angle = direction.angle()
+	var pts = PackedVector2Array([Vector2.ZERO])
+	for i in range(TELEGRAPH_CONE_SEGMENTS + 1):
+		var a = base_angle - half_angle + (float(i) / float(TELEGRAPH_CONE_SEGMENTS)) * (half_angle * 2.0)
+		pts.append(Vector2(cos(a), sin(a)) * cone_range)
+
+	var fill = Polygon2D.new()
+	fill.polygon = pts
+	fill.color = Color(color.r, color.g, color.b, TELEGRAPH_FILL_ALPHA)
+	holder.add_child(fill)
+
+	var border = Line2D.new()
+	var border_pts = pts.duplicate()
+	border_pts.append(pts[0])
+	border.points = border_pts
+	border.width = 3.0
+	border.default_color = Color(color.r, color.g, color.b, TELEGRAPH_BORDER_ALPHA)
+	holder.add_child(border)
+
+	_telegraph_parent().add_child(holder)
+	return holder
+
+# Waits windup_time, runs resolve_callback, then frees the warning visual.
+# telegraph_visual may already be freed/invalid (e.g. scene reload) --
+# guarded so that's a no-op rather than an error.
+func _resolve_telegraph_after(windup_time: float, telegraph_visual: Node, resolve_callback: Callable) -> void:
+	var timer = get_tree().create_timer(windup_time)
+	timer.timeout.connect(func():
+		resolve_callback.call()
+		if is_instance_valid(telegraph_visual):
+			telegraph_visual.queue_free()
+	)
+
+# Universal melee disengage: hits every living enemy within MELEE_RANGE
+# of the player with a brief stagger (reusing the same stagger_until_msec
+# field the "stagger" secondary weapon effect uses, so AI already knows
+# to freeze while it's set) and a flat positional knockback away from the
+# player. Deliberately low, flat damage -- not gated by hit-chance/armor
+# proficiency since it's a defensive panic button, not a weapon attack.
+func _perform_buttstroke() -> void:
+	if not player_alive:
+		return
+	if Time.get_ticks_msec() < player_stagger_until_msec:
+		_show_combat_message("You're staggered and can't act!")
+		return
+	if Time.get_ticks_msec() < buttstroke_ready_msec:
+		return
+
+	var hit_any := false
+	for eid in enemies.keys():
+		var te = enemies[eid]
+		if not te["alive"] or not enemy_nodes.has(eid):
+			continue
+		var body: Node2D = enemy_nodes[eid]["body"]
+		var to_enemy = body.global_position - player.global_position
+		if to_enemy.length() > MELEE_RANGE:
+			continue
+
+		hit_any = true
+		var dealt = Combat.apply_typed_mitigation(BUTTSTROKE_DAMAGE, te["resistances"], "Kinetic", 0)
+		te["current_health"] -= dealt
+		te["damage_by_weapon_class"]["Buttstroke"] = te["damage_by_weapon_class"].get("Buttstroke", 0) + dealt
+		te["stagger_until_msec"] = Time.get_ticks_msec() + int(BUTTSTROKE_STUN_DURATION * 1000.0)
+
+		var push_dir = to_enemy.normalized() if to_enemy.length() > 0.001 else Vector2.RIGHT
+		body.position += push_dir * BUTTSTROKE_KNOCKBACK_DISTANCE
+
+		if te["current_health"] <= 0:
+			_show_combat_message(_defeat_enemy(eid))
+
+	buttstroke_ready_msec = Time.get_ticks_msec() + int(BUTTSTROKE_COOLDOWN * 1000.0)
+	if hit_any:
+		_show_combat_message("Buttstroke! Enemies in range are knocked back and stunned.")
 	else:
-		attack_range = MELEE_RANGE
+		_show_combat_message("Buttstroke -- no one in range.")
 
-	# Single-target attacks REQUIRE an explicit target (set via Tab or
-	# click). No auto-targeting nearest -- you have to consciously pick
-	# who you're attacking. AoE abilities bypass this entirely and hit
-	# everything in range from _perform_attack's own AoE block.
-	if targeted_enemy == "":
+# The engage range for whatever's currently equipped -- shared by
+# _aim_fire_target() below and by Charged Shot's locked-target range
+# check (a charge's target must still be in weapon range when it
+# resolves at release, not just alive).
+func _weapon_engage_range() -> float:
+	var weapon_class = crafted_item_class.get(equipped_weapon_name, "")
+	if weapon_class == "Pistol":
+		return ENGAGE_RANGE_PISTOL
+	elif weapon_class == "Sniper Rifle":
+		return ENGAGE_RANGE_SNIPER
+	elif GameData.rifle_weapons.has(weapon_class):
+		return ENGAGE_RANGE_RIFLE
+	elif weapon_class == "Shotgun":
+		return ENGAGE_RANGE_SHOTGUN
+	elif GameData.heavy_weapon_types.has(weapon_class):
+		return ENGAGE_RANGE_HEAVY
+	return MELEE_RANGE
+
+const ENEMY_HITBOX_COLLISION_LAYER := 2
+
+# Aim-fire targeting: casts a ray from the player toward the mouse
+# cursor, out to the equipped weapon's engage range, and returns
+# whichever enemy's Hitbox (scenes/enemy.tscn, collision layer 2) it
+# hits first. Replaces the old Tab-cycle/click-target system entirely --
+# there's no explicit "selected target" anymore, just point and shoot.
+# AoE abilities bypass this and hit everything in range from
+# _perform_attack's own AoE block.
+func _aim_fire_target() -> String:
+	var aim_dir = get_global_mouse_position() - player.global_position
+	if aim_dir.length() < 0.001:
+		return ""
+	aim_dir = aim_dir.normalized()
+
+	var attack_range = _weapon_engage_range()
+	var space_state = get_world_2d().direct_space_state
+	var query = PhysicsRayQueryParameters2D.create(
+		player.global_position,
+		player.global_position + aim_dir * attack_range
+	)
+	query.collision_mask = ENEMY_HITBOX_COLLISION_LAYER
+	query.collide_with_areas = true
+	query.collide_with_bodies = false
+
+	var result = space_state.intersect_ray(query)
+	if result.is_empty():
 		return ""
 
-	var target_node = enemy_nodes[targeted_enemy]["body"]
-	var target_alive = enemies[targeted_enemy]["alive"] if enemies.has(targeted_enemy) else false
-
-	if not target_alive:
-		targeted_enemy = ""
-		return ""
-
-	var d = player.global_position.distance_to(target_node.global_position)
-	if d <= attack_range:
-		return targeted_enemy
-
+	var collider = result.get("collider")
+	if collider != null and collider.has_meta("enemy_id"):
+		return String(collider.get_meta("enemy_id"))
 	return ""
 
 func _build_enemy_node_registry() -> void:
@@ -2009,12 +2470,17 @@ func _spawn_enemy(enemy_id: String, spawn_override: Dictionary = {}) -> void:
 	visual.scale = spawn.get("sprite_scale", Vector2.ONE)
 	visual.modulate = spawn.get("tint", Color(1, 1, 1, 1))
 
+	# Real collision, used by the aim-fire raycast (layer 2, see
+	# _raycast_aim_target). enemy_id is stashed as metadata so a ray hit
+	# can be mapped straight back to this registry entry.
+	var hitbox: Area2D = body.get_node("Hitbox")
+	hitbox.set_meta("enemy_id", enemy_id)
+
 	var health_bg: Polygon2D = body.get_node("HealthBarBg")
 	var health_fill: Polygon2D = body.get_node("HealthBarFill")
 	var action_bg: Polygon2D = body.get_node("ActionBarBg")
 	var action_fill: Polygon2D = body.get_node("ActionBarFill")
 	var name_label: Label = body.get_node("NameLabel")
-	var indicator: Line2D = body.get_node("TargetIndicator")
 	var attack_timer: Timer = body.get_node("AttackCooldownTimer")
 	var respawn_timer: Timer = body.get_node("RespawnTimer")
 
@@ -2030,10 +2496,6 @@ func _spawn_enemy(enemy_id: String, spawn_override: Dictionary = {}) -> void:
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_label.custom_minimum_size = Vector2(NAME_LABEL_WIDTH, 0)
 
-	_style_target_indicator(indicator)
-	indicator.position = bar_offset
-	indicator.visible = false
-
 	attack_timer.one_shot = true
 	attack_timer.wait_time = float(spawn.get("attack_cooldown", 2.5))
 	attack_timer.timeout.connect(_on_enemy_attack_cooldown_finished.bind(enemy_id))
@@ -2044,12 +2506,12 @@ func _spawn_enemy(enemy_id: String, spawn_override: Dictionary = {}) -> void:
 
 	enemy_nodes[enemy_id] = {
 		"body": body,
+		"hitbox": hitbox,
 		"health_bg": health_bg,
 		"health_fill": health_fill,
 		"action_bg": action_bg,
 		"action_fill": action_fill,
 		"name_label": name_label,
-		"indicator": indicator,
 		"attack_timer": attack_timer,
 		"respawn_timer": respawn_timer,
 		"kill_xp": int(spawn.get("kill_xp", 0)),
@@ -2075,6 +2537,10 @@ func _set_enemy_visible(enemy_id: String, is_visible: bool) -> void:
 	n["action_bg"].visible = is_visible
 	n["action_fill"].visible = is_visible
 	n["name_label"].visible = is_visible
+	# Node visibility doesn't stop physics queries -- intersect_ray would
+	# still hit a "dead" enemy's Hitbox. Layer 0 makes it unmatchable by
+	# the aim-fire raycast's layer-2 mask until it respawns.
+	n["hitbox"].collision_layer = 2 if is_visible else 0
 
 
 # Replaces the old per-enemy defeat functions. Awards kill XP split by
@@ -2087,8 +2553,6 @@ func _defeat_enemy(enemy_id: String) -> String:
 	var n = enemy_nodes[enemy_id]
 
 	e["alive"] = false
-	if targeted_enemy == enemy_id:
-		targeted_enemy = ""
 	quest_system.on_enemy_killed()
 	_set_enemy_visible(enemy_id, false)
 
@@ -2657,21 +3121,21 @@ func _make_bar_polygon(width: float, height: float) -> PackedVector2Array:
 
 func _setup_health_bars() -> void:
 	# Enemy bars are configured per-instance in _spawn_enemy now; this
-	# handles the player HUD and the tracked-enemy HUD only.
+	# handles the player HUD only -- the single tracked-target EnemyHUD
+	# was retired along with Tab/click-targeting (see _aim_fire_target()),
+	# since every enemy's own floating bars already show this info.
 	var bg_color = Color(0.1, 0.1, 0.1)
 	var health_color = Color(0.8, 0.1, 0.1)
 	var action_color = Color(0.1, 0.8, 0.1)
 
-	for bar in [player_health_bar_bg, player_action_bar_bg, enemy_hud_health_bar_bg, enemy_hud_action_bar_bg]:
+	for bar in [player_health_bar_bg, player_action_bar_bg]:
 		bar.color = bg_color
 		bar.polygon = _make_bar_polygon(HUD_BAR_WIDTH, HUD_BAR_HEIGHT)
 
 	player_health_bar_fill.color = health_color
-	enemy_hud_health_bar_fill.color = health_color
 	player_action_bar_fill.color = action_color
-	enemy_hud_action_bar_fill.color = action_color
 
-	for fill in [player_health_bar_fill, player_action_bar_fill, enemy_hud_health_bar_fill, enemy_hud_action_bar_fill]:
+	for fill in [player_health_bar_fill, player_action_bar_fill]:
 		fill.polygon = _make_bar_polygon(HUD_BAR_WIDTH, HUD_BAR_HEIGHT)
 
 	# Every spawned enemy's own bars.
@@ -2693,13 +3157,7 @@ func _setup_health_bars() -> void:
 	player_action_bar_bg.position = Vector2(0, HUD_BAR_HEIGHT + HUD_BAR_GAP)
 	player_action_bar_fill.position = Vector2(0, HUD_BAR_HEIGHT + HUD_BAR_GAP)
 
-	enemy_hud_health_bar_bg.position = Vector2.ZERO
-	enemy_hud_health_bar_fill.position = Vector2.ZERO
-	enemy_hud_action_bar_bg.position = Vector2(0, HUD_BAR_HEIGHT + HUD_BAR_GAP)
-	enemy_hud_action_bar_fill.position = Vector2(0, HUD_BAR_HEIGHT + HUD_BAR_GAP)
-	enemy_hud.visible = false
-
-	for label in [player_hud_health_label, player_hud_action_label, enemy_hud_health_label, enemy_hud_action_label]:
+	for label in [player_hud_health_label, player_hud_action_label]:
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		label.custom_minimum_size = Vector2(HUD_BAR_WIDTH, HUD_BAR_HEIGHT)
@@ -2708,22 +3166,6 @@ func _setup_health_bars() -> void:
 
 	player_hud_health_label.position = Vector2.ZERO
 	player_hud_action_label.position = Vector2(0, HUD_BAR_HEIGHT + HUD_BAR_GAP)
-	enemy_hud_health_label.position = Vector2.ZERO
-	enemy_hud_action_label.position = Vector2(0, HUD_BAR_HEIGHT + HUD_BAR_GAP)
-func _make_target_indicator() -> Line2D:
-	var line = Line2D.new()
-	line.default_color = Color(0.95, 0.75, 0.2)
-	line.width = 2.0
-	line.closed = true
-	line.points = PackedVector2Array([
-		Vector2(-3.0, -3.0),
-		Vector2(HEALTH_BAR_WIDTH + 3.0, -3.0),
-		Vector2(HEALTH_BAR_WIDTH + 3.0, HEALTH_BAR_HEIGHT * 2 + ACTION_BAR_GAP + 3.0),
-		Vector2(-3.0, HEALTH_BAR_HEIGHT * 2 + ACTION_BAR_GAP + 3.0)
-	])
-	line.visible = false
-	return line
-
 func _process(delta: float) -> void:
 	_update_health_bars()
 	for eid in enemies.keys():
@@ -2754,7 +3196,10 @@ func _update_health_bars() -> void:
 	player_hud_action_label.size = Vector2(HUD_BAR_WIDTH, HUD_BAR_HEIGHT)
 
 	# Bars are CHILDREN of each enemy now, so nothing needs repositioning
-	# here -- only the fill widths, name text/colour and target highlight.
+	# here -- only the fill widths and name text/colour. There's no
+	# single "targeted" enemy anymore (aim-fire replaced Tab/click), so
+	# every alive enemy's own floating bars are the only enemy HUD --
+	# see _aim_fire_target().
 	for enemy_id in enemy_nodes.keys():
 		var eid = String(enemy_id)
 		if not enemies.has(eid):
@@ -2762,7 +3207,6 @@ func _update_health_bars() -> void:
 		var n = enemy_nodes[eid]
 		var e = enemies[eid]
 		if not e["alive"]:
-			n["indicator"].visible = false
 			continue
 
 		var health_pct = clamp(float(e["current_health"]) / float(max(1, e["max_health"])), 0.0, 1.0)
@@ -2773,104 +3217,6 @@ func _update_health_bars() -> void:
 
 		n["name_label"].modulate = _get_con_color(eid)
 		n["name_label"].text = _get_enemy_display_text(eid)
-		n["indicator"].visible = (targeted_enemy == eid)
-
-	_update_enemy_hud()
-# Mirrors the player's fixed HUD bars, but for whichever enemy is
-# currently nearest to the player (alive). Hides itself entirely when
-# no enemies are alive. This is separate from -- and doesn't replace --
-# the floating health/action bars each enemy shows above its own head.
-# Mirrors the player's fixed HUD bars, but for whichever enemy is
-# currently nearest to the player (alive). Hides itself entirely when
-# no enemies are alive. This is separate from -- and doesn't replace --
-# the floating health/action bars each enemy shows above its own head.
-func _update_enemy_hud() -> void:
-	var tracked_id = _get_tracked_enemy_id()
-
-	if tracked_id == "" or not enemies.has(tracked_id):
-		enemy_hud.visible = false
-		return
-
-	enemy_hud.visible = true
-	var e = enemies[tracked_id]
-
-	var tracked_health_pct = clamp(float(e["current_health"]) / float(max(1, e["max_health"])), 0.0, 1.0)
-	enemy_hud_health_bar_fill.polygon = _make_bar_polygon(HUD_BAR_WIDTH * tracked_health_pct, HUD_BAR_HEIGHT)
-	enemy_hud_health_label.text = str(e["current_health"]) + " / " + str(e["max_health"])
-	enemy_hud_health_label.size = Vector2(HUD_BAR_WIDTH, HUD_BAR_HEIGHT)
-
-	var tracked_action_pct = clamp(float(e["current_action"]) / float(max(1, e["max_action"])), 0.0, 1.0)
-	enemy_hud_action_bar_fill.polygon = _make_bar_polygon(HUD_BAR_WIDTH * tracked_action_pct, HUD_BAR_HEIGHT)
-	enemy_hud_action_label.text = str(e["current_action"]) + " / " + str(e["max_action"])
-	enemy_hud_action_label.size = Vector2(HUD_BAR_WIDTH, HUD_BAR_HEIGHT)
-func _cycle_target() -> void:
-	var ids: Array = []
-	for enemy_id in enemy_nodes.keys():
-		var eid = String(enemy_id)
-		if enemies.has(eid) and enemies[eid]["alive"]:
-			ids.append(eid)
-	if ids.is_empty():
-		targeted_enemy = ""
-		_show_combat_message("No enemies to target.")
-		return
-	var current_index = ids.find(targeted_enemy)
-	if current_index == -1 or current_index >= ids.size() - 1:
-		targeted_enemy = ids[0]
-	else:
-		targeted_enemy = ids[current_index + 1]
-	_show_combat_message("Target: " + _get_enemy_name(targeted_enemy))
-func _try_click_target(world_pos: Vector2) -> void:
-	var clicked: String = ""
-	var closest_dist = INF
-	for enemy_id in enemy_nodes.keys():
-		var eid = String(enemy_id)
-		if not enemies.has(eid) or not enemies[eid]["alive"]:
-			continue
-		var d = world_pos.distance_to(enemy_nodes[eid]["body"].global_position)
-		if d <= ENEMY_CLICK_RADIUS and d < closest_dist:
-			closest_dist = d
-			clicked = eid
-	if clicked != "":
-		targeted_enemy = clicked
-		_show_combat_message("Target: " + _get_enemy_name(targeted_enemy))
-func _get_tracked_enemy_id() -> String:
-	# Prefer the explicitly targeted enemy -- that's what the player
-	# is looking at and expecting to see health bars for.
-	if targeted_enemy != "":
-		var target_alive = enemies[targeted_enemy]["alive"] if enemies.has(targeted_enemy) else false
-		if target_alive:
-			return targeted_enemy
-		else:
-			targeted_enemy = ""
-
-	# No target set -- show nearest alive enemy as a passive indicator.
-	var weapon_class = crafted_item_class.get(equipped_weapon_name, "")
-	var track_range: float
-	if weapon_class == "Pistol":
-		track_range = ENGAGE_RANGE_PISTOL
-	elif weapon_class == "Sniper Rifle":
-		track_range = ENGAGE_RANGE_SNIPER
-	elif GameData.rifle_weapons.has(weapon_class):
-		track_range = ENGAGE_RANGE_RIFLE
-	elif weapon_class == "Shotgun":
-		track_range = ENGAGE_RANGE_SHOTGUN
-	elif GameData.heavy_weapon_types.has(weapon_class):
-		track_range = ENGAGE_RANGE_HEAVY
-	else:
-		track_range = MELEE_RANGE
-
-	var candidates = []
-	for enemy_id in enemy_nodes.keys():
-		var eid = String(enemy_id)
-		if not enemies.has(eid) or not enemies[eid]["alive"]:
-			continue
-		var d = player.global_position.distance_to(enemy_nodes[eid]["body"].global_position)
-		if d <= track_range:
-			candidates.append([eid, d])
-	if candidates.is_empty():
-		return ""
-	candidates.sort_custom(func(a, b): return a[1] < b[1])
-	return candidates[0][0]
 func _apply_cl_derivation(enemy_id: String) -> void:
 	# Fills an enemy's derived combat values from its hidden Combat Level.
 	# Health/action/damage/defense/armor come from the CL anchor table via
@@ -2887,12 +3233,7 @@ func _apply_cl_derivation(enemy_id: String) -> void:
 	e["stats"]["effective_health"] = Combat.effective_health(d["health"], d["armor"])
 	e["stats"]["defense"] = d["defense"]
 	e["stats"]["armor_rating"] = d["armor"]
-	# Phase 5 defensive stats (percentages, CL-derived).
-	e["stats"]["dodge"] = d.get("dodge", 0.0)
-	e["stats"]["block"] = d.get("block", 0.0)
 	e["stats"]["critical_resistance"] = d.get("crit_resist", 0.0)
-	e["dodge"] = d.get("dodge", 0.0)
-	e["block"] = d.get("block", 0.0)
 	e["crit_resist"] = d.get("crit_resist", 0.0)
 	e["max_health"] = d["health"]
 	e["current_health"] = d["health"]
@@ -2961,11 +3302,37 @@ func _ai_try_attack(_enemy_id: String, e: Dictionary, n: Dictionary) -> void:
 	if not e["attack_ready"] or not player_alive:
 		return
 
+	# Active Dodge Roll i-frames (player.gd) avoid the attack entirely --
+	# this is the sole way to avoid enemy damage now that passive Dodge/
+	# Block were removed from the resolution chain. The enemy's attack
+	# still goes on cooldown; it just whiffs.
+	if player.is_invulnerable:
+		_show_enemy_combat_message(e["name"] + "'s attack misses -- you roll out of the way!")
+		e["attack_ready"] = false
+		n["attack_timer"].wait_time = float(n["attack_cooldown"]) * (1.0 + e["attack_speed_debuff"])
+		n["attack_timer"].start()
+		return
+
 	var damage = Combat.compute_enemy_attack_damage(e["attack_min_damage"], e["attack_max_damage"], e["damage_debuff"])
 	player_current_health -= damage
 	player_current_health = max(player_current_health, 0)
 
 	_show_enemy_combat_message(e["name"] + " hits you for " + str(damage) + " damage!")
+	_cancel_charge("Got hit by " + e["name"] + "!")
+
+	# Rust Marauder's bleed+stagger proc -- Grit reduces both the DoT's
+	# per-tick damage and the stagger's duration, via the same
+	# diminishing-returns formula Armor uses for direct hits.
+	if _enemy_id == "enemy2" and randf() < RUST_MARAUDER_BLEED_STAGGER_CHANCE:
+		var grit = _get_total_keystone_stat("Street Thug", "Grit")
+		var dot_reduction = Combat.grit_dot_reduction(grit)
+		player_bleed_damage_per_tick = int(round(RUST_MARAUDER_BLEED_DAMAGE_PER_TICK * (1.0 - dot_reduction)))
+		player_bleed_ticks_remaining = RUST_MARAUDER_BLEED_DURATION_TICKS
+
+		var cc_mult = Combat.grit_cc_duration_mult(grit)
+		player_stagger_until_msec = Time.get_ticks_msec() + int(RUST_MARAUDER_STAGGER_DURATION * cc_mult * 1000.0)
+
+		_show_enemy_combat_message(e["name"] + "'s attack tears into you -- bleeding and staggered!")
 
 	if player_current_health <= 0:
 		_defeat_player()
@@ -3055,6 +3422,9 @@ func _on_player_respawn() -> void:
 	player_current_action = player_max_action
 	player_alive = true
 	player.position = player_spawn_position
+	player_bleed_ticks_remaining = 0
+	player_bleed_damage_per_tick = 0
+	player_stagger_until_msec = 0
 	_show_combat_message("You have respawned.")
 
 func _on_player_regen_tick() -> void:
@@ -3073,6 +3443,16 @@ func _on_player_regen_tick() -> void:
 		player_current_health = min(player_current_health, player_max_health)
 		blood_bag_bonus_amount = 0
 		_show_combat_message("Your Blood Bag boost has worn off.")
+
+	# Player-side bleed tick -- damage-per-tick was already Grit-mitigated
+	# at application time (see _ai_try_attack's proc), same as enemy DoTs
+	# apply their pre-mitigated per-tick amount here without re-rolling.
+	if player_bleed_ticks_remaining > 0:
+		player_current_health = max(0, player_current_health - player_bleed_damage_per_tick)
+		player_bleed_ticks_remaining -= 1
+		_show_combat_message("Bleeding deals " + str(player_bleed_damage_per_tick) + " damage to you!")
+		if player_current_health <= 0:
+			_defeat_player()
 
 	for eid in enemies.keys():
 		var be = enemies[eid]
@@ -3261,14 +3641,6 @@ func _grant_starting_weapon(weapon_name: String, quality: int) -> void:
 
 
 # --- Scavenging ---
-
-func _attempt_forage() -> void:
-	var dumpster_distance = player.global_position.distance_to(dumpster.global_position)
-	if dumpster_distance > DUMPSTER_RANGE:
-		_show_combat_message("Too far away! Get closer to scavenge.")
-		return
-
-	_scavenge_dumpster()
 
 # Fixed, guaranteed-drop scavenge point (a Dumpster) -- unlike the herb
 # patch's probability-tiered loot, this always gives the same kind of
@@ -3599,11 +3971,6 @@ func _layout_hud() -> void:
 
 	player_hud.position = Vector2(action_bar_position.x, hud_y)
 
-	# EnemyHUD mirrors PlayerHUD but right-aligned: its bars' right edge
-	# lines up with the ActionBar's right edge.
-	var action_bar_right_edge = action_bar_position.x + action_bar_size.x
-	enemy_hud.position = Vector2(action_bar_right_edge - HUD_BAR_WIDTH, hud_y)
-
 func _is_ability_learned(ability_name: String) -> bool:
 	var ability = GameData.ability_definitions[ability_name]
 	var required_profession = ability["requires_profession"]
@@ -3632,8 +3999,12 @@ func _is_ability_learned(ability_name: String) -> bool:
 	var box_data = prof_data["paths"][required_box]
 	return box_data["unlocked_nodes"] >= 1
 
-func _trigger_slot(slot: ActionBarSlot) -> void:
-	if slot.assigned_ability != "":
+func _trigger_slot(slot: ActionBarSlot, action_name: String = "") -> void:
+	if slot.assigned_ability == "":
+		return
+	if GameData.ability_definitions.get(slot.assigned_ability, {}).get("chargeable", false):
+		_start_charge(slot.assigned_ability, action_name)
+	else:
 		_use_ability_by_name(slot.assigned_ability)
 
 func _use_ability_by_name(ability_name: String) -> void:
@@ -3652,7 +4023,15 @@ func _use_ability_by_name(ability_name: String) -> void:
 	elif ability_name == "Blood Bag":
 		_attempt_blood_bag()
 	elif GameData.ability_definitions.has(ability_name):
-		_attempt_ability(ability_name)
+		# Chargeable abilities need a real press-and-hold key, which only
+		# an action-bar slot (see _trigger_slot) can provide -- clicking
+		# from the Ability Book or an inventory item has no "hold" to
+		# time, so it's blocked here rather than silently instant-firing
+		# at the weakest (tap) tier.
+		if GameData.ability_definitions[ability_name].get("chargeable", false):
+			_show_combat_message(ability_name + " must be used from the action bar (hold to charge, release to fire).")
+		else:
+			_attempt_ability(ability_name)
 	else:
 		_show_combat_message("Nothing to do with " + ability_name + ".")
 
@@ -3939,8 +4318,8 @@ func _grant_starting_bandages() -> void:
 func _grant_profession_starting_kit(_profession_name: String) -> void:
 	# Every new character gets the same base kit regardless of which
 	# profession they start as.
-	_grant_starting_weapon("Riveted Knuckles", 0)
 	_grant_starting_weapon("Rusty Pistol", 0)
+	_grant_starting_weapon("Canister Launcher", 0)
 	_add_to_inventory("Mineral Survey Tool", 1)
 	_add_to_inventory("Rusty Crafting Kit", 1)
 
@@ -4838,7 +5217,6 @@ func _select_inventory_book_item(item_key: String) -> void:
 	inventory_book_stats_label.text = "\n".join(lines)
 	_refresh_socket_area()
 
-const MELEE_WEAPON_CLASSES = ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick"]
 const RANGED_WEAPON_CLASSES = ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"]
 
 # Returns {"class": ..., "type": ..., "subclass": ...}. "type" and
@@ -5373,9 +5751,7 @@ func _mod_install_problems(item_key: String, mod_item_key: String) -> Array:
 		return ["That is not a mod."]
 	var item_class = String(crafted_item_class.get(item_key, ""))
 	var weapon_range = ""
-	if MELEE_WEAPON_CLASSES.has(item_class):
-		weapon_range = "Melee"
-	elif RANGED_WEAPON_CLASSES.has(item_class):
+	if RANGED_WEAPON_CLASSES.has(item_class):
 		weapon_range = "Ranged"
 	return CraftingService.mod_install_problems(
 		crafted_items[instance_id], mod_instances[mod_id], _installed_mods_for(item_key), weapon_range)
@@ -5628,26 +6004,3 @@ func _on_mod_install_confirmed() -> void:
 	pending_mod_installs.clear()
 	_refresh_inventory_book()
 	_select_inventory_book_item(item_key)
-
-
-func _get_enemy_name(enemy_id: String) -> String:
-	if enemies.has(enemy_id):
-		return String(enemies[enemy_id].get("name", enemy_id))
-	return String(ENEMY_SPAWN_TABLE.get(enemy_id, {}).get("display_name", enemy_id))
-
-
-# Configures an enemy's TargetIndicator Line2D. Same amber border the old
-# _make_target_indicator() built, but applied to the node that now ships
-# with Enemy.tscn instead of being created and parented separately.
-func _style_target_indicator(line: Line2D) -> void:
-	var w = HEALTH_BAR_WIDTH
-	var h = (HEALTH_BAR_HEIGHT * 2.0) + ACTION_BAR_GAP
-	line.clear_points()
-	line.add_point(Vector2(0, 0))
-	line.add_point(Vector2(w, 0))
-	line.add_point(Vector2(w, h))
-	line.add_point(Vector2(0, h))
-	line.add_point(Vector2(0, 0))
-	line.width = 2.0
-	line.default_color = Color(0.95, 0.75, 0.2)
-	line.z_index = 1

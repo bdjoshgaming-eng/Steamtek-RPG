@@ -180,32 +180,6 @@ const RESOURCE_FAMILIES: Dictionary = {
 # "difficulty" (0-100) feeds experimentation point generation and the
 # difficulty penalty later (spec s17). Unused in Phase 1.
 const BLUEPRINTS: Dictionary = {
-	"bp_piston_blade": {
-		"display_name": "Piston Blade",
-		"output_item_id": "Piston Blade",
-		"difficulty": 20,
-		"material_slots": [
-			{"slot_id": "blade", "slot_name": "Blade", "accepts": ["gunmetal_steel", "black_iron"], "amount": 4, "weight": 0.6},
-			{"slot_id": "hilt", "slot_name": "Hilt", "accepts": ["black_iron", "aluminum"], "amount": 2, "weight": 0.25},
-			{"slot_id": "binding", "slot_name": "Binding", "accepts": ["copper", "aluminum"], "amount": 1, "weight": 0.15},
-		],
-		"experimentation_categories": ["output_damage", "accuracy", "durability", "handling", "mod_architecture"],
-		"guaranteed_sockets": 0,
-		"max_sockets": 3,
-	},
-	"bp_arc_rod": {
-		"display_name": "Arc Rod",
-		"output_item_id": "Arc Rod",
-		"difficulty": 30,
-		"material_slots": [
-			{"slot_id": "core", "slot_name": "Conductive Core", "accepts": ["copper"], "amount": 3, "weight": 0.5},
-			{"slot_id": "shaft", "slot_name": "Shaft", "accepts": ["black_iron", "aluminum"], "amount": 2, "weight": 0.3},
-			{"slot_id": "regulator", "slot_name": "Regulator", "accepts": ["quartz"], "amount": 1, "weight": 0.2},
-		],
-		"experimentation_categories": ["output_damage", "efficiency", "thermal_control", "durability", "mod_architecture"],
-		"guaranteed_sockets": 0,
-		"max_sockets": 3,
-	},
 	# --- Medicine. Consumables take NO mod sockets. Bandages are the
 	# cheapest recipe in the game deliberately: medicine became
 	# unobtainable when the old crafting system was cut, and this is what

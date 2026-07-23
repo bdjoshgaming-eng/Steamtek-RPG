@@ -30,16 +30,12 @@ func _ready() -> void:
 
 
 func _get_progress() -> Dictionary:
-	var stored: Variant = get_tree().root.get_meta(PROGRESS_STATE_META, {})
-	if stored is Dictionary:
-		progress = (stored as Dictionary).duplicate(true)
-	else:
-		progress = {}
+	progress = SteamtekLive3DProgressStore.get_progress(PROGRESS_STATE_META)
 	return progress
 
 
 func _save_progress() -> void:
-	get_tree().root.set_meta(PROGRESS_STATE_META, progress.duplicate(true))
+	SteamtekLive3DProgressStore.save_progress(PROGRESS_STATE_META, progress)
 
 
 func _on_hud_panel_opened() -> void:
@@ -165,7 +161,7 @@ func _open_starter_storage() -> void:
 			"Mineral Survey Tool": 1,
 			"Rusty Crafting Kit": 1,
 		}
-		progress["crate_weapons"] = ["Riveted Knuckles", "Rusty Pistol"]
+		progress["crate_weapons"] = ["Rusty Pistol", "Canister Launcher"]
 		progress["cogs"] = maxi(int(progress.get("cogs", 0)), 100)
 		_save_progress()
 		hud._refresh_cogs()

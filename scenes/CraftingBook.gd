@@ -31,7 +31,6 @@ var crafting_book_back_button: Button
 var crafting_assembly_recipe_index: int = -1
 var crafting_assembly_selections: Dictionary = {}
 
-const MELEE_WEAPON_CLASSES = ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick"]
 const RANGED_WEAPON_CLASSES = ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"]
 
 # Returns {"class": ..., "type": ..., "subclass": ...}. "type" and
@@ -64,9 +63,7 @@ func _categorize_recipe_for_book(recipe: Dictionary) -> Dictionary:
 	var item_class = recipe.get("item_class", "")
 	var item_subclass = recipe.get("item_subclass", "")
 
-	if MELEE_WEAPON_CLASSES.has(item_class):
-		return {"class": "Melee Weapon", "type": item_class, "subclass": item_subclass}
-	elif RANGED_WEAPON_CLASSES.has(item_class):
+	if RANGED_WEAPON_CLASSES.has(item_class):
 		var subclass_value = "" if item_subclass == item_class else item_subclass
 		return {"class": "Ranged Weapon", "type": item_class, "subclass": subclass_value}
 	elif item_class == "Tool":
@@ -223,7 +220,7 @@ func _refresh_crafting_book() -> void:
 			grouped[cat["class"]][type_key][subclass_key] = []
 		grouped[cat["class"]][type_key][subclass_key].append(i)
 
-	var class_order = ["Melee Weapon", "Ranged Weapon", "Tool", "Component", "Medicine", "Material"]
+	var class_order = ["Ranged Weapon", "Tool", "Component", "Medicine", "Material"]
 	for class_name_key in class_order:
 		if not grouped.has(class_name_key):
 			continue

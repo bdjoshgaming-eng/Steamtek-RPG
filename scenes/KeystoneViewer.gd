@@ -8,14 +8,15 @@ extends Node
 # or collapse the whole profession view.
 #
 # Collapsed: only the Street Thug diamond shows.
-# Expanded: the diamond, its 4 keystone clusters, and an
+# Expanded: the diamond, its keystone clusters (Ranged, Auxiliary --
+# Melee was removed in the ranged-only combat redesign), and an
 # advancement branch running up to Enforcer / Specialist
 # (the two professions that require a mastered Street Thug).
 #
 # Each keystone hex has:
 #  - a tight bright triangle of ability nodes right next to it
-#    (Melee and Ranged only -- Crafting and Auxiliary have no
-#    ability nodes and never show this cluster)
+#    (Ranged only -- Auxiliary has no ability nodes and never
+#    shows this cluster)
 #  - an outer ring of stat nodes, grouped by category (Accuracy,
 #    Speed, Crit Damage, Survey Rate, etc) with a label per group
 #
@@ -28,7 +29,6 @@ var main
 # --- Palette ---
 const BG_COLOR      = Color(0.06, 0.02, 0.04)
 const COLORS = {
-	"Melee":     Color(0.95, 0.20, 0.20),
 	"Ranged":    Color(0.15, 0.90, 0.95),
 	"Auxiliary": Color(0.95, 0.60, 0.05)
 }
@@ -44,7 +44,6 @@ const ABILITY_TAG_COLOR = Color(1.00, 0.92, 0.55)
 # same fix already applied to the header and info panels.
 const CENTER_FALLBACK = Vector2(960, 540)
 const KS_OFFSETS = {
-	"Melee":     Vector2(-300, -260),
 	"Ranged":    Vector2( 300, -260),
 	"Auxiliary": Vector2(-300,  260)
 }
@@ -412,7 +411,7 @@ func _rebuild_graph() -> void:
 # ============================================================
 
 # Rebuilds both side columns based on info_focus. When focus is the
-# whole profession, all four keystones are aggregated; when focus is a
+# whole profession, all keystones are aggregated; when focus is a
 # single keystone, only that keystone's contents show.
 func _refresh_info_pane() -> void:
 	if info_unlocked_label == null:
@@ -426,7 +425,7 @@ func _refresh_info_pane() -> void:
 	if whole_profession:
 		info_unlocked_title.text = "UNLOCKED -- STREET THUG"
 		info_locked_title.text = "AVAILABLE -- STREET THUG"
-		for ks_name in ["Melee", "Ranged", "Auxiliary"]:
+		for ks_name in ["Ranged", "Auxiliary"]:
 			if keystones.has(ks_name):
 				scope_ks.append(ks_name)
 	else:
@@ -513,15 +512,14 @@ func _refresh_info_pane() -> void:
 	info_unlocked_label.text = "\n".join(unlocked_lines)
 	info_locked_label.text = "\n".join(locked_lines)
 
-# Adds weapon-cert lines (Melee/Ranged keystones) and recipe lines
-# (Crafting keystone) to the unlocked/locked columns, reflecting the
-# same gating the combat and crafting code enforces: certs unlock at 5
-# points in the matching keystone, recipes at 6 points in Crafting.
+# Adds weapon-cert lines (Ranged keystone) to the unlocked/locked
+# columns, reflecting the same gating the combat code enforces: certs
+# unlock at 5 points spent in the keystone.
 func _append_cert_and_recipe_lines(ks_name: String, ks_data: Dictionary, unlocked_lines: Array, locked_lines: Array) -> void:
 	var points_spent = ks_data.get("points_spent", 0)
 	var ks_unlocked = ks_data.get("unlocked", false)
 
-	if ks_name == "Melee" or ks_name == "Ranged":
+	if ks_name == "Ranged":
 		var certs_met = points_spent >= 5
 		for weapon_name in GameData.WEAPON_CERT_REQUIREMENTS.keys():
 			var req = GameData.WEAPON_CERT_REQUIREMENTS[weapon_name]
@@ -592,7 +590,7 @@ func _is_profession_mastered(profession_name: String) -> bool:
 
 # Distinct from _is_profession_mastered above: this only checks that
 # every keystone has been unlocked, not that every point in it has
-# been spent. Unlocking all four is what should reveal the Enforcer /
+# been spent. Unlocking all of them is what should reveal the Enforcer /
 # Specialist advancement paths as available; full mastery (every point
 # spent) is the separate, later milestone that changes the Street Thug
 # diamond's own visual state.
@@ -656,7 +654,6 @@ func _draw_graph() -> void:
 		return
 
 	var diamond_corners = {
-		"Melee":     _graph_center() + Vector2(-CENTER_SIZE * 0.75, -CENTER_SIZE * 0.35),
 		"Ranged":    _graph_center() + Vector2( CENTER_SIZE * 0.75, -CENTER_SIZE * 0.35),
 		"Auxiliary": _graph_center() + Vector2(-CENTER_SIZE * 0.75,  CENTER_SIZE * 0.35)
 	}
@@ -721,8 +718,8 @@ func _draw_graph() -> void:
 		# actual equilateral triangle (top, bottom-left, bottom-right),
 		# connected to each other by triangle-edge lines, with the
 		# keystone hex centered inside. Only keystones that actually
-		# have ability nodes (Melee, Ranged) get this -- Crafting and
-		# Auxiliary have none and simply skip straight to their stat ring.
+		# have ability nodes (Ranged) get this -- Auxiliary has none
+		# and simply skips straight to its stat ring.
 		var ability_vertex_positions: Array = []
 		if ability_group != null:
 			var members = ability_group["members"]
@@ -735,11 +732,11 @@ func _draw_graph() -> void:
 				var next_i = (i + 1) % ability_vertex_positions.size()
 				_line(ability_vertex_positions[i], ability_vertex_positions[next_i], ABILITY_TAG_COLOR, 2.5, 0.65 if ks_unlocked else 0.3)
 
-		# Melee and Ranged have an embedded ability triangle, so the hex
-		# shape is dropped -- the triangle itself is the visual center
-		# of the cluster, with only the label/status text remaining.
-		# Crafting and Auxiliary have no triangle and keep the full
-		# keystone hex as their visual anchor.
+		# Ranged has an embedded ability triangle, so the hex shape is
+		# dropped -- the triangle itself is the visual center of the
+		# cluster, with only the label/status text remaining. Auxiliary
+		# has no triangle and keeps the full keystone hex as its visual
+		# anchor.
 		if ability_group != null:
 			_keystone_label_only(ks_pos, KS_RADIUS, col, ks_name, ks_data)
 		else:
@@ -819,9 +816,9 @@ func _advancement_box(pos: Vector2, profession_name: String, unlocked: bool) -> 
 	btn.modulate.a = 0.0
 	var tip = profession_name + "\n"
 	if unlocked:
-		tip += "All four Street Thug keystones are unlocked -- " + profession_name + " is available to train at a trainer NPC."
+		tip += "All Street Thug keystones are unlocked -- " + profession_name + " is available to train at a trainer NPC."
 	else:
-		tip += "Requires all Street Thug keystones unlocked (Melee, Ranged, Auxiliary)."
+		tip += "Requires all Street Thug keystones unlocked (Ranged, Auxiliary)."
 	btn.mouse_entered.connect(func(): _show_tooltip(tip, pos))
 	btn.mouse_exited.connect(_hide_tooltip)
 	btn.pressed.connect(func(): _on_next_profession_clicked(profession_name, unlocked))
@@ -831,9 +828,9 @@ func _on_next_profession_clicked(profession_name: String, unlocked: bool) -> voi
 	popup_title.text = profession_name.to_upper()
 	popup_title.modulate = CENTER_COLOR
 	if unlocked:
-		popup_body.text = "All four Street Thug keystones have been unlocked!\n\n" + profession_name + " is available to train at a trainer NPC.\n\n(Its own talent tree will appear here in a future update.)"
+		popup_body.text = "All Street Thug keystones have been unlocked!\n\n" + profession_name + " is available to train at a trainer NPC.\n\n(Its own talent tree will appear here in a future update.)"
 	else:
-		popup_body.text = "Unlock every keystone in Street Thug -- Melee, Ranged, and Auxiliary -- to unlock " + profession_name + "."
+		popup_body.text = "Unlock every keystone in Street Thug -- Ranged and Auxiliary -- to unlock " + profession_name + "."
 	popup_cost_label.text = ""
 	popup_buy_btn.visible = false
 	popup_panel.visible = true
@@ -951,7 +948,7 @@ func _diamond(pos: Vector2, size: float, color: Color, label: String, combat_spe
 	if expanded:
 		tip += "\n\nClick to collapse."
 	else:
-		tip += "\n\nClick to expand and see the four keystones."
+		tip += "\n\nClick to expand and see the keystones."
 	btn.mouse_entered.connect(func(): _show_tooltip(tip, pos))
 	btn.mouse_exited.connect(_hide_tooltip)
 	btn.pressed.connect(_toggle_expanded)
@@ -1032,8 +1029,8 @@ func _keystone_hex(pos: Vector2, radius: float, color: Color, ks_name: String, k
 	btn.pressed.connect(func(): _on_keystone_clicked(ks_name))
 	canvas.add_child(btn)
 
-# Used for keystones that have an embedded ability triangle (Melee,
-# Ranged). No hex polygon/border/glow is drawn -- the triangle is the
+# Used for keystones that have an embedded ability triangle (Ranged).
+# No hex polygon/border/glow is drawn -- the triangle is the
 # visual anchor -- but the name/status text and click/tooltip target
 # are identical to _keystone_hex so the keystone is still fully
 # interactable from the middle of its triangle.
@@ -1093,7 +1090,7 @@ func _keystone_label_only(pos: Vector2, radius: float, color: Color, ks_name: St
 
 # Ability nodes render brighter and larger than stat nodes, and sit
 # in a tight triangle right next to the keystone hex instead of on
-# the outer stat ring. Only Melee and Ranged currently have any.
+# the outer stat ring. Only Ranged currently has any.
 func _ability_hex(pos: Vector2, radius: float, category_color: Color, node_name: String, node_data: Dictionary, ks_data: Dictionary, ks_name: String) -> void:
 	var purchased = node_data.get("purchased", false)
 	var cost = node_data.get("cost", 2)
@@ -1475,7 +1472,7 @@ func _update_hud() -> void:
 	var prof_data = GameData.novice_professions.get("Street Thug", {})
 	var keystones = prof_data.get("keystones", {})
 	var parts: Array = []
-	for ks_name in ["Melee", "Ranged", "Auxiliary"]:
+	for ks_name in ["Ranged", "Auxiliary"]:
 		if not keystones.has(ks_name):
 			continue
 		var ks_data = keystones[ks_name]

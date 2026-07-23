@@ -68,7 +68,10 @@ func _show_tab(tab_name: String) -> void:
 
 func _render_current_tab() -> void:
 	if _current_tab == "currency":
-		capacity_label.text = "Cogs carried: %d" % _cogs
+		# Cogs carried is already shown by the footer's currency_label
+		# (set in configure()) -- the header just labels the tab instead
+		# of duplicating that text into the wrong label.
+		capacity_label.text = "CURRENCY"
 		return
 	var entries: Array = _inventory_entries if _current_tab == "inventory" else _mission_entries
 	capacity_label.text = "CAPACITY  %d/%d" % [entries.size(), slot_count]

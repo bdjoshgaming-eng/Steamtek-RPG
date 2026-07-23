@@ -30,11 +30,6 @@ extends Node
 #
 # Keyed by item name (recipe "name" and "output" are always equal).
 const ITEM_DEFINITIONS: Dictionary = {
-	"Piston Blade": {"item_class": "Sword", "item_subclass": "1 Handed", "weapon_stat_ranges": {"Speed": [2.8, 1.8], "Damage Rating": [8, 16], "Accuracy": [55, 75]}},
-	"Piston Greatblade": {"item_class": "Sword", "item_subclass": "2 Handed", "weapon_stat_ranges": {"Speed": [4.0, 3.0], "Damage Rating": [18, 32], "Accuracy": [40, 60]}},
-	"Pressure Maul": {"item_class": "Hammer", "item_subclass": "2 Handed", "weapon_stat_ranges": {"Speed": [4.5, 3.2], "Damage Rating": [20, 36], "Accuracy": [35, 55]}},
-	"Arc Rod": {"item_class": "Stun Stick", "item_subclass": "1 Handed", "weapon_stat_ranges": {"Speed": [2.4, 1.6], "Damage Rating": [6, 14], "Accuracy": [55, 75]}},
-	"Riveted Knuckles": {"item_class": "Brass Knuckles", "item_subclass": "1 Handed", "weapon_stat_ranges": {"Speed": [1.8, 1.0], "Damage Rating": [5, 12], "Accuracy": [65, 85]}},
 	"Crate of Bandages": {"item_class": "Medicine", "max_charges": 5},
 	"Antiseptic Salve": {"item_class": "Medicine"},
 	"Vitality Tonic": {"item_class": "Medicine"},
@@ -45,10 +40,6 @@ const ITEM_DEFINITIONS: Dictionary = {
 	"Pressure Scattergun": {"item_class": "Shotgun", "item_subclass": "Shotgun", "weapon_stat_ranges": {"Speed": [3.5, 2.5], "Damage Rating": [22, 38], "Range": [8, 15], "Ammo Capacity": [4, 8], "Reload Speed": [5.0, 3.5], "Accuracy": [35, 55]}},
 	"Canister Launcher": {"item_class": "Grenade Launcher", "item_subclass": "Grenade Launcher", "weapon_stat_ranges": {"Speed": [3.5, 2.2], "Damage Rating": [50, 90], "Range": [30, 60], "Ammo Capacity": [1, 4], "Reload Speed": [5.0, 3.0], "Accuracy": [35, 55]}},
 	"Oil Burner": {"item_class": "Flame Thrower", "item_subclass": "Flame Thrower", "weapon_stat_ranges": {"Speed": [0.3, 0.1], "Damage Rating": [5, 10], "Range": [5, 12], "Ammo Capacity": [50, 100], "Reload Speed": [4.5, 3.0], "Accuracy": [50, 70]}},
-	"Hydraulic Saber": {"item_class": "Sword", "item_subclass": "1 Handed", "weapon_stat_ranges": {"Speed": [2.4, 1.5], "Damage Rating": [14, 26], "Accuracy": [60, 80]}},
-	"Compression Sledge": {"item_class": "Hammer", "item_subclass": "2 Handed", "weapon_stat_ranges": {"Speed": [3.6, 2.4], "Damage Rating": [30, 50], "Accuracy": [40, 60]}},
-	"Pneumatic Knuckles": {"item_class": "Brass Knuckles", "item_subclass": "1 Handed", "weapon_stat_ranges": {"Speed": [1.5, 0.8], "Damage Rating": [9, 18], "Accuracy": [70, 90]}},
-	"Steam Baton": {"item_class": "Baton", "item_subclass": "1 Handed", "weapon_stat_ranges": {"Speed": [2.2, 1.4], "Damage Rating": [12, 22], "Accuracy": [60, 80]}},
 	"Vented Long-Rifle": {"item_class": "Sniper Rifle", "item_subclass": "Sniper Rifle", "weapon_stat_ranges": {"Speed": [2.6, 1.5], "Damage Rating": [45, 75], "Range": [120, 190], "Ammo Capacity": [5, 10], "Reload Speed": [3.5, 2.2], "Accuracy": [75, 95]}},
 	"Double-Bore Scattergun": {"item_class": "Shotgun", "item_subclass": "Shotgun", "weapon_stat_ranges": {"Speed": [4.5, 3.2], "Damage Rating": [35, 60], "Range": [10, 18], "Ammo Capacity": [2, 4], "Reload Speed": [6.0, 4.5], "Accuracy": [35, 55]}},
 	"Copper Lined Gun": {"item_class": "Pistol", "item_subclass": "Pistol", "weapon_stat_ranges": {"Speed": [1.0, 0.5], "Damage Rating": [10, 22], "Range": [20, 32], "Ammo Capacity": [10, 18], "Reload Speed": [2.5, 1.2], "Accuracy": [70, 90]}},
@@ -62,16 +53,28 @@ func get_item_definition(item_name: String) -> Dictionary:
 	return ITEM_DEFINITIONS.get(item_name, {})
 
 
+# How a weapon class resolves its target, keyed by item_class (not by
+# individual item name -- every weapon sharing a class fires the same
+# way). "aim_hitscan" fires instantly at whatever's under the aim-fire
+# raycast (see main.gd's _aim_fire_target()). "ground_target" and "cone"
+# are telegraphed: a warning shape shows at/around the mouse, then
+# resolves after a short delay (see main.gd's telegraph helpers).
+# Data-driven so a future weapon (Rocket Launcher, Arc Cannon, grenade
+# abilities) just needs an entry here, not a new code branch.
+const WEAPON_TARGETING_MODES: Dictionary = {
+	"Pistol": "aim_hitscan",
+	"Assault Rifle": "aim_hitscan",
+	"Sniper Rifle": "aim_hitscan",
+	"Shotgun": "aim_hitscan",
+	"Grenade Launcher": "ground_target",
+	"Flame Thrower": "cone",
+}
+
+func targeting_mode_for_class(weapon_class: String) -> String:
+	return WEAPON_TARGETING_MODES.get(weapon_class, "aim_hitscan")
+
+
 const WEAPON_CERT_REQUIREMENTS: Dictionary = {
-	"Piston Blade": {"profession": "Street Thug", "box": "Novice"},
-	"Piston Greatblade": {"profession": "Street Thug", "box": "Novice"},
-	"Pressure Maul": {"profession": "Street Thug", "box": "Novice"},
-	"Arc Rod": {"profession": "Street Thug", "box": "Novice"},
-	"Riveted Knuckles": {"profession": "Street Thug", "box": "Novice"},
-	"Hydraulic Saber": {"profession": "Street Thug", "keystone": "Melee", "points_required": 5},
-	"Steam Baton": {"profession": "Street Thug", "keystone": "Melee", "points_required": 5},
-	"Compression Sledge": {"profession": "Street Thug", "keystone": "Melee", "points_required": 5},
-	"Pneumatic Knuckles": {"profession": "Street Thug", "keystone": "Melee", "points_required": 5},
 	"Rusty Pistol": {"profession": "Street Thug", "box": "Novice"},
 	"Pneumatic Rifle": {"profession": "Street Thug", "box": "Novice"},
 	"Pneumatic Longrifle": {"profession": "Street Thug", "box": "Novice"},
@@ -87,23 +90,13 @@ const WEAPON_CERT_REQUIREMENTS: Dictionary = {
 
 # --- Ability Definitions ---
 var ability_definitions: Dictionary = {
-	"Quick Hit": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 35, "damage_multiplier": 1.5, "requires_profession": "Street Thug", "requires_box": "Novice"},
-	"Overhead Swing": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 35, "damage_multiplier": 1.5, "requires_profession": "Street Thug", "requires_box": "Novice"},
-	"Bash": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 35, "damage_multiplier": 1.5, "requires_profession": "Street Thug", "requires_box": "Novice"},
-	"Backhand": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 35, "damage_multiplier": 1.5, "requires_profession": "Street Thug", "requires_box": "Novice"},
-	"Slap": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 50, "damage_multiplier": 2.5, "requires_profession": "Street Thug", "requires_box": "Melee II"},
-	"Thrust": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 50, "damage_multiplier": 2.5, "requires_profession": "Street Thug", "requires_box": "Melee II"},
-	"Bludgeon": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 50, "damage_multiplier": 2.5, "requires_profession": "Street Thug", "requires_box": "Melee II"},
-	"Roundhouse": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 60, "damage_multiplier": 4.0, "aoe": true, "requires_profession": "Street Thug", "requires_box": "Master"},
-	"Flourish": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 60, "damage_multiplier": 4.0, "aoe": true, "requires_profession": "Street Thug", "requires_box": "Master"},
-	"Power Swing": {"weapons": ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"], "action_cost": 60, "damage_multiplier": 4.0, "aoe": true, "requires_profession": "Street Thug", "requires_box": "Master"},
-	"Subdue": {"weapons": ["Sword", "Axe", "Baton", "Hammer", "Brass Knuckles", "Stun Stick"], "action_cost": 30, "damage_multiplier": 0.25, "debuff": "damage", "debuff_amount": 0.10, "debuff_duration": 3.0, "requires_profession": "Street Thug", "requires_box": "Combat Training I"},
-	"Disorient": {"weapons": ["Sword", "Axe", "Baton", "Hammer", "Brass Knuckles", "Stun Stick"], "action_cost": 30, "damage_multiplier": 0.25, "debuff": "accuracy", "debuff_amount": 0.05, "debuff_duration": 3.0, "requires_profession": "Street Thug", "requires_box": "Combat Training II"},
-	"Bleed": {"weapons": ["Sword", "Axe", "Baton", "Hammer", "Brass Knuckles", "Stun Stick"], "action_cost": 30, "damage_multiplier": 0.25, "dot_damage_per_tick": 8, "dot_duration_ticks": 3, "requires_profession": "Street Thug", "requires_box": "Master"},
-	"Bruise": {"weapons": ["Sword", "Axe", "Baton", "Hammer", "Brass Knuckles", "Stun Stick"], "action_cost": 30, "damage_multiplier": 0.25, "debuff": "attack_speed", "debuff_amount": 0.20, "debuff_duration": 3.0, "requires_profession": "Street Thug", "requires_box": "Master"},
-	"Anger": {"weapons": ["Sword", "Axe", "Baton", "Hammer", "Brass Knuckles", "Stun Stick"], "action_cost": 30, "damage_multiplier": 0.25, "taunt_duration": 3.0, "requires_profession": "Street Thug", "requires_box": "Master"},
 	"Aimed Shot": {"weapons": ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"], "action_cost": 35, "damage_multiplier": 1.5, "requires_profession": "Street Thug", "requires_box": "Novice"},
-	"Scatter Blast": {"weapons": ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"], "action_cost": 35, "damage_multiplier": 1.5, "requires_profession": "Street Thug", "requires_box": "Novice"},
+	# Hold-to-charge: tap fires the "damage_multiplier" tier below, holding
+	# past charge_partial_time/charge_full_time steps up to the partial/full
+	# multiplier. "chargeable" is the generic flag any future ability can
+	# set to reuse this same hold/release handling in main.gd -- Charged
+	# Shot is just the first (and, for now, only) ability using it.
+	"Charged Shot": {"weapons": ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"], "action_cost": 40, "damage_multiplier": 1.0, "chargeable": true, "charge_partial_time": 1.0, "charge_full_time": 2.0, "charge_partial_multiplier": 1.75, "charge_full_multiplier": 2.5, "requires_profession": "Street Thug", "requires_box": "Novice"},
 	"Suppressing Fire": {"weapons": ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"], "action_cost": 35, "damage_multiplier": 1.5, "requires_profession": "Street Thug", "requires_box": "Novice"},
 	"Piercing Round": {"weapons": ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"], "action_cost": 50, "damage_multiplier": 2.5, "requires_profession": "Street Thug", "requires_box": "Ranged III"},
 	"Point-Blank Burst": {"weapons": ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"], "action_cost": 50, "damage_multiplier": 2.5, "requires_profession": "Street Thug", "requires_box": "Ranged II"},
@@ -129,46 +122,6 @@ var novice_professions: Dictionary = {
 		# "unlocked" starts false -- you unlock a keystone with XP, then
 		# spend node points freely within it.
 		"keystones": {
-			"Melee": {
-				"unlocked": false,
-				"xp_type": "Combat XP",
-				"xp_cost": 500,
-				"points_spent": 0,
-				"points_max": 10,
-				"nodes": {
-					# --- Melee Accuracy nodes (5) ---
-					"Melee Accuracy 1": {"type": "stat", "cost": 1, "stat": "Melee Accuracy", "amount": 3, "purchased": false, "xp_cost": 150},
-					"Melee Accuracy 2": {"type": "stat", "cost": 1, "stat": "Melee Accuracy", "amount": 3, "purchased": false, "xp_cost": 150},
-					"Melee Accuracy 3": {"type": "stat", "cost": 1, "stat": "Melee Accuracy", "amount": 3, "purchased": false, "xp_cost": 150},
-					"Melee Accuracy 4": {"type": "stat", "cost": 1, "stat": "Melee Accuracy", "amount": 3, "purchased": false, "xp_cost": 150},
-					"Melee Accuracy 5": {"type": "stat", "cost": 1, "stat": "Melee Accuracy", "amount": 3, "purchased": false, "xp_cost": 150},
-					# --- Melee Speed nodes (5) ---
-					"Melee Speed 1": {"type": "stat", "cost": 1, "stat": "Melee Speed", "amount": 3, "purchased": false, "xp_cost": 150},
-					"Melee Speed 2": {"type": "stat", "cost": 1, "stat": "Melee Speed", "amount": 3, "purchased": false, "xp_cost": 150},
-					"Melee Speed 3": {"type": "stat", "cost": 1, "stat": "Melee Speed", "amount": 3, "purchased": false, "xp_cost": 150},
-					"Melee Speed 4": {"type": "stat", "cost": 1, "stat": "Melee Speed", "amount": 3, "purchased": false, "xp_cost": 150},
-					"Melee Speed 5": {"type": "stat", "cost": 1, "stat": "Melee Speed", "amount": 3, "purchased": false, "xp_cost": 150},
-					# --- Melee Crit Damage nodes (5) ---
-					"Melee Crit Damage 1": {"type": "stat", "cost": 1, "stat": "Melee Crit Damage", "amount": 3, "purchased": false, "xp_cost": 150},
-					"Melee Crit Damage 2": {"type": "stat", "cost": 1, "stat": "Melee Crit Damage", "amount": 3, "purchased": false, "xp_cost": 150},
-					"Melee Crit Damage 3": {"type": "stat", "cost": 1, "stat": "Melee Crit Damage", "amount": 3, "purchased": false, "xp_cost": 150},
-					"Melee Crit Damage 4": {"type": "stat", "cost": 1, "stat": "Melee Crit Damage", "amount": 3, "purchased": false, "xp_cost": 150},
-					"Melee Crit Damage 5": {"type": "stat", "cost": 1, "stat": "Melee Crit Damage", "amount": 3, "purchased": false, "xp_cost": 150},
-					# --- Ability nodes (3, cost 2 each) ---
-					"Quick Hit": {
-						"type": "ability", "cost": 2, "ability": "Quick Hit", "purchased": false, "xp_cost": 300,
-						"mastery_upgrade": "Quick Hit gains +15% damage and applies a 1s slow"
-					},
-					"Overhead Swing": {
-						"type": "ability", "cost": 2, "ability": "Overhead Swing", "purchased": false, "xp_cost": 300,
-						"mastery_upgrade": "Overhead Swing becomes an AoE hit striking all enemies in melee range"
-					},
-					"Bash": {
-						"type": "ability", "cost": 2, "ability": "Bash", "purchased": false, "xp_cost": 300,
-						"mastery_upgrade": "Bash gains a stun component -- target is stunned for 2s"
-					}
-				}
-			},
 			"Ranged": {
 				"unlocked": false,
 				"xp_type": "Combat XP",
@@ -199,9 +152,9 @@ var novice_professions: Dictionary = {
 						"type": "ability", "cost": 2, "ability": "Aimed Shot", "purchased": false, "xp_cost": 300,
 						"mastery_upgrade": "Aimed Shot gains +20% damage and ignores 10% of target defense"
 					},
-					"Scatter Blast": {
-						"type": "ability", "cost": 2, "ability": "Scatter Blast", "purchased": false, "xp_cost": 300,
-						"mastery_upgrade": "Scatter Blast becomes an AoE hitting all enemies in shotgun range"
+					"Charged Shot": {
+						"type": "ability", "cost": 2, "ability": "Charged Shot", "purchased": false, "xp_cost": 300,
+						"mastery_upgrade": "Charged Shot's full-charge tier gains +20% damage"
 					},
 					"Suppressing Fire": {
 						"type": "ability", "cost": 2, "ability": "Suppressing Fire", "purchased": false, "xp_cost": 300,
@@ -224,10 +177,10 @@ var novice_professions: Dictionary = {
 					"Ranged Defense 1": {"type": "stat", "cost": 3, "stat": "Ranged Defense", "amount": 5, "purchased": false, "xp_cost": 150},
 					"Ranged Defense 2": {"type": "stat", "cost": 3, "stat": "Ranged Defense", "amount": 5, "purchased": false, "xp_cost": 150},
 					"Ranged Defense 3": {"type": "stat", "cost": 3, "stat": "Ranged Defense", "amount": 5, "purchased": false, "xp_cost": 150},
-					# --- Toughness nodes (3) ---
-					"Toughness 1": {"type": "stat", "cost": 3, "stat": "Toughness", "amount": 5, "purchased": false, "xp_cost": 150},
-					"Toughness 2": {"type": "stat", "cost": 3, "stat": "Toughness", "amount": 5, "purchased": false, "xp_cost": 150},
-					"Toughness 3": {"type": "stat", "cost": 3, "stat": "Toughness", "amount": 5, "purchased": false, "xp_cost": 150},
+					# --- Grit nodes (3) -- resists DoT damage and CC duration/potency ---
+					"Grit 1": {"type": "stat", "cost": 3, "stat": "Grit", "amount": 5, "purchased": false, "xp_cost": 150},
+					"Grit 2": {"type": "stat", "cost": 3, "stat": "Grit", "amount": 5, "purchased": false, "xp_cost": 150},
+					"Grit 3": {"type": "stat", "cost": 3, "stat": "Grit", "amount": 5, "purchased": false, "xp_cost": 150},
 					# --- Loot Chance nodes (3) ---
 					"Loot Chance 1": {"type": "stat", "cost": 3, "stat": "Loot Chance", "amount": 5, "purchased": false, "xp_cost": 150},
 					"Loot Chance 2": {"type": "stat", "cost": 3, "stat": "Loot Chance", "amount": 5, "purchased": false, "xp_cost": 150},
@@ -458,7 +411,6 @@ var novice_professions: Dictionary = {
 
 
 # --- Weapon Category Groupings ---
-var pressure_enforcer_weapons = ["Sword", "Axe", "Hammer", "Brass Knuckles", "Stun Stick", "Baton"]
 var chrome_gunner_weapons = ["Pistol", "Assault Rifle", "Sniper Rifle", "Shotgun", "Grenade Launcher", "Flame Thrower"]
 var rifle_weapons = ["Assault Rifle", "Sniper Rifle"]
 var shotgun_weapons = ["Shotgun"]

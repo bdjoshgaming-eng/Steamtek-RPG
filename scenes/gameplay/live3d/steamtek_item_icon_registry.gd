@@ -24,6 +24,7 @@ const CATEGORY_STYLES := {
 const ITEM_OVERRIDES := {
 	"Riveted Knuckles": {"category": "Weapon", "abbreviation": "RK"},
 	"Rusty Pistol": {"category": "Weapon", "abbreviation": "RP"},
+	"Canister Launcher": {"category": "Weapon", "abbreviation": "GL"},
 	"Crate of Bandages": {"category": "Consumable", "abbreviation": "BND"},
 	"Mineral Survey Tool": {"category": "Mod", "abbreviation": "SVY"},
 	"Rusty Crafting Kit": {"category": "Mod", "abbreviation": "KIT"},

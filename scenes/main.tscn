@@ -248,9 +248,6 @@ one_shot = true
 wait_time = 5.0
 one_shot = true
 
-[node name="ForageCooldownTimer" type="Timer" parent="." unique_id=99446312]
-wait_time = 30.06
-
 [node name="ResourceShiftTimer" type="Timer" parent="." unique_id=1257001318]
 
 [node name="DumpsterCooldownTimer" type="Timer" parent="." unique_id=1061319465]
@@ -596,31 +593,6 @@ offset_right = 40.0
 offset_bottom = 22.0
 
 [node name="PlayerHUDActionLabel" type="Label" parent="UILayer/PlayerHUD" unique_id=2091946325]
-unique_name_in_owner = true
-offset_right = 40.0
-offset_bottom = 22.0
-
-[node name="EnemyHUD" type="Node2D" parent="UILayer" unique_id=791479968]
-unique_name_in_owner = true
-
-[node name="EnemyHUDHealthBarBg" type="Polygon2D" parent="UILayer/EnemyHUD" unique_id=1686816633]
-unique_name_in_owner = true
-
-[node name="EnemyHUDHealthBarFill" type="Polygon2D" parent="UILayer/EnemyHUD" unique_id=1762811413]
-unique_name_in_owner = true
-
-[node name="EnemyHUDActionBarBg" type="Polygon2D" parent="UILayer/EnemyHUD" unique_id=436171622]
-unique_name_in_owner = true
-
-[node name="EnemyHUDActionBarFill" type="Polygon2D" parent="UILayer/EnemyHUD" unique_id=1818110177]
-unique_name_in_owner = true
-
-[node name="EnemyHUDHealthLabel" type="Label" parent="UILayer/EnemyHUD" unique_id=329551639]
-unique_name_in_owner = true
-offset_right = 40.0
-offset_bottom = 22.0
-
-[node name="EnemyHUDActionLabel" type="Label" parent="UILayer/EnemyHUD" unique_id=1387373912]
 unique_name_in_owner = true
 offset_right = 40.0
 offset_bottom = 22.0

@@ -24,32 +24,26 @@ extends Node
 # "armor" is the Armor Rating (Phase 4a); Combat converts it to a Damage
 # Reduction %% and to Effective Health.
 #
-# Phase 5 adds three DEFENSIVE stats, all percentages and all CL-derived
-# only (no archetype shaping -- archetype shapes resistances, CL shapes
-# defense): "dodge" is a full-avoid chance rolled AFTER the hit check and
-# is deliberately capped low (15%% at CL40) so it never compounds with
-# Defense into a frustrating double-whiff; "block" is a partial-mitigation
-# chance that halves incoming damage; "crit_resist" subtracts directly
-# from the attacker's critical chance.
+# "crit_resist" is a CL-derived percentage (no archetype shaping --
+# archetype shapes resistances, CL shapes defense) that subtracts
+# directly from the attacker's critical chance. Dodge and Block were
+# removed from the resolution chain in the ranged-only combat redesign:
+# avoiding damage entirely is now the PLAYER's active Dodge Roll
+# (player.gd), not a per-hit enemy stat rolled here.
 const CL_ANCHORS: Dictionary = {
-	1: {"health": 50, "action": 50, "damage": 27, "defense": -2, "armor": 0, "dodge": 0.0, "block": 0.0, "crit_resist": 0.0},
-	5: {"health": 110, "action": 90, "damage": 48, "defense": 16, "armor": 15, "dodge": 2.0, "block": 3.0, "crit_resist": 2.0},
-	10: {"health": 250, "action": 190, "damage": 85, "defense": 35, "armor": 30, "dodge": 4.0, "block": 6.0, "crit_resist": 4.0},
-	15: {"health": 600, "action": 440, "damage": 146, "defense": 55, "armor": 48, "dodge": 6.0, "block": 8.0, "crit_resist": 6.0},
-	20: {"health": 1365, "action": 980, "damage": 238, "defense": 75, "armor": 66, "dodge": 8.0, "block": 11.0, "crit_resist": 8.0},
-	25: {"health": 2940, "action": 2100, "damage": 374, "defense": 100, "armor": 93, "dodge": 10.0, "block": 13.0, "crit_resist": 10.0},
-	30: {"health": 5800, "action": 4100, "damage": 578, "defense": 130, "armor": 120, "dodge": 12.0, "block": 15.0, "crit_resist": 11.0},
-	35: {"health": 10920, "action": 7700, "damage": 867, "defense": 165, "armor": 152, "dodge": 13.0, "block": 18.0, "crit_resist": 13.0},
-	40: {"health": 21000, "action": 14700, "damage": 1241, "defense": 200, "armor": 193, "dodge": 15.0, "block": 20.0, "crit_resist": 15.0},
+	1: {"health": 50, "action": 50, "damage": 27, "defense": -2, "armor": 0, "crit_resist": 0.0},
+	5: {"health": 110, "action": 90, "damage": 48, "defense": 16, "armor": 15, "crit_resist": 2.0},
+	10: {"health": 250, "action": 190, "damage": 85, "defense": 35, "armor": 30, "crit_resist": 4.0},
+	15: {"health": 600, "action": 440, "damage": 146, "defense": 55, "armor": 48, "crit_resist": 6.0},
+	20: {"health": 1365, "action": 980, "damage": 238, "defense": 75, "armor": 66, "crit_resist": 8.0},
+	25: {"health": 2940, "action": 2100, "damage": 374, "defense": 100, "armor": 93, "crit_resist": 10.0},
+	30: {"health": 5800, "action": 4100, "damage": 578, "defense": 130, "armor": 120, "crit_resist": 11.0},
+	35: {"health": 10920, "action": 7700, "damage": 867, "defense": 165, "armor": 152, "crit_resist": 13.0},
+	40: {"health": 21000, "action": 14700, "damage": 1241, "defense": 200, "armor": 193, "crit_resist": 15.0},
 }
 
 
-# Damage multiplier applied when a defender BLOCKS (Phase 5). A block is
-# partial mitigation, not an avoid -- the hit still lands for half.
-const BLOCK_DAMAGE_MULTIPLIER: float = 0.5
-
-
-# The shared 15-field combat stat block (framework spec 3.1). Returns a
+# The shared 13-field combat stat block (framework spec 3.1). Returns a
 # FRESH dictionary each call so no two combatants share a reference.
 # Defaults are placeholders; later phases populate them.
 func new_combat_stats() -> Dictionary:
@@ -63,8 +57,6 @@ func new_combat_stats() -> Dictionary:
 		"critical_chance": 0.0,
 		"critical_damage": 0.0,
 		"critical_resistance": 0.0,
-		"dodge": 0.0,
-		"block": 0.0,
 		"armor_penetration": 0.0,
 		"heat": 0,
 		"pressure_capacity": 0,
@@ -224,8 +216,6 @@ func generate_enemy(display_name: String, cl: int, archetype: String, faction: S
 		"defense": 0,
 		"armor_rating": 0,
 		"resistances": {},
-		"dodge": 0.0,
-		"block": 0.0,
 		"crit_resist": 0.0,
 		"alive": true,
 		"attack_ready": true,
@@ -365,24 +355,16 @@ const PLAYER_CL_MAX: int = 100
 # ============================================================
 # Phase 10: weapon families, proficiency, certification
 # ============================================================
-# Steamtek-native family list: the 12 weapon classes the game already
-# uses ARE the 12 families, rather than the framework's 11-ranged +
-# 1-collapsed-melee list, which would have thrown away the six distinct
-# melee classes. Each family names the keystone that governs its
-# proficiency.
+# Ranged-only family list: melee weapon families were removed when the
+# game moved to ranged-only player combat (buttstroke disengage is the
+# sole remaining melee action and isn't a trained weapon family). Each
+# family names the keystone that governs its proficiency.
 #
-# NOTE: Street Thug is a generalist, so its Melee keystone lifts all six
-# melee families equally (same for Ranged). Families are still tracked
-# INDIVIDUALLY here so that per-family nodes in later specialist
-# professions (Sniper, Bombardier, etc.) become a source swap rather
-# than a restructure.
+# NOTE: Street Thug is a generalist, so its Ranged keystone lifts all six
+# families equally. Families are still tracked INDIVIDUALLY here so that
+# per-family nodes in later specialist professions (Sniper, Bombardier,
+# etc.) become a source swap rather than a restructure.
 const WEAPON_FAMILIES: Dictionary = {
-	"Sword": {"keystone": "Melee", "range": "Melee"},
-	"Axe": {"keystone": "Melee", "range": "Melee"},
-	"Hammer": {"keystone": "Melee", "range": "Melee"},
-	"Brass Knuckles": {"keystone": "Melee", "range": "Melee"},
-	"Stun Stick": {"keystone": "Melee", "range": "Melee"},
-	"Baton": {"keystone": "Melee", "range": "Melee"},
 	"Pistol": {"keystone": "Ranged", "range": "Ranged"},
 	"Assault Rifle": {"keystone": "Ranged", "range": "Ranged"},
 	"Sniper Rifle": {"keystone": "Ranged", "range": "Ranged"},
