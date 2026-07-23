@@ -20,6 +20,7 @@ var _take_all_hold_time := 0.0
 var _suppress_storage_reopen := false
 var _dialogue_queue: Array = []
 var _dialogue_speaker := ""
+var _dialogue_on_complete: Callable
 
 
 func _ready() -> void:
@@ -47,11 +48,18 @@ func _on_hud_panel_closed() -> void:
 
 
 func _on_inventory_slot_double_clicked(key: String) -> void:
+	# Equip itself (set equipped_weapon, save, refresh the inventory
+	# window) is universal base-class behavior, same as every other
+	# scene -- this override only adds the apartment's TUTORIAL-specific
+	# side effects (door-unlock gate, objective text, onboarding toast).
 	var weapons_owned: Dictionary = hud.progress_ref.get("weapons_owned", {})
-	if weapons_owned.has(key):
-		_equip_starter_weapon(key)
-	else:
+	if not weapons_owned.has(key):
 		_show_message("Nothing to do with this yet.")
+		return
+	super._on_inventory_slot_double_clicked(key)
+	_apply_progress_to_scene()
+	_update_objective()
+	_show_message("EQUIPPED - %s. Time to head out." % key)
 
 
 func _process(delta: float) -> void:
@@ -99,18 +107,38 @@ func _on_interactable_action_requested(action_id: String, _actor: Node, _source:
 	match action_id:
 		"opening_note":
 			if bool(progress.get("note_found", false)):
-				_show_dialogue_sequence("Note", ["The note says to head east to The Brass Lantern."])
+				character.think("Head east to the Brass Lantern.")
 				return
 			progress["note_found"] = true
 			progress["quest_stage"] = 1
 			progress["quest_title"] = "Rough Streets"
 			_save_progress()
 			_apply_progress_to_scene()
-			_show_dialogue_sequence("Note", [
-				"\"Storm's got the whole block dark again. Went to check on things at the Brass Lantern -- should've been back an hour ago. Don't wait up. -- Joss\"",
-				"An hour ago, in this? That's not like them.",
-				"If I'm going out there, I should grab my gear first. These streets don't forgive being careless.",
-			])
+			# The note's actual written words are quest item text -- they
+			# stay in the modal SteamtekDialogueBox. The player's own
+			# reaction to reading it is NOT the note's text, so it plays
+			# afterward as an inner-thought head bubble instead of being
+			# blended into the same modal under the same "Note" speaker.
+			_show_dialogue_sequence(
+				"Note",
+				[
+					(
+						"\"Storm's got the whole block dark again. Went to check on"
+						+ " things at the Brass Lantern -- should've been back an hour"
+						+ " ago. Don't wait up. -- Joss\""
+					),
+				],
+				func():
+					character.think_sequence(
+						[
+							"An hour ago, in this? That's not like them.",
+							(
+								"If I'm going out there, I should grab my gear first."
+								+ " These streets don't forgive being careless."
+							),
+						]
+					)
+			)
 			_update_objective()
 		"starter_storage":
 			if not _suppress_storage_reopen:
@@ -118,9 +146,10 @@ func _on_interactable_action_requested(action_id: String, _actor: Node, _source:
 	_update_objective()
 
 
-func _show_dialogue_sequence(speaker: String, lines: Array) -> void:
+func _show_dialogue_sequence(speaker: String, lines: Array, on_complete: Callable = Callable()) -> void:
 	_dialogue_speaker = speaker
 	_dialogue_queue = lines.duplicate()
+	_dialogue_on_complete = on_complete
 	character.set_player_controlled(false)
 	_advance_dialogue()
 
@@ -129,6 +158,9 @@ func _advance_dialogue() -> void:
 	if _dialogue_queue.is_empty():
 		hud.dialogue_box.close()
 		character.call_deferred("set_player_controlled", true)
+		if _dialogue_on_complete.is_valid():
+			_dialogue_on_complete.call()
+			_dialogue_on_complete = Callable()
 		return
 	var line: String = _dialogue_queue.pop_front()
 	var options: Array
@@ -160,7 +192,7 @@ func _open_starter_storage() -> void:
 			"Mineral Survey Tool": 1,
 			"Rusty Crafting Kit": 1,
 		}
-		progress["crate_weapons"] = ["Rusty Pistol", "Canister Launcher"]
+		progress["crate_weapons"] = ["Rusty Pistol", "Canister Launcher", "Oil Burner"]
 		_save_progress()
 		hud.progress_ref["cogs"] = maxi(int(hud.progress_ref.get("cogs", 0)), 100)
 		if hud.save_callback.is_valid():
@@ -309,15 +341,6 @@ func _refresh_inventory_window() -> void:
 func _save_inventory() -> void:
 	if hud.save_callback.is_valid():
 		hud.save_callback.call()
-
-
-func _equip_starter_weapon(weapon_name: String) -> void:
-	hud.progress_ref["equipped_weapon"] = weapon_name
-	_save_inventory()
-	_apply_progress_to_scene()
-	_refresh_inventory_window()
-	_update_objective()
-	_show_message("EQUIPPED - %s. Time to head out." % weapon_name)
 
 
 func _show_message(text: String) -> void:

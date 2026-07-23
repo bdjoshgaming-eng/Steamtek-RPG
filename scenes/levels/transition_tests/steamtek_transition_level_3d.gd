@@ -170,8 +170,19 @@ func _on_hud_panel_closed() -> void:
 	pass
 
 
-func _on_inventory_slot_double_clicked(_item_key: String) -> void:
-	pass
+func _on_inventory_slot_double_clicked(item_key: String) -> void:
+	# Base/default equip handling: any scene that doesn't override this
+	# (apartment does, for its own door-unlock + message-toast behavior)
+	# still lets the player equip an owned weapon from the inventory
+	# window. Without this, scenes like the lantern/surface canvas had no
+	# way to change equipped weapon at all once past the apartment.
+	var weapons_owned: Dictionary = hud.progress_ref.get("weapons_owned", {})
+	if not weapons_owned.has(item_key):
+		return
+	hud.progress_ref["equipped_weapon"] = item_key
+	if hud.save_callback.is_valid():
+		hud.save_callback.call()
+	hud._refresh_inventory_display()
 
 
 func _apply_pending_spawn() -> void:

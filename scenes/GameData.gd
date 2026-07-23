@@ -38,12 +38,12 @@ const ITEM_DEFINITIONS: Dictionary = {
 	"Pneumatic Rifle": {"item_class": "Assault Rifle", "item_subclass": "Assault Rifle", "weapon_stat_ranges": {"Speed": [0.4, 0.15], "Damage Rating": [8, 18], "Range": [40, 70], "Ammo Capacity": [20, 35], "Reload Speed": [3.5, 2.0], "Accuracy": [45, 65]}},
 	"Pneumatic Longrifle": {"item_class": "Sniper Rifle", "item_subclass": "Sniper Rifle", "weapon_stat_ranges": {"Speed": [3.0, 1.8], "Damage Rating": [30, 55], "Range": [100, 160], "Ammo Capacity": [4, 8], "Reload Speed": [4.0, 2.5], "Accuracy": [70, 90]}},
 	"Pressure Scattergun": {"item_class": "Shotgun", "item_subclass": "Shotgun", "weapon_stat_ranges": {"Speed": [3.5, 2.5], "Damage Rating": [22, 38], "Range": [8, 15], "Ammo Capacity": [4, 8], "Reload Speed": [5.0, 3.5], "Accuracy": [35, 55]}},
-	"Canister Launcher": {"item_class": "Grenade Launcher", "item_subclass": "Grenade Launcher", "weapon_stat_ranges": {"Speed": [3.5, 2.2], "Damage Rating": [50, 90], "Range": [30, 60], "Ammo Capacity": [1, 4], "Reload Speed": [5.0, 3.0], "Accuracy": [35, 55]}},
+	"Canister Launcher": {"item_class": "Grenade Launcher", "item_subclass": "Grenade Launcher", "weapon_stat_ranges": {"Speed": [0.8, 0.5], "Damage Rating": [50, 90], "Range": [30, 60], "Ammo Capacity": [4, 8], "Reload Speed": [2.0, 1.2], "Accuracy": [35, 55]}},
 	"Oil Burner": {"item_class": "Flame Thrower", "item_subclass": "Flame Thrower", "weapon_stat_ranges": {"Speed": [0.3, 0.1], "Damage Rating": [5, 10], "Range": [5, 12], "Ammo Capacity": [50, 100], "Reload Speed": [4.5, 3.0], "Accuracy": [50, 70]}},
 	"Vented Long-Rifle": {"item_class": "Sniper Rifle", "item_subclass": "Sniper Rifle", "weapon_stat_ranges": {"Speed": [2.6, 1.5], "Damage Rating": [45, 75], "Range": [120, 190], "Ammo Capacity": [5, 10], "Reload Speed": [3.5, 2.2], "Accuracy": [75, 95]}},
 	"Double-Bore Scattergun": {"item_class": "Shotgun", "item_subclass": "Shotgun", "weapon_stat_ranges": {"Speed": [4.5, 3.2], "Damage Rating": [35, 60], "Range": [10, 18], "Ammo Capacity": [2, 4], "Reload Speed": [6.0, 4.5], "Accuracy": [35, 55]}},
 	"Copper Lined Gun": {"item_class": "Pistol", "item_subclass": "Pistol", "weapon_stat_ranges": {"Speed": [1.0, 0.5], "Damage Rating": [10, 22], "Range": [20, 32], "Ammo Capacity": [10, 18], "Reload Speed": [2.5, 1.2], "Accuracy": [70, 90]}},
-	"Pressure-Fed Launcher": {"item_class": "Grenade Launcher", "item_subclass": "Grenade Launcher", "weapon_stat_ranges": {"Speed": [3.0, 1.8], "Damage Rating": [65, 105], "Range": [35, 65], "Ammo Capacity": [2, 5], "Reload Speed": [4.5, 2.8], "Accuracy": [40, 60]}},
+	"Pressure-Fed Launcher": {"item_class": "Grenade Launcher", "item_subclass": "Grenade Launcher", "weapon_stat_ranges": {"Speed": [1.0, 0.65], "Damage Rating": [65, 105], "Range": [35, 65], "Ammo Capacity": [5, 10], "Reload Speed": [2.5, 1.5], "Accuracy": [40, 60]}},
 }
 
 
@@ -53,12 +53,40 @@ func get_item_definition(item_name: String) -> Dictionary:
 	return ITEM_DEFINITIONS.get(item_name, {})
 
 
+# Sums the "amount" of every PURCHASED keystone node across every
+# profession/keystone whose "stat" field matches stat_name (e.g. "Grit").
+# Generic on purpose: any profession could add more nodes for the same
+# stat later without this needing to change.
+func total_purchased_stat(stat_name: String) -> float:
+	var total := 0.0
+	for profession_data in novice_professions.values():
+		var keystones: Dictionary = profession_data.get("keystones", {})
+		for keystone_data in keystones.values():
+			var nodes: Dictionary = keystone_data.get("nodes", {})
+			for node_data in nodes.values():
+				if String(node_data.get("type", "")) != "stat":
+					continue
+				if String(node_data.get("stat", "")) != stat_name:
+					continue
+				if not bool(node_data.get("purchased", false)):
+					continue
+				total += float(node_data.get("amount", 0))
+	return total
+
+
 # How a weapon class resolves its target, keyed by item_class (not by
 # individual item name -- every weapon sharing a class fires the same
 # way). "aim_hitscan" fires instantly at whatever's under the aim-fire
-# raycast (see main.gd's _aim_fire_target()). "ground_target" and "cone"
-# are telegraphed: a warning shape shows at/around the mouse, then
-# resolves after a short delay (see main.gd's telegraph helpers).
+# raycast (see steamtek_humanoid_character_3d.gd's _aim_fire_target()).
+# "ground_target" shows a telegraph circle at the mouse (clamped to the
+# weapon's Range) that confirms on a second click. splash_radius_for_
+# class() sizes that circle for every ground_target weapon, but only
+# actually SPLASHES damage for instant-detonate blast weapons (Rocket
+# Launcher/Arc Cannon, once they exist) -- Grenade Launcher instead
+# throws a real projectile that deals a direct hit on contact
+# (GRENADE_CONTACT_RADIUS in steamtek_humanoid_character_3d.gd), not an
+# AoE check at the splash radius. "cone" is not implemented yet (Flame
+# Thrower still fires as aim_hitscan).
 # Data-driven so a future weapon (Rocket Launcher, Arc Cannon, grenade
 # abilities) just needs an entry here, not a new code branch.
 const WEAPON_TARGETING_MODES: Dictionary = {
@@ -72,6 +100,29 @@ const WEAPON_TARGETING_MODES: Dictionary = {
 
 func targeting_mode_for_class(weapon_class: String) -> String:
 	return WEAPON_TARGETING_MODES.get(weapon_class, "aim_hitscan")
+
+
+# Splash radius (meters) for weapon classes that deal area damage on
+# confirm rather than hitting a single raycast target. Keyed by
+# item_class, same convention as WEAPON_TARGETING_MODES.
+const WEAPON_SPLASH_RADIUS: Dictionary = {
+	"Grenade Launcher": 0.49,
+}
+
+func splash_radius_for_class(weapon_class: String) -> float:
+	return float(WEAPON_SPLASH_RADIUS.get(weapon_class, 3.0))
+
+
+# Cone half-spread (full angle, degrees) for weapon classes that deal
+# area damage in a wedge in front of the player. Cone LENGTH uses the
+# weapon's own weapon_stat_ranges Range[0], same convention as
+# ground_target's max click distance -- only the angle is class-level.
+const WEAPON_CONE_ANGLE_DEGREES: Dictionary = {
+	"Flame Thrower": 50.0,
+}
+
+func cone_angle_for_class(weapon_class: String) -> float:
+	return float(WEAPON_CONE_ANGLE_DEGREES.get(weapon_class, 45.0))
 
 
 const WEAPON_CERT_REQUIREMENTS: Dictionary = {

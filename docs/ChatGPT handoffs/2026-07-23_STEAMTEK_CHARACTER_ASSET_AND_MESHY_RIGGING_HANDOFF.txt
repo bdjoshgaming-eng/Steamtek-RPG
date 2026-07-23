@@ -80,3 +80,20 @@ WORKTREE SAFETY
 The repository contains unrelated modified and untracked files. Preserve them.
 Do not reset, clean, delete, revert, or overwrite unrelated work. No commit was
 created as part of this character-asset handoff.
+
+
+LATER SAME-DAY CONTINUATION UPDATE
+
+The Meshy upload, rerigging, animation selection, Blender retargeting, combat
+motion completion, production GLB export, and Godot prototype-scene work were
+subsequently completed. Section 5 above is therefore historical and is no
+longer the next action.
+
+Current continuation authority has moved to:
+
+C:\My Game\Steamtek-RPG\docs\ChatGPT handoffs\2026-07-23_STEAMTEK_HERO_COMBAT_AND_HAZMAT_SCENE_HANDOFF.txt
+
+The approved v04 sources remain unchanged. The new v05 derivative contains 12
+validated animations and is wrapped by a Godot Hazmat combat-prototype scene.
+The visible body is still a temporary base-body proxy; actual Hazmat clothing,
+the rifle visual, and enemy combat AI remain pending.

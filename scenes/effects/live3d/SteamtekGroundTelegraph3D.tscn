@@ -1,0 +1,34 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scenes/effects/live3d/steamtek_ground_telegraph_3d.gd" id="1_script"]
+
+[sub_resource type="Gradient" id="RingGradient"]
+offsets = PackedFloat32Array(0, 0.78, 0.85, 0.94, 1)
+colors = PackedColorArray(0.2, 0.55, 1, 0, 0.2, 0.55, 1, 0, 0.4, 0.78, 1, 0.85, 0.4, 0.78, 1, 0.85, 0.2, 0.55, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="RingTexture"]
+gradient = SubResource("RingGradient")
+width = 128
+height = 128
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="TelegraphMaterial"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(1, 1, 1, 1)
+albedo_texture = SubResource("RingTexture")
+no_depth_test = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_ring"]
+size = Vector2(2, 2)
+
+[node name="SteamtekGroundTelegraph3D" type="Node3D"]
+editor_description = "Ground-target telegraph ring for AoE weapons (Grenade Launcher). Radius set at runtime via set_radius()."
+script = ExtResource("1_script")
+
+[node name="Disc" type="MeshInstance3D" parent="."]
+rotation_degrees = Vector3(-90, 0, 0)
+mesh = SubResource("QuadMesh_ring")
+surface_material_override/0 = SubResource("TelegraphMaterial")

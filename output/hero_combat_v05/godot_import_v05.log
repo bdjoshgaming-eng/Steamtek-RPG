@@ -1,0 +1,992 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+ERROR: Could not create editor data directory: C:/Users/bdjos/AppData/Roaming/Godot
+   at: EditorPaths (editor/file_system/editor_paths.cpp:201)
+ERROR: Could not create editor config directory: C:/Users/bdjos/AppData/Roaming/Godot
+   at: EditorPaths (editor/file_system/editor_paths.cpp:216)
+ERROR: Could not create editor cache directory: C:/Users/bdjos/AppData/Local/Godot
+   at: EditorPaths (editor/file_system/editor_paths.cpp:237)
+TextServer: Added interface "Dummy"
+TextServer: Added interface "ICU / HarfBuzz / Graphite (Built-in)"
+Using "default" pen tablet driver...
+
+TextServer: Primary interface set to: "ICU / HarfBuzz / Graphite (Built-in)".
+Loading resource: res://themes/steamtek_theme.tres remapped: res://themes/steamtek_theme.tres
+Completed load for: 'res://themes/steamtek_theme.tres' remapped 'res://themes/steamtek_theme.tres' at thread -1
+CORE API HASH: 3472268009
+EDITOR API HASH: 2212757246
+SceneTreeFTI: traversal method DEFAULT
+EditorTheme: Generating new theme for the config '3810048042'.
+EditorTheme: Generating new icons.
+EditorTheme: Generating new fonts.
+EditorTheme: Generating new styles.
+Loading resource: C:/Users/bdjos/AppData/Local/Godot/editor_doc_cache-4.7.res remapped: C:/Users/bdjos/AppData/Local/Godot/editor_doc_cache-4.7.res
+ERROR: Cannot open file 'C:/Users/bdjos/AppData/Local/Godot/editor_doc_cache-4.7.res'.
+   at: load (core/io/resource_format_binary.cpp:1156)
+Failed loading resource: C:/Users/bdjos/AppData/Local/Godot/editor_doc_cache-4.7.res
+ERROR: Failed loading resource: C:/Users/bdjos/AppData/Local/Godot/editor_doc_cache-4.7.res.
+   at: _load (core/io/resource_loader.cpp:317)
+Completed load for: 'C:/Users/bdjos/AppData/Local/Godot/editor_doc_cache-4.7.res' remapped 'C:/Users/bdjos/AppData/Local/Godot/editor_doc_cache-4.7.res' at thread -1
+Loaded system CA certificates
+Failed to bind socket. Error: 3.
+ERROR: Could not open 'user://' directory: 'user://'.
+   at: _get_and_create_snapshot_storage_dir (modules/objectdb_profiler/editor/objectdb_profiler_panel.cpp:157)
+ERROR: Cannot open directory 'C:/Users/bdjos/AppData/Roaming/Godot/feature_profiles'.
+   at: _update_profile_list (editor/settings/editor_feature_profile.cpp:392)
+Regenerating editor help cache
+Class 'AbstractPolygon2DEditor' is not exposed, skipping.
+Class 'AbstractPolygon2DEditorPlugin' is not exposed, skipping.
+Class 'ActionMapEditor' is not exposed, skipping.
+Class 'AnchorPresetPicker' is not exposed, skipping.
+Class 'AnimationBezierTrackEdit' is not exposed, skipping.
+Class 'AnimationLibraryEditor' is not exposed, skipping.
+Class 'AnimationMarkerEdit' is not exposed, skipping.
+Class 'AnimationMarkerKeyEditEditorPlugin' is not exposed, skipping.
+Class 'AnimationNodeBlendSpace1DEditor' is not exposed, skipping.
+Class 'AnimationNodeBlendSpace2DEditor' is not exposed, skipping.
+Class 'AnimationNodeBlendTreeEditor' is not exposed, skipping.
+Class 'AnimationNodeStateMachineEditor' is not exposed, skipping.
+Class 'AnimationPlayerEditor' is not exposed, skipping.
+Class 'AnimationPlayerEditorPlugin' is not exposed, skipping.
+Class 'AnimationTimelineEdit' is not exposed, skipping.
+Class 'AnimationTrackEditDefaultPlugin' is not exposed, skipping.
+Class 'AnimationTrackEditPlugin' is not exposed, skipping.
+Class 'AnimationTrackEditor' is not exposed, skipping.
+Class 'AnimationTrackKeyEditEditorPlugin' is not exposed, skipping.
+Class 'AnimationTreeEditor' is not exposed, skipping.
+Class 'AnimationTreeEditorPlugin' is not exposed, skipping.
+Class 'AnimationTreeNodeEditorPlugin' is not exposed, skipping.
+Class 'AssetLibraryEditorPlugin' is not exposed, skipping.
+Class 'AtlasMergingDialog' is not exposed, skipping.
+Class 'AudioBusesEditorPlugin' is not exposed, skipping.
+Class 'AudioListener3DGizmoPlugin' is not exposed, skipping.
+Class 'AudioStreamEditorPlugin' is not exposed, skipping.
+Class 'AudioStreamImportSettingsDialog' is not exposed, skipping.
+Class 'AudioStreamInteractiveEditorPlugin' is not exposed, skipping.
+Class 'AudioStreamInteractiveTransitionEditor' is not exposed, skipping.
+Class 'AudioStreamPlayer3DGizmoPlugin' is not exposed, skipping.
+Class 'AudioStreamPlayerInternal' is not exposed, skipping.
+Class 'AudioStreamPreviewGenerator' is not exposed, skipping.
+Class 'AudioStreamRandomizerEditorPlugin' is not exposed, skipping.
+Class 'BackgroundProgress' is not exposed, skipping.
+Class 'BitMapEditorPlugin' is not exposed, skipping.
+Class 'BlitMaterialConversionPlugin' is not exposed, skipping.
+Class 'BoneMapEditorPlugin' is not exposed, skipping.
+Class 'BottomSideDockTabContainer' is not exposed, skipping.
+Class 'CPUParticles2DEditorPlugin' is not exposed, skipping.
+Class 'CPUParticles3DEditorPlugin' is not exposed, skipping.
+Class 'CPUParticles3DGizmoPlugin' is not exposed, skipping.
+Class 'CSGShape3DGizmoPlugin' is not exposed, skipping.
+Class 'CSGShapeEditor' is not exposed, skipping.
+Class 'Camera2DEditor' is not exposed, skipping.
+Class 'Camera2DEditorPlugin' is not exposed, skipping.
+Class 'Camera3DEditorPlugin' is not exposed, skipping.
+Class 'Camera3DGizmoPlugin' is not exposed, skipping.
+Class 'CanvasItemEditor' is not exposed, skipping.
+Class 'CanvasItemEditorPlugin' is not exposed, skipping.
+Class 'CanvasItemEditorViewport' is not exposed, skipping.
+Class 'CanvasItemMaterialConversionPlugin' is not exposed, skipping.
+Class 'Cast2DEditor' is not exposed, skipping.
+Class 'Cast2DEditorPlugin' is not exposed, skipping.
+Class 'ChainIK3DGizmoPlugin' is not exposed, skipping.
+Class 'CollisionObject3DGizmoPlugin' is not exposed, skipping.
+Class 'CollisionPolygon2DEditor' is not exposed, skipping.
+Class 'CollisionPolygon2DEditorPlugin' is not exposed, skipping.
+Class 'CollisionPolygon3DGizmoPlugin' is not exposed, skipping.
+Class 'CollisionShape2DEditor' is not exposed, skipping.
+Class 'CollisionShape2DEditorPlugin' is not exposed, skipping.
+Class 'CollisionShape3DGizmoPlugin' is not exposed, skipping.
+Class 'ColorPickerShape' is not exposed, skipping.
+Class 'ColorPickerShapeCircle' is not exposed, skipping.
+Class 'ColorPickerShapeOKHLRectangle' is not exposed, skipping.
+Class 'ColorPickerShapeOKHSLCircle' is not exposed, skipping.
+Class 'ColorPickerShapeOKHSRectangle' is not exposed, skipping.
+Class 'ColorPickerShapeVHSCircle' is not exposed, skipping.
+Class 'ColorPickerShapeWheel' is not exposed, skipping.
+Class 'ConnectDialog' is not exposed, skipping.
+Class 'ConnectDialogBinds' is not exposed, skipping.
+Class 'ConnectionsDock' is not exposed, skipping.
+Class 'ControlEditorPlugin' is not exposed, skipping.
+Class 'ControlEditorPopupButton' is not exposed, skipping.
+Class 'ControlEditorPresetPicker' is not exposed, skipping.
+Class 'ControlEditorToolbar' is not exposed, skipping.
+Class 'ControlOffsetTransformPreview' is not exposed, skipping.
+Class 'CreateDialog' is not exposed, skipping.
+Class 'CurveEditorPlugin' is not exposed, skipping.
+Class 'CurvePreviewGenerator' is not exposed, skipping.
+Class 'DebugAdapterParser' is not exposed, skipping.
+Class 'DebugAdapterServer' is not exposed, skipping.
+Class 'DebuggerEditorPlugin' is not exposed, skipping.
+Class 'DecalGizmoPlugin' is not exposed, skipping.
+Class 'DefaultThemeEditorPreview' is not exposed, skipping.
+Class 'DependencyEditor' is not exposed, skipping.
+Class 'DependencyEditorOwners' is not exposed, skipping.
+Class 'DependencyErrorDialog' is not exposed, skipping.
+Class 'DependencyRemoveDialog' is not exposed, skipping.
+Class 'DirectoryCreateDialog' is not exposed, skipping.
+Class 'DockContextPopup' is not exposed, skipping.
+Class 'DockShortcutHandler' is not exposed, skipping.
+Class 'DockSlotGrid' is not exposed, skipping.
+Class 'DockSplitContainer' is not exposed, skipping.
+Class 'DockTabContainer' is not exposed, skipping.
+Class 'DynamicFontImportSettingsData' is not exposed, skipping.
+Class 'DynamicFontImportSettingsDialog' is not exposed, skipping.
+Class 'EditorAbout' is not exposed, skipping.
+Class 'EditorAssetLibrary' is not exposed, skipping.
+Class 'EditorAudioBus' is not exposed, skipping.
+Class 'EditorAudioBuses' is not exposed, skipping.
+Class 'EditorAudioMeterNotches' is not exposed, skipping.
+Class 'EditorAudioStreamPreviewPlugin' is not exposed, skipping.
+Class 'EditorAudioStreamTooltipPlugin' is not exposed, skipping.
+Class 'EditorAutoloadSettings' is not exposed, skipping.
+Class 'EditorBitmapPreviewPlugin' is not exposed, skipping.
+Class 'EditorBottomPanel' is not exposed, skipping.
+Class 'EditorBuildProfile' is not exposed, skipping.
+Class 'EditorBuildProfileManager' is not exposed, skipping.
+Class 'EditorConfigFileSyntaxHighlighter' is not exposed, skipping.
+Class 'EditorContextMenuPluginManager' is not exposed, skipping.
+Class 'EditorDebuggerInspector' is not exposed, skipping.
+Class 'EditorDebuggerNode' is not exposed, skipping.
+Class 'EditorDebuggerRemoteObjects' is not exposed, skipping.
+Class 'EditorDebuggerTree' is not exposed, skipping.
+Class 'EditorDirDialog' is not exposed, skipping.
+Class 'EditorDockDragHint' is not exposed, skipping.
+Class 'EditorDockManager' is not exposed, skipping.
+Class 'EditorEventSearchBar' is not exposed, skipping.
+Class 'EditorExport' is not exposed, skipping.
+Class 'EditorExportGDScript' is not exposed, skipping.
+Class 'EditorExpressionEvaluator' is not exposed, skipping.
+Class 'EditorFeatureProfileManager' is not exposed, skipping.
+Class 'EditorFileServer' is not exposed, skipping.
+Class 'EditorFontPreviewPlugin' is not exposed, skipping.
+Class 'EditorGradientPreviewPlugin' is not exposed, skipping.
+Class 'EditorHelpBit' is not exposed, skipping.
+Class 'EditorHelpSearch' is not exposed, skipping.
+Class 'EditorImagePreviewPlugin' is not exposed, skipping.
+Class 'EditorImportBlendRunner' is not exposed, skipping.
+Class 'EditorInspectorCategory' is not exposed, skipping.
+Class 'EditorInspectorDefaultPlugin' is not exposed, skipping.
+Class 'EditorInspectorParticleProcessMaterialPlugin' is not exposed, skipping.
+Class 'EditorInspectorPlugin3DTexture' is not exposed, skipping.
+Class 'EditorInspectorPluginAnimationMarkerKeyEdit' is not exposed, skipping.
+Class 'EditorInspectorPluginAnimationNodeAnimation' is not exposed, skipping.
+Class 'EditorInspectorPluginAnimationTrackKeyEdit' is not exposed, skipping.
+Class 'EditorInspectorPluginAudioStream' is not exposed, skipping.
+Class 'EditorInspectorPluginAudioStreamInteractive' is not exposed, skipping.
+Class 'EditorInspectorPluginBitMap' is not exposed, skipping.
+Class 'EditorInspectorPluginBoneMap' is not exposed, skipping.
+Class 'EditorInspectorPluginCamera3DPreview' is not exposed, skipping.
+Class 'EditorInspectorPluginControl' is not exposed, skipping.
+Class 'EditorInspectorPluginCurve' is not exposed, skipping.
+Class 'EditorInspectorPluginFontPreview' is not exposed, skipping.
+Class 'EditorInspectorPluginFontVariation' is not exposed, skipping.
+Class 'EditorInspectorPluginGradient' is not exposed, skipping.
+Class 'EditorInspectorPluginGradientTexture2D' is not exposed, skipping.
+Class 'EditorInspectorPluginInputEvent' is not exposed, skipping.
+Class 'EditorInspectorPluginLayeredTexture' is not exposed, skipping.
+Class 'EditorInspectorPluginMaterial' is not exposed, skipping.
+Class 'EditorInspectorPluginMesh' is not exposed, skipping.
+Class 'EditorInspectorPluginPackedScene' is not exposed, skipping.
+Class 'EditorInspectorPluginSkeleton' is not exposed, skipping.
+Class 'EditorInspectorPluginStyleBox' is not exposed, skipping.
+Class 'EditorInspectorPluginSubViewportPreview' is not exposed, skipping.
+Class 'EditorInspectorPluginSystemFont' is not exposed, skipping.
+Class 'EditorInspectorPluginTexture' is not exposed, skipping.
+Class 'EditorInspectorPluginTextureRegion' is not exposed, skipping.
+Class 'EditorInspectorPluginTileData' is not exposed, skipping.
+Class 'EditorInspectorRootMotionPlugin' is not exposed, skipping.
+Class 'EditorInspectorToolButtonPlugin' is not exposed, skipping.
+Class 'EditorInspectorVisualShaderModePlugin' is not exposed, skipping.
+Class 'EditorJSONSyntaxHighlighter' is not exposed, skipping.
+Class 'EditorLayoutsDialog' is not exposed, skipping.
+Class 'EditorLocaleDialog' is not exposed, skipping.
+Class 'EditorLog' is not exposed, skipping.
+Class 'EditorMainScreen' is not exposed, skipping.
+Class 'EditorMarkdownSyntaxHighlighter' is not exposed, skipping.
+Class 'EditorMaterialPreviewPlugin' is not exposed, skipping.
+Class 'EditorMeshPreviewPlugin' is not exposed, skipping.
+Class 'EditorNativeShaderSourceVisualizer' is not exposed, skipping.
+Class 'EditorNetworkProfiler' is not exposed, skipping.
+Class 'EditorNode' is not exposed, skipping.
+Class 'EditorOBJImporter' is not exposed, skipping.
+Class 'EditorObjectSelector' is not exposed, skipping.
+Class 'EditorPackedScenePreviewPlugin' is not exposed, skipping.
+Class 'EditorPerformanceProfiler' is not exposed, skipping.
+Class 'EditorPluginCSG' is not exposed, skipping.
+Class 'EditorPluginSettings' is not exposed, skipping.
+Class 'EditorProfiler' is not exposed, skipping.
+Class 'EditorPropertyInteger' is not exposed, skipping.
+Class 'EditorPropertyNameProcessor' is not exposed, skipping.
+Class 'EditorPropertyPath' is not exposed, skipping.
+Class 'EditorPropertyVector2i' is not exposed, skipping.
+Class 'EditorPropertyVectorN' is not exposed, skipping.
+Class 'EditorQuickOpenDialog' is not exposed, skipping.
+Class 'EditorRunBar' is not exposed, skipping.
+Class 'EditorRunNative' is not exposed, skipping.
+Class 'EditorSceneExporterGLTFSettings' is not exposed, skipping.
+Class 'EditorSceneFormatImporterCollada' is not exposed, skipping.
+Class 'EditorSceneFormatImporterESCN' is not exposed, skipping.
+Class 'EditorSceneTabs' is not exposed, skipping.
+Class 'EditorScriptPlugin' is not exposed, skipping.
+Class 'EditorScriptPreviewPlugin' is not exposed, skipping.
+Class 'EditorSettingsDialog' is not exposed, skipping.
+Class 'EditorSettingsInspectorPlugin' is not exposed, skipping.
+Class 'EditorShaderLanguagePlugin' is not exposed, skipping.
+Class 'EditorTexturePreviewPlugin' is not exposed, skipping.
+Class 'EditorTextureTooltipPlugin' is not exposed, skipping.
+Class 'EditorTheme' is not exposed, skipping.
+Class 'EditorTitleBar' is not exposed, skipping.
+Class 'EditorTranslationPreviewButton' is not exposed, skipping.
+Class 'EditorTranslationPreviewMenu' is not exposed, skipping.
+Class 'EditorValidationPanel' is not exposed, skipping.
+Class 'EditorVariantTypeOptionButton' is not exposed, skipping.
+Class 'EditorVersionButton' is not exposed, skipping.
+Class 'EditorVisualProfiler' is not exposed, skipping.
+Class 'EditorZoomWidget' is not exposed, skipping.
+Class 'EmbeddedProcess' is not exposed, skipping.
+Class 'EmbeddedProcessBase' is not exposed, skipping.
+Class 'EventListenerLineEdit' is not exposed, skipping.
+Class 'ExportTemplateManager' is not exposed, skipping.
+Class 'FBXImporterManager' is not exposed, skipping.
+Class 'FileSystemList' is not exposed, skipping.
+Class 'FilterLineEdit' is not exposed, skipping.
+Class 'FindInFiles' is not exposed, skipping.
+Class 'FindInFilesContainer' is not exposed, skipping.
+Class 'FindInFilesDialog' is not exposed, skipping.
+Class 'FindReplaceBar' is not exposed, skipping.
+Class 'FogMaterialConversionPlugin' is not exposed, skipping.
+Class 'FogVolumeGizmoPlugin' is not exposed, skipping.
+Class 'FontEditorPlugin' is not exposed, skipping.
+Class 'GDScriptEditorTranslationParserPlugin' is not exposed, skipping.
+Class 'GDScriptFunctionState' is not exposed, skipping.
+Class 'GDScriptLanguageServer' is not exposed, skipping.
+Class 'GDScriptNativeClass' is not exposed, skipping.
+Class 'GLTFDocumentExtensionPhysics' is not exposed, skipping.
+Class 'GLTFDocumentExtensionTextureKTX' is not exposed, skipping.
+Class 'GLTFDocumentExtensionTextureWebP' is not exposed, skipping.
+Class 'GPUParticles2DEditorPlugin' is not exposed, skipping.
+Class 'GPUParticles3DEditorPlugin' is not exposed, skipping.
+Class 'GPUParticles3DGizmoPlugin' is not exposed, skipping.
+Class 'GPUParticlesCollision3DGizmoPlugin' is not exposed, skipping.
+Class 'GPUParticlesCollisionSDF3DEditorPlugin' is not exposed, skipping.
+Class 'GameView' is not exposed, skipping.
+Class 'GameViewDebugger' is not exposed, skipping.
+Class 'GameViewPlugin' is not exposed, skipping.
+Class 'GameViewPluginBase' is not exposed, skipping.
+Class 'GeometryInstance3DGizmoPlugin' is not exposed, skipping.
+Class 'Gizmo3DHelper' is not exposed, skipping.
+Class 'GodotNavigationServer2D' is not exposed, skipping.
+Class 'GodotPhysicsServer2D' is not exposed, skipping.
+Class 'GradientEditorPlugin' is not exposed, skipping.
+Class 'GradientTexture2DEditorPlugin' is not exposed, skipping.
+Class 'GraphEditFilter' is not exposed, skipping.
+Class 'GraphEditMinimap' is not exposed, skipping.
+Class 'GridMapEditor' is not exposed, skipping.
+Class 'GroupSettingsEditor' is not exposed, skipping.
+Class 'GroupsDock' is not exposed, skipping.
+Class 'GroupsEditor' is not exposed, skipping.
+Class 'HistoryDock' is not exposed, skipping.
+Class 'IPWindows' is not exposed, skipping.
+Class 'ImportDefaultsEditor' is not exposed, skipping.
+Class 'ImportDefaultsEditorSettings' is not exposed, skipping.
+Class 'ImportDock' is not exposed, skipping.
+Class 'ImportDockParameters' is not exposed, skipping.
+Class 'InputEventConfigurationDialog' is not exposed, skipping.
+Class 'InputEventEditorPlugin' is not exposed, skipping.
+Class 'InspectorDock' is not exposed, skipping.
+Class 'Joint3DGizmoPlugin' is not exposed, skipping.
+Class 'JoltPhysicsServer3D' is not exposed, skipping.
+Class 'Label3DGizmoPlugin' is not exposed, skipping.
+Class 'Light3DGizmoPlugin' is not exposed, skipping.
+Class 'LightOccluder2DEditor' is not exposed, skipping.
+Class 'LightOccluder2DEditorPlugin' is not exposed, skipping.
+Class 'LightmapGIEditorPlugin' is not exposed, skipping.
+Class 'LightmapGIGizmoPlugin' is not exposed, skipping.
+Class 'LightmapProbeGizmoPlugin' is not exposed, skipping.
+Class 'Line2DEditor' is not exposed, skipping.
+Class 'Line2DEditorPlugin' is not exposed, skipping.
+Class 'LocalizationEditor' is not exposed, skipping.
+Class 'MarginContainerEditorPlugin' is not exposed, skipping.
+Class 'Marker3DGizmoPlugin' is not exposed, skipping.
+Class 'MaterialEditorPlugin' is not exposed, skipping.
+Class 'MeshEditorPlugin' is not exposed, skipping.
+Class 'MeshInstance3DEditor' is not exposed, skipping.
+Class 'MeshInstance3DEditorPlugin' is not exposed, skipping.
+Class 'MeshInstance3DGizmoPlugin' is not exposed, skipping.
+Class 'MeshLibraryEditor' is not exposed, skipping.
+Class 'MeshLibraryEditorPlugin' is not exposed, skipping.
+Class 'MovieWriterMJPEG' is not exposed, skipping.
+Class 'MovieWriterOGV' is not exposed, skipping.
+Class 'MovieWriterPNGWAV' is not exposed, skipping.
+Class 'MultiMeshEditor' is not exposed, skipping.
+Class 'MultiMeshEditorPlugin' is not exposed, skipping.
+Class 'MultiplayerEditorDebugger' is not exposed, skipping.
+Class 'MultiplayerEditorPlugin' is not exposed, skipping.
+Class 'NavigationLink2DEditor' is not exposed, skipping.
+Class 'NavigationLink2DEditorPlugin' is not exposed, skipping.
+Class 'NavigationLink3DEditorPlugin' is not exposed, skipping.
+Class 'NavigationLink3DGizmoPlugin' is not exposed, skipping.
+Class 'NavigationObstacle2DEditor' is not exposed, skipping.
+Class 'NavigationObstacle2DEditorPlugin' is not exposed, skipping.
+Class 'NavigationObstacle3DEditorPlugin' is not exposed, skipping.
+Class 'NavigationObstacle3DGizmoPlugin' is not exposed, skipping.
+Class 'NavigationRegion2DEditor' is not exposed, skipping.
+Class 'NavigationRegion2DEditorPlugin' is not exposed, skipping.
+Class 'NavigationRegion3DEditor' is not exposed, skipping.
+Class 'NavigationRegion3DEditorPlugin' is not exposed, skipping.
+Class 'NavigationRegion3DGizmoPlugin' is not exposed, skipping.
+Class 'Node3DEditor' is not exposed, skipping.
+Class 'Node3DEditorPlugin' is not exposed, skipping.
+Class 'Node3DEditorViewport' is not exposed, skipping.
+Class 'Node3DEditorViewportContainer' is not exposed, skipping.
+Class 'NoiseEditorInspectorPlugin' is not exposed, skipping.
+Class 'NoiseEditorPlugin' is not exposed, skipping.
+Class 'ORMMaterial3DConversionPlugin' is not exposed, skipping.
+Class 'ObjectDBProfilerDebuggerPlugin' is not exposed, skipping.
+Class 'ObjectDBProfilerPanel' is not exposed, skipping.
+Class 'ObjectDBProfilerPlugin' is not exposed, skipping.
+Class 'OccluderInstance3DEditorPlugin' is not exposed, skipping.
+Class 'OccluderInstance3DGizmoPlugin' is not exposed, skipping.
+Class 'OpenXREditorPlugin' is not exposed, skipping.
+Class 'OpenXRExportPlugin' is not exposed, skipping.
+Class 'OrphanResourcesDialog' is not exposed, skipping.
+Class 'PackedSceneEditorPlugin' is not exposed, skipping.
+Class 'PackedSceneEditorTranslationParserPlugin' is not exposed, skipping.
+Class 'PanoramaSkyMaterialConversionPlugin' is not exposed, skipping.
+Class 'ParallaxBackgroundEditorPlugin' is not exposed, skipping.
+Class 'ParticleProcessMaterialConversionPlugin' is not exposed, skipping.
+Class 'Particles2DEditorPlugin' is not exposed, skipping.
+Class 'Particles3DEditorPlugin' is not exposed, skipping.
+Class 'Particles3DEmissionShapeGizmoPlugin' is not exposed, skipping.
+Class 'ParticlesEditorPlugin' is not exposed, skipping.
+Class 'Path2DEditor' is not exposed, skipping.
+Class 'Path2DEditorPlugin' is not exposed, skipping.
+Class 'Path3DEditorPlugin' is not exposed, skipping.
+Class 'Path3DGizmoPlugin' is not exposed, skipping.
+Class 'PhysicalBone3DEditorPlugin' is not exposed, skipping.
+Class 'PhysicalBone3DGizmoPlugin' is not exposed, skipping.
+Class 'PhysicalSkyMaterialConversionPlugin' is not exposed, skipping.
+Class 'PluginConfigDialog' is not exposed, skipping.
+Class 'Polygon2DEditor' is not exposed, skipping.
+Class 'Polygon2DEditorPlugin' is not exposed, skipping.
+Class 'Polygon3DEditor' is not exposed, skipping.
+Class 'Polygon3DEditorPlugin' is not exposed, skipping.
+Class 'PopupMenuItems' is not exposed, skipping.
+Class 'PostImportPluginSkeletonRenamer' is not exposed, skipping.
+Class 'PostImportPluginSkeletonRestFixer' is not exposed, skipping.
+Class 'PostImportPluginSkeletonTrackOrganizer' is not exposed, skipping.
+Class 'PreviewSunEnvPopup' is not exposed, skipping.
+Class 'ProceduralSkyMaterialConversionPlugin' is not exposed, skipping.
+Class 'ProgressDialog' is not exposed, skipping.
+Class 'ProgressIndicator' is not exposed, skipping.
+Class 'ProjectExportDialog' is not exposed, skipping.
+Class 'ProjectExportTextureFormatError' is not exposed, skipping.
+Class 'ProjectSettingsEditor' is not exposed, skipping.
+Class 'ProjectSettingsGDExtension' is not exposed, skipping.
+Class 'ProjectUpgradeTool' is not exposed, skipping.
+Class 'PropertySelector' is not exposed, skipping.
+Class 'QuickOpenResultContainer' is not exposed, skipping.
+Class 'RayCast3DGizmoPlugin' is not exposed, skipping.
+Class 'ReflectionProbeGizmoPlugin' is not exposed, skipping.
+Class 'RenameDialog' is not exposed, skipping.
+Class 'ReparentDialog' is not exposed, skipping.
+Class 'ReplicationEditor' is not exposed, skipping.
+Class 'ResourceFormatImporterSaver' is not exposed, skipping.
+Class 'ResourcePreloaderEditor' is not exposed, skipping.
+Class 'ResourcePreloaderEditorPlugin' is not exposed, skipping.
+Class 'RunInstancesDialog' is not exposed, skipping.
+Class 'ScalableContainer' is not exposed, skipping.
+Class 'SceneCacheInterface' is not exposed, skipping.
+Class 'SceneCreateDialog' is not exposed, skipping.
+Class 'SceneExporterGLTFPlugin' is not exposed, skipping.
+Class 'SceneImportSettingsData' is not exposed, skipping.
+Class 'SceneImportSettingsDialog' is not exposed, skipping.
+Class 'ScenePaint2DEditor' is not exposed, skipping.
+Class 'ScenePaint2DEditorPlugin' is not exposed, skipping.
+Class 'SceneRPCInterface' is not exposed, skipping.
+Class 'SceneReplicationInterface' is not exposed, skipping.
+SceneTreeFTI: traversal method DEFAULT
+Class 'SceneTreeDialog' is not exposed, skipping.
+Class 'SceneTreeDock' is not exposed, skipping.
+Class 'SceneTreeEditor' is not exposed, skipping.
+Class 'ScreenSelect' is not exposed, skipping.
+Class 'ScriptEditorDebugger' is not exposed, skipping.
+Class 'ScriptEditorPlugin' is not exposed, skipping.
+Class 'SectionedInspector' is not exposed, skipping.
+Class 'SectionedInspectorFilter' is not exposed, skipping.
+Class 'ShaderBakerExportPluginPlatform' is not exposed, skipping.
+Class 'ShaderBakerExportPluginPlatformD3D12' is not exposed, skipping.
+Class 'ShaderBakerExportPluginPlatformVulkan' is not exposed, skipping.
+Class 'ShaderCreateDialog' is not exposed, skipping.
+Class 'ShaderEditorPlugin' is not exposed, skipping.
+Class 'ShaderFileEditor' is not exposed, skipping.
+Class 'ShaderFileEditorPlugin' is not exposed, skipping.
+Class 'ShaderGlobalsEditor' is not exposed, skipping.
+Class 'ShaderGlobalsEditorInterface' is not exposed, skipping.
+Class 'ShapeCast3DGizmoPlugin' is not exposed, skipping.
+Class 'SideDockTabContainer' is not exposed, skipping.
+Class 'SignalsDock' is not exposed, skipping.
+Class 'SizeFlagPresetPicker' is not exposed, skipping.
+Class 'Skeleton2DEditor' is not exposed, skipping.
+Class 'Skeleton2DEditorPlugin' is not exposed, skipping.
+Class 'Skeleton3DEditorPlugin' is not exposed, skipping.
+Class 'Skeleton3DGizmoPlugin' is not exposed, skipping.
+Class 'SkeletonIK3DEditorPlugin' is not exposed, skipping.
+Class 'SnapDialog' is not exposed, skipping.
+Class 'SnapshotClassView' is not exposed, skipping.
+Class 'SnapshotNodeView' is not exposed, skipping.
+Class 'SnapshotObjectView' is not exposed, skipping.
+Class 'SnapshotRefCountedView' is not exposed, skipping.
+Class 'SnapshotSummaryView' is not exposed, skipping.
+Class 'SnapshotView' is not exposed, skipping.
+Class 'SoftBody3DGizmoPlugin' is not exposed, skipping.
+Class 'SpinBoxLineEdit' is not exposed, skipping.
+Class 'SplitContainerDragger' is not exposed, skipping.
+Class 'SpringArm3DGizmoPlugin' is not exposed, skipping.
+Class 'SpringBoneCollision3DGizmoPlugin' is not exposed, skipping.
+Class 'SpringBoneSimulator3DGizmoPlugin' is not exposed, skipping.
+Class 'Sprite2DEditor' is not exposed, skipping.
+Class 'Sprite2DEditorPlugin' is not exposed, skipping.
+Class 'SpriteBase3DGizmoPlugin' is not exposed, skipping.
+Class 'SpriteFramesEditor' is not exposed, skipping.
+Class 'SpriteFramesEditorPlugin' is not exposed, skipping.
+Class 'StandardMaterial3DConversionPlugin' is not exposed, skipping.
+Class 'StyleBoxEditorPlugin' is not exposed, skipping.
+Class 'SubViewportPreviewEditorPlugin' is not exposed, skipping.
+Class 'SwitchSeparator' is not exposed, skipping.
+Class 'TemplateDownloader' is not exposed, skipping.
+Class 'TextShaderLanguagePlugin' is not exposed, skipping.
+Class 'Texture3DEditorPlugin' is not exposed, skipping.
+Class 'TextureEditorPlugin' is not exposed, skipping.
+Class 'TextureLayeredEditorPlugin' is not exposed, skipping.
+Class 'TextureRegionEditor' is not exposed, skipping.
+Class 'TextureRegionEditorPlugin' is not exposed, skipping.
+Class 'ThemeContext' is not exposed, skipping.
+Class 'ThemeEditor' is not exposed, skipping.
+Class 'ThemeEditorPlugin' is not exposed, skipping.
+Class 'ThemeEditorPreview' is not exposed, skipping.
+Class 'ThemeItemEditorDialog' is not exposed, skipping.
+Class 'ThemeItemImportTree' is not exposed, skipping.
+Class 'ThemeTypeDialog' is not exposed, skipping.
+Class 'ThemeTypeEditor' is not exposed, skipping.
+Class 'TileAtlasView' is not exposed, skipping.
+Class 'TileMapEditorPlugin' is not exposed, skipping.
+Class 'TileMapLayerEditor' is not exposed, skipping.
+Class 'TileMapLayerEditorTerrainsPlugin' is not exposed, skipping.
+Class 'TileMapLayerEditorTilesPlugin' is not exposed, skipping.
+Class 'TileProxiesManagerDialog' is not exposed, skipping.
+Class 'TileSetAtlasSourceEditor' is not exposed, skipping.
+Class 'TileSetEditor' is not exposed, skipping.
+Class 'TileSetEditorPlugin' is not exposed, skipping.
+Class 'TileSetScenesCollectionSourceEditor' is not exposed, skipping.
+Class 'TileSetSourceItemList' is not exposed, skipping.
+Class 'TileSourceInspectorPlugin' is not exposed, skipping.
+Class 'TilesEditorUtils' is not exposed, skipping.
+Class 'ToolButtonEditorPlugin' is not exposed, skipping.
+Class 'TwoBoneIK3DGizmoPlugin' is not exposed, skipping.
+Class 'VehicleWheel3DGizmoPlugin' is not exposed, skipping.
+Class 'VersionControlEditorPlugin' is not exposed, skipping.
+Class 'View3DController' is not exposed, skipping.
+Class 'ViewPanner' is not exposed, skipping.
+Class 'ViewportNavigationControl' is not exposed, skipping.
+Class 'ViewportRotationControl' is not exposed, skipping.
+Class 'VirtualJoystickEditorPlugin' is not exposed, skipping.
+Class 'VisibleOnScreenNotifier3DGizmoPlugin' is not exposed, skipping.
+Class 'VisualShaderConversionPlugin' is not exposed, skipping.
+Class 'VisualShaderLanguagePlugin' is not exposed, skipping.
+Class 'VoxelGIEditorPlugin' is not exposed, skipping.
+Class 'VoxelGIGizmoPlugin' is not exposed, skipping.
+Class 'WindowWrapper' is not exposed, skipping.
+[   0% ] first_scan_filesystem | Started Project initialization (5 steps)
+[   0% ] first_scan_filesystem | Scanning file structure...
+WARNING: Detected another project.godot at res://Steamtek-Character-Validation. The folder will be ignored.
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3485)
+ERROR: Cannot create file 'C:/Users/bdjos/AppData/Local/Godot/editor_doc_cache-4.7.res'.
+   at: save (core/io/resource_format_binary.cpp:2117)
+ERROR: Cannot save editor help cache (C:/Users/bdjos/AppData/Local/Godot/editor_doc_cache-4.7.res).
+   at: _gen_doc_thread (editor/doc/editor_help.cpp:3071)
+[  16% ] first_scan_filesystem | Loading global class names...
+[  33% ] first_scan_filesystem | Verifying GDExtensions...
+[  50% ] first_scan_filesystem | Creating autoload scripts...
+Loading resource: res://scenes/GameData.gd remapped: res://scenes/GameData.gd
+Completed load for: 'res://scenes/GameData.gd' remapped 'res://scenes/GameData.gd' at thread -1
+Loading resource: res://scenes/Combat.gd remapped: res://scenes/Combat.gd
+Completed load for: 'res://scenes/Combat.gd' remapped 'res://scenes/Combat.gd' at thread -1
+Loading resource: res://scenes/gameplay/live3d/steamtek_live3d_progress_store.gd remapped: res://scenes/gameplay/live3d/steamtek_live3d_progress_store.gd
+Completed load for: 'res://scenes/gameplay/live3d/steamtek_live3d_progress_store.gd' remapped 'res://scenes/gameplay/live3d/steamtek_live3d_progress_store.gd' at thread -1
+[  66% ] first_scan_filesystem | Initializing plugins...
+Loading resource: res://addons/meshy-godot-plugin/meshy_plugin.gd remapped: res://addons/meshy-godot-plugin/meshy_plugin.gd
+Loading resource: res://addons/meshy-godot-plugin/main_panel.tscn remapped: res://addons/meshy-godot-plugin/main_panel.tscn
+Loading resource: res://addons/meshy-godot-plugin/main_scripts.gd remapped: res://addons/meshy-godot-plugin/main_scripts.gd
+Completed load for: 'res://addons/meshy-godot-plugin/main_scripts.gd' remapped 'res://addons/meshy-godot-plugin/main_scripts.gd' at thread -1
+Completed load for: 'res://addons/meshy-godot-plugin/main_panel.tscn' remapped 'res://addons/meshy-godot-plugin/main_panel.tscn' at thread -1
+Loading resource: res://addons/meshy-godot-plugin/Meshy_Icon_36.png remapped: res://addons/meshy-godot-plugin/Meshy_Icon_36.png
+Loading resource: res://.godot/imported/Meshy_Icon_36.png-45bf9fe5e79948bd21fa2b9d42bb6f48.ctex remapped: res://.godot/imported/Meshy_Icon_36.png-45bf9fe5e79948bd21fa2b9d42bb6f48.ctex
+Completed load for: 'res://addons/meshy-godot-plugin/Meshy_Icon_36.png' remapped 'res://addons/meshy-godot-plugin/Meshy_Icon_36.png' at thread -1
+Completed load for: 'res://addons/meshy-godot-plugin/meshy_plugin.gd' remapped 'res://addons/meshy-godot-plugin/meshy_plugin.gd' at thread -1
+_ready: editor_interface initialization status: true
+Loading resource: res://addons/steamtek_humanoid_runtime/plugin.gd remapped: res://addons/steamtek_humanoid_runtime/plugin.gd
+Completed load for: 'res://addons/steamtek_humanoid_runtime/plugin.gd' remapped 'res://addons/steamtek_humanoid_runtime/plugin.gd' at thread -1
+Loading resource: res://addons/steamtek_live3d_builder/steamtek_live3d_builder.gd remapped: res://addons/steamtek_live3d_builder/steamtek_live3d_builder.gd
+Completed load for: 'res://addons/steamtek_live3d_builder/steamtek_live3d_builder.gd' remapped 'res://addons/steamtek_live3d_builder/steamtek_live3d_builder.gd' at thread -1
+Loading resource: res://scenes/environment/live3d/props/apartment_interior/generated_variants/STK_PROP_Couch_A_GunmetalBlue.tscn remapped: res://scenes/environment/live3d/props/apartment_interior/generated_variants/STK_PROP_Couch_A_GunmetalBlue.tscn
+Loading resource: res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Couch_A.tscn remapped: res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Couch_A.tscn
+Loading resource: res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Couch_A_Production.glb remapped: res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Couch_A_Production.glb
+Loading resource: res://.godot/imported/STK_PROP_Couch_A_Production.glb-96e351f84b72cb02b8ce7e80f36557bd.scn remapped: res://.godot/imported/STK_PROP_Couch_A_Production.glb-96e351f84b72cb02b8ce7e80f36557bd.scn
+Loading resource: res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Couch_A_Production_Baked_BaseColor.png remapped: res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Couch_A_Production_Baked_BaseColor.png
+Loading resource: res://.godot/imported/STK_PROP_Couch_A_Production_Baked_BaseColor.png-bc8f13af8fb2f456fa5e6b89ddd6a3dd.s3tc.ctex remapped: res://.godot/imported/STK_PROP_Couch_A_Production_Baked_BaseColor.png-bc8f13af8fb2f456fa5e6b89ddd6a3dd.s3tc.ctex
+Completed load for: 'res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Couch_A_Production_Baked_BaseColor.png' remapped 'res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Couch_A_Production_Baked_BaseColor.png' at thread -1
+Loading resource: res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Couch_A_Production_Baked_MetallicRoughness.png remapped: res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Couch_A_Production_Baked_MetallicRoughness.png
+Loading resource: res://.godot/imported/STK_PROP_Couch_A_Production_Baked_MetallicRoughness.png-fa9cac0adaff1158adf3b76c3542813c.s3tc.ctex remapped: res://.godot/imported/STK_PROP_Couch_A_Production_Baked_MetallicRoughness.png-fa9cac0adaff1158adf3b76c3542813c.s3tc.ctex
+Completed load for: 'res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Couch_A_Production_Baked_MetallicRoughness.png' remapped 'res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Couch_A_Production_Baked_MetallicRoughness.png' at thread -1
+Loading resource: res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Couch_A_Production_Baked_Emit.png remapped: res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Couch_A_Production_Baked_Emit.png
+Loading resource: res://.godot/imported/STK_PROP_Couch_A_Production_Baked_Emit.png-06b0aa2b58116783a81166baf949ba0e.s3tc.ctex remapped: res://.godot/imported/STK_PROP_Couch_A_Production_Baked_Emit.png-06b0aa2b58116783a81166baf949ba0e.s3tc.ctex
+Completed load for: 'res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Couch_A_Production_Baked_Emit.png' remapped 'res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Couch_A_Production_Baked_Emit.png' at thread -1
+Completed load for: 'res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Couch_A_Production.glb' remapped 'res://assets/environment/live3d/models/apartment_interior/meshy/STK_PROP_Couch_A_Production.glb' at thread -1
+Loading resource: res://scenes/environment/live3d/props/static_prop_material_variant.gd remapped: res://scenes/environment/live3d/props/static_prop_material_variant.gd
+Completed load for: 'res://scenes/environment/live3d/props/static_prop_material_variant.gd' remapped 'res://scenes/environment/live3d/props/static_prop_material_variant.gd' at thread -1
+Loading resource: res://assets/environment/live3d/materials/apartment_interior_variants/STK_MAT_Couch_A_SourceMatte.tres remapped: res://assets/environment/live3d/materials/apartment_interior_variants/STK_MAT_Couch_A_SourceMatte.tres
+Loading resource: res://assets/environment/live3d/materials/apartment_interior_variants/STK_Couch_UpholsteryVariant.gdshader remapped: res://assets/environment/live3d/materials/apartment_interior_variants/STK_Couch_UpholsteryVariant.gdshader
+Completed load for: 'res://assets/environment/live3d/materials/apartment_interior_variants/STK_Couch_UpholsteryVariant.gdshader' remapped 'res://assets/environment/live3d/materials/apartment_interior_variants/STK_Couch_UpholsteryVariant.gdshader' at thread -1
+Completed load for: 'res://assets/environment/live3d/materials/apartment_interior_variants/STK_MAT_Couch_A_SourceMatte.tres' remapped 'res://assets/environment/live3d/materials/apartment_interior_variants/STK_MAT_Couch_A_SourceMatte.tres' at thread -1
+Completed load for: 'res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Couch_A.tscn' remapped 'res://scenes/environment/live3d/props/apartment_interior/STK_PROP_Couch_A.tscn' at thread -1
+Loading resource: res://assets/environment/live3d/materials/apartment_interior_variants/generated/STK_MAT_Couch_A_GunmetalBlue.tres remapped: res://assets/environment/live3d/materials/apartment_interior_variants/generated/STK_MAT_Couch_A_GunmetalBlue.tres
+Completed load for: 'res://assets/environment/live3d/materials/apartment_interior_variants/generated/STK_MAT_Couch_A_GunmetalBlue.tres' remapped 'res://assets/environment/live3d/materials/apartment_interior_variants/generated/STK_MAT_Couch_A_GunmetalBlue.tres' at thread -1
+Completed load for: 'res://scenes/environment/live3d/props/apartment_interior/generated_variants/STK_PROP_Couch_A_GunmetalBlue.tscn' remapped 'res://scenes/environment/live3d/props/apartment_interior/generated_variants/STK_PROP_Couch_A_GunmetalBlue.tscn' at thread -1
+Loading resource: res://addons/steamtek_material_variant_editor/steamtek_material_variant_editor.gd remapped: res://addons/steamtek_material_variant_editor/steamtek_material_variant_editor.gd
+Completed load for: 'res://addons/steamtek_material_variant_editor/steamtek_material_variant_editor.gd' remapped 'res://addons/steamtek_material_variant_editor/steamtek_material_variant_editor.gd' at thread -1
+Loading resource: res://addons/steamtek_modular_snap/steamtek_modular_snap.gd remapped: res://addons/steamtek_modular_snap/steamtek_modular_snap.gd
+Completed load for: 'res://addons/steamtek_modular_snap/steamtek_modular_snap.gd' remapped 'res://addons/steamtek_modular_snap/steamtek_modular_snap.gd' at thread -1
+[  83% ] first_scan_filesystem | Starting file scan...
+[ DONE ] first_scan_filesystem
+
+[   0% ] update_scripts_classes | Started Registering global classes... (2 steps)
+[   0% ] update_scripts_classes | SteamtekHazmatCombatPrototype
+[  33% ] update_scripts_classes | 
+[ DONE ] update_scripts_classes
+
+[   0% ] _update_scan_actions | Started Scanning actions... (87 steps)
+[   0% ] _update_scan_actions | STK_HERO_BaseBody_01_Rigged_Combat_v05.glb
+[   1% ] _update_scan_actions | STK_DEATH_FORWARD_contact_sheet.jpg
+[   2% ] _update_scan_actions | STK_HERO_Combat_v05_MasterContactSheet.jpg
+[   3% ] _update_scan_actions | STK_HIT_REACT_STRONG_contact_sheet.jpg
+[   4% ] _update_scan_actions | STK_RIFLE_BUTTSTROKE_contact_sheet.jpg
+[   5% ] _update_scan_actions | STK_RIFLE_CROUCH_STRAFE_LEFT_contact_sheet.jpg
+[   6% ] _update_scan_actions | STK_RIFLE_CROUCH_STRAFE_RIGHT_contact_sheet.jpg
+[   7% ] _update_scan_actions | STK_RIFLE_FIRE_contact_sheet.jpg
+[   9% ] _update_scan_actions | STK_RIFLE_IDLE_contact_sheet.jpg
+[  10% ] _update_scan_actions | STK_RIFLE_RELOAD_contact_sheet.jpg
+[  11% ] _update_scan_actions | STK_RIFLE_TURN_LEFT_contact_sheet.jpg
+[  12% ] _update_scan_actions | STK_RIFLE_TURN_RIGHT_contact_sheet.jpg
+[  13% ] _update_scan_actions | STK_RUN_contact_sheet.jpg
+[  14% ] _update_scan_actions | STK_WALK_contact_sheet.jpg
+[  15% ] _update_scan_actions | STK_DEATH_FORWARD_00_0.000.png
+[  17% ] _update_scan_actions | STK_DEATH_FORWARD_01_13.200.png
+[  18% ] _update_scan_actions | STK_DEATH_FORWARD_02_26.400.png
+[  19% ] _update_scan_actions | STK_DEATH_FORWARD_03_39.600.png
+[  20% ] _update_scan_actions | STK_DEATH_FORWARD_04_52.800.png
+[  21% ] _update_scan_actions | STK_HIT_REACT_STRONG_00_0.000.png
+[  22% ] _update_scan_actions | STK_HIT_REACT_STRONG_01_18.000.png
+[  23% ] _update_scan_actions | STK_HIT_REACT_STRONG_02_36.000.png
+[  25% ] _update_scan_actions | STK_HIT_REACT_STRONG_03_54.000.png
+[  26% ] _update_scan_actions | STK_HIT_REACT_STRONG_04_72.000.png
+[  27% ] _update_scan_actions | STK_RIFLE_BUTTSTROKE_00_0.000.png
+[  28% ] _update_scan_actions | STK_RIFLE_BUTTSTROKE_01_14.800.png
+[  29% ] _update_scan_actions | STK_RIFLE_BUTTSTROKE_02_29.600.png
+[  30% ] _update_scan_actions | STK_RIFLE_BUTTSTROKE_03_44.400.png
+[  31% ] _update_scan_actions | STK_RIFLE_BUTTSTROKE_04_59.200.png
+[  32% ] _update_scan_actions | STK_RIFLE_CROUCH_STRAFE_LEFT_00_0.000.png
+[  34% ] _update_scan_actions | STK_RIFLE_CROUCH_STRAFE_LEFT_01_7.600.png
+[  35% ] _update_scan_actions | STK_RIFLE_CROUCH_STRAFE_LEFT_02_15.200.png
+[  36% ] _update_scan_actions | STK_RIFLE_CROUCH_STRAFE_LEFT_03_22.800.png
+[  37% ] _update_scan_actions | STK_RIFLE_CROUCH_STRAFE_LEFT_04_30.400.png
+[  38% ] _update_scan_actions | STK_RIFLE_CROUCH_STRAFE_RIGHT_00_0.000.png
+[  39% ] _update_scan_actions | STK_RIFLE_CROUCH_STRAFE_RIGHT_01_7.600.png
+[  40% ] _update_scan_actions | STK_RIFLE_CROUCH_STRAFE_RIGHT_02_15.200.png
+[  42% ] _update_scan_actions | STK_RIFLE_CROUCH_STRAFE_RIGHT_03_22.800.png
+[  43% ] _update_scan_actions | STK_RIFLE_CROUCH_STRAFE_RIGHT_04_30.400.png
+[  44% ] _update_scan_actions | STK_RIFLE_FIRE_00_0.000.png
+[  45% ] _update_scan_actions | STK_RIFLE_FIRE_01_1.500.png
+[  46% ] _update_scan_actions | STK_RIFLE_FIRE_02_3.000.png
+[  47% ] _update_scan_actions | STK_RIFLE_FIRE_03_4.500.png
+[  48% ] _update_scan_actions | STK_RIFLE_FIRE_04_6.000.png
+[  50% ] _update_scan_actions | STK_RIFLE_IDLE_00_0.000.png
+[  51% ] _update_scan_actions | STK_RIFLE_IDLE_01_6.000.png
+[  52% ] _update_scan_actions | STK_RIFLE_IDLE_02_12.000.png
+[  53% ] _update_scan_actions | STK_RIFLE_IDLE_03_18.000.png
+[  54% ] _update_scan_actions | STK_RIFLE_IDLE_04_24.000.png
+[  55% ] _update_scan_actions | STK_RIFLE_RELOAD_00_0.000.png
+[  56% ] _update_scan_actions | STK_RIFLE_RELOAD_01_19.800.png
+[  57% ] _update_scan_actions | STK_RIFLE_RELOAD_02_39.600.png
+[  59% ] _update_scan_actions | STK_RIFLE_RELOAD_03_59.400.png
+[  60% ] _update_scan_actions | STK_RIFLE_RELOAD_04_79.200.png
+[  61% ] _update_scan_actions | STK_RIFLE_TURN_LEFT_00_0.000.png
+[  62% ] _update_scan_actions | STK_RIFLE_TURN_LEFT_01_9.000.png
+[  63% ] _update_scan_actions | STK_RIFLE_TURN_LEFT_02_18.000.png
+[  64% ] _update_scan_actions | STK_RIFLE_TURN_LEFT_03_27.000.png
+[  65% ] _update_scan_actions | STK_RIFLE_TURN_LEFT_04_36.000.png
+[  67% ] _update_scan_actions | STK_RIFLE_TURN_RIGHT_00_0.000.png
+[  68% ] _update_scan_actions | STK_RIFLE_TURN_RIGHT_01_10.800.png
+[  69% ] _update_scan_actions | STK_RIFLE_TURN_RIGHT_02_21.600.png
+[  70% ] _update_scan_actions | STK_RIFLE_TURN_RIGHT_03_32.400.png
+[  71% ] _update_scan_actions | STK_RIFLE_TURN_RIGHT_04_43.200.png
+[  72% ] _update_scan_actions | STK_RUN_00_0.000.png
+[  73% ] _update_scan_actions | STK_RUN_01_3.800.png
+[  75% ] _update_scan_actions | STK_RUN_02_7.600.png
+[  76% ] _update_scan_actions | STK_RUN_03_11.400.png
+[  77% ] _update_scan_actions | STK_RUN_04_15.200.png
+[  78% ] _update_scan_actions | STK_WALK_00_0.000.png
+[  79% ] _update_scan_actions | STK_WALK_01_6.200.png
+[  80% ] _update_scan_actions | STK_WALK_02_12.400.png
+[  81% ] _update_scan_actions | STK_WALK_03_18.600.png
+[  82% ] _update_scan_actions | STK_WALK_04_24.800.png
+[  84% ] _update_scan_actions | walk_review_00_0.000s.jpg
+[  85% ] _update_scan_actions | walk_review_01_0.470s.jpg
+[  86% ] _update_scan_actions | walk_review_02_0.939s.jpg
+[  87% ] _update_scan_actions | walk_review_03_1.409s.jpg
+[  88% ] _update_scan_actions | walk_review_04_1.878s.jpg
+[  89% ] _update_scan_actions | walk_review_05_2.348s.jpg
+[  90% ] _update_scan_actions | walk_review_06_2.818s.jpg
+[  92% ] _update_scan_actions | walk_review_07_3.287s.jpg
+[  93% ] _update_scan_actions | walk_review_08_3.757s.jpg
+[  94% ] _update_scan_actions | walk_review_09_4.226s.jpg
+[  95% ] _update_scan_actions | walk_review_10_4.696s.jpg
+[  96% ] _update_scan_actions | walk_review_11_5.166s.jpg
+[  97% ] _update_scan_actions | STK_HERO_BaseBody_01_MeshyRigInput_STK_HERO_BaseBody_01_MeshyRigInput_BaseColor.png
+[ DONE ] _update_scan_actions
+
+[   0% ] reimport | Started (Re)Importing Assets (63 steps)
+[   0% ] reimport | Preparing files to reimport...
+[   1% ] reimport | Preparing files to reimport...
+[   3% ] reimport | Preparing files to reimport...
+[   4% ] reimport | Preparing files to reimport...
+[   6% ] reimport | Preparing files to reimport...
+[   7% ] reimport | Preparing files to reimport...
+[   9% ] reimport | Preparing files to reimport...
+[  10% ] reimport | Preparing files to reimport...
+[  12% ] reimport | Preparing files to reimport...
+[  14% ] reimport | Preparing files to reimport...
+[  15% ] reimport | Preparing files to reimport...
+[  17% ] reimport | Preparing files to reimport...
+[  18% ] reimport | Preparing files to reimport...
+[  20% ] reimport | Preparing files to reimport...
+[  21% ] reimport | Preparing files to reimport...
+[  23% ] reimport | Preparing files to reimport...
+[  25% ] reimport | Preparing files to reimport...
+[  26% ] reimport | Preparing files to reimport...
+[  28% ] reimport | Preparing files to reimport...
+[  29% ] reimport | Preparing files to reimport...
+[  31% ] reimport | Preparing files to reimport...
+[  32% ] reimport | Preparing files to reimport...
+[  34% ] reimport | Preparing files to reimport...
+[  35% ] reimport | Preparing files to reimport...
+[  37% ] reimport | Preparing files to reimport...
+[  39% ] reimport | Preparing files to reimport...
+[  40% ] reimport | Preparing files to reimport...
+[  42% ] reimport | Preparing files to reimport...
+[  43% ] reimport | Preparing files to reimport...
+[  45% ] reimport | Preparing files to reimport...
+[  46% ] reimport | Preparing files to reimport...
+[  48% ] reimport | Preparing files to reimport...
+[  50% ] reimport | Preparing files to reimport...
+[  51% ] reimport | Preparing files to reimport...
+[  53% ] reimport | Preparing files to reimport...
+[  54% ] reimport | Preparing files to reimport...
+[  56% ] reimport | Preparing files to reimport...
+[  57% ] reimport | Preparing files to reimport...
+[  59% ] reimport | Preparing files to reimport...
+[  60% ] reimport | Preparing files to reimport...
+[  62% ] reimport | Preparing files to reimport...
+[  64% ] reimport | Preparing files to reimport...
+[  65% ] reimport | Preparing files to reimport...
+[  67% ] reimport | Preparing files to reimport...
+[  68% ] reimport | Preparing files to reimport...
+[  70% ] reimport | Preparing files to reimport...
+[  71% ] reimport | Preparing files to reimport...
+[  73% ] reimport | Preparing files to reimport...
+[  75% ] reimport | Preparing files to reimport...
+[  76% ] reimport | Preparing files to reimport...
+[  78% ] reimport | Preparing files to reimport...
+[  79% ] reimport | Preparing files to reimport...
+[  81% ] reimport | Preparing files to reimport...
+[  82% ] reimport | Preparing files to reimport...
+[  84% ] reimport | Preparing files to reimport...
+[  85% ] reimport | Preparing files to reimport...
+[  87% ] reimport | Preparing files to reimport...
+[  89% ] reimport | Preparing files to reimport...
+[  90% ] reimport | Preparing files to reimport...
+[  92% ] reimport | Preparing files to reimport...
+[  93% ] reimport | Preparing files to reimport...
+[  95% ] reimport | Preparing files to reimport...
+[  96% ] reimport | Preparing files to reimport...
+[   0% ] reimport | Executing pre-reimport operations...
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_FIRE_04_6.000.png
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_IDLE_01_6.000.png
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_RELOAD_01_19.800.png
+[   0% ] reimport | STK_RIFLE_FIRE_04_6.000.png
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_TURN_LEFT_00_0.000.png
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_TURN_LEFT_01_9.000.png
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_TURN_LEFT_02_18.000.png
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_TURN_RIGHT_01_10.800.png
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_RELOAD_02_39.600.png
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_RELOAD_04_79.200.png
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_IDLE_02_12.000.png
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_RELOAD_00_0.000.png
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_IDLE_04_24.000.png
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_TURN_RIGHT_00_0.000.png
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_TURN_LEFT_04_36.000.png
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_RELOAD_03_59.400.png
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_TURN_LEFT_03_27.000.png
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_IDLE_03_18.000.png
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_IDLE_00_0.000.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_IDLE_03_18.000.png" import took 184 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_TURN_RIGHT_02_21.600.png
+[   1% ] reimport | STK_RIFLE_IDLE_00_0.000.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_TURN_LEFT_01_9.000.png" import took 215 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_TURN_RIGHT_03_32.400.png
+[   3% ] reimport | STK_RIFLE_IDLE_01_6.000.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_IDLE_00_0.000.png" import took 255 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_TURN_RIGHT_04_43.200.png
+[   4% ] reimport | STK_RIFLE_IDLE_02_12.000.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_FIRE_04_6.000.png" import took 261 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RUN_00_0.000.png
+[   6% ] reimport | STK_RIFLE_IDLE_03_18.000.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_TURN_LEFT_00_0.000.png" import took 261 ms.
+[   7% ] reimport | STK_RIFLE_IDLE_04_24.000.png
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RUN_01_3.800.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_TURN_LEFT_03_27.000.png" import took 281 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RUN_02_7.600.png
+[   9% ] reimport | STK_RIFLE_RELOAD_00_0.000.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_RELOAD_04_79.200.png" import took 284 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RUN_03_11.400.png
+[  10% ] reimport | STK_RIFLE_RELOAD_01_19.800.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_TURN_LEFT_04_36.000.png" import took 284 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RUN_04_15.200.png
+[  12% ] reimport | STK_RIFLE_RELOAD_02_39.600.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_RELOAD_02_39.600.png" import took 293 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_WALK_00_0.000.png
+[  14% ] reimport | STK_RIFLE_RELOAD_03_59.400.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_RELOAD_01_19.800.png" import took 300 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_WALK_01_6.200.png
+[  15% ] reimport | STK_RIFLE_RELOAD_04_79.200.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_IDLE_02_12.000.png" import took 305 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_WALK_02_12.400.png
+[  17% ] reimport | STK_RIFLE_TURN_LEFT_00_0.000.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_TURN_LEFT_02_18.000.png" import took 307 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_WALK_03_18.600.png
+[  18% ] reimport | STK_RIFLE_TURN_LEFT_01_9.000.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_RELOAD_03_59.400.png" import took 311 ms.
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_IDLE_01_6.000.png" import took 315 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_WALK_04_24.800.png
+EditorFileSystem: Importing file: res://output/hero_combat_v05/contact_sheets/STK_DEATH_FORWARD_contact_sheet.jpg
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_IDLE_04_24.000.png" import took 314 ms.
+[  20% ] reimport | STK_RIFLE_TURN_LEFT_02_18.000.png
+EditorFileSystem: Importing file: res://output/hero_combat_v05/contact_sheets/STK_HERO_Combat_v05_MasterContactSheet.jpg
+[  21% ] reimport | STK_RIFLE_TURN_LEFT_03_27.000.png
+[  23% ] reimport | STK_RIFLE_TURN_LEFT_04_36.000.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_TURN_RIGHT_00_0.000.png" import took 326 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_DEATH_FORWARD_00_0.000.png
+[  25% ] reimport | STK_RIFLE_TURN_RIGHT_00_0.000.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_TURN_RIGHT_01_10.800.png" import took 334 ms.
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_RELOAD_00_0.000.png" import took 334 ms.
+[  26% ] reimport | STK_RIFLE_TURN_RIGHT_01_10.800.png
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_DEATH_FORWARD_02_26.400.png
+[  28% ] reimport | STK_RIFLE_TURN_RIGHT_02_21.600.png
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_DEATH_FORWARD_01_13.200.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_TURN_RIGHT_02_21.600.png" import took 177 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_DEATH_FORWARD_03_39.600.png
+[  29% ] reimport | STK_RIFLE_TURN_RIGHT_03_32.400.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_TURN_RIGHT_03_32.400.png" import took 196 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_DEATH_FORWARD_04_52.800.png
+[  31% ] reimport | STK_RIFLE_TURN_RIGHT_04_43.200.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_DEATH_FORWARD_03_39.600.png" import took 124 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_HIT_REACT_STRONG_00_0.000.png
+[  32% ] reimport | STK_RUN_00_0.000.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RUN_00_0.000.png" import took 263 ms.
+[  34% ] reimport | STK_RUN_01_3.800.png
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_HIT_REACT_STRONG_01_18.000.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RUN_01_3.800.png" import took 274 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_HIT_REACT_STRONG_02_36.000.png
+[  35% ] reimport | STK_RUN_02_7.600.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_DEATH_FORWARD_04_52.800.png" import took 122 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_HIT_REACT_STRONG_03_54.000.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_WALK_01_6.200.png" import took 244 ms.
+[  37% ] reimport | STK_RUN_03_11.400.png
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_HIT_REACT_STRONG_04_72.000.png
+[  39% ] reimport | STK_RUN_04_15.200.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_DEATH_FORWARD_02_26.400.png" import took 208 ms.
+[  40% ] reimport | STK_WALK_00_0.000.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_DEATH_FORWARD_01_13.200.png" import took 201 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_BUTTSTROKE_00_0.000.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RUN_04_15.200.png" import took 270 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_BUTTSTROKE_01_14.800.png
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_BUTTSTROKE_02_29.600.png
+[  42% ] reimport | STK_WALK_01_6.200.png
+[  43% ] reimport | STK_WALK_02_12.400.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_DEATH_FORWARD_00_0.000.png" import took 243 ms.
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_TURN_RIGHT_04_43.200.png" import took 317 ms.
+[  45% ] reimport | STK_WALK_03_18.600.png
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_FIRE_02_3.000.png
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_FIRE_03_4.500.png
+[  46% ] reimport | STK_WALK_04_24.800.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RUN_02_7.600.png" import took 293 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_FIRE_01_1.500.png
+[  48% ] reimport | STK_DEATH_FORWARD_contact_sheet.jpg
+EditorFileSystem: "res://output/hero_combat_v05/contact_sheets/STK_DEATH_FORWARD_contact_sheet.jpg" import took 262 ms.
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RUN_03_11.400.png" import took 296 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_FIRE_00_0.000.png
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_CROUCH_STRAFE_RIGHT_04_30.400.png
+[  50% ] reimport | STK_HERO_Combat_v05_MasterContactSheet.jpg
+[  51% ] reimport | STK_DEATH_FORWARD_00_0.000.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_WALK_04_24.800.png" import took 270 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_CROUCH_STRAFE_RIGHT_03_22.800.png
+[  53% ] reimport | STK_DEATH_FORWARD_01_13.200.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_WALK_00_0.000.png" import took 348 ms.
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_HIT_REACT_STRONG_00_0.000.png" import took 169 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_CROUCH_STRAFE_RIGHT_01_7.600.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_WALK_03_18.600.png" import took 356 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_CROUCH_STRAFE_RIGHT_00_0.000.png
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_CROUCH_STRAFE_RIGHT_02_15.200.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_WALK_02_12.400.png" import took 389 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_CROUCH_STRAFE_LEFT_04_30.400.png
+[  54% ] reimport | STK_DEATH_FORWARD_02_26.400.png
+[  56% ] reimport | STK_DEATH_FORWARD_03_39.600.png
+[  57% ] reimport | STK_DEATH_FORWARD_04_52.800.png
+[  59% ] reimport | STK_HIT_REACT_STRONG_00_0.000.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_HIT_REACT_STRONG_01_18.000.png" import took 206 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_CROUCH_STRAFE_LEFT_03_22.800.png
+[  60% ] reimport | STK_HIT_REACT_STRONG_01_18.000.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_FIRE_03_4.500.png" import took 199 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_CROUCH_STRAFE_LEFT_02_15.200.png
+[  62% ] reimport | STK_HIT_REACT_STRONG_02_36.000.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_HIT_REACT_STRONG_03_54.000.png" import took 241 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_CROUCH_STRAFE_LEFT_01_7.600.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_BUTTSTROKE_01_14.800.png" import took 224 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_CROUCH_STRAFE_LEFT_00_0.000.png
+[  64% ] reimport | STK_HIT_REACT_STRONG_03_54.000.png
+[  65% ] reimport | STK_HIT_REACT_STRONG_04_72.000.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_HIT_REACT_STRONG_04_72.000.png" import took 264 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_BUTTSTROKE_04_59.200.png
+[  67% ] reimport | STK_RIFLE_BUTTSTROKE_00_0.000.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_FIRE_00_0.000.png" import took 239 ms.
+EditorFileSystem: Importing file: res://output/hero_combat_v05/review/STK_RIFLE_BUTTSTROKE_03_44.400.png
+[  68% ] reimport | STK_RIFLE_BUTTSTROKE_01_14.800.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_HIT_REACT_STRONG_02_36.000.png" import took 302 ms.
+[  70% ] reimport | STK_RIFLE_BUTTSTROKE_02_29.600.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_CROUCH_STRAFE_RIGHT_03_22.800.png" import took 248 ms.
+[  71% ] reimport | STK_RIFLE_FIRE_03_4.500.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_BUTTSTROKE_00_0.000.png" import took 307 ms.
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_CROUCH_STRAFE_RIGHT_01_7.600.png" import took 209 ms.
+[  73% ] reimport | STK_RIFLE_FIRE_02_3.000.png
+[  75% ] reimport | STK_RIFLE_FIRE_01_1.500.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_BUTTSTROKE_02_29.600.png" import took 314 ms.
+[  76% ] reimport | STK_RIFLE_FIRE_00_0.000.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_FIRE_01_1.500.png" import took 321 ms.
+[  78% ] reimport | STK_RIFLE_CROUCH_STRAFE_RIGHT_04_30.400.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_CROUCH_STRAFE_RIGHT_00_0.000.png" import took 241 ms.
+[  79% ] reimport | STK_RIFLE_CROUCH_STRAFE_RIGHT_03_22.800.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_CROUCH_STRAFE_RIGHT_04_30.400.png" import took 333 ms.
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_FIRE_02_3.000.png" import took 341 ms.
+[  81% ] reimport | STK_RIFLE_CROUCH_STRAFE_RIGHT_02_15.200.png
+[  82% ] reimport | STK_RIFLE_CROUCH_STRAFE_RIGHT_01_7.600.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_CROUCH_STRAFE_RIGHT_02_15.200.png" import took 245 ms.
+[  84% ] reimport | STK_RIFLE_CROUCH_STRAFE_RIGHT_00_0.000.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_CROUCH_STRAFE_LEFT_04_30.400.png" import took 236 ms.
+[  85% ] reimport | STK_RIFLE_CROUCH_STRAFE_LEFT_04_30.400.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_CROUCH_STRAFE_LEFT_03_22.800.png" import took 211 ms.
+[  87% ] reimport | STK_RIFLE_CROUCH_STRAFE_LEFT_03_22.800.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_CROUCH_STRAFE_LEFT_02_15.200.png" import took 175 ms.
+[  89% ] reimport | STK_RIFLE_CROUCH_STRAFE_LEFT_02_15.200.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_BUTTSTROKE_04_59.200.png" import took 169 ms.
+[  90% ] reimport | STK_RIFLE_CROUCH_STRAFE_LEFT_01_7.600.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_CROUCH_STRAFE_LEFT_01_7.600.png" import took 215 ms.
+[  92% ] reimport | STK_RIFLE_CROUCH_STRAFE_LEFT_00_0.000.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_BUTTSTROKE_03_44.400.png" import took 177 ms.
+[  93% ] reimport | STK_RIFLE_BUTTSTROKE_04_59.200.png
+EditorFileSystem: "res://output/hero_combat_v05/review/STK_RIFLE_CROUCH_STRAFE_LEFT_00_0.000.png" import took 225 ms.
+[  95% ] reimport | STK_RIFLE_BUTTSTROKE_03_44.400.png
+EditorFileSystem: "res://output/hero_combat_v05/contact_sheets/STK_HERO_Combat_v05_MasterContactSheet.jpg" import took 1318 ms.
+[  96% ] reimport | STK_HERO_BaseBody_01_Rigged_Combat_v05.glb
+EditorFileSystem: Importing file: res://assets/characters/humanoid/base/STK_HERO_BaseBody_01/v01/rigged/STK_HERO_BaseBody_01_Rigged_Combat_v05.glb
+[   0% ] import | Started Import Scene (104 steps)
+[   0% ] import | Importing Scene...
+glTF: Total buffers: 1
+glTF: Total buffer views: 828
+glTF: Total accessors: 826
+EditorFileSystem: Importing file: res://assets/characters/humanoid/base/STK_HERO_BaseBody_01/v01/rigged/STK_HERO_BaseBody_01_Rigged_Combat_v05_STK_HERO_BaseBody_01_Baked_Emit.png
+EditorFileSystem: "res://assets/characters/humanoid/base/STK_HERO_BaseBody_01/v01/rigged/STK_HERO_BaseBody_01_Rigged_Combat_v05_STK_HERO_BaseBody_01_Baked_Emit.png" import took 701 ms.
+Loading resource: res://assets/characters/humanoid/base/STK_HERO_BaseBody_01/v01/rigged/STK_HERO_BaseBody_01_Rigged_Combat_v05_STK_HERO_BaseBody_01_Baked_Emit.png remapped: res://assets/characters/humanoid/base/STK_HERO_BaseBody_01/v01/rigged/STK_HERO_BaseBody_01_Rigged_Combat_v05_STK_HERO_BaseBody_01_Baked_Emit.png
+Loading resource: res://.godot/imported/STK_HERO_BaseBody_01_Rigged_Combat_v05_STK_HERO_BaseBody_01_Baked_Emit.png-3b8738af143b057718ec27b05f1f568f.ctex remapped: res://.godot/imported/STK_HERO_BaseBody_01_Rigged_Combat_v05_STK_HERO_BaseBody_01_Baked_Emit.png-3b8738af143b057718ec27b05f1f568f.ctex
+Completed load for: 'res://assets/characters/humanoid/base/STK_HERO_BaseBody_01/v01/rigged/STK_HERO_BaseBody_01_Rigged_Combat_v05_STK_HERO_BaseBody_01_Baked_Emit.png' remapped 'res://assets/characters/humanoid/base/STK_HERO_BaseBody_01/v01/rigged/STK_HERO_BaseBody_01_Rigged_Combat_v05_STK_HERO_BaseBody_01_Baked_Emit.png' at thread -1
+EditorFileSystem: Importing file: res://assets/characters/humanoid/base/STK_HERO_BaseBody_01/v01/rigged/STK_HERO_BaseBody_01_Rigged_Combat_v05_STK_HERO_BaseBody_01_Baked_BaseColor.png
+EditorFileSystem: "res://assets/characters/humanoid/base/STK_HERO_BaseBody_01/v01/rigged/STK_HERO_BaseBody_01_Rigged_Combat_v05_STK_HERO_BaseBody_01_Baked_BaseColor.png" import took 8494 ms.
+Loading resource: res://assets/characters/humanoid/base/STK_HERO_BaseBody_01/v01/rigged/STK_HERO_BaseBody_01_Rigged_Combat_v05_STK_HERO_BaseBody_01_Baked_BaseColor.png remapped: res://assets/characters/humanoid/base/STK_HERO_BaseBody_01/v01/rigged/STK_HERO_BaseBody_01_Rigged_Combat_v05_STK_HERO_BaseBody_01_Baked_BaseColor.png
+Loading resource: res://.godot/imported/STK_HERO_BaseBody_01_Rigged_Combat_v05_STK_HERO_BaseBody_01_Baked_BaseColor.png-ff5d67625d609237ca803143698a0f83.ctex remapped: res://.godot/imported/STK_HERO_BaseBody_01_Rigged_Combat_v05_STK_HERO_BaseBody_01_Baked_BaseColor.png-ff5d67625d609237ca803143698a0f83.ctex
+Completed load for: 'res://assets/characters/humanoid/base/STK_HERO_BaseBody_01/v01/rigged/STK_HERO_BaseBody_01_Rigged_Combat_v05_STK_HERO_BaseBody_01_Baked_BaseColor.png' remapped 'res://assets/characters/humanoid/base/STK_HERO_BaseBody_01/v01/rigged/STK_HERO_BaseBody_01_Rigged_Combat_v05_STK_HERO_BaseBody_01_Baked_BaseColor.png' at thread -1
+glTF: Total images: 2
+Total materials: 2
+glTF: Total skins: 1
+glTF: Parsing mesh: 0
+WARNING: glTF import: Buffer view byte stride should be declared for vertex attributes. Assuming packed data and reading anyway.
+WARNING: glTF import: Buffer view byte stride should be declared for vertex attributes. Assuming packed data and reading anyway.
+WARNING: glTF import: Buffer view byte stride should be declared for vertex attributes. Assuming packed data and reading anyway.
+WARNING: glTF import: Buffer view byte stride should be declared for vertex attributes. Assuming packed data and reading anyway.
+WARNING: glTF import: Buffer view byte stride should be declared for vertex attributes. Assuming packed data and reading anyway.
+WARNING: glTF import: Buffer view byte stride should be declared for vertex attributes. Assuming packed data and reading anyway.
+WARNING: glTF import: Buffer view byte stride should be declared for vertex attributes. Assuming packed data and reading anyway.
+WARNING: glTF import: Buffer view byte stride should be declared for vertex attributes. Assuming packed data and reading anyway.
+WARNING: glTF import: Buffer view byte stride should be declared for vertex attributes. Assuming packed data and reading anyway.
+WARNING: glTF import: Buffer view byte stride should be declared for vertex attributes. Assuming packed data and reading anyway.
+WARNING: glTF import: Buffer view byte stride should be declared for vertex attributes. Assuming packed data and reading anyway.
+WARNING: glTF import: Buffer view byte stride should be declared for vertex attributes. Assuming packed data and reading anyway.
+glTF: Total meshes: 1
+glTF: Total animations '12'.
+glTF: Converting spatial: STK_HERO_BaseBody_01_Armature
+glTF: Creating mesh for: STK_HERO_BaseBody_01_RiggedBody
+LOD Generation: Triangles 24520, vertices 17907 (merged 17846), deformable
+  LOD 1: 12260 triangles, error 0.00276178517379 (step error 0.00276178517379)
+  LOD 2: 6129 triangles, error 0.00616546720266 (step error 0.00616546720266)
+  LOD 3: 3063 triangles, error 0.0276149418205 (step error 0.0276149418205)
+  LOD stop: got 2487 triangles when asking for 1531
+LOD Generation: Triangles 6618, vertices 6573 (merged 6526), deformable
+  LOD 1: 3308 triangles, error 0.01952213421464 (step error 0.01952213421464)
+  LOD 2: 1694 triangles, error 0.26820015907288 (step error 0.26820015907288)
+  LOD stop: got 1494 triangles when asking for 847
+[   1% ] import | Running Custom Script...
+[  99% ] import | Saving...
+Saving scene to: res://.godot/imported/STK_HERO_BaseBody_01_Rigged_Combat_v05.glb-a2e55a6f45611b47b16288dd6919c8df.scn
+[ DONE ] import
+
+EditorFileSystem: "res://assets/characters/humanoid/base/STK_HERO_BaseBody_01/v01/rigged/STK_HERO_BaseBody_01_Rigged_Combat_v05.glb" import took 11593 ms.
+[  98% ] reimport | Finalizing Asset Import...
+[ DONE ] reimport
+
+[   0% ] reimport | Started (Re)Importing Assets (63 steps)
+[   0% ] reimport | Executing post-reimport operations...
+[ DONE ] reimport
+
+[   0% ] loading_editor_layout | Started Loading editor (5 steps)
+[   0% ] loading_editor_layout | Loading editor layout...
+[  16% ] loading_editor_layout | Loading docks...
+[  33% ] loading_editor_layout | Reopening scenes...
+[  50% ] loading_editor_layout | Loading central editor layout...
+[  66% ] loading_editor_layout | Loading plugin window layout...
+Loading resource: res://systems/crafting/crafting_data.gd remapped: res://systems/crafting/crafting_data.gd
+Completed load for: 'res://systems/crafting/crafting_data.gd' remapped 'res://systems/crafting/crafting_data.gd' at thread -1
+[  83% ] loading_editor_layout | Editor layout ready.
+[ DONE ] loading_editor_layout
+
+Loading resource: res://scenes/menus/SteamtekMainMenu.tscn remapped: res://scenes/menus/SteamtekMainMenu.tscn
+Loading resource: res://scenes/menus/steamtek_main_menu.gd remapped: res://scenes/menus/steamtek_main_menu.gd
+Completed load for: 'res://scenes/menus/steamtek_main_menu.gd' remapped 'res://scenes/menus/steamtek_main_menu.gd' at thread -1
+Completed load for: 'res://scenes/menus/SteamtekMainMenu.tscn' remapped 'res://scenes/menus/SteamtekMainMenu.tscn' at thread -1
+Failed to bind socket. Error: 3.
+Unloading addon: res://addons/meshy-godot-plugin/plugin.cfg
+Unloading addon: res://addons/steamtek_humanoid_runtime/plugin.cfg
+Unloading addon: res://addons/steamtek_live3d_builder/plugin.cfg
+Unloading addon: res://addons/steamtek_material_variant_editor/plugin.cfg
+Unloading addon: res://addons/steamtek_modular_snap/plugin.cfg
+Script docs haven't been properly loaded or regenerated, so don't save them to disk.
+ERROR: Can't save resource to empty path. Provide non-empty path or a Resource with non-empty resource_path.
+   at: save (core/io/resource_saver.cpp:108)
+ERROR: Error saving editor settings to 
+   at: save (editor/settings/editor_settings.cpp:1525)

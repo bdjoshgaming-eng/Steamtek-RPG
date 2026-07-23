@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scenes/effects/live3d/steamtek_grenade_projectile_3d.gd" id="1_script"]
+
+[sub_resource type="SphereMesh" id="GrenadeMesh"]
+radius = 0.09
+height = 0.18
+
+[sub_resource type="StandardMaterial3D" id="GrenadeMaterial"]
+albedo_color = Color(0.32, 0.28, 0.2, 1)
+metallic = 0.6
+roughness = 0.35
+
+[node name="SteamtekGrenadeProjectile3D" type="Node3D"]
+editor_description = "Thrown grenade visual for the Grenade Launcher bounce mechanic. Spawned and driven entirely at runtime by steamtek_humanoid_character_3d.gd's _launch_grenade()."
+script = ExtResource("1_script")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+mesh = SubResource("GrenadeMesh")
+surface_material_override/0 = SubResource("GrenadeMaterial")

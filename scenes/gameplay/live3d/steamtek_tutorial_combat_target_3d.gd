@@ -19,6 +19,15 @@ enum AiState { IDLE, CHASE, LEASH }
 @export var attack_cooldown := 2.5
 @export var attack_contact_distance := 1.1
 
+# "Corrosive Grasp" special: an alternate contact hit, on its own longer
+# cooldown, that inflicts a Grit-mitigated DoT + slow instead of a
+# straight hit -- first consumer of Combat.gd's previously-unused
+# grit_dot_reduction()/grit_cc_duration_mult().
+@export var special_attack_cooldown := 8.0
+@export var special_attack_dot_duration := 4.0
+@export var special_attack_cc_duration := 3.0
+@export var special_attack_cc_speed_multiplier := 0.5
+
 const LEASH_SPEED_MULTIPLIER := 1.6
 const LEASH_ARRIVE_DISTANCE := 0.35
 const PATROL_ARRIVE_DISTANCE := 0.2
@@ -32,6 +41,7 @@ var max_health := 1
 var current_health := 1
 var attack_min_damage := 1
 var attack_max_damage := 1
+var special_attack_dot_total := 1
 var resistances: Dictionary = {}
 var active := true
 var combat_runtime: Node
@@ -43,6 +53,8 @@ var home_position: Vector3
 var patrol_target: Vector3
 var patrol_pause_timer := 0.0
 var attack_timer := 0.0
+var special_attack_timer := 0.0
+var stagger_timer := 0.0
 
 
 func _ready() -> void:
@@ -54,6 +66,7 @@ func _ready() -> void:
 	var center_damage := int(derived["damage"])
 	attack_min_damage = maxi(1, int(round(center_damage * 0.55)))
 	attack_max_damage = maxi(attack_min_damage, int(round(center_damage * 1.45)))
+	special_attack_dot_total = maxi(1, int(round(center_damage * 1.2)))
 	resistances = combat_data_runtime.call("new_resistances", int(derived["armor"]))
 	enemy_sprite.modulate = sprite_tint
 	home_position = global_position
@@ -68,6 +81,9 @@ func set_player_reference(player: Node3D) -> void:
 
 func _process(delta: float) -> void:
 	if not is_alive() or player_ref == null:
+		return
+	if stagger_timer > 0.0:
+		stagger_timer -= delta
 		return
 	match ai_state:
 		AiState.IDLE:
@@ -100,10 +116,16 @@ func _chase_tick(delta: float) -> void:
 	if distance_to_home > leash_range:
 		ai_state = AiState.LEASH
 		return
+	if special_attack_timer > 0.0:
+		special_attack_timer -= delta
 	if to_player.length() <= attack_contact_distance:
 		attack_timer -= delta
 		if attack_timer <= 0.0:
-			_attack_player()
+			if special_attack_timer <= 0.0:
+				_special_attack_player()
+				special_attack_timer = special_attack_cooldown
+			else:
+				_attack_player()
 			attack_timer = attack_cooldown
 		return
 	var step := to_player.normalized() * chase_speed * delta
@@ -116,6 +138,19 @@ func _attack_player() -> void:
 	if player_ref.has_method("is_alive") and not player_ref.call("is_alive"):
 		return
 	player_ref.call("apply_damage", roll_enemy_attack())
+
+
+func _special_attack_player() -> void:
+	if player_ref == null or not is_instance_valid(player_ref):
+		return
+	if player_ref.has_method("is_alive") and not player_ref.call("is_alive"):
+		return
+	if player_ref.has_method("apply_dot_effect"):
+		player_ref.call("apply_dot_effect", float(special_attack_dot_total), special_attack_dot_duration, 1.0)
+	if player_ref.has_method("apply_cc_slow"):
+		player_ref.call(
+			"apply_cc_slow", special_attack_cc_duration, special_attack_cc_speed_multiplier
+		)
 
 
 func _leash_tick(delta: float) -> void:
@@ -138,6 +173,14 @@ func _pick_patrol_target() -> void:
 	var radius := randf_range(0.0, patrol_radius)
 	patrol_target = home_position + Vector3(cos(angle) * radius, 0.0, sin(angle) * radius)
 	patrol_pause_timer = randf_range(patrol_pause_min, patrol_pause_max)
+
+
+func apply_stagger(duration: float) -> void:
+	stagger_timer = maxf(stagger_timer, duration)
+
+
+func apply_knockback(direction: Vector3, distance: float) -> void:
+	global_position += direction * distance
 
 
 func is_alive() -> bool:
@@ -187,6 +230,8 @@ func reset_target() -> void:
 	ai_state = AiState.IDLE
 	global_position = home_position
 	attack_timer = 0.0
+	special_attack_timer = 0.0
+	stagger_timer = 0.0
 	set_active(true)
 	_refresh_label()
 	health_changed.emit(self, current_health, max_health)

@@ -1,0 +1,89 @@
+{
+  "schema": "SteamtekMeshyAnimationSourceValidation-3",
+  "status": "pass",
+  "purpose": "Seamless original-proportion proxy for Meshy motion generation only",
+  "warning": "Do not use this proxy as the production hero. Retarget downloaded Meshy motion onto the approved v04 rig.",
+  "source_blend": "C:\\My Game\\Steamtek-RPG\\blender\\character_pipeline\\heroes\\STK_HERO_BaseBody_01_Rigged_MeshyMotion_v04.blend",
+  "source_sha256": "514399916842f553b212a821be74ef94fa29baa3c06a5fe032743c6ec2d694db",
+  "output_glb": "C:\\My Game\\Steamtek-RPG\\output\\meshy_animation_source\\STK_HERO_BaseBody_01_MeshyAnimationSource_NeutralPose_v03.glb",
+  "output_sha256": "d7602b6bd34fe495430dd88e5219f759b2c7a48cb41f58cd7d133dbebc6f12e9",
+  "bytes": 742888,
+  "pose": "Original neutral pose",
+  "front_axis_gltf": "+Z",
+  "voxel_size_m": 0.012,
+  "animations": [],
+  "armatures": 0,
+  "uv_layers": 0,
+  "pre_export": {
+    "vertices": 20592,
+    "edges": 61770,
+    "faces": 41180,
+    "triangles": 41180,
+    "components": 1,
+    "boundary_edges": 0,
+    "overfull_edges": 0,
+    "wire_edges": 0,
+    "degenerate_faces": 0,
+    "bounds_minimum": [
+      -0.3751010298728943,
+      -0.16438868641853333,
+      0.0
+    ],
+    "bounds_maximum": [
+      0.3751010298728943,
+      0.16438868641853333,
+      1.8254001140594482
+    ],
+    "dimensions": [
+      0.7502020597457886,
+      0.32877737283706665,
+      1.8254001140594482
+    ]
+  },
+  "reimport": {
+    "vertices": 20592,
+    "edges": 61770,
+    "faces": 41180,
+    "triangles": 41180,
+    "components": 1,
+    "boundary_edges": 0,
+    "overfull_edges": 0,
+    "wire_edges": 0,
+    "degenerate_faces": 0,
+    "bounds_minimum": [
+      -0.3751010298728943,
+      -0.16438868641853333,
+      0.0
+    ],
+    "bounds_maximum": [
+      0.3751010298728943,
+      0.16438868641853333,
+      1.8254001140594482
+    ],
+    "dimensions": [
+      0.7502020597457886,
+      0.32877737283706665,
+      1.8254001140594482
+    ]
+  },
+  "export_options": {
+    "filepath": "C:\\My Game\\Steamtek-RPG\\output\\meshy_animation_source\\STK_HERO_BaseBody_01_MeshyAnimationSource_NeutralPose_v03.glb",
+    "export_format": "GLB",
+    "use_selection": true,
+    "export_apply": false,
+    "export_yup": true,
+    "export_materials": "EXPORT",
+    "export_image_format": "AUTO",
+    "export_cameras": false,
+    "export_lights": false,
+    "export_animations": false,
+    "export_skins": false,
+    "export_morph": false,
+    "export_attributes": false,
+    "export_extras": true,
+    "export_texcoords": false,
+    "export_normals": true,
+    "export_tangents": false
+  },
+  "meshy_upload_setting": "Keep Original Texture and UV = OFF"
+}

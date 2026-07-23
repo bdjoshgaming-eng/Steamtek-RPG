@@ -18,6 +18,28 @@ var _lightning_lights: Array[OmniLight3D] = []
 var _rain_overlays: Array[MeshInstance3D] = []
 var _next_lightning_time := 0.0
 var _elapsed := 0.0
+var _enabled := true
+
+
+# Stops/resumes the lightning cycle and rain/thunder audio without
+# freeing or reparenting anything -- called by SteamtekSurfaceWeather3D's
+# debug weather toggle (F4).
+func set_enabled(enabled: bool) -> void:
+	if enabled == _enabled:
+		return
+	_enabled = enabled
+	set_process(enabled)
+	if enabled:
+		_schedule_next_lightning()
+		if rain_audio.stream != null:
+			rain_audio.volume_db = ambient_rain_volume_db
+			rain_audio.play()
+	else:
+		rain_audio.stop()
+		thunder_audio.stop()
+		for light in _lightning_lights:
+			light.light_energy = 0.0
+		_set_rain_lightning_boost(0.0)
 
 
 func _ready() -> void:

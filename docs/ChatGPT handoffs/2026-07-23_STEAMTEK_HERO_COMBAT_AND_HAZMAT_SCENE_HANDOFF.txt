@@ -1,0 +1,265 @@
+STEAMTEK HERO COMBAT AND HAZMAT SCENE HANDOFF
+Date: 2026-07-23
+Project: C:\My Game\Steamtek-RPG
+
+AUTHORITY
+
+This is the current continuation authority for the approved hero rig,
+the Meshy combat-motion package, the combat-ready v05 GLB, and the Godot
+Hazmat combat-prototype scene. It supersedes the earlier same-day instruction
+to upload the neutral Meshy input. The earlier character handoff remains useful
+for repair-master history:
+
+C:\My Game\Steamtek-RPG\docs\ChatGPT handoffs\2026-07-23_STEAMTEK_CHARACTER_ASSET_AND_MESHY_RIGGING_HANDOFF.txt
+
+The July 22 street-kit handoff remains authoritative for street walls,
+sidewalks, Live3D Builder integration, and the paused road-tile request.
+
+
+CURRENT CLAUDE CODE STARTING POINT
+
+Claude Code should instantiate or extend this Godot scene:
+
+C:\My Game\Steamtek-RPG\scenes\characters\enemies\STK_NPC_Hazmat_CombatPrototype_v01.tscn
+
+Do not instantiate the GLB directly for enemy combat unless intentionally
+bypassing the project wrapper. The scene supplies collision, the project
+humanoid runtime contract, animation helpers, metadata, enemy group tags, and
+the runtime RightHand rifle attachment.
+
+
+APPROVED SOURCES PRESERVED
+
+The approved v04 files were not overwritten:
+
+C:\My Game\Steamtek-RPG\blender\character_pipeline\heroes\STK_HERO_BaseBody_01_Rigged_MeshyMotion_v04.blend
+
+C:\My Game\Steamtek-RPG\assets\characters\humanoid\base\STK_HERO_BaseBody_01\v01\rigged\STK_HERO_BaseBody_01_Rigged_MeshyMotion_v04.glb
+
+The original unrigged repair master and incoming sources also remain
+unchanged. Do not use the rejected C001 skeleton as a deformation baseline.
+
+
+MESHY PACKAGE INTAKE
+
+The user supplied:
+
+C:\Users\bdjos\Downloads\Meshy_AI_STK_HERO_BaseBody_01__biped (1).zip
+
+A project-owned copy was saved at:
+
+C:\My Game\Steamtek-RPG\output\meshy_animation_source\downloaded\Meshy_AI_STK_HERO_BaseBody_01_biped_AllAdded_v03.zip
+
+The extracted merged-animation GLB is under:
+
+C:\My Game\Steamtek-RPG\output\meshy_animation_source\downloaded\all_added_v03_20260723
+
+The package contained a compatible 24-bone Meshy biped with the same bone
+names as the approved Steamtek rig. Direct curve copying was not used because
+the Meshy armature scale and rest transforms differed. The established
+world-space delta retargeting method from the v04 pipeline was used instead.
+
+
+COMBAT V05 PRODUCTION OUTPUT
+
+Blender source:
+
+C:\My Game\Steamtek-RPG\blender\character_pipeline\heroes\STK_HERO_BaseBody_01_Rigged_Combat_v05.blend
+
+Production GLB:
+
+C:\My Game\Steamtek-RPG\assets\characters\humanoid\base\STK_HERO_BaseBody_01\v01\rigged\STK_HERO_BaseBody_01_Rigged_Combat_v05.glb
+
+GLB SHA-256:
+
+4dc8b1d82e954d027b72649d9c62d1ebeeb314aecacef200ee038f16cc2b5e5b
+
+Validated contents:
+
+- One skinned body
+- One 24-bone armature
+- 24,480 vertices after clean GLB import
+- 31,138 triangles
+- Two materials
+- Twelve animations
+
+Animation contract:
+
+- STK_DEATH_FORWARD
+- STK_HIT_REACT_STRONG
+- STK_RIFLE_BUTTSTROKE
+- STK_RIFLE_CROUCH_STRAFE_LEFT
+- STK_RIFLE_CROUCH_STRAFE_RIGHT
+- STK_RIFLE_FIRE
+- STK_RIFLE_IDLE
+- STK_RIFLE_RELOAD
+- STK_RIFLE_TURN_LEFT
+- STK_RIFLE_TURN_RIGHT
+- STK_RUN
+- STK_WALK
+
+The Meshy package supplied crouch-walk-left-with-gun, death, elbow strike,
+gunshot reaction, rifle aim turn right, rifle turn left, standing reload,
+running, and walking. The production build retained the approved v04 walk and
+run actions. Missing combat actions were completed in Blender:
+
+- STK_RIFLE_IDLE was derived as a stable rifle-ready loop.
+- STK_RIFLE_FIRE adds a short recoil action.
+- STK_RIFLE_CROUCH_STRAFE_RIGHT is a controlled mirror of the left action.
+- STK_RIFLE_BUTTSTROKE adapts the elbow strike into a two-handed rifle strike.
+- STK_DEATH_FORWARD was trimmed to remove the odd pre-death brace and now
+  begins upright before the fall.
+
+
+QA AND VALIDATION
+
+The v05 GLB passed a fresh Blender import validation:
+
+C:\My Game\Steamtek-RPG\assets\characters\humanoid\base\STK_HERO_BaseBody_01\v01\rigged\STK_HERO_BaseBody_01_Rigged_Combat_v05.validation.json
+
+Export receipt:
+
+C:\My Game\Steamtek-RPG\assets\characters\humanoid\base\STK_HERO_BaseBody_01\v01\rigged\STK_HERO_BaseBody_01_Rigged_Combat_v05.export.json
+
+Rendered animation review:
+
+C:\My Game\Steamtek-RPG\output\hero_combat_v05\contact_sheets\STK_HERO_Combat_v05_MasterContactSheet.jpg
+
+Temporary rifle-proxy review:
+
+C:\My Game\Steamtek-RPG\output\hero_combat_v05\rifle_proxy_contact_sheets\STK_HERO_Combat_v05_RifleProxy_MasterContactSheet.jpg
+
+The rifle proxy was a render-only QA aid. It was not saved into the Blender
+source or exported in the production GLB.
+
+Godot imported the production GLB and reported all 12 animations. The Godot
+scene runtime validator passed with no errors, one Skeleton3D, a resolved
+rifle idle, and valid runtime attachment nodes:
+
+RightHand/RifleAttachment/RifleMount
+
+Godot validation log:
+
+C:\My Game\Steamtek-RPG\output\hero_combat_v05\hazmat_scene_validation.log
+
+
+GODOT HAZMAT COMBAT-PROTOTYPE SCENE
+
+Scene:
+
+C:\My Game\Steamtek-RPG\scenes\characters\enemies\STK_NPC_Hazmat_CombatPrototype_v01.tscn
+
+Controller:
+
+C:\My Game\Steamtek-RPG\scenes\characters\enemies\stk_npc_hazmat_combat_prototype_v01.gd
+
+The scene extends Steamtek_HumanoidCharacter3D and currently provides:
+
+- CharacterBody3D collision using a 1.83 m capsule.
+- The v05 combat GLB visible in the editor and available at runtime.
+- STK_RIFLE_IDLE as the default idle animation.
+- STK_WALK and STK_RUN as locomotion actions.
+- Groups steamtek_enemy and steamtek_hazmat_enemy.
+- A runtime BoneAttachment3D on the RightHand bone.
+- A RifleMount Marker3D beneath the attachment.
+- An exported rifle_scene slot and position/rotation/scale offsets.
+- Metadata identifying the visual as a temporary base-body proxy.
+
+Controller animation helpers available to enemy AI:
+
+- play_rifle_idle()
+- play_rifle_fire()
+- play_rifle_reload()
+- play_rifle_turn_left()
+- play_rifle_turn_right()
+- play_crouch_strafe_left()
+- play_crouch_strafe_right()
+- play_rifle_buttstroke()
+- play_hit_reaction()
+- play_death()
+- inherited play_walk()
+- inherited play_run()
+
+One-shot fire, reload, turn, buttstroke, and hit-reaction actions return to
+rifle idle when finished. Death does not return to idle. Crouch strafes and
+rifle idle are configured as loops.
+
+Scene validator:
+
+C:\My Game\Steamtek-RPG\tools\qa\validate_hazmat_combat_prototype_v01.gd
+
+Validator runner:
+
+C:\My Game\Steamtek-RPG\tools\qa\ValidateHazmatCombatPrototypeV01.tscn
+
+
+IMPORTANT LIMITATIONS
+
+This is a combat-animation carrier and Godot integration prototype, not a
+finished Hazmat NPC.
+
+- The visible mesh is the approved base body, not Hazmat clothing.
+- No actual rifle scene is assigned yet.
+- The rifle mount follows RightHand, but final rifle position and rotation
+  require tuning against the selected rifle model.
+- No muzzle marker, muzzle flash, projectile spawn, or firing audio is included.
+- No enemy AI, navigation, targeting, perception, health, damage, cover logic,
+  combat stats, or loot behavior is included.
+- No final Hazmat materials, armor, mask, tank, hoses, or other outfit parts
+  are included.
+
+Do not mislabel the current visible proxy as the finished Hazmat art.
+
+
+RECOMMENDED NEXT ACTIONS
+
+1. Assign the selected rifle PackedScene to rifle_scene on
+   STK_NPC_Hazmat_CombatPrototype_v01 and tune the three rifle offsets.
+
+2. Add a Muzzle Marker3D to the rifle scene so firing logic can spawn muzzle
+   effects and projectiles from the weapon rather than the character root.
+
+3. Build enemy combat AI by extending or driving
+   SteamtekHazmatCombatPrototype. Use the helper methods above instead of
+   hard-coding imported AnimationPlayer paths.
+
+4. Add combat state transitions for idle, aiming, firing, reload, left/right
+   crouch strafe, hit reaction, buttstroke, and death.
+
+5. Replace only the temporary visual when compatible Hazmat clothing is ready.
+   Preserve the 24-bone skeleton, animation names, scene wrapper, collision,
+   and rifle-attachment contract unless a deliberate migration is performed.
+
+6. Run the Godot validator again after rifle assignment and after any visual
+   replacement.
+
+
+PIPELINE SCRIPTS
+
+Combat build:
+
+C:\My Game\Steamtek-RPG\blender\character_pipeline\scripts\Steamtek_Build_STK_HERO_CombatMotion_v05.py
+
+Production GLB export:
+
+C:\My Game\Steamtek-RPG\blender\character_pipeline\scripts\Steamtek_Export_STK_HERO_Combat_v05_ProductionGLB.py
+
+Production GLB validation:
+
+C:\My Game\Steamtek-RPG\blender\character_pipeline\scripts\Steamtek_Validate_STK_HERO_Combat_v05_ProductionGLB.py
+
+Rifle-proxy QA:
+
+C:\My Game\Steamtek-RPG\blender\character_pipeline\scripts\Steamtek_Render_STK_HERO_Combat_v05_RifleProxyQA.py
+
+
+WORKTREE SAFETY
+
+The repository contains unrelated modified and untracked files. Preserve them.
+Do not reset, clean, delete, revert, or overwrite unrelated work. The combat
+v05 GLB, Blender source, Godot scene, controller, validators, reports, and
+pipeline scripts are new derivatives. No Git commit was created during this
+work.
+
+The verbatim transcript and its SHA-256 verification file were intentionally
+left unchanged when these handoffs were updated.

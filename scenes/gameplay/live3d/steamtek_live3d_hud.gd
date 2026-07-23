@@ -24,6 +24,7 @@ const DIALOGUE_BOX_SCENE := preload("res://scenes/gameplay/live3d/SteamtekDialog
 
 @onready var health_bar: ProgressBar = $Bars/HealthBar
 @onready var action_bar: ProgressBar = $Bars/ActionBar
+@onready var heat_bar: ProgressBar = $Bars/HeatBar
 @onready var cogs_label: Label = $Bars/CogsLabel
 @onready var action_slots: HBoxContainer = $ActionSlots
 @onready var talents_panel: Control = $TalentsPanel
@@ -34,6 +35,13 @@ const DIALOGUE_BOX_SCENE := preload("res://scenes/gameplay/live3d/SteamtekDialog
 @onready var craft_button: Button = $CraftingPanel/CraftButton
 @onready var craft_result_label: Label = $CraftingPanel/ResultLabel
 @onready var crafting_close: Button = $CraftingPanel/Close
+@onready var mods_list: VBoxContainer = $CraftingPanel/Mods/Scroll/List
+
+# Flat Cogs cost to grant a mod. The 8 weapon mods have no blueprint/
+# material requirement in the data model (only Core mods do, via
+# bp_core_mod + a reagent family) so a flat cost stands in for a real
+# recipe -- placeholder tuning value, needs a balance pass.
+const MOD_GRANT_COGS_COST := 40
 
 var progress_ref: Dictionary = {}
 var save_callback: Callable
@@ -55,6 +63,10 @@ func _ready() -> void:
 	action_bar.value = 850
 	action_bar.add_theme_stylebox_override("fill", _bar_fill_style(Color(0.14, 0.42, 0.16)))
 	action_bar.add_theme_stylebox_override("background", _bar_fill_style(Color(0.04, 0.08, 0.04)))
+	heat_bar.max_value = 100
+	heat_bar.value = 0
+	heat_bar.add_theme_stylebox_override("fill", _bar_fill_style(Color(0.78, 0.35, 0.08)))
+	heat_bar.add_theme_stylebox_override("background", _bar_fill_style(Color(0.1, 0.05, 0.02)))
 	for slot_button in action_slots.get_children():
 		if slot_button is Button:
 			slot_button.text = "(empty)"
@@ -67,6 +79,7 @@ func _ready() -> void:
 	keystone_viewer_node.setup(talents_panel)
 
 	_build_blueprint_buttons()
+	_build_mod_buttons()
 	craft_button.pressed.connect(_on_craft_pressed)
 	crafting_close.pressed.connect(func(): crafting_panel.visible = false)
 
@@ -89,6 +102,7 @@ func _ready() -> void:
 	add_child(inventory_window)
 	inventory_window.close_requested.connect(func(): set_inventory_open(false))
 	inventory_window.slot_double_clicked.connect(func(key: String): inventory_slot_double_clicked.emit(key))
+	inventory_window.inventory_changed.connect(_refresh_inventory_display)
 	inventory_window.visibility_changed.connect(_emit_panel_state)
 
 	dialogue_box = DIALOGUE_BOX_SCENE.instantiate()
@@ -108,6 +122,7 @@ func _bar_fill_style(color: Color) -> StyleBoxFlat:
 func bind(progress: Dictionary, save_fn: Callable) -> void:
 	progress_ref = progress
 	save_callback = save_fn
+	inventory_window.bind_inventory_data(progress_ref)
 	_refresh_cogs()
 	_refresh_inventory_display()
 
@@ -118,12 +133,23 @@ func bind_combat_state(state: Dictionary) -> void:
 
 
 func _refresh_combat_bars() -> void:
+	heat_bar.visible = _is_flame_thrower_equipped()
 	if combat_state_ref.is_empty():
 		return
 	health_bar.max_value = float(combat_state_ref.get("max_health", 500))
 	health_bar.value = float(combat_state_ref.get("current_health", 0))
 	action_bar.max_value = float(combat_state_ref.get("max_action", 850))
 	action_bar.value = float(combat_state_ref.get("current_action", 0))
+	heat_bar.max_value = float(combat_state_ref.get("max_heat", 100))
+	heat_bar.value = float(combat_state_ref.get("current_heat", 0))
+
+
+func _is_flame_thrower_equipped() -> bool:
+	var weapon_name := String(progress_ref.get("equipped_weapon", ""))
+	if weapon_name.is_empty():
+		return false
+	var weapon_def: Dictionary = GameData.ITEM_DEFINITIONS.get(weapon_name, {})
+	return String(weapon_def.get("item_class", "")) == "Flame Thrower"
 
 
 func _process(_delta: float) -> void:
@@ -166,6 +192,7 @@ func _refresh_inventory_display() -> void:
 		entries.append({"key": weapon_name, "label": label, "icon_name": weapon_name, "count": 1})
 	var status := "EQUIPPED WEAPON: %s" % (equipped if not equipped.is_empty() else "None")
 	refresh_inventory(entries, [], int(progress_ref.get("cogs", 0)), status)
+	_refresh_cogs()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -233,6 +260,56 @@ func _build_blueprint_buttons() -> void:
 
 		blueprint_list.add_child(row)
 		icon.set_item(display_name)
+
+
+# Phase 6 Batch 2: the 8 weapon mods have no blueprint/material
+# requirement in the data model, so granting one is a flat Cogs cost
+# rather than a real recipe row -- everything else about mod behavior
+# (stat effects, install rules, grades) is the real, spec'd system.
+func _build_mod_buttons() -> void:
+	for mod_id in CraftingData.MOD_DEFINITIONS.keys():
+		var mod_def: Dictionary = CraftingData.MOD_DEFINITIONS[mod_id]
+		var display_name := String(mod_def.get("display_name", mod_id))
+		var summary := CraftingService.mod_effect_summary(mod_id, "standard")
+
+		var row := VBoxContainer.new()
+
+		var button := Button.new()
+		button.text = "%s (%d Cogs)" % [display_name, MOD_GRANT_COGS_COST]
+		button.tooltip_text = String(mod_def.get("description", ""))
+		button.pressed.connect(_on_mod_grant_pressed.bind(mod_id))
+		row.add_child(button)
+
+		if not summary.is_empty():
+			var summary_label := Label.new()
+			summary_label.text = summary
+			summary_label.add_theme_font_size_override("font_size", 12)
+			row.add_child(summary_label)
+
+		mods_list.add_child(row)
+
+
+func _on_mod_grant_pressed(mod_id: String) -> void:
+	var cogs := int(progress_ref.get("cogs", 0))
+	if cogs < MOD_GRANT_COGS_COST:
+		craft_result_label.text = "Not enough Cogs."
+		return
+	var mod_instance := CraftingService.create_mod(mod_id, "standard")
+	if mod_instance.is_empty():
+		return
+	progress_ref["cogs"] = cogs - MOD_GRANT_COGS_COST
+	var mod_instances: Dictionary = progress_ref.get("mod_instances", {})
+	var mods_owned: Dictionary = progress_ref.get("mods_owned", {})
+	var mod_instance_id := String(mod_instance.get("mod_instance_id", ""))
+	mod_instances[mod_instance_id] = mod_instance
+	mods_owned[mod_instance_id] = true
+	progress_ref["mod_instances"] = mod_instances
+	progress_ref["mods_owned"] = mods_owned
+	if save_callback.is_valid():
+		save_callback.call()
+	_refresh_cogs()
+	var mod_def: Dictionary = CraftingData.get_mod(mod_id)
+	craft_result_label.text = "Granted: %s" % String(mod_def.get("display_name", mod_id))
 
 
 func _refresh_crafting_panel() -> void:

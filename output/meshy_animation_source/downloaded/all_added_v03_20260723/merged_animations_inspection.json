@@ -1,0 +1,193 @@
+{
+  "input": "C:\\My Game\\Steamtek-RPG\\output\\meshy_animation_source\\downloaded\\all_added_v03_20260723\\Meshy_AI_STK_HERO_BaseBody_01__biped\\Meshy_AI_STK_HERO_BaseBody_01__biped_Meshy_AI_Meshy_Merged_Animations.glb",
+  "objects": [
+    {
+      "name": "Armature",
+      "type": "ARMATURE",
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_mode": "QUATERNION",
+      "scale": [
+        0.009999999776482582,
+        0.009999999776482582,
+        0.009999999776482582
+      ],
+      "dimensions": [
+        14.45409870147705,
+        12.493021965026855,
+        12.504579544067383
+      ],
+      "parent": null
+    },
+    {
+      "name": "char1",
+      "type": "MESH",
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_mode": "QUATERNION",
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.5707706212997437,
+        0.9881830215454102,
+        1.3980731964111328
+      ],
+      "parent": "Armature"
+    },
+    {
+      "name": "Icosphere",
+      "type": "MESH",
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_mode": "XYZ",
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        1.9021157026290894,
+        1.9999998807907104,
+        2.0
+      ],
+      "parent": null
+    }
+  ],
+  "armatures": [
+    {
+      "object_name": "Armature",
+      "data_name": "Armature",
+      "bone_count": 24,
+      "bones": [
+        "Hips",
+        "LeftUpLeg",
+        "LeftLeg",
+        "LeftFoot",
+        "LeftToeBase",
+        "RightUpLeg",
+        "RightLeg",
+        "RightFoot",
+        "RightToeBase",
+        "Spine02",
+        "Spine01",
+        "Spine",
+        "LeftShoulder",
+        "LeftArm",
+        "LeftForeArm",
+        "LeftHand",
+        "RightShoulder",
+        "RightArm",
+        "RightForeArm",
+        "RightHand",
+        "neck",
+        "Head",
+        "head_end",
+        "headfront"
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "name": "Crouch_Walk_Left_with_Gun_inplace",
+      "frame_range": [
+        0.0,
+        30.399999618530273
+      ],
+      "frame_count": 31,
+      "fcurve_count": 240,
+      "users": 2
+    },
+    {
+      "name": "Dead",
+      "frame_range": [
+        0.0,
+        71.19999694824219
+      ],
+      "frame_count": 72,
+      "fcurve_count": 240,
+      "users": 1
+    },
+    {
+      "name": "Elbow_Strike",
+      "frame_range": [
+        0.0,
+        59.20000076293945
+      ],
+      "frame_count": 60,
+      "fcurve_count": 240,
+      "users": 1
+    },
+    {
+      "name": "Gunshot_Reaction",
+      "frame_range": [
+        0.0,
+        72.0
+      ],
+      "frame_count": 73,
+      "fcurve_count": 240,
+      "users": 1
+    },
+    {
+      "name": "Rifle_Aim_Turn_Right",
+      "frame_range": [
+        0.0,
+        43.19999694824219
+      ],
+      "frame_count": 44,
+      "fcurve_count": 240,
+      "users": 1
+    },
+    {
+      "name": "Rifle_Turn_Left",
+      "frame_range": [
+        0.0,
+        36.0
+      ],
+      "frame_count": 37,
+      "fcurve_count": 240,
+      "users": 1
+    },
+    {
+      "name": "Running",
+      "frame_range": [
+        0.0,
+        15.199999809265137
+      ],
+      "frame_count": 16,
+      "fcurve_count": 240,
+      "users": 1
+    },
+    {
+      "name": "Standing_Reload",
+      "frame_range": [
+        0.0,
+        79.19999694824219
+      ],
+      "frame_count": 80,
+      "fcurve_count": 240,
+      "users": 1
+    },
+    {
+      "name": "Walking",
+      "frame_range": [
+        0.0,
+        24.799999237060547
+      ],
+      "frame_count": 26,
+      "fcurve_count": 240,
+      "users": 1
+    }
+  ]
+}

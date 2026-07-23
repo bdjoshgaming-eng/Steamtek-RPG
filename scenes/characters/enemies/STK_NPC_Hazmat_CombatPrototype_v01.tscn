@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/characters/templates/Steamtek_HumanoidCharacter3D.tscn" id="1_template"]
+[ext_resource type="PackedScene" path="res://assets/characters/humanoid/base/STK_HERO_BaseBody_01/v01/rigged/STK_HERO_BaseBody_01_Rigged_Combat_v05.glb" id="2_combat_visual"]
+[ext_resource type="Script" path="res://scenes/characters/enemies/stk_npc_hazmat_combat_prototype_v01.gd" id="3_controller"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hazmat"]
+radius = 0.38
+height = 1.83
+
+[node name="STK_NPC_Hazmat_CombatPrototype_v01" instance=ExtResource("1_template")]
+script = ExtResource("3_controller")
+character_scene = ExtResource("2_combat_visual")
+character_instance_name = "CombatVisual"
+player_controlled = false
+model_forward_yaw_offset_degrees = 0.0
+idle_animation_key = "STK_RIFLE_IDLE"
+walk_animation_key = "STK_WALK"
+run_animation_key = "STK_RUN"
+metadata/steamtek_asset_id = "STK_NPC_Hazmat_CombatPrototype_v01"
+metadata/character_class = "enemy_combat_prototype"
+metadata/visual_status = "temporary_base_body_proxy_pending_hazmat_outfit"
+metadata/animation_contract = "SteamtekCombatMotionRig-5"
+metadata/rifle_socket = "RightHand/RifleAttachment/RifleMount"
+metadata/combat_glb = "res://assets/characters/humanoid/base/STK_HERO_BaseBody_01/v01/rigged/STK_HERO_BaseBody_01_Rigged_Combat_v05.glb"
+
+[node name="BodyCollision" parent="." index="0"]
+position = Vector3(0, 0.915, 0)
+shape = SubResource("CapsuleShape3D_hazmat")
+
+[node name="CombatVisual" parent="VisualPivot" index="0" instance=ExtResource("2_combat_visual")]
+
+[node name="CameraTarget" parent="." index="2"]
+position = Vector3(0, 1.5, 0)
+
+[editable path="VisualPivot"]

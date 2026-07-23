@@ -1,10 +1,77 @@
 STEAMTEK RPG - CLAUDE HANDOFF
-Updated: 2026-07-23, 2D deletion + 3D combat/inventory/persistence
-         session (2D main.tscn/main.gd system, described in the
-         "PRE-EXISTING HANDOFF" section far below, IS NOW FULLY
-         DELETED from the working tree as of this session -- read
-         section 2026-07-23 first)
+Updated: 2026-07-23, Live3D combat deep dive (grenade/flame/dodge/
+         buttstroke, Phase 6 Batch 2 mods, Phase 8 repair/dismantle/
+         rebuild, weapon Speed/Ammo/Reload/stamina rework, player
+         chat bubbles) -- read section "SESSION 2026-07-23b" first,
+         then the 2D-deletion session below it. The 2D main.tscn/
+         main.gd system, described in the "PRE-EXISTING HANDOFF"
+         section far below, IS FULLY DELETED from the working tree.
 =============================================================
+
+-------------------------------------------------------------
+SESSION 2026-07-23b -- LIVE3D COMBAT DEEP DIVE (grenades, flame,
+                        mods live, durability/repair, weapon economy)
+-------------------------------------------------------------
+Full detail: docs\claude handoffs\
+  2026-07-23_Live3D_Combat_Deep_Dive.md
+
+SCOPE. Direct continuation of the "2026-07-23" session below (same
+day). Closed out the entire ranged-combat-redesign cluster (Grenade
+Launcher telegraph+physics+collision-damage, Flame Thrower channel,
+Grit DoT/CC, Charged Shot, Buttstroke, Dodge Roll -- all now fully
+built and confirmed working), then kept going into crafting Phase 6
+Batch 2 (mods finally affect combat, not just data), crafting Phase 8
+(durability/repair/dismantle/rebuild), and a full weapon resource-
+economy rework. Read the detail doc -- this is a LOT, and several
+things (grenade damage model, grenade burst-fire, grenade accuracy
+scatter) were built, tested, and explicitly REVERTED within this same
+session based on live feedback, so skimming only the current handoff
+top risks re-proposing something Josh already said no to.
+
+WHAT SHIPPED (one line each, see detail doc for the real substance)
+- Grenade Launcher: real ballistic physics (solved launch velocity,
+  gravity+bounce), damage is DIRECT HIT via continuous contact
+  detection during the whole flight (not a check at the final rest
+  spot -- that was the reliability bug), plus a secondary splash layer
+  for anyone else caught nearby. Splash radius is explicitly reserved
+  for future Rocket Launcher/Arc Cannon, NOT grenades.
+- Flame Thrower: hold-to-channel cone, heat/overheat resource, HUD
+  heat bar (equipped-weapon-conditional).
+- Grit's DoT/CC: ScrapThief's new "Corrosive Grasp" special is the
+  first real consumer of Combat.gd's grit_dot_reduction()/
+  grit_cc_duration_mult(), which existed but had nothing to resist
+  before this session.
+- Charged Shot, Buttstroke, Dodge Roll all fully built and confirmed.
+- Phase 6 Batch 2: mods now actually change combat stats/damage type,
+  not just sit in data. Install/remove UI in the inventory window.
+- Phase 8: durability actually drains from combat now, repair/
+  dismantle/rebuild UI wired to real CraftingService functions.
+- WEAPON SPEED/AMMO/RELOAD/STAMINA REWORK (the biggest structural
+  change): Speed is now a real attack cooldown, Ammo Capacity/Reload
+  Speed drive a real magazine+reload system, and Action was fully
+  repurposed into a stamina pool for sprint/dodge -- weapons/abilities
+  NEVER spend Action anymore, only ammo/heat/durability/cooldowns.
+- Player chat bubbles (WoW/FFXIV-style, blue) separated from quest
+  item dialogue (the modal SteamtekDialogueBox) -- character.say()/
+  think() for speech vs. inner monologue.
+- Universal weapon-equip bug fixed (was apartment-only).
+- Weather F4 debug toggle.
+- Standing color rule set: player telegraphs blue/green
+  (damage/heal), enemy telegraphs red/yellow (damage/CC).
+
+STILL ON HOLD, DO NOT BUILD WITHOUT ASKING FIRST
+- Steamtek Assembly System -- its socket/grade curves are keyed on
+  "floor depth" from the deleted 2D 60-floor system, which has no
+  equivalent anywhere in the Live3D game. Confirmed via grep: nothing
+  in scenes/ calls the campaign generator. Needs a real zone/depth
+  concept to exist first.
+- Crafting Phase 7 (15-node pick-4 crafting keystone) -- the keystone
+  system itself is expected to be reworked.
+
+See the detail doc for exact numbers, file-by-file changes, and the
+full "tried and reverted" history (grenade burst-fire, grenade
+accuracy scatter) so you don't re-propose either.
+
 
 -------------------------------------------------------------
 SESSION 2026-07-23 -- 2D DELETED, 3D COMBAT + INVENTORY BUILT,

@@ -761,3 +761,119 @@ static func mod_effect_summary(mod_id: String, grade_id: String) -> String:
 		if p != 0.0:
 			parts.append(("%+.1f " % (p if stat2 == "Speed" else -p)) + stat2)
 	return ", ".join(parts)
+
+
+# =============================================================
+# MOD INSTALL/REMOVE + FINAL STAT RESOLUTION (Spec Phase 6 Batch 2)
+# =============================================================
+# The piece Batch 1 stopped short of: actually mutating a socket, and
+# turning installed mods into numbers combat can read. Batch 1 only
+# validated (mod_install_problems) and computed deltas in isolation
+# (mod_stat_deltas) -- nothing applied those deltas to a base stat set,
+# and nothing wrote a mod into an item's installed_mod_instance_ids.
+
+
+# Mutates item and mod in place: appends the mod's mod_instance_id onto
+# the item's installed_mod_instance_ids and marks the mod installed_in
+# the item's instance_id. Caller must have already confirmed
+# mod_install_problems(item, mod, installed_mods, weapon_range) is empty.
+static func apply_mod_installation(item: Dictionary, mod: Dictionary) -> void:
+	var installed: Array = item.get("installed_mod_instance_ids", [])
+	var mod_instance_id := String(mod.get("mod_instance_id", ""))
+	if not installed.has(mod_instance_id):
+		installed.append(mod_instance_id)
+	item["installed_mod_instance_ids"] = installed
+	mod["installed_in"] = String(item.get("instance_id", ""))
+
+
+# Reverses apply_mod_installation: frees the socket and marks the mod
+# loose/uninstalled again.
+static func remove_mod_installation(item: Dictionary, mod: Dictionary) -> void:
+	var installed: Array = item.get("installed_mod_instance_ids", [])
+	installed.erase(String(mod.get("mod_instance_id", "")))
+	item["installed_mod_instance_ids"] = installed
+	mod["installed_in"] = ""
+
+
+# Combines a weapon's BASE stats (the low end of a weapon_stat_ranges
+# dict, e.g. GameData.ITEM_DEFINITIONS[weapon]["weapon_stat_ranges"] --
+# same [0] convention every live combat call site already reads) with
+# mod_stat_deltas() from its installed mods, into one final numeric stat
+# dict combat can read directly instead of the raw range.
+static func compute_final_weapon_stats(base_stat_ranges: Dictionary, installed_mods: Array) -> Dictionary:
+	var final_stats: Dictionary = {}
+	for stat in base_stat_ranges.keys():
+		var range_values: Array = base_stat_ranges[stat]
+		final_stats[stat] = float(range_values[0]) if range_values.size() > 0 else 0.0
+	var deltas := mod_stat_deltas(installed_mods)
+	for stat2 in deltas.keys():
+		final_stats[stat2] = float(final_stats.get(stat2, 0.0)) + float(deltas[stat2])
+	return final_stats
+
+
+# Resolves the damage type a weapon should deal: the installed Core
+# mod's damage_type if one exists, else "Kinetic" (spec s8 step 7). Only
+# one Core mod can ever be installed at once -- mod_install_problems'
+# one-per-type rule covers "core" the same as any other mod type.
+static func resolve_damage_type(installed_mods: Array) -> String:
+	for mod in installed_mods:
+		var def = CraftingData.get_mod(String(mod.get("mod_id", "")))
+		if String(def.get("mod_type", "")) == "core":
+			return String(def.get("damage_type", "Kinetic"))
+	return "Kinetic"
+
+
+# =============================================================
+# REPAIR / DISMANTLE / REBUILD (Spec Phase 8)
+# =============================================================
+# current_durability/maximum_durability have existed on CraftedItemInstance
+# since Phase 1 but nothing in the live game ever drained or restored them
+# until now. Combat wear is applied by the caller (steamtek_humanoid_
+# character_3d.gd, scaled by mod_instability_total so a heavily-modded
+# weapon wears out faster); these three functions are what a player DOES
+# about that wear once it exists.
+
+
+# Reduces current_durability by amount (floored at 0). Caller (combat)
+# scales amount by (1.0 + mod_instability_total(installed_mods)) so
+# installed mods make a weapon wear out faster, matching the doc note
+# that instability "feeds durability loss."
+static func drain_durability(item: Dictionary, amount: float) -> void:
+	var current := float(item.get("current_durability", 0.0))
+	item["current_durability"] = maxf(0.0, current - amount)
+
+
+static func is_broken(item: Dictionary) -> bool:
+	return float(item.get("current_durability", 0.0)) <= 0.0
+
+
+# Restores current_durability by amount, capped at maximum_durability.
+# Does not touch installed mods or sockets -- repair only ever restores
+# wear, it never resets the item.
+static func repair_item(item: Dictionary, amount: float) -> void:
+	var current := float(item.get("current_durability", 0.0))
+	var maximum := float(item.get("maximum_durability", 0.0))
+	item["current_durability"] = minf(maximum, current + amount)
+
+
+# Full reset: durability back to maximum AND every installed mod is
+# uninstalled (the item's sockets go back to empty). Returns the
+# mod_instance_ids that were uninstalled so the caller can mark them
+# loose/uninstalled (mods aren't destroyed by a rebuild, just removed).
+static func rebuild_item(item: Dictionary) -> Array:
+	var freed_mod_instance_ids: Array = item.get("installed_mod_instance_ids", []).duplicate()
+	item["installed_mod_instance_ids"] = []
+	item["current_durability"] = float(item.get("maximum_durability", 0.0))
+	return freed_mod_instance_ids
+
+
+# Fraction of the item's durability remaining (0.0-1.0), the basis for a
+# dismantle Cogs refund -- a nearly-broken item gives back much less than
+# a pristine one. Dismantling itself (deleting the item, returning its
+# mods to the player) is the caller's job since it operates on the
+# player's whole inventory, not just this one item dict.
+static func dismantle_refund_fraction(item: Dictionary) -> float:
+	var maximum := float(item.get("maximum_durability", 0.0))
+	if maximum <= 0.0:
+		return 0.0
+	return clampf(float(item.get("current_durability", 0.0)) / maximum, 0.0, 1.0)

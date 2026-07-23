@@ -1,0 +1,51 @@
+{
+  "schema": "SteamtekHeroCombatGLBExport-1",
+  "status": "pass",
+  "source_blend": "C:\\My Game\\Steamtek-RPG\\blender\\character_pipeline\\heroes\\STK_HERO_BaseBody_01_Rigged_Combat_v05.blend",
+  "output_glb": "C:\\My Game\\Steamtek-RPG\\assets\\characters\\humanoid\\base\\STK_HERO_BaseBody_01\\v01\\rigged\\STK_HERO_BaseBody_01_Rigged_Combat_v05.glb",
+  "sha256": "4dc8b1d82e954d027b72649d9c62d1ebeeb314aecacef200ee038f16cc2b5e5b",
+  "bytes": 18290648,
+  "mesh": "STK_HERO_BaseBody_01_RiggedBody",
+  "armature": "STK_HERO_BaseBody_01_Armature",
+  "bones": 24,
+  "actions": [
+    "STK_DEATH_FORWARD",
+    "STK_HIT_REACT_STRONG",
+    "STK_RIFLE_BUTTSTROKE",
+    "STK_RIFLE_CROUCH_STRAFE_LEFT",
+    "STK_RIFLE_CROUCH_STRAFE_RIGHT",
+    "STK_RIFLE_FIRE",
+    "STK_RIFLE_IDLE",
+    "STK_RIFLE_RELOAD",
+    "STK_RIFLE_TURN_LEFT",
+    "STK_RIFLE_TURN_RIGHT",
+    "STK_RUN",
+    "STK_WALK"
+  ],
+  "triangles": 31138,
+  "materials": [
+    "STK_MAT_HERO_BaseBody_01",
+    "STK_MAT_HERO_BaseBody_01_Hair"
+  ],
+  "export_options": {
+    "filepath": "C:\\My Game\\Steamtek-RPG\\assets\\characters\\humanoid\\base\\STK_HERO_BaseBody_01\\v01\\rigged\\STK_HERO_BaseBody_01_Rigged_Combat_v05.glb",
+    "export_format": "GLB",
+    "use_selection": true,
+    "export_apply": false,
+    "export_yup": true,
+    "export_materials": "EXPORT",
+    "export_image_format": "AUTO",
+    "export_cameras": false,
+    "export_lights": false,
+    "export_animations": true,
+    "export_animation_mode": "ACTIONS",
+    "export_anim_single_armature": true,
+    "export_force_sampling": true,
+    "export_frame_step": 1,
+    "export_skins": true,
+    "export_all_influences": false,
+    "export_morph": false,
+    "export_attributes": false,
+    "export_extras": true
+  }
+}

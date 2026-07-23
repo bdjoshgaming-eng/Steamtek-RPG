@@ -1,0 +1,123 @@
+{
+  "input": "C:\\My Game\\Steamtek-RPG\\assets\\characters\\humanoid\\base\\STK_HERO_BaseBody_01\\v01\\rigged\\STK_HERO_BaseBody_01_Rigged_MeshyMotion_v04.glb",
+  "objects": [
+    {
+      "name": "Icosphere",
+      "type": "MESH",
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_mode": "XYZ",
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        1.9021157026290894,
+        1.9999998807907104,
+        2.0
+      ],
+      "parent": null
+    },
+    {
+      "name": "STK_HERO_BaseBody_01_Armature",
+      "type": "ARMATURE",
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_mode": "QUATERNION",
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.6195113658905029,
+        0.8850365281105042,
+        1.5706865787506104
+      ],
+      "parent": null
+    },
+    {
+      "name": "STK_HERO_BaseBody_01_RiggedBody",
+      "type": "MESH",
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_mode": "QUATERNION",
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.6536496877670288,
+        0.992435097694397,
+        1.7617065906524658
+      ],
+      "parent": "STK_HERO_BaseBody_01_Armature"
+    }
+  ],
+  "armatures": [
+    {
+      "object_name": "STK_HERO_BaseBody_01_Armature",
+      "data_name": "STK_HERO_BaseBody_01_Armature",
+      "bone_count": 24,
+      "bones": [
+        "Hips",
+        "LeftUpLeg",
+        "LeftLeg",
+        "LeftFoot",
+        "LeftToeBase",
+        "RightUpLeg",
+        "RightLeg",
+        "RightFoot",
+        "RightToeBase",
+        "Spine02",
+        "Spine01",
+        "Spine",
+        "LeftShoulder",
+        "LeftArm",
+        "LeftForeArm",
+        "LeftHand",
+        "RightShoulder",
+        "RightArm",
+        "RightForeArm",
+        "RightHand",
+        "neck",
+        "Head",
+        "head_end",
+        "headfront"
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "name": "STK_RUN",
+      "frame_range": [
+        0.0,
+        15.0
+      ],
+      "frame_count": 16,
+      "fcurve_count": 240,
+      "users": 2
+    },
+    {
+      "name": "STK_WALK",
+      "frame_range": [
+        0.0,
+        24.0
+      ],
+      "frame_count": 25,
+      "fcurve_count": 240,
+      "users": 1
+    }
+  ]
+}

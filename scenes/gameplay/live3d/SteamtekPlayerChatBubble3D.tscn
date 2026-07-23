@@ -1,0 +1,69 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scenes/gameplay/live3d/steamtek_player_chat_bubble_3d.gd" id="1_script"]
+
+[sub_resource type="LabelSettings" id="LabelSettings"]
+font_size = 15
+font_color = Color(0.12, 0.1, 0.08, 1)
+outline_size = 0
+
+[sub_resource type="StyleBoxFlat" id="BubbleStyle"]
+bg_color = Color(0.96, 0.94, 0.88, 0.97)
+border_color = Color(0.35, 0.3, 0.24, 0.6)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_left = 8
+corner_radius_bottom_right = 8
+content_margin_left = 10.0
+content_margin_top = 7.0
+content_margin_right = 10.0
+content_margin_bottom = 7.0
+shadow_color = Color(0, 0, 0, 0.3)
+shadow_size = 3
+
+[node name="SteamtekPlayerChatBubble3D" type="Node3D"]
+editor_description = "WoW/FFXIV-style floating bubble above the player character's head. Fully driven at runtime by steamtek_humanoid_character_3d.gd's say()/say_sequence() (speech, pointed tail) and think()/think_sequence() (inner monologue, trailing dots) -- panel auto-sizes to text, advances on the interact key."
+script = ExtResource("1_script")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Panel" type="PanelContainer" parent="CanvasLayer"]
+visible = false
+theme_override_styles/panel = SubResource("BubbleStyle")
+
+[node name="Label" type="Label" parent="CanvasLayer/Panel"]
+custom_minimum_size = Vector2(180, 0)
+label_settings = SubResource("LabelSettings")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Tail" type="Polygon2D" parent="CanvasLayer/Panel"]
+color = Color(0.96, 0.94, 0.88, 0.97)
+polygon = PackedVector2Array(-7, 0, 7, 0, 0, 10)
+
+[node name="TailBorderLeft" type="Line2D" parent="CanvasLayer/Panel"]
+points = PackedVector2Array(-7, 0, 0, 10)
+width = 1.0
+default_color = Color(0.35, 0.3, 0.24, 0.6)
+
+[node name="TailBorderRight" type="Line2D" parent="CanvasLayer/Panel"]
+points = PackedVector2Array(7, 0, 0, 10)
+width = 1.0
+default_color = Color(0.35, 0.3, 0.24, 0.6)
+
+[node name="ThoughtDot1" type="Polygon2D" parent="CanvasLayer/Panel"]
+visible = false
+color = Color(0.96, 0.94, 0.88, 0.97)
+
+[node name="ThoughtDot2" type="Polygon2D" parent="CanvasLayer/Panel"]
+visible = false
+color = Color(0.96, 0.94, 0.88, 0.97)
+
+[node name="ThoughtDot3" type="Polygon2D" parent="CanvasLayer/Panel"]
+visible = false
+color = Color(0.96, 0.94, 0.88, 0.97)

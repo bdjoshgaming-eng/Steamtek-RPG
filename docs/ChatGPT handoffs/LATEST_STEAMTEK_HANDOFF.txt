@@ -3,6 +3,10 @@ Updated: 2026-07-23
 
 Primary current continuation:
 
+C:\My Game\Steamtek-RPG\docs\ChatGPT handoffs\2026-07-23_STEAMTEK_HERO_COMBAT_AND_HAZMAT_SCENE_HANDOFF.txt
+
+Earlier same-day character repair and Meshy preparation context:
+
 C:\My Game\Steamtek-RPG\docs\ChatGPT handoffs\2026-07-23_STEAMTEK_CHARACTER_ASSET_AND_MESHY_RIGGING_HANDOFF.txt
 
 Full visible current chat (July 22-23):
@@ -11,12 +15,16 @@ C:\My Game\Steamtek-RPG\docs\ChatGPT handoffs\2026-07-23_STEAMTEK_CHAT_TRANSCRIP
 
 Current character continuation state:
 
-- STK_HERO_BaseBody_01 repair master is approved and remains unrigged.
-- Upload STK_HERO_BaseBody_01_MeshyRigInput.glb for Meshy auto-rigging.
-- The Meshy copy has one mesh, one opaque material, one UV atlas, and 31,138 triangles.
-- Single-sided 360-degree QA found no black patches or missing polygons.
-- Do not use the rejected C001 skeleton as the SCU or hero rig baseline.
-- Preserve the approved production source and save Meshy's return as a new derivative.
+- The approved v04 Blender source and production GLB remain unchanged.
+- The combat-ready v05 GLB is:
+  C:\My Game\Steamtek-RPG\assets\characters\humanoid\base\STK_HERO_BaseBody_01\v01\rigged\STK_HERO_BaseBody_01_Rigged_Combat_v05.glb
+- It has one skinned body, a 24-bone rig, 31,138 triangles, and 12 validated animations.
+- The Godot Hazmat combat-prototype scene is:
+  C:\My Game\Steamtek-RPG\scenes\characters\enemies\STK_NPC_Hazmat_CombatPrototype_v01.tscn
+- The scene passed Godot runtime validation and creates a rifle mount from the RightHand bone.
+- The visible body is still a temporary base-body proxy. Hazmat clothing, the actual rifle visual,
+  muzzle setup, enemy AI, combat stats, and damage logic remain future work.
+- Claude Code should start from the Godot scene, not instantiate the GLB directly.
 
 Subsystem authority retained:
 

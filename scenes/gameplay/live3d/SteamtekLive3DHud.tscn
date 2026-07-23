@@ -16,7 +16,7 @@ anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 24.0
-offset_top = -132.0
+offset_top = -158.0
 offset_right = 344.0
 offset_bottom = -64.0
 grow_vertical = 0
@@ -27,6 +27,12 @@ layout_mode = 2
 show_percentage = false
 
 [node name="ActionBar" type="ProgressBar" parent="Bars"]
+custom_minimum_size = Vector2(320, 22)
+layout_mode = 2
+show_percentage = false
+
+[node name="HeatBar" type="ProgressBar" parent="Bars"]
+visible = false
 custom_minimum_size = Vector2(320, 22)
 layout_mode = 2
 show_percentage = false
@@ -161,12 +167,32 @@ columns = 3
 offset_left = 660.0
 offset_top = 60.0
 offset_right = 900.0
-offset_bottom = 400.0
+offset_bottom = 260.0
 
 [node name="Label" type="Label" parent="CraftingPanel/Carried"]
 layout_mode = 2
 text = "Carried Materials"
 label_settings = SubResource("LabelSettings")
+
+[node name="Mods" type="VBoxContainer" parent="CraftingPanel"]
+offset_left = 660.0
+offset_top = 270.0
+offset_right = 900.0
+offset_bottom = 560.0
+
+[node name="Label" type="Label" parent="CraftingPanel/Mods"]
+layout_mode = 2
+text = "Mods (Grant)"
+label_settings = SubResource("LabelSettings")
+
+[node name="Scroll" type="ScrollContainer" parent="CraftingPanel/Mods"]
+custom_minimum_size = Vector2(0, 250)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="List" type="VBoxContainer" parent="CraftingPanel/Mods/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="CraftButton" type="Button" parent="CraftingPanel"]
 offset_left = 280.0

@@ -61,22 +61,68 @@ offset_bottom = 32.0
 text = "Details"
 label_settings = SubResource("DetailsTitleSettings")
 
-[node name="ItemName" type="Label" parent="Details"]
+[node name="Scroll" type="ScrollContainer" parent="Details"]
 offset_left = 10.0
 offset_top = 38.0
 offset_right = 250.0
-offset_bottom = 62.0
+offset_bottom = 600.0
+
+[node name="Content" type="VBoxContainer" parent="Details/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="ItemName" type="Label" parent="Details/Scroll/Content"]
+layout_mode = 2
 text = "Select an item to view its details."
 autowrap_mode = 2
 label_settings = SubResource("DetailsStatsSettings")
 
-[node name="Stats" type="Label" parent="Details"]
-offset_left = 10.0
-offset_top = 68.0
-offset_right = 250.0
-offset_bottom = 600.0
+[node name="Stats" type="Label" parent="Details/Scroll/Content"]
+layout_mode = 2
 autowrap_mode = 2
 label_settings = SubResource("DetailsStatsSettings")
+
+[node name="ModsPanel" type="VBoxContainer" parent="Details/Scroll/Content"]
+visible = false
+layout_mode = 2
+
+[node name="DurabilityPanel" type="VBoxContainer" parent="Details/Scroll/Content/ModsPanel"]
+visible = false
+layout_mode = 2
+
+[node name="DurabilityLabel" type="Label" parent="Details/Scroll/Content/ModsPanel/DurabilityPanel"]
+layout_mode = 2
+text = "Durability: --"
+label_settings = SubResource("DetailsTitleSettings")
+
+[node name="RepairButton" type="Button" parent="Details/Scroll/Content/ModsPanel/DurabilityPanel"]
+layout_mode = 2
+text = "Repair"
+
+[node name="RebuildButton" type="Button" parent="Details/Scroll/Content/ModsPanel/DurabilityPanel"]
+layout_mode = 2
+text = "Rebuild"
+
+[node name="DismantleButton" type="Button" parent="Details/Scroll/Content/ModsPanel/DurabilityPanel"]
+layout_mode = 2
+text = "Dismantle"
+
+[node name="SocketsLabel" type="Label" parent="Details/Scroll/Content/ModsPanel"]
+layout_mode = 2
+text = "Sockets"
+label_settings = SubResource("DetailsTitleSettings")
+
+[node name="SocketList" type="VBoxContainer" parent="Details/Scroll/Content/ModsPanel"]
+layout_mode = 2
+
+[node name="OwnedModsLabel" type="Label" parent="Details/Scroll/Content/ModsPanel"]
+layout_mode = 2
+text = "Owned Mods"
+label_settings = SubResource("DetailsTitleSettings")
+
+[node name="OwnedModsList" type="VBoxContainer" parent="Details/Scroll/Content/ModsPanel"]
+layout_mode = 2
 
 [node name="Header" type="Control" parent="."]
 offset_left = 298.0
