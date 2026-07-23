@@ -1,0 +1,13 @@
+{
+  "asset_id": "STK_HERO_BaseBody_01",
+  "purpose": "Meshy rigging upload with Keep Original Texture and UV",
+  "output": "C:\\My Game\\Steamtek-RPG\\output\\meshy_upload\\STK_HERO_BaseBody_01_MeshyUpload.glb",
+  "bytes": 17390828,
+  "sha256": "1510f26fe549bda3c50568c2a2dd6d0b15d7ac4c32c2bf21fe3be55b8bc3f19d",
+  "mesh_objects": 1,
+  "materials": 1,
+  "uv_layers": 1,
+  "triangles": 31138,
+  "geometry_changed": false,
+  "production_master_changed": false
+}

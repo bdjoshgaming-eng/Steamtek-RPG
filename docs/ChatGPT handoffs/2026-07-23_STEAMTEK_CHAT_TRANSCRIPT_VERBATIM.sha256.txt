@@ -1,0 +1,5 @@
+04a79125dd0f615822dffa9c45f5cdf6fd9ec1bfdb346502a7ba945d4453c83c  2026-07-23_STEAMTEK_CHAT_TRANSCRIPT_VERBATIM.txt
+source_session=C:\Users\bdjos\.codex\sessions\2026\07\22\rollout-2026-07-22T22-20-32-019f8cfd-1d79-7353-a1b7-e0fb77b507ce.jsonl
+embedded_body_sha256=cc6129d1a65aa8768a05c6d9d83320afca01872b5dfb7881c350272c69cc0e0e
+visible_entries=139
+capture_through=2026-07-23 09:12:05 AM CDT

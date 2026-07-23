@@ -1,0 +1,82 @@
+STEAMTEK CHARACTER-ASSET AND MESHY RIGGING HANDOFF
+Date: 2026-07-23
+Project: C:\My Game\Steamtek-RPG
+
+AUTHORITY
+
+This is the current continuation authority for STK_NPC_SCU_Mk1,
+STK_HERO_BaseBody_01, and the hero Meshy auto-rigging input. It supersedes
+older character-status notes where they conflict. The July 22 street-kit
+handoff remains authoritative for walls, sidewalks, Builder integration, and
+the paused road tile. The complete visible current task, including its
+late-evening July 22 start and July 23 continuation, is preserved in:
+
+C:\My Game\Steamtek-RPG\docs\ChatGPT handoffs\2026-07-23_STEAMTEK_CHAT_TRANSCRIPT_VERBATIM.txt
+
+1. STK_NPC_SCU_Mk1 has passed mesh, material, scale, LOD, and Godot intake, with
+LOD0/LOD1/LOD2 at 18,000 / 10,000 / 4,500 triangles. The production GLB is
+assets/characters/humanoid/base/STK_NPC_SCU_Mk1/v01/STK_NPC_SCU_Mk1.glb and
+the wrapper is scenes/characters/enemies/STK_NPC_SCU_Mk1.tscn. The transferred
+C001 skin was rejected after F6 exposed severe arm deformation. The wrapper
+therefore displays the untouched static mesh; animation is deliberately
+disabled. Do not use C001 as the baseline for future SCU or hero rigging. A
+new, internally consistent Meshy rig is the preferred direction.
+
+2. STK_HERO_BaseBody_01 is the approved unrigged hero repair master at
+assets/characters/humanoid/base/STK_HERO_BaseBody_01/v01/STK_HERO_BaseBody_01.glb.
+It remains one mesh at 31,138 triangles, 1.83 m / 6 ft tall, grounded at Y=0,
+root scale 1,1,1, and in the original mild A-pose. The face, hairstyle,
+proportions, five readable fingers per hand, and readable toe structure were
+preserved. Hair uses a dedicated matte-black material; the body response was
+changed to non-metallic with higher roughness to remove the apparent upper-arm
+shading bulge. The user accepted the hair under neutral lighting and approved
+the corrected body geometry. The original incoming GLB remains unchanged.
+
+3. The upload-ready Meshy derivative is
+output/meshy_rig_input/STK_HERO_BaseBody_01_MeshyRigInput.glb. It is a separate,
+unrigged copy containing exactly one mesh object, one opaque material named
+STK_MAT_HERO_MeshyRigInput, one UV map, 31,138 triangles, and one 4096 x 4096
+base-color atlas. The approved skin, black hair, shirt, and shorts appearance
+was transferred into the atlas. Alpha blending/masking, emissive output,
+unsupported material graphs, metallic/roughness texture dependencies, and
+normal-map tangent risk were removed. The approved production source was not
+modified or overwritten.
+
+4. The repeated jagged black/missing regions were traced to mixed triangle
+winding hidden by the production source's double-sided materials, combined
+with the two-material/overlapping-UV arrangement. The rigging copy reoriented
+20,526 inward-facing triangles, repaired 15 collapsed source UV triangles,
+created a non-overlapping atlas, applied transforms, and passed fresh GLB
+reimport validation. Final checks found one mesh, one material, one UV map,
+zero inward faces, zero duplicate faces, and a closed positional-weld shell
+with zero boundary, overfull, wire, or degenerate edges. An eight-angle
+single-sided 360-degree review showed no black patches, missing polygons, or
+incorrect appearance regions.
+
+5. The next action is to upload only
+STK_HERO_BaseBody_01_MeshyRigInput.glb to Meshy for auto-rigging. Keep the
+approved production GLB unchanged and save Meshy's rigged return as a new
+incoming derivative. Before promotion, inspect the rigged return through a
+full rotation and test shoulders, elbows, wrists, fingers, hips, knees,
+ankles, toes, neck, and hair/scalp deformation. Then validate it in a normal
+Godot F6 review scene. Do not retarget or compare deformation against the
+rejected C001 skeleton.
+
+KEY REPORTS AND QA
+
+- Hero repair report:
+  C:\My Game\Steamtek-RPG\docs\reviews\characters\STK_HERO_BaseBody_01\STK_HERO_BaseBody_01_Completion_Report.md
+- Meshy rigging-input report:
+  C:\My Game\Steamtek-RPG\output\meshy_rig_input\STK_HERO_BaseBody_01_MeshyRigInput_Report.md
+- Meshy 360-degree contact sheet:
+  C:\My Game\Steamtek-RPG\output\meshy_rig_input\turnaround\STK_HERO_BaseBody_01_MeshyRigInput_TurnaroundContactSheet.png
+- SCU completion report:
+  C:\My Game\Steamtek-RPG\docs\reviews\characters\STK_NPC_SCU_Mk1\STK_NPC_SCU_Mk1_Completion_Report.md
+- Transcript verification:
+  C:\My Game\Steamtek-RPG\docs\ChatGPT handoffs\2026-07-23_STEAMTEK_CHAT_TRANSCRIPT_VERBATIM.sha256.txt
+
+WORKTREE SAFETY
+
+The repository contains unrelated modified and untracked files. Preserve them.
+Do not reset, clean, delete, revert, or overwrite unrelated work. No commit was
+created as part of this character-asset handoff.

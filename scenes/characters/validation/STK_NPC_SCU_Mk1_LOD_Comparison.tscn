@@ -1,0 +1,135 @@
+[gd_scene format=3 uid="uid://cm46rh12c5s07"]
+
+[ext_resource type="Script" uid="uid://clur5cusqgpla" path="res://scenes/characters/validation/stk_npc_scu_mk1_lod_comparison.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/characters/enemies/STK_NPC_SCU_Mk1.tscn" id="2_scu"]
+
+[sub_resource type="Environment" id="Environment_review"]
+background_mode = 1
+background_color = Color(0.018, 0.026, 0.035, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.38, 0.48, 0.58, 1)
+ambient_light_energy = 0.55
+tonemap_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
+albedo_color = Color(0.055, 0.075, 0.085, 1)
+metallic = 0.25
+roughness = 0.82
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_floor"]
+material = SubResource("StandardMaterial3D_floor")
+size = Vector2(8, 5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lod0"]
+shading_mode = 0
+albedo_color = Color(0.05, 0.72, 0.88, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lod0"]
+material = SubResource("StandardMaterial3D_lod0")
+size = Vector3(0.02, 0.02, 1.3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lod1"]
+shading_mode = 0
+albedo_color = Color(0.95, 0.62, 0.08, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lod1"]
+material = SubResource("StandardMaterial3D_lod1")
+size = Vector3(0.02, 0.02, 1.3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lod2"]
+shading_mode = 0
+albedo_color = Color(0.86, 0.08, 0.48, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lod2"]
+material = SubResource("StandardMaterial3D_lod2")
+size = Vector3(0.02, 0.02, 1.3)
+
+[node name="STK_NPC_SCU_Mk1_LOD_Comparison" type="Node3D" unique_id=6885416]
+script = ExtResource("1_script")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=610222434]
+environment = SubResource("Environment_review")
+
+[node name="KeyLight" type="DirectionalLight3D" parent="." unique_id=1205352846]
+transform = Transform3D(0.81915206, 0.45198438, -0.35312894, 0, 0.6156615, 0.7880107, 0.57357645, -0.6455006, 0.5043204, 0, 0, 0)
+light_color = Color(0.88, 0.93, 1, 1)
+light_energy = 1.45
+shadow_enabled = true
+
+[node name="CyanRim" type="OmniLight3D" parent="." unique_id=1112961518]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.2, 2.4, 1.2)
+light_color = Color(0.08, 0.78, 1, 1)
+light_energy = 7.0
+omni_range = 6.0
+
+[node name="MagentaRim" type="OmniLight3D" parent="." unique_id=724216737]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, 2.2, -1.4)
+visible = false
+light_color = Color(1, 0.06, 0.48, 1)
+light_energy = 5.5
+omni_range = 6.0
+
+[node name="Floor" type="MeshInstance3D" parent="." unique_id=1394547603]
+mesh = SubResource("PlaneMesh_floor")
+
+[node name="LOD0GroundMarker" type="MeshInstance3D" parent="." unique_id=1172344557]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.65, 0.012, 0)
+mesh = SubResource("BoxMesh_lod0")
+
+[node name="LOD1GroundMarker" type="MeshInstance3D" parent="." unique_id=469647045]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, 0)
+mesh = SubResource("BoxMesh_lod1")
+
+[node name="LOD2GroundMarker" type="MeshInstance3D" parent="." unique_id=398693114]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.65, 0.012, 0)
+mesh = SubResource("BoxMesh_lod2")
+
+[node name="LOD0_SCU" parent="." unique_id=1066847972 instance=ExtResource("2_scu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.65, 0, 0)
+lod0_end_distance = 14.0
+lod1_end_distance = 28.0
+animation_preview_enabled = false
+
+[node name="LOD1_SCU" parent="." unique_id=1725670671 instance=ExtResource("2_scu")]
+lod0_end_distance = 14.0
+lod1_end_distance = 28.0
+animation_preview_enabled = false
+
+[node name="LOD2_SCU" parent="." unique_id=2090511061 instance=ExtResource("2_scu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.65, 0, 0)
+lod0_end_distance = 14.0
+lod1_end_distance = 28.0
+animation_preview_enabled = false
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1679748915]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.8, 4.5, 7.4)
+projection = 1
+current = true
+size = 4.2
+
+[node name="ReviewUI" type="CanvasLayer" parent="." unique_id=462150446]
+
+[node name="Title" type="Label" parent="ReviewUI" unique_id=1057746281]
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 980.0
+offset_bottom = 52.0
+theme_override_colors/font_color = Color(0.28, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "STK_NPC_SCU_Mk1 — SIDE-BY-SIDE LOD REVIEW"
+
+[node name="Status" type="Label" parent="ReviewUI" unique_id=1128039557]
+offset_left = 24.0
+offset_top = 62.0
+offset_right = 1200.0
+offset_bottom = 90.0
+theme_override_colors/font_color = Color(0.88, 0.94, 0.96, 1)
+text = "LOD0: 18,000 tris     LOD1: 10,000 tris     LOD2: 4,500 tris + SAFETY ORANGE TEST     Yaw: 0 deg"
+
+[node name="Controls" type="Label" parent="ReviewUI" unique_id=1213201458]
+offset_left = 24.0
+offset_top = 96.0
+offset_right = 980.0
+offset_bottom = 124.0
+theme_override_colors/font_color = Color(0.62, 0.72, 0.76, 1)
+text = "Left/Right: rotate all three together     Animation/skin disabled pending approved rig pass"

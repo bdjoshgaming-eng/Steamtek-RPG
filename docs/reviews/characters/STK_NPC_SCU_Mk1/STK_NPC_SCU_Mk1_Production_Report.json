@@ -1,0 +1,139 @@
+{
+  "schema": "SteamtekRegularEnemyProduction-1",
+  "asset_id": "STK_NPC_SCU_Mk1",
+  "source": "C:\\My Game\\Steamtek-RPG\\incoming\\meshy_enemy_npc\\STK_NPC_SCU_Mk1.glb",
+  "shared_rig_source": "C:\\My Game\\Steamtek-RPG\\assets\\characters\\humanoid\\base\\STK_C001_Protagonist\\v01\\STK_C001_Protagonist_RigAnim_v01.glb",
+  "source_triangle_count": 32658,
+  "lod_triangle_counts": {
+    "LOD0": 18000,
+    "LOD1": 10000,
+    "LOD2": 4500
+  },
+  "lod_targets": {
+    "LOD0": 18000,
+    "LOD1": 10000,
+    "LOD2": 4500
+  },
+  "material": {
+    "material": "STK_MAT_SCU_BodyArmorEmissive",
+    "material_count": 1,
+    "textures": [
+      {
+        "name": "STK_NPC_SCU_Mk1_Baked_BaseColor",
+        "original_size": [
+          4096,
+          4096
+        ],
+        "production_size": [
+          2048,
+          2048
+        ],
+        "packed": true
+      },
+      {
+        "name": "STK_NPC_SCU_Mk1_Baked_Emit",
+        "original_size": [
+          4096,
+          4096
+        ],
+        "production_size": [
+          2048,
+          2048
+        ],
+        "packed": true
+      },
+      {
+        "name": "STK_NPC_SCU_Mk1_Baked_MetallicRoughness",
+        "original_size": [
+          4096,
+          4096
+        ],
+        "production_size": [
+          2048,
+          2048
+        ],
+        "packed": true
+      }
+    ],
+    "roughness_floor": 0.62,
+    "emission_preserved": true
+  },
+  "scale_and_grounding": {
+    "source_size_m": [
+      1.055874,
+      0.699355,
+      1.897771
+    ],
+    "internal_scale_factor": 0.8957874972492453,
+    "internal_bounds_m": {
+      "minimum": [
+        -0.472919,
+        -0.313237,
+        0.0
+      ],
+      "maximum": [
+        0.472919,
+        0.313237,
+        1.699999
+      ],
+      "size": [
+        0.945839,
+        0.626473,
+        1.699999
+      ]
+    },
+    "physical_height_m": 1.8288,
+    "godot_visual_scale": 1.075765
+  },
+  "geometry_cleanup": {
+    "before": {
+      "vertices": 31151,
+      "edges": 61544,
+      "faces": 32658
+    },
+    "after": {
+      "vertices": 31151,
+      "edges": 61544,
+      "faces": 32658
+    },
+    "loose_vertices_removed": 0,
+    "mesh_validate_changed_data": false,
+    "non_manifold_edges_after": 25114,
+    "boundary_edges_after": 25114,
+    "normals_recalculated": true,
+    "uv_seams_preserved": true,
+    "merge_by_distance_skipped_to_preserve_uv_and_normal_seams": true
+  },
+  "rigging": {
+    "source_mesh": "STK_C001_Protagonist_Body",
+    "shared_armature": "STK_C001_Protagonist_Rig",
+    "vertex_groups": 24,
+    "unweighted_vertices": 0,
+    "maximum_source_influences": 7,
+    "influences_trimmed_above_four": 3670,
+    "maximum_production_influences": 4
+  },
+  "animations": [
+    "STK_IDLE",
+    "STK_RUN",
+    "STK_WALK"
+  ],
+  "sockets": [
+    "SOCKET_Head",
+    "SOCKET_Hand_R",
+    "SOCKET_Hand_L",
+    "SOCKET_Back"
+  ],
+  "forward_orientation": "-Z in Godot / -Y in Blender",
+  "root_scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "output_glb": "C:\\My Game\\Steamtek-RPG\\assets\\characters\\humanoid\\base\\STK_NPC_SCU_Mk1\\v01\\STK_NPC_SCU_Mk1.glb",
+  "output_blend": "C:\\My Game\\Steamtek-RPG\\blender\\character_pipeline\\enemies\\STK_NPC_SCU_Mk1.blend",
+  "errors": [],
+  "passed": true,
+  "output_glb_bytes": 12789076,
+  "exported": true
+}

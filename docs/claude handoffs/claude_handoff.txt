@@ -1,9 +1,63 @@
 STEAMTEK RPG - CLAUDE HANDOFF
-Updated: 2026-07-22, Live3D apartment + UI framework session
-         (crafting/combat sections below are UNCHANGED from the
-         prior handoff -- this session did not touch main.tscn,
-         main.gd, or the crafting/combat systems at all)
+Updated: 2026-07-23, 2D deletion + 3D combat/inventory/persistence
+         session (2D main.tscn/main.gd system, described in the
+         "PRE-EXISTING HANDOFF" section far below, IS NOW FULLY
+         DELETED from the working tree as of this session -- read
+         section 2026-07-23 first)
 =============================================================
+
+-------------------------------------------------------------
+SESSION 2026-07-23 -- 2D DELETED, 3D COMBAT + INVENTORY BUILT,
+                       PERSISTENCE REMOVED
+-------------------------------------------------------------
+Full detail: docs\claude handoffs\
+  2026-07-23_3D_Pivot_Combat_And_Persistence_Removal.md
+
+SCOPE. The 2D prototype (scenes/main.gd, main.tscn, player.gd,
+enemy.tscn, and every sibling 2D-only UI script) was permanently
+deleted this session at Josh's explicit request ("I want the 2d
+prototype scene gone, obliterated. no trace left. 3d is the way
+forward"). Commit 39846d2. Everything in the "PRE-EXISTING HANDOFF"
+section below this point describes that now-deleted system --
+treat it as historical/git-archaeology reference only, recoverable
+from commit 31122e5, NOT live code. GameData.gd/Combat.gd/
+CombatData.gd/KeystoneViewer.gd/systems/crafting/*.gd survived --
+those are shared with, and now exclusively used by, the 3D pipeline.
+
+WHAT SHIPPED
+- Full 2D prototype deletion (see file manifest in the detail doc).
+- A global inventory system: items/weapons/cogs/equipped-weapon now
+  shared across every Live3D scene (apartment/lantern/surface)
+  instead of each scene keeping its own disconnected copy, and the
+  [I] inventory panel now works in every scene, not just the
+  apartment. Fixed by extending the SteamtekLive3DProgressStore
+  autoload (get_global_inventory/save_global_inventory), NOT by
+  adding a new autoload.
+- HARD LESSON: an earlier attempt added two NEW autoload singletons
+  (SteamtekPlayerCombatState, SteamtekPlayerInventory) and hit a
+  Godot 4.7 editor UID-cache desync bug ("Failed to create an
+  autoload, can't load from UID or path") that blocked the game from
+  launching at all, and that a full "Reload Current Project" did NOT
+  fix. STANDING RULE: never register a new autoload singleton for
+  shared runtime state -- always extend SteamtekLive3DProgressStore
+  with a new key/method instead.
+- Basic 3D ranged combat: mouse-aim + left-click hitscan attack,
+  shared player health/action pool (same safe extend-the-store
+  pattern), enemy chase/attack/receive-damage loop, confirmed working
+  end-to-end in-game (fired on the ScrapThief, its health dropped).
+  Scope is intentionally basic -- no telegraphs/AoE for Grenade
+  Launcher or Flame Thrower yet, no Grit/Charged Shot/Dodge Roll
+  (those are still 2D-only design intent, not rebuilt in 3D).
+- Persistence removed ENTIRELY per Josh's explicit request ("please
+  delete the persistant game code. Ill just start a new game every
+  time.") -- SteamtekLive3DProgressStore no longer touches
+  FileAccess/user:// at all, it's a pure in-memory Dictionary cache
+  for the lifetime of the running process. Cross-scene consistency
+  within ONE session still works (autoloads survive scene changes on
+  their own); a fresh Play always starts completely clean now.
+
+See the detail doc for exact code-level specifics on every item above.
+
 
 -------------------------------------------------------------
 SESSION 2026-07-22 -- LIVE3D APARTMENT + REUSABLE UI FRAMEWORK
@@ -190,7 +244,15 @@ OPEN / NOT YET DONE
   crate still does, untouched, not requested).
 
 =============================================================
-BELOW THIS LINE: PRE-EXISTING HANDOFF, UNCHANGED
+BELOW THIS LINE: PRE-EXISTING HANDOFF -- 2D PROTOTYPE, DELETED
+2026-07-23 (commit 39846d2). NONE OF THIS CODE IS LIVE ANYMORE.
+main.gd, main.tscn, player.gd, enemy.tscn, and every 2D-only UI
+script (CraftingPanel.gd, InventoryBook.gd, AbilityBook.gd, etc.)
+described below no longer exist in the working tree. Kept here
+purely as historical/design reference -- the exact numbers and
+mechanics are still recoverable from commit 31122e5 if ever worth
+rebuilding against the 3D character/scene architecture instead.
+Do not propose editing any file named below as if it still exists.
 =============================================================
 
 >> See docs/claude handoffs/STEAMTEK_WORKFLOW.md for the session

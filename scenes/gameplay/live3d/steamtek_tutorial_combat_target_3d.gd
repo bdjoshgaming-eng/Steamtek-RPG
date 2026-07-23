@@ -16,6 +16,8 @@ enum AiState { IDLE, CHASE, LEASH }
 @export var patrol_radius := 1.6
 @export var patrol_pause_min := 1.5
 @export var patrol_pause_max := 3.5
+@export var attack_cooldown := 2.5
+@export var attack_contact_distance := 1.1
 
 const LEASH_SPEED_MULTIPLIER := 1.6
 const LEASH_ARRIVE_DISTANCE := 0.35
@@ -40,6 +42,7 @@ var ai_state: AiState = AiState.IDLE
 var home_position: Vector3
 var patrol_target: Vector3
 var patrol_pause_timer := 0.0
+var attack_timer := 0.0
 
 
 func _ready() -> void:
@@ -97,10 +100,22 @@ func _chase_tick(delta: float) -> void:
 	if distance_to_home > leash_range:
 		ai_state = AiState.LEASH
 		return
-	if to_player.length() <= 1.1:
+	if to_player.length() <= attack_contact_distance:
+		attack_timer -= delta
+		if attack_timer <= 0.0:
+			_attack_player()
+			attack_timer = attack_cooldown
 		return
 	var step := to_player.normalized() * chase_speed * delta
 	global_position += step
+
+
+func _attack_player() -> void:
+	if player_ref == null or not is_instance_valid(player_ref) or not player_ref.has_method("apply_damage"):
+		return
+	if player_ref.has_method("is_alive") and not player_ref.call("is_alive"):
+		return
+	player_ref.call("apply_damage", roll_enemy_attack())
 
 
 func _leash_tick(delta: float) -> void:
@@ -110,6 +125,7 @@ func _leash_tick(delta: float) -> void:
 		current_health = max_health
 		ai_state = AiState.IDLE
 		patrol_pause_timer = randf_range(patrol_pause_min, patrol_pause_max)
+		attack_timer = 0.0
 		_refresh_label()
 		health_changed.emit(self, current_health, max_health)
 		return
@@ -170,6 +186,7 @@ func reset_target() -> void:
 	current_health = max_health
 	ai_state = AiState.IDLE
 	global_position = home_position
+	attack_timer = 0.0
 	set_active(true)
 	_refresh_label()
 	health_changed.emit(self, current_health, max_health)

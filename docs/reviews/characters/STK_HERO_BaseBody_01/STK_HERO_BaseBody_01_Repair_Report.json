@@ -1,0 +1,266 @@
+{
+  "schema": "SteamtekHeroBaseBodyRepair-1",
+  "asset_id": "STK_HERO_BaseBody_01",
+  "source": "C:\\My Game\\Steamtek-RPG\\incoming\\meshy_hero_char\\STK_HERO_BaseBody_01.glb",
+  "source_sha256": "5991b66b7b7457af036662e16caddb8dd40de2dfa1910f8bcf3d2b945989e81f",
+  "source_preserved": true,
+  "source_topology": {
+    "vertices": 23323,
+    "edges": 53445,
+    "faces": 31140,
+    "triangles": 31140,
+    "manifold_edges": 39975,
+    "boundary_edges": 13470,
+    "wire_edges": 0,
+    "overfull_edges": 0,
+    "degenerate_faces": 0
+  },
+  "scale_and_grounding": {
+    "source_bounds_m": {
+      "minimum": [
+        -0.390673,
+        -0.169835,
+        -0.950028
+      ],
+      "maximum": [
+        0.388146,
+        0.172841,
+        0.947811
+      ],
+      "size": [
+        0.778819,
+        0.342676,
+        1.897839
+      ]
+    },
+    "uniform_scale_factor": 0.964254572,
+    "production_bounds_m": {
+      "minimum": [
+        -0.37549,
+        -0.165214,
+        0.0
+      ],
+      "maximum": [
+        0.37549,
+        0.165214,
+        1.83
+      ],
+      "size": [
+        0.75098,
+        0.330427,
+        1.83
+      ]
+    },
+    "root_scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "grounded": true,
+    "centered_xy": true
+  },
+  "exact_seam_weld": {
+    "distance_m": 1e-06,
+    "before": {
+      "vertices": 23323,
+      "edges": 53445,
+      "faces": 31140,
+      "triangles": 31140,
+      "manifold_edges": 39975,
+      "boundary_edges": 13470,
+      "wire_edges": 0,
+      "overfull_edges": 0,
+      "degenerate_faces": 0
+    },
+    "after": {
+      "vertices": 15573,
+      "edges": 46711,
+      "faces": 31140,
+      "triangles": 31140,
+      "manifold_edges": 46673,
+      "boundary_edges": 21,
+      "wire_edges": 0,
+      "overfull_edges": 17,
+      "degenerate_faces": 0
+    },
+    "vertices_merged": 7750,
+    "triangles_preserved": true,
+    "uv_layers_preserved": 1
+  },
+  "hair_repair": {
+    "method": "texture_guided_connected_region_laplacian",
+    "faces": 6619,
+    "vertices": 3417,
+    "factor": 0.075,
+    "iterations": 2,
+    "average_vertex_movement_m": 0.000346223,
+    "maximum_vertex_movement_m": 0.002482824,
+    "region_bounds_m": {
+      "minimum": [
+        -0.102808,
+        -0.115722,
+        1.613694
+      ],
+      "maximum": [
+        0.109721,
+        0.125925,
+        1.829736
+      ]
+    },
+    "separate_object": false,
+    "separate_object_limitation": "The source hair is welded into the single body surface and shares one baked material; separation would create destructive open boundaries."
+  },
+  "manifold_repair": {
+    "before": {
+      "vertices": 15573,
+      "edges": 46711,
+      "faces": 31140,
+      "triangles": 31140,
+      "manifold_edges": 46673,
+      "boundary_edges": 21,
+      "wire_edges": 0,
+      "overfull_edges": 17,
+      "degenerate_faces": 0
+    },
+    "faces_removed_from_overfull_edges": 17,
+    "initial_boundary_edges": 31,
+    "repair_passes": 4,
+    "new_fill_faces": 6,
+    "manual_small_cycle_cap_faces": 2,
+    "remaining_boundary_edges_before_mesh_validate": 0,
+    "remaining_boundary_edge_centers": [],
+    "after": {
+      "vertices": 15569,
+      "edges": 46700,
+      "faces": 31131,
+      "triangles": 31138,
+      "manifold_edges": 46700,
+      "boundary_edges": 0,
+      "wire_edges": 0,
+      "overfull_edges": 0,
+      "degenerate_faces": 0
+    }
+  },
+  "glb_topology_stabilization": [
+    {
+      "pass": 1,
+      "triangulation": {
+        "before": {
+          "vertices": 15569,
+          "edges": 46700,
+          "faces": 31131,
+          "triangles": 31138,
+          "manifold_edges": 46700,
+          "boundary_edges": 0,
+          "wire_edges": 0,
+          "overfull_edges": 0,
+          "degenerate_faces": 0
+        },
+        "after": {
+          "vertices": 15569,
+          "edges": 46707,
+          "faces": 31138,
+          "triangles": 31138,
+          "manifold_edges": 46707,
+          "boundary_edges": 0,
+          "wire_edges": 0,
+          "overfull_edges": 0,
+          "degenerate_faces": 0
+        },
+        "all_faces_triangular": true
+      }
+    }
+  ],
+  "hands": {
+    "left": "five visually distinct fingers confirmed; exact seams welded",
+    "right": "five visually distinct fingers confirmed; exact seams welded",
+    "geometry_cuts_required": false,
+    "thumb_opposition_preserved": true
+  },
+  "feet": {
+    "left": "five readable toe forms confirmed; exact seams welded",
+    "right": "five readable toe forms confirmed; exact seams welded",
+    "geometry_cuts_required": false
+  },
+  "material": {
+    "material": "STK_MAT_HERO_BaseBody_01",
+    "material_count": 2,
+    "textures": [
+      {
+        "source_name": "Baked_BaseColor",
+        "production_name": "STK_HERO_BaseBody_01_Baked_BaseColor",
+        "size": [
+          4096,
+          4096
+        ],
+        "packed": true
+      },
+      {
+        "source_name": "Baked_Emit",
+        "production_name": "STK_HERO_BaseBody_01_Baked_Emit",
+        "size": [
+          4096,
+          4096
+        ],
+        "packed": true
+      },
+      {
+        "source_name": "Baked_MetallicRoughness",
+        "production_name": "STK_HERO_BaseBody_01_Baked_MetallicRoughness",
+        "size": [
+          4096,
+          4096
+        ],
+        "packed": true
+      }
+    ],
+    "texture_resolution_preserved": true,
+    "body_surface": {
+      "metallic": 0.0,
+      "roughness": 0.72,
+      "specular_ior_level": 0.28,
+      "geometry_changed": false,
+      "purpose": "remove faceted metallic/specular response from skin and underlayer"
+    },
+    "hair_override": {
+      "material": "STK_MAT_HERO_BaseBody_01_Hair",
+      "faces": 6618,
+      "material_index": 1,
+      "base_color_linear": [
+        0.004,
+        0.006,
+        0.009,
+        1.0
+      ],
+      "metallic": 0.0,
+      "roughness": 0.78,
+      "specular_ior_level": 0.22,
+      "geometry_changed": false,
+      "purpose": "matte black isolation from the shared baked body textures"
+    }
+  },
+  "rigging": {
+    "status": "unrigged",
+    "pose": "mild A-pose preserved",
+    "readiness": "clean base geometry for an approved Steamtek humanoid rig",
+    "c001_dependency_added": false
+  },
+  "final_topology": {
+    "vertices": 15569,
+    "edges": 46707,
+    "faces": 31138,
+    "triangles": 31138,
+    "manifold_edges": 46707,
+    "boundary_edges": 0,
+    "wire_edges": 0,
+    "overfull_edges": 0,
+    "degenerate_faces": 0
+  },
+  "output_glb": "C:\\My Game\\Steamtek-RPG\\assets\\characters\\humanoid\\base\\STK_HERO_BaseBody_01\\v01\\STK_HERO_BaseBody_01.glb",
+  "output_blend": "C:\\My Game\\Steamtek-RPG\\blender\\character_pipeline\\heroes\\STK_HERO_BaseBody_01.blend",
+  "errors": [],
+  "passed": true,
+  "output_glb_bytes": 17399012,
+  "output_glb_sha256": "4bd4ce97fc8d0c4929e843383345cd042c3bd48b1087f74c80abae1185636408",
+  "exported": true
+}

@@ -31,8 +31,6 @@ func _get_progress() -> Dictionary:
 			"main_combat_complete": true,
 			"first_skill_learned": true,
 			"garage_inspected": true,
-			"cogs": 10,
-			"items": {},
 		}
 		_save_progress()
 	return tutorial_state
@@ -55,15 +53,6 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_2:
 		_buy_vendor_item("Water Flask", 2)
 		get_viewport().set_input_as_handled()
-
-
-func _items() -> Dictionary:
-	var value: Variant = tutorial_state.get("items")
-	if tutorial_state.has("items") and value is Dictionary:
-		return value as Dictionary
-	var created: Dictionary = {}
-	tutorial_state["items"] = created
-	return created
 
 
 func _connect_tutorial_interactables() -> void:
@@ -108,13 +97,16 @@ func _set_vendor_open(open: bool) -> void:
 
 
 func _buy_vendor_item(item_name: String, cost: int) -> void:
-	var cogs := int(tutorial_state.get("cogs", 0))
+	var cogs := int(hud.progress_ref.get("cogs", 0))
 	if cogs < cost:
 		_show_message("Not enough Cogs for %s." % item_name)
 		return
-	var items := _items()
+	var items: Dictionary = hud.progress_ref.get("items", {})
 	items[item_name] = int(items.get(item_name, 0)) + 1
-	tutorial_state["cogs"] = cogs - cost
+	hud.progress_ref["items"] = items
+	hud.progress_ref["cogs"] = cogs - cost
+	if hud.save_callback.is_valid():
+		hud.save_callback.call()
 	tutorial_state["vendor_tutorial_complete"] = true
 	_save_progress()
 	_update_vendor_panel()
@@ -125,11 +117,11 @@ func _buy_vendor_item(item_name: String, cost: int) -> void:
 func _update_vendor_panel() -> void:
 	if not is_instance_valid(vendor_status_label):
 		return
-	var items := _items()
+	var items: Dictionary = hud.progress_ref.get("items", {})
 	vendor_status_label.text = (
 		"COGS: %d\n\n[1] FIELD RATION --4 Cogs   Owned: %d\n[2] WATER FLASK --2 Cogs   Owned: %d\n\nPurchase either item to complete the vendor tutorial.\n\n[I] Close vendor"
 		% [
-			int(tutorial_state.get("cogs", 0)),
+			int(hud.progress_ref.get("cogs", 0)),
 			int(items.get("Field Ration", 0)),
 			int(items.get("Water Flask", 0)),
 		]

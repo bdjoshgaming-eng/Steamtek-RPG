@@ -1,0 +1,276 @@
+STEAMTEK RPG -- CLAUDE SESSION TRANSCRIPT
+Session date: 2026-07-22
+Scope: Street kit collision, character step climbing, F8 quit, weather/rain system
+===================================================================================
+
+NOTE ON COMPLETENESS: This session continued from TWO earlier
+conversations that were summarized by the harness before this
+transcript's context began. The first session covered the Live3D
+apartment rebuild and UI framework. The second session (which this
+one directly continues) covered scene tree organization, street kit
+collision, step climbing, and F8 quit behavior. The summarized
+portion is reproduced below AS THE SUMMARY ITSELF. Everything after
+"VERBATIM TRANSCRIPT BEGINS HERE" is the actual word-for-word
+conversation from this context window.
+
+-------------------------------------------------------------
+PRIOR-SESSION SUMMARY (key points carried forward):
+-------------------------------------------------------------
+
+The prior session (same date, earlier context window) covered:
+
+1. SCENE TREE ORGANIZATION:
+   User asked "Where do i group stuff within the scene tree. Should
+   i put Streets under the 'ground' node?" -- Claude added Streets,
+   Buildings, Props, and Lighting Node3D organizer nodes to
+   SteamtekSurfaceBlank3D.tscn. Street kit instances reparented
+   under Streets.
+
+2. STREET KIT COLLISION:
+   User asked "Who handles the heightmapping of a scene?" -- Claude
+   explained that collision shapes in kit .tscn files control
+   walking height. Added StaticBody3D + BoxShape3D collision to
+   all 5 street kit pieces:
+   - SteamtekRoadStraight4_8x2_4m3D.tscn: BoxShape3D(2.4, 0.16, 4.8) at y=-0.08
+   - SteamtekRoadIntersection4Way4_8m3D.tscn: BoxShape3D(4.8, 0.16, 4.8) at y=-0.08
+   - SteamtekCurbStraight2_4m3D.tscn: BoxShape3D(2.4, 0.04, 0.2) at y=0.16
+   - SteamtekSidewalkStraight2_4m3D.tscn: BoxShape3D(2.4, 0.04, 1.2) at y=-0.02
+   - SteamtekSidewalkCurbRamp2_4m3D.tscn: Multiple shapes including ConvexPolygonShape3D ramp
+
+   First attempt crashed Godot -- sub_resource blocks were placed
+   after node definitions in the .tscn files. Godot requires ALL
+   sub_resources before ANY nodes. Fixed by reordering all 5 files.
+
+3. RAMP COLLISION ATTEMPTS (multiple failures):
+   User reported "the ramp collision is off. I cant walk up it from
+   any side" and later "I dont want to use the curbed opening. I want
+   to be able to walk up onto the sidewalk wherever i want."
+
+   Attempted solutions that FAILED:
+   a) ConvexPolygonShape3D ramps -- too steep (42-50 degrees), exceeded
+      CharacterBody3D's 45-degree floor_max_angle. Jolt Physics rejected them.
+   b) Rotated BoxShape3D ramps -- worked in one curb direction but not
+      the other (curbs get rotated 90 degrees differently in the scene).
+   c) Tent/dual ramps -- added ramps from both sides. Still didn't solve
+      sidewalk approach.
+   d) Even 0.04m thin slabs created vertical edges that move_and_slide()
+      treated as walls.
+
+4. STEP CLIMBING SOLUTION:
+   Final solution: character controller step-up teleport system.
+   Added to steamtek_humanoid_character_3d.gd:
+   - @export var step_height := 0.25
+   - _try_step_up() method: tests if space above is clear, tests if
+     floor exists ahead, then teleports character up by step_height
+   - floor_snap_length = 0.3 added to CharacterBody3D .tscn to snap
+     character down after teleport
+
+   First attempt failed -- gravity was too weak (-0.288 m/s) to reach
+   surface in one frame after teleport. Character floated, failed
+   is_on_floor(), got reset. Fixed with floor_snap_length + simplified
+   teleport without extra move_and_slide call.
+
+   User confirmed: "its working now"
+
+5. F8 QUIT BEHAVIOR:
+   User reported "when i F8 its making godot quit" then later "F8
+   still doesnt close the game." Multiple rounds of fixes:
+   - get_tree().quit() was closing the game process. When launched from
+     editor, F8 is also the editor's "Stop Running Scene" shortcut.
+   - Removed all F8 handlers -- then user couldn't close standalone game.
+   - Restored F8 quit in base script (steamtek_transition_level_3d.gd)
+   - Added super._unhandled_input(event) calls in apartment and lantern
+     scene overrides so F8 reaches the base class handler.
+   - steamtek_main_menu.gd has its own F8 handler (doesn't extend base).
+   - scenes/main.gd F8 handler removed (replaced with pass).
+
+6. GAME LAUNCH PREFERENCE:
+   User said "i will launch from now on. I dont want to keep playing
+   through the apartment scene when im testing the next scene" --
+   user now launches via F6 (run current scene) in Godot editor.
+   Claude should never auto-launch via MCP.
+
+7. RAIN REQUEST:
+   User's final message before context compaction: "can you please
+   set up the raining functions on the canvas scene" -- referring to
+   SteamtekSurfaceBlank3D.tscn (the outdoor surface scene).
+
+=============================================================
+VERBATIM TRANSCRIPT BEGINS HERE
+=============================================================
+
+[Assistant, resuming from compacted context. Searched the codebase
+for existing rain/weather/particle files. Found 73 matches including
+existing rain systems: SteamtekRainVolume3D.tscn (3D GPU rain
+particles), SteamtekStormAtmosphere3D.tscn (lightning + procedural
+rain/thunder audio), steamtek_procedural_rain_audio.gd,
+steamtek_procedural_thunder_audio.gd, SteamtekWindowRainOverlay3D.tscn
+(shader window rain), and 2D surface overlay effects FX001-003.
+Also found existing rain-themed materials: STK_MAT_RainPolishedStreet,
+STK_MAT_WetConcrete.]
+
+[Read all rain system files to understand what was already built:
+- SteamtekRainVolume3D.tscn: GPUParticles3D with 720 particles,
+  0.78s lifetime, emission box 8.5x0.35x8.5m, billboard quad
+  meshes, local_coords=false
+- SteamtekStormAtmosphere3D.tscn: 2 OmniLight3D for lightning +
+  AudioStreamPlayer for rain (using SteamtekProceduralRainAudio)
+  + AudioStreamPlayer for thunder (using SteamtekProceduralThunderAudio)
+- steamtek_storm_atmosphere_3d.gd: Lightning flash system with
+  4-12s intervals, 35% double-flash chance, thunder delay 0.3-1.8s
+- steamtek_procedural_rain_audio.gd: Generates 4s filtered-noise
+  WAV loop at 22050 Hz
+- steamtek_procedural_thunder_audio.gd: Generates 2.5s thunder rumble
+- FX001_RainSystem.tscn: 2D GPUParticles2D (Node2D, screen-space)
+- FX002_RainSplash.tscn: 2D splash particles (Node2D)
+- FX003_RainMist.tscn: 2D mist clouds (Node2D)]
+
+[Read the SteamtekSurfaceBlank3D.tscn to see current scene state.
+Read steamtek_transition_level_3d.gd (base script) to understand
+the scene's _process loop and player-following camera.]
+
+ASSISTANT: The project already has a full rain system. I'll wire the
+existing SteamtekRainVolume3D (3D rain particles) and
+SteamtekStormAtmosphere3D (lightning + procedural rain/thunder audio)
+into the surface scene.
+
+[Edited SteamtekSurfaceBlank3D.tscn: added 3 ext_resource entries
+(SteamtekRainVolume3D.tscn as id="11_rain",
+SteamtekStormAtmosphere3D.tscn as id="12_storm",
+steamtek_surface_weather_3d.gd as id="13_weather").
+Added node definitions: Weather Node3D with script, RainVolume
+instance, StormAtmosphere instance. Overrode lightning light
+positions for outdoor (y=12, range=20 instead of interior defaults
+y=1.8, range=8).]
+
+[Created new file: scenes/effects/live3d/steamtek_surface_weather_3d.gd
+- class_name SteamtekSurfaceWeather3D extends Node3D
+- @export var rain_height := 10.0
+- @export var follow_response := 6.0
+- Finds player via "steamtek_humanoid" group on first process frame
+- _process(): smoothly lerps to player's XZ position so rain
+  stays overhead as player walks around]
+
+ASSISTANT: Rain on SteamtekSurfaceBlank3D -- 3 components:
+
+1. SteamtekRainVolume3D -- 720 GPU rain streak particles falling
+through an 8.5m emission box. Already tuned to your "thin, fast,
+restrained" rain reference.
+
+2. SteamtekStormAtmosphere3D -- Procedurally generated rain ambient
+audio (looping filtered noise) + periodic lightning flashes (with
+double-flash chance) + procedural thunder rumbles. I repositioned
+the lightning OmniLights higher (y=12) with wider range (20m) to
+work for outdoor instead of the apartment interior defaults.
+
+3. SteamtekSurfaceWeather3D (new script) -- Smoothly follows the
+player character's XZ position so rain stays overhead wherever you
+walk. Finds the player via the steamtek_humanoid group.
+
+All three sit under a new Weather organizer node alongside your
+Streets/Buildings/Props/Lighting nodes. When you run the scene
+(F6), you should see rain falling, hear ambient rain audio, and
+get periodic lightning flashes + thunder.
+
+-------------------------------------------------------------
+
+USER: the SurfaceBlank3D scene
+
+[This was sent while assistant was already working on the surface
+scene. Confirmed same target -- no change needed.]
+
+-------------------------------------------------------------
+
+USER: keep the rain sound at like 10%. I dont want it overbearing
+
+[Read steamtek_storm_atmosphere_3d.gd to check defaults:
+ambient_rain_volume_db = -24.0, thunder_volume_db = -20.0]
+
+ASSISTANT: The default is -24 dB. For ~10% perceived volume, -40 dB
+is the right ballpark. I'll override it on the instance in the scene.
+
+[Edited SteamtekSurfaceBlank3D.tscn: added instance overrides on
+StormAtmosphere node:
+  ambient_rain_volume_db = -40.0
+  thunder_volume_db = -34.0]
+
+ASSISTANT: Done. Rain audio dropped to -40 dB (roughly 10% perceived
+loudness) and thunder pulled down to -34 dB so it's present but not
+jarring.
+
+-------------------------------------------------------------
+
+USER: create a detailed handoff like before and update the folder
+
+[Read all memory files: MEMORY.md, project_steamtek_rpg_state.md,
+feedback_gd_file_rules.md, feedback_game_launch.md. Read existing
+handoff documents for format reference.]
+
+[Created: docs/claude handoffs/2026-07-22_Live3D_Surface_StreetKit_Weather.md
+-- 8 sections covering scene tree organization, street kit collision,
+character step climbing, F8 quit behavior, weather system, lessons
+learned, file manifest, and still-to-do list.]
+
+[Updated: memory/project_steamtek_rpg_state.md -- dated to 2026-07-22,
+added Live3D surface scene progress including collision, step climbing,
+weather, linked new handoff doc.]
+
+[Updated: memory/feedback_game_launch.md -- updated to reflect user
+launches via F6, not MCP. Never auto-launch.]
+
+[Created: memory/feedback_surface_scene_editing.md -- new memory:
+SteamtekSurfaceBlank3D.tscn is user's canvas, never overwrite.]
+
+[Updated: memory/MEMORY.md -- index updated with all 4 entries.]
+
+ASSISTANT: Done. Created handoff document and updated all 4 memory
+files. Handoff covers all 8 sections. Memory updated to 2026-07-22.
+
+-------------------------------------------------------------
+
+USER: i also need the claude hand off txt file done which is a
+transcript of this chat
+
+[Created this transcript file.]
+
+
+=============================================================
+FILES TOUCHED THIS SESSION
+=============================================================
+
+Modified:
+  scenes/levels/surface_3d/SteamtekSurfaceBlank3D.tscn
+    -- Added ext_resources for rain volume, storm atmosphere, weather script
+    -- Added Weather node tree with RainVolume + StormAtmosphere instances
+    -- Overrode lightning positions for outdoor + rain/thunder volume to -40/-34 dB
+
+New:
+  scenes/effects/live3d/steamtek_surface_weather_3d.gd
+    -- Weather controller that follows player XZ position
+  docs/claude handoffs/2026-07-22_Live3D_Surface_StreetKit_Weather.md
+    -- Detailed handoff document
+  docs/claude handoffs/2026-07-22_Live3D_Surface_StreetKit_Weather_Transcript.txt
+    -- This transcript
+
+Memory updated:
+  memory/project_steamtek_rpg_state.md (updated)
+  memory/feedback_game_launch.md (updated)
+  memory/feedback_surface_scene_editing.md (new)
+  memory/MEMORY.md (updated)
+
+NOTE: The street kit collision, step climbing, and F8 quit changes
+were made in the prior context window (same session, before
+compaction). Those files are listed in the handoff .md but were
+not re-touched in this context window. See the prior-session
+summary above for full detail on those changes. The files are:
+  scenes/characters/templates/steamtek_humanoid_character_3d.gd
+  scenes/characters/templates/Steamtek_HumanoidCharacter3D.tscn
+  scenes/environment/live3d/kits/street/SteamtekRoadStraight4_8x2_4m3D.tscn
+  scenes/environment/live3d/kits/street/SteamtekRoadIntersection4Way4_8m3D.tscn
+  scenes/environment/live3d/kits/street/SteamtekCurbStraight2_4m3D.tscn
+  scenes/environment/live3d/kits/street/SteamtekSidewalkStraight2_4m3D.tscn
+  scenes/environment/live3d/kits/street/SteamtekSidewalkCurbRamp2_4m3D.tscn
+  scenes/levels/transition_tests/steamtek_transition_level_3d.gd
+  scenes/levels/apartment_3d/steamtek_apartment.gd
+  scenes/levels/lantern_3d/steamtek_lantern_playable_3d.gd
+  scenes/main.gd

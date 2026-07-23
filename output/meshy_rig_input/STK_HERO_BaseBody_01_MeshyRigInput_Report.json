@@ -1,0 +1,270 @@
+{
+  "schema": "SteamtekMeshyRigInput-1",
+  "asset_id": "STK_HERO_BaseBody_01_MeshyRigInput",
+  "purpose": "Meshy auto-rigging",
+  "source_preserved": true,
+  "source": {
+    "path": "C:\\My Game\\Steamtek-RPG\\assets\\characters\\humanoid\\base\\STK_HERO_BaseBody_01\\v01\\STK_HERO_BaseBody_01.glb",
+    "sha256": "4bd4ce97fc8d0c4929e843383345cd042c3bd48b1087f74c80abae1185636408",
+    "mesh_objects": 1,
+    "material_slots": 2,
+    "uv_layers": [
+      1
+    ],
+    "triangles": 31138,
+    "topology": [
+      {
+        "vertices": 24372,
+        "edges": 54360,
+        "faces": 31138,
+        "triangles": 31138,
+        "manifold_edges": 39054,
+        "boundary_edges": 15306,
+        "wire_edges": 0,
+        "overfull_edges": 0,
+        "degenerate_faces": 0
+      }
+    ],
+    "connected_components": [
+      1445
+    ],
+    "duplicate_faces": [
+      0
+    ],
+    "materials": [
+      {
+        "name": "STK_MAT_HERO_BaseBody_01",
+        "use_nodes": true,
+        "node_types": [
+          "BSDF_PRINCIPLED",
+          "OUTPUT_MATERIAL",
+          "TEX_IMAGE"
+        ],
+        "backface_culling": false,
+        "alpha_linked": false,
+        "alpha_value": 1.0
+      },
+      {
+        "name": "STK_MAT_HERO_BaseBody_01_Hair",
+        "use_nodes": true,
+        "node_types": [
+          "BSDF_PRINCIPLED",
+          "OUTPUT_MATERIAL"
+        ],
+        "backface_culling": false,
+        "alpha_linked": false,
+        "alpha_value": 1.0
+      }
+    ],
+    "transforms_identity": [
+      true
+    ]
+  },
+  "diagnosis": {
+    "primary_failure_risk": "approved production GLB uses two material primitives; Meshy's Keep Original Texture and UV path expects one material and one UV map",
+    "secondary_risks_removed": [
+      "multi-material primitive split",
+      "complex or unused source material nodes",
+      "separate hair material",
+      "emissive texture path",
+      "metallic-roughness texture path",
+      "alpha-capable source graph",
+      "normal-map tangent dependency"
+    ],
+    "not_found_in_approved_source": [
+      "multiple mesh objects",
+      "non-manifold edges",
+      "duplicate faces",
+      "degenerate faces",
+      "multiple UV maps",
+      "armature or animation data"
+    ],
+    "hidden_internal_geometry_assessment": "single closed connected component; no separate hidden shell detected"
+  },
+  "repairs": {
+    "mesh_objects_joined": 0,
+    "transforms_applied": true,
+    "topology": {
+      "weld_distance_m": 1e-07,
+      "before": {
+        "vertices": 24372,
+        "edges": 54360,
+        "faces": 31138,
+        "triangles": 31138,
+        "manifold_edges": 39054,
+        "boundary_edges": 15306,
+        "wire_edges": 0,
+        "overfull_edges": 0,
+        "degenerate_faces": 0
+      },
+      "after": {
+        "vertices": 15569,
+        "edges": 46707,
+        "faces": 31138,
+        "triangles": 31138,
+        "manifold_edges": 46707,
+        "boundary_edges": 0,
+        "wire_edges": 0,
+        "overfull_edges": 0,
+        "degenerate_faces": 0
+      },
+      "vertices_resolved_by_positional_test": 8803,
+      "duplicate_faces_before": 0,
+      "duplicate_faces_after_weld": 0,
+      "connected_components_after_weld": 1,
+      "custom_normals_preserved": true,
+      "source_face_winding_preserved": true,
+      "geometry_modified": false,
+      "normals_recalculated_outward": false,
+      "signed_volume_m3": -0.024786947
+    },
+    "normal_repair": {
+      "method": "bidirectional_nearest_surface_raycast",
+      "faces_tested": 31138,
+      "inward_faces_detected": 20526,
+      "faces_flipped": 20526,
+      "ambiguous_faces": 1,
+      "repairs_applied": true
+    },
+    "uv_repair": {
+      "before": {
+        "layers": 1,
+        "finite": true,
+        "degenerate_triangles": 15,
+        "loops_outside_zero_one": 0
+      },
+      "repaired_triangles": 15,
+      "fallback_triangles": 9,
+      "after": {
+        "layers": 1,
+        "finite": true,
+        "degenerate_triangles": 0,
+        "loops_outside_zero_one": 0
+      }
+    },
+    "one_uv_atlas_preserved": true,
+    "base_color_baked": "C:\\My Game\\Steamtek-RPG\\output\\meshy_rig_input\\STK_HERO_BaseBody_01_MeshyRigInput_BaseColor.png",
+    "atlas_resolution": [
+      4096,
+      4096
+    ],
+    "one_material_created": "STK_MAT_HERO_MeshyRigInput",
+    "opaque_only": true,
+    "alpha_blend_removed": true,
+    "alpha_mask_removed": true,
+    "custom_or_unsupported_nodes_removed": true,
+    "emissive_removed": true,
+    "normal_map_omitted_for_tangent_safety": true,
+    "mild_a_pose_preserved": true,
+    "unrigged": true
+  },
+  "reimport_validation": {
+    "mesh_objects": 1,
+    "materials": 1,
+    "material_names": [
+      "STK_MAT_HERO_MeshyRigInput"
+    ],
+    "uv": {
+      "layers": 1,
+      "finite": true,
+      "degenerate_triangles": 0,
+      "loops_outside_zero_one": 0
+    },
+    "raw_glb_topology": {
+      "vertices": 28296,
+      "edges": 56812,
+      "faces": 31138,
+      "triangles": 31138,
+      "manifold_edges": 36602,
+      "boundary_edges": 20210,
+      "wire_edges": 0,
+      "overfull_edges": 0,
+      "degenerate_faces": 0
+    },
+    "raw_glb_connected_components": 2892,
+    "positional_weld_validation": {
+      "weld_distance_m": 1e-07,
+      "before": {
+        "vertices": 28296,
+        "edges": 56812,
+        "faces": 31138,
+        "triangles": 31138,
+        "manifold_edges": 36602,
+        "boundary_edges": 20210,
+        "wire_edges": 0,
+        "overfull_edges": 0,
+        "degenerate_faces": 0
+      },
+      "after": {
+        "vertices": 15569,
+        "edges": 46707,
+        "faces": 31138,
+        "triangles": 31138,
+        "manifold_edges": 46707,
+        "boundary_edges": 0,
+        "wire_edges": 0,
+        "overfull_edges": 0,
+        "degenerate_faces": 0
+      },
+      "vertices_resolved_by_positional_test": 12727,
+      "duplicate_faces_before": 0,
+      "duplicate_faces_after_weld": 0,
+      "connected_components_after_weld": 1,
+      "custom_normals_preserved": true,
+      "source_face_winding_preserved": true,
+      "geometry_modified": false,
+      "normals_recalculated_outward": false,
+      "signed_volume_m3": 0.09096424
+    },
+    "topology": {
+      "vertices": 15569,
+      "edges": 46707,
+      "faces": 31138,
+      "triangles": 31138,
+      "manifold_edges": 46707,
+      "boundary_edges": 0,
+      "wire_edges": 0,
+      "overfull_edges": 0,
+      "degenerate_faces": 0
+    },
+    "connected_components": 1,
+    "duplicate_faces": 0,
+    "signed_volume_m3": 0.09096424,
+    "normal_orientation": {
+      "method": "bidirectional_nearest_surface_raycast",
+      "faces_tested": 31138,
+      "inward_faces_detected": 0,
+      "faces_flipped": 0,
+      "ambiguous_faces": 1,
+      "repairs_applied": false
+    },
+    "normals_outward": true,
+    "opaque_alpha": true,
+    "backface_culling": true,
+    "texture_images": [
+      {
+        "name": "STK_HERO_BaseBody_01_MeshyRigInput_BaseColor",
+        "resolution": [
+          4096,
+          4096
+        ]
+      }
+    ],
+    "armatures": 0,
+    "actions": 0,
+    "unrigged": true,
+    "mesh_transform_identity": true,
+    "triangle_count_preserved": true,
+    "normal_map_used": false,
+    "tangent_risk": "eliminated; no normal map exported",
+    "errors": [],
+    "passed": true
+  },
+  "output": {
+    "glb": "C:\\My Game\\Steamtek-RPG\\output\\meshy_rig_input\\STK_HERO_BaseBody_01_MeshyRigInput.glb",
+    "bytes": 4302736,
+    "sha256": "355a05f85f5ca379f864923b7c82b3c83b67881bcaf7dac2e35ff124475eec10",
+    "base_color_atlas": "C:\\My Game\\Steamtek-RPG\\output\\meshy_rig_input\\STK_HERO_BaseBody_01_MeshyRigInput_BaseColor.png"
+  },
+  "passed": true
+}

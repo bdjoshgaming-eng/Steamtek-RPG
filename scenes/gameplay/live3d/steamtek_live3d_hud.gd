@@ -37,6 +37,7 @@ const DIALOGUE_BOX_SCENE := preload("res://scenes/gameplay/live3d/SteamtekDialog
 
 var progress_ref: Dictionary = {}
 var save_callback: Callable
+var combat_state_ref: Dictionary = {}
 var talent_bridge: SteamtekLocalTalentBridge
 var keystone_viewer_node: Node
 var selected_blueprint_id: String = ""
@@ -108,6 +109,25 @@ func bind(progress: Dictionary, save_fn: Callable) -> void:
 	progress_ref = progress
 	save_callback = save_fn
 	_refresh_cogs()
+	_refresh_inventory_display()
+
+
+func bind_combat_state(state: Dictionary) -> void:
+	combat_state_ref = state
+	_refresh_combat_bars()
+
+
+func _refresh_combat_bars() -> void:
+	if combat_state_ref.is_empty():
+		return
+	health_bar.max_value = float(combat_state_ref.get("max_health", 500))
+	health_bar.value = float(combat_state_ref.get("current_health", 0))
+	action_bar.max_value = float(combat_state_ref.get("max_action", 850))
+	action_bar.value = float(combat_state_ref.get("current_action", 0))
+
+
+func _process(_delta: float) -> void:
+	_refresh_combat_bars()
 
 
 func set_inventory_enabled(enabled: bool) -> void:
@@ -115,6 +135,8 @@ func set_inventory_enabled(enabled: bool) -> void:
 
 
 func set_inventory_open(open: bool) -> void:
+	if open:
+		_refresh_inventory_display()
 	inventory_window.visible = open
 
 
@@ -125,6 +147,25 @@ func is_inventory_open() -> bool:
 func refresh_inventory(entries: Array, mission_entries: Array, cogs: int, status_text: String) -> void:
 	inventory_window.configure(entries, mission_entries, cogs)
 	inventory_window.set_status_text(status_text)
+
+
+# Rebuilds the inventory window straight from progress_ref (the shared
+# global inventory dict) so every scene shows current data on open, not
+# just whichever scene last happened to push a manual refresh.
+func _refresh_inventory_display() -> void:
+	var entries: Array = []
+	var items: Dictionary = progress_ref.get("items", {})
+	for item_name in items.keys():
+		entries.append({"key": item_name, "label": item_name, "count": int(items[item_name])})
+	var weapons_owned: Dictionary = progress_ref.get("weapons_owned", {})
+	var equipped := String(progress_ref.get("equipped_weapon", ""))
+	for weapon_name in weapons_owned.keys():
+		var label := String(weapon_name)
+		if weapon_name == equipped:
+			label += " (equipped)"
+		entries.append({"key": weapon_name, "label": label, "icon_name": weapon_name, "count": 1})
+	var status := "EQUIPPED WEAPON: %s" % (equipped if not equipped.is_empty() else "None")
+	refresh_inventory(entries, [], int(progress_ref.get("cogs", 0)), status)
 
 
 func _unhandled_input(event: InputEvent) -> void:

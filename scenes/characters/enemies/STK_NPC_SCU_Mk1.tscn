@@ -1,0 +1,38 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/characters/templates/Steamtek_HumanoidCharacter3D.tscn" id="1_template"]
+[ext_resource type="PackedScene" path="res://assets/characters/humanoid/base/STK_NPC_SCU_Mk1/v01/STK_NPC_SCU_Mk1.glb" id="2_scu"]
+[ext_resource type="Script" path="res://scenes/characters/enemies/stk_npc_scu_mk1.gd" id="3_controller"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_scu"]
+radius = 0.41
+height = 1.8288
+
+[node name="STK_NPC_SCU_Mk1" instance=ExtResource("1_template")]
+script = ExtResource("3_controller")
+character_scene = ExtResource("2_scu")
+character_instance_name = "STK_NPC_SCU_Mk1"
+player_controlled = false
+model_forward_yaw_offset_degrees = 0.0
+metadata/steamtek_asset_id = "STK_NPC_SCU_Mk1"
+metadata/character_class = "regular_enemy"
+metadata/physical_height_ft = 6.0
+metadata/physical_height_m = 1.8288
+metadata/shared_skeleton = "STK_C001 humanoid skeleton"
+metadata/lod_triangles = "18000,10000,4500"
+metadata/animation_status = "disabled_pending_pose_match_and_manual_weight_validation"
+metadata/production_report = "res://docs/reviews/characters/STK_NPC_SCU_Mk1/STK_NPC_SCU_Mk1_Production_Report.json"
+
+[node name="BodyCollision" parent="." index="0"]
+position = Vector3(0, 0.9144, 0)
+shape = SubResource("CapsuleShape3D_scu")
+
+[node name="VisualPivot" parent="." index="1"]
+scale = Vector3(1.075765, 1.075765, 1.075765)
+
+[node name="STK_NPC_SCU_Mk1" parent="VisualPivot" index="0" instance=ExtResource("2_scu")]
+
+[node name="CameraTarget" parent="." index="2"]
+position = Vector3(0, 1.50, 0)
+
+[editable path="VisualPivot"]

@@ -30,6 +30,9 @@ func _ready() -> void:
 		var door := door_node as SteamtekZoneDoor3D
 		if door != null and is_ancestor_of(door):
 			door.zone_transition_requested.connect(_on_zone_transition_requested)
+	for enemy_node in get_tree().get_nodes_in_group("steamtek_tutorial_enemy_3d"):
+		if is_ancestor_of(enemy_node) and enemy_node.has_method("set_player_reference"):
+			enemy_node.call("set_player_reference", character)
 	interaction_prompt.visible = false
 	_build_prompt_tag()
 	_setup_hud()
@@ -130,12 +133,24 @@ func _update_prompt_tag_position() -> void:
 func _setup_hud() -> void:
 	hud = HUD_SCENE.instantiate()
 	add_child(hud)
-	var progress := _get_progress()
-	hud.bind(progress, _save_progress)
+	_get_progress()
+	var inventory := SteamtekLive3DProgressStore.get_global_inventory()
+	if inventory.is_empty():
+		inventory = {"items": {}, "weapons_owned": {}, "cogs": 0, "equipped_weapon": ""}
+	hud.bind(inventory, func(): SteamtekLive3DProgressStore.save_global_inventory(inventory))
+	hud.set_inventory_enabled(true)
+	character.set_inventory(inventory)
+	var combat_state := SteamtekLive3DProgressStore.get_global_combat_state()
+	if combat_state.is_empty():
+		combat_state = {"current_health": 500.0, "max_health": 500.0, "current_action": 850.0, "max_action": 850.0}
+	character.set_combat_state(combat_state, func(): SteamtekLive3DProgressStore.save_global_combat_state(combat_state))
+	hud.bind_combat_state(combat_state)
 	hud.panel_opened.connect(_on_hud_panel_opened)
 	hud.panel_opened.connect(func(): set_prompt_suppressed(true))
+	hud.panel_opened.connect(func(): character.combat_blocked = true)
 	hud.panel_closed.connect(_on_hud_panel_closed)
 	hud.panel_closed.connect(func(): set_prompt_suppressed(false))
+	hud.panel_closed.connect(func(): character.combat_blocked = false)
 	hud.inventory_slot_double_clicked.connect(_on_inventory_slot_double_clicked)
 
 
@@ -196,6 +211,7 @@ func _on_zone_transition_requested(target_scene_path: String, target_spawn_id: S
 		return
 	transition_in_progress = true
 	character.set_player_controlled(false)
+	character.save_combat_state()
 	interaction_prompt.visible = false
 	if _prompt_tag != null:
 		_prompt_tag.visible = false

@@ -3,6 +3,7 @@ extends CharacterBody3D
 
 signal interaction_focus_changed(prompt_text: String, target: Node)
 signal interaction_performed(target: Node)
+signal attack_performed(target: Node, result: Dictionary)
 
 ## Reusable Steamtek humanoid wrapper for the fixed-camera 2.5D pipeline.
 ## Character art is supplied as an imported GLB; collision, movement, facing,
@@ -26,6 +27,11 @@ signal interaction_performed(target: Node)
 @export var walk_animation_key := "STK_WALK"
 @export var run_animation_key := "STK_RUN"
 @export var interaction_action := "interact"
+@export var attack_action := "primary_fire"
+@export var default_attack_range := 14.0
+
+const ATTACK_ACTION_COST := 35
+const COMBAT_TARGET_COLLISION_MASK := 16
 
 @onready var visual_pivot: Node3D = $VisualPivot
 @onready var camera_target: Marker3D = $CameraTarget
@@ -43,17 +49,25 @@ var target_facing_yaw := 0.0
 var focused_interactable: Area3D
 var focused_prompt_text := ""
 
+var combat_blocked := false
+var combat_state: Dictionary = {}
+var inventory: Dictionary = {}
+var _combat_save_callback: Callable
+
 
 func _ready() -> void:
 	_instantiate_character()
 
 
 func _physics_process(delta: float) -> void:
+	_regen_combat_state(delta)
 	if not player_controlled:
 		return
 	_refresh_interaction_focus()
 	if InputMap.has_action(interaction_action) and Input.is_action_just_pressed(interaction_action):
 		attempt_interaction()
+	if not combat_blocked and InputMap.has_action(attack_action) and Input.is_action_just_pressed(attack_action):
+		attempt_attack()
 	var input_vector := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var move_direction := _camera_relative_direction(input_vector)
 	if move_direction.length_squared() > 0.001:
@@ -153,6 +167,129 @@ func get_interaction_prompt() -> String:
 
 func get_focused_interactable() -> Area3D:
 	return focused_interactable
+
+
+func set_combat_state(state: Dictionary, save_fn: Callable) -> void:
+	combat_state = state
+	_combat_save_callback = save_fn
+
+
+func set_inventory(inv: Dictionary) -> void:
+	inventory = inv
+
+
+func is_alive() -> bool:
+	return not combat_state.is_empty() and int(combat_state.get("current_health", 1)) > 0
+
+
+func get_health() -> int:
+	return int(combat_state.get("current_health", 0))
+
+
+func get_max_health() -> int:
+	return int(combat_state.get("max_health", 1))
+
+
+func get_action() -> int:
+	return int(combat_state.get("current_action", 0))
+
+
+func get_max_action() -> int:
+	return int(combat_state.get("max_action", 1))
+
+
+func apply_damage(amount: int) -> void:
+	if combat_state.is_empty() or not is_alive():
+		return
+	combat_state["current_health"] = maxf(0.0, float(combat_state.get("current_health", 0)) - amount)
+	save_combat_state()
+
+
+func spend_action(amount: int) -> bool:
+	if combat_state.is_empty() or float(combat_state.get("current_action", 0)) < amount:
+		return false
+	combat_state["current_action"] = float(combat_state["current_action"]) - amount
+	save_combat_state()
+	return true
+
+
+func attempt_attack() -> bool:
+	if combat_blocked or not is_alive():
+		return false
+	var weapon_name := String(inventory.get("equipped_weapon", ""))
+	if weapon_name.is_empty():
+		return false
+	if not spend_action(ATTACK_ACTION_COST):
+		return false
+	var weapon_def: Dictionary = GameData.ITEM_DEFINITIONS.get(weapon_name, {})
+	var stat_ranges: Dictionary = weapon_def.get("weapon_stat_ranges", {})
+	var range_stat: Array = stat_ranges.get("Range", [default_attack_range])
+	var damage_stat: Array = stat_ranges.get("Damage Rating", [5])
+	var target := _aim_fire_target(float(range_stat[0]))
+	if target == null:
+		return false
+	var attack_parameters := {
+		"base_damage": float(damage_stat[0]),
+		"damage_multiplier": 1.0,
+		"conditioning_nodes": 0,
+		"max_conditioning_nodes": 0,
+		"equipped_weapon_name": weapon_name,
+		"professions_unlocked": {},
+	}
+	var result: Dictionary = target.call("receive_player_attack", attack_parameters)
+	attack_performed.emit(target, result)
+	return true
+
+
+func _aim_fire_target(max_range: float) -> Node:
+	var aim_point := _get_mouse_aim_point()
+	var origin := global_position + Vector3(0, 1.0, 0)
+	var direction := aim_point - origin
+	direction.y = 0.0
+	if direction.length_squared() < 0.0001:
+		return null
+	direction = direction.normalized()
+	var space_state := get_world_3d().direct_space_state
+	var query := PhysicsRayQueryParameters3D.create(origin, origin + direction * max_range)
+	query.collision_mask = COMBAT_TARGET_COLLISION_MASK
+	query.collide_with_areas = true
+	query.collide_with_bodies = false
+	var result := space_state.intersect_ray(query)
+	if result.is_empty():
+		return null
+	return result.get("collider")
+
+
+func _get_mouse_aim_point() -> Vector3:
+	var camera := get_viewport().get_camera_3d()
+	if camera == null:
+		return global_position
+	var mouse_pos := get_viewport().get_mouse_position()
+	var ray_origin := camera.project_ray_origin(mouse_pos)
+	var ray_dir := camera.project_ray_normal(mouse_pos)
+	var ground_plane := Plane(Vector3.UP, global_position.y)
+	var hit: Variant = ground_plane.intersects_ray(ray_origin, ray_dir)
+	if hit == null:
+		return global_position
+	return hit as Vector3
+
+
+func save_combat_state() -> void:
+	if _combat_save_callback.is_valid():
+		_combat_save_callback.call()
+
+
+func _regen_combat_state(delta: float) -> void:
+	if combat_state.is_empty():
+		return
+	var max_h := float(get_max_health())
+	var max_a := float(get_max_action())
+	var h := float(combat_state.get("current_health", max_h))
+	var a := float(combat_state.get("current_action", max_a))
+	if h > 0.0 and h < max_h:
+		combat_state["current_health"] = minf(max_h, h + max_h * 0.02 * delta)
+	if a < max_a:
+		combat_state["current_action"] = minf(max_a, a + 10.0 * delta)
 
 
 func _refresh_interaction_focus() -> void:

@@ -47,7 +47,7 @@ func _on_hud_panel_closed() -> void:
 
 
 func _on_inventory_slot_double_clicked(key: String) -> void:
-	var weapons_owned: Dictionary = progress.get("weapons_owned", {})
+	var weapons_owned: Dictionary = hud.progress_ref.get("weapons_owned", {})
 	if weapons_owned.has(key):
 		_equip_starter_weapon(key)
 	else:
@@ -85,7 +85,7 @@ func _connect_interactables() -> void:
 
 func _apply_progress_to_scene() -> void:
 	var note_found := bool(progress.get("note_found", false))
-	var equipped := bool(progress.get("equipment_complete", false))
+	var equipped := not String(hud.progress_ref.get("equipped_weapon", "")).is_empty()
 	exit_door.interaction_enabled = note_found and equipped
 	var note := $QuestNoteInteractable
 	if note_found:
@@ -93,7 +93,6 @@ func _apply_progress_to_scene() -> void:
 	note_marker.visible = not note_found
 	storage_marker.visible = note_found and not equipped
 	door_outline.visible = false
-	hud.set_inventory_enabled(note_found)
 
 
 func _on_interactable_action_requested(action_id: String, _actor: Node, _source: Node) -> void:
@@ -148,7 +147,7 @@ func _set_quest_log_visible(is_visible: bool) -> void:
 func _update_objective() -> void:
 	if not bool(progress.get("note_found", false)):
 		objective_label.text = "OBJECTIVE  |  Explore with WASD and read the note near the bed"
-	elif not bool(progress.get("equipment_complete", false)):
+	elif String(hud.progress_ref.get("equipped_weapon", "")).is_empty():
 		objective_label.text = "OBJECTIVE  |  Open your storage crate and equip a weapon"
 	else:
 		objective_label.text = "OBJECTIVE  |  Head out through the north door"
@@ -162,8 +161,10 @@ func _open_starter_storage() -> void:
 			"Rusty Crafting Kit": 1,
 		}
 		progress["crate_weapons"] = ["Rusty Pistol", "Canister Launcher"]
-		progress["cogs"] = maxi(int(progress.get("cogs", 0)), 100)
 		_save_progress()
+		hud.progress_ref["cogs"] = maxi(int(hud.progress_ref.get("cogs", 0)), 100)
+		if hud.save_callback.is_valid():
+			hud.save_callback.call()
 		hud._refresh_cogs()
 	_set_storage_open(true)
 
@@ -189,11 +190,11 @@ func _refresh_storage_window() -> void:
 	storage_panel.configure("CRATE CONTENTS", crate_entries, _on_storage_slot_double_clicked)
 
 	var your_entries: Array = []
-	var items: Dictionary = progress.get("items", {})
+	var items: Dictionary = hud.progress_ref.get("items", {})
 	for item_name in items.keys():
 		your_entries.append({"key": item_name, "label": item_name, "count": int(items[item_name])})
-	var weapons_owned: Dictionary = progress.get("weapons_owned", {})
-	var equipped := String(progress.get("equipped_weapon", ""))
+	var weapons_owned: Dictionary = hud.progress_ref.get("weapons_owned", {})
+	var equipped := String(hud.progress_ref.get("equipped_weapon", ""))
 	for weapon_name in weapons_owned.keys():
 		var label := String(weapon_name)
 		if weapon_name == equipped:
@@ -226,12 +227,13 @@ func _on_storage_item_taken(item_name: String) -> void:
 	var crate_items: Dictionary = progress.get("crate_items", {})
 	if not crate_items.has(item_name):
 		return
-	var items: Dictionary = progress.get("items", {})
+	var items: Dictionary = hud.progress_ref.get("items", {})
 	items[item_name] = int(items.get(item_name, 0)) + int(crate_items[item_name])
-	progress["items"] = items
+	hud.progress_ref["items"] = items
 	crate_items.erase(item_name)
 	progress["crate_items"] = crate_items
 	_save_progress()
+	_save_inventory()
 	_refresh_storage_window()
 	_refresh_inventory_window()
 	_show_message("Took %s." % item_name)
@@ -243,17 +245,18 @@ func _on_storage_weapon_taken(weapon_name: String) -> void:
 		return
 	crate_weapons.erase(weapon_name)
 	progress["crate_weapons"] = crate_weapons
-	var weapons_owned: Dictionary = progress.get("weapons_owned", {})
+	var weapons_owned: Dictionary = hud.progress_ref.get("weapons_owned", {})
 	weapons_owned[weapon_name] = true
-	progress["weapons_owned"] = weapons_owned
+	hud.progress_ref["weapons_owned"] = weapons_owned
 	_save_progress()
+	_save_inventory()
 	_refresh_storage_window()
 	_refresh_inventory_window()
 	_show_message("Took %s. Open your inventory with [I] to equip it." % weapon_name)
 
 
 func _on_your_items_slot_double_clicked(key: String) -> void:
-	var weapons_owned: Dictionary = progress.get("weapons_owned", {})
+	var weapons_owned: Dictionary = hud.progress_ref.get("weapons_owned", {})
 	if weapons_owned.has(key):
 		_store_weapon(key)
 	else:
@@ -261,35 +264,36 @@ func _on_your_items_slot_double_clicked(key: String) -> void:
 
 
 func _store_item(item_name: String) -> void:
-	var items: Dictionary = progress.get("items", {})
+	var items: Dictionary = hud.progress_ref.get("items", {})
 	if not items.has(item_name):
 		return
 	var crate_items: Dictionary = progress.get("crate_items", {})
 	crate_items[item_name] = int(crate_items.get(item_name, 0)) + int(items[item_name])
 	progress["crate_items"] = crate_items
 	items.erase(item_name)
-	progress["items"] = items
+	hud.progress_ref["items"] = items
 	_save_progress()
+	_save_inventory()
 	_refresh_storage_window()
 	_refresh_inventory_window()
 	_show_message("Stored %s." % item_name)
 
 
 func _store_weapon(weapon_name: String) -> void:
-	var weapons_owned: Dictionary = progress.get("weapons_owned", {})
+	var weapons_owned: Dictionary = hud.progress_ref.get("weapons_owned", {})
 	if not weapons_owned.has(weapon_name):
 		return
 	weapons_owned.erase(weapon_name)
-	progress["weapons_owned"] = weapons_owned
+	hud.progress_ref["weapons_owned"] = weapons_owned
 	var crate_weapons: Array = progress.get("crate_weapons", [])
 	crate_weapons.append(weapon_name)
 	progress["crate_weapons"] = crate_weapons
 	var unequipped := false
-	if String(progress.get("equipped_weapon", "")) == weapon_name:
-		progress["equipped_weapon"] = ""
-		progress["equipment_complete"] = false
+	if String(hud.progress_ref.get("equipped_weapon", "")) == weapon_name:
+		hud.progress_ref["equipped_weapon"] = ""
 		unequipped = true
 	_save_progress()
+	_save_inventory()
 	_refresh_storage_window()
 	_refresh_inventory_window()
 	if unequipped:
@@ -299,25 +303,17 @@ func _store_weapon(weapon_name: String) -> void:
 
 
 func _refresh_inventory_window() -> void:
-	var entries: Array = []
-	var items: Dictionary = progress.get("items", {})
-	for item_name in items.keys():
-		entries.append({"key": item_name, "label": item_name, "count": int(items[item_name])})
-	var weapons_owned: Dictionary = progress.get("weapons_owned", {})
-	var equipped := String(progress.get("equipped_weapon", ""))
-	for weapon_name in weapons_owned.keys():
-		var label := String(weapon_name)
-		if weapon_name == equipped:
-			label += " (equipped)"
-		entries.append({"key": weapon_name, "label": label, "icon_name": weapon_name, "count": 1})
-	var status := "EQUIPPED WEAPON: %s" % (equipped if not equipped.is_empty() else "None")
-	hud.refresh_inventory(entries, [], int(progress.get("cogs", 0)), status)
+	hud._refresh_inventory_display()
+
+
+func _save_inventory() -> void:
+	if hud.save_callback.is_valid():
+		hud.save_callback.call()
 
 
 func _equip_starter_weapon(weapon_name: String) -> void:
-	progress["equipped_weapon"] = weapon_name
-	progress["equipment_complete"] = true
-	_save_progress()
+	hud.progress_ref["equipped_weapon"] = weapon_name
+	_save_inventory()
 	_apply_progress_to_scene()
 	_refresh_inventory_window()
 	_update_objective()

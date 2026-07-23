@@ -1,14 +1,28 @@
 LATEST AUTHORITATIVE STEAMTEK HANDOFF
-Updated: 2026-07-22
+Updated: 2026-07-23
 
-Use:
+Primary current continuation:
+
+C:\My Game\Steamtek-RPG\docs\ChatGPT handoffs\2026-07-23_STEAMTEK_CHARACTER_ASSET_AND_MESHY_RIGGING_HANDOFF.txt
+
+Full visible current chat (July 22-23):
+
+C:\My Game\Steamtek-RPG\docs\ChatGPT handoffs\2026-07-23_STEAMTEK_CHAT_TRANSCRIPT_VERBATIM.txt
+
+Current character continuation state:
+
+- STK_HERO_BaseBody_01 repair master is approved and remains unrigged.
+- Upload STK_HERO_BaseBody_01_MeshyRigInput.glb for Meshy auto-rigging.
+- The Meshy copy has one mesh, one opaque material, one UV atlas, and 31,138 triangles.
+- Single-sided 360-degree QA found no black patches or missing polygons.
+- Do not use the rejected C001 skeleton as the SCU or hero rig baseline.
+- Preserve the approved production source and save Meshy's return as a new derivative.
+
+Subsystem authority retained:
 
 C:\My Game\Steamtek-RPG\docs\ChatGPT handoffs\2026-07-22_STEAMTEK_STREET_KIT_LIVE3D_HANDOFF.txt
 
-Current continuation state:
+The July 22 file remains authoritative for the finalized street walls, corrected
+sidewalk corner, Live3D Builder integration, and paused road-tile request.
 
-- The 1.2 m and 2.4 m street walls are finalized and Builder-ready.
-- Both walls have structural snaps and nine functional front prop sockets.
-- The sidewalk corner is now a compact 1.2 m junction with corrected snapping.
-- STK_ENV_Street_Road_1p2_A is paused before implementation.
-- Preserve the dirty worktree and do not modify unrelated assets.
+Preserve the dirty worktree and do not modify unrelated assets.

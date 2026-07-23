@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" path="res://scenes/effects/live3d/SteamtekRainVolume3D.tscn" id="11_rain"]
 [ext_resource type="PackedScene" path="res://scenes/effects/live3d/SteamtekStormAtmosphere3D.tscn" id="12_storm"]
 [ext_resource type="Script" path="res://scenes/effects/live3d/steamtek_surface_weather_3d.gd" id="13_weather"]
+[ext_resource type="PackedScene" path="res://scenes/gameplay/live3d/SteamtekTutorialCombatTarget3D.tscn" id="14_combat_target"]
 
 [sub_resource type="Environment" id="Environment"]
 background_mode = 1
@@ -169,6 +170,9 @@ metadata/rotation_contract = "Yaw only: 0, 90, 180, or 270 degrees; never negati
 [node name="Buildings" type="Node3D" parent="." unique_id=301781188]
 
 [node name="Props" type="Node3D" parent="." unique_id=196012570]
+
+[node name="ScrapThief" parent="Props" instance=ExtResource("14_combat_target")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.18, 3)
 
 [node name="Lighting" type="Node3D" parent="." unique_id=999445586]
 
