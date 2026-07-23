@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_WetConcrete_Neutral_v01.tres" id="1_concrete"]
 [ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="2_gunmetal"]
@@ -8,6 +8,10 @@ size = Vector3(2.4, 0.18, 1.2)
 
 [sub_resource type="BoxMesh" id="EdgeBandMesh"]
 size = Vector3(2.32, 0.025, 0.08)
+
+[sub_resource type="BoxShape3D" id="SidewalkCollisionShape"]
+size = Vector3(2.4, 0.04, 1.2)
+
 
 [node name="SteamtekSidewalkStraight2_4m3D" type="Node3D" groups=["steamtek_live3d_modular"]]
 editor_description = "Straight 2.4 m by 1.2 m sidewalk segment. Root is the finished walking plane; local -Z is the street edge."
@@ -31,19 +35,29 @@ position = Vector3(0, 0.0125, -0.55)
 mesh = SubResource("EdgeBandMesh")
 material_override = ExtResource("2_gunmetal")
 
+[node name="CollisionBody" type="StaticBody3D" parent="."]
+position = Vector3(0, -0.02, 0)
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="CollisionBody"]
+shape = SubResource("SidewalkCollisionShape")
+
 [node name="Sockets" type="Node3D" parent="."]
 
 [node name="ChainNegX" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
 position = Vector3(-1.2, 0, 0)
 metadata/socket_role = "street_sidewalk_chain"
+metadata/socket_polarity = -1
 
 [node name="ChainPosX" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
 position = Vector3(1.2, 0, 0)
 metadata/socket_role = "street_sidewalk_chain"
+metadata/socket_polarity = 1
 
 [node name="StreetEdge" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
 position = Vector3(0, 0, -0.6)
 metadata/socket_role = "street_sidewalk_road_edge"
+metadata/socket_normal_local = Vector3(0, 0, -1)
 
 [node name="BuildingEdge" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
 position = Vector3(0, 0, 0.6)

@@ -1,0 +1,44 @@
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://cl07nj36sh4uj"
+path.s3tc="res://.godot/imported/STK_ENV_Street_Wall_1p2_A_Production_v13_STK_Wall_Brick_Normal.png-9a34c891067c32df2d68ff853be277ff.s3tc.ctex"
+metadata={
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
+}
+generator_parameters={
+"md5": "504a656b8f92675b773000a93328665f"
+}
+
+[deps]
+
+source_file="res://assets/environment/live3d/models/street_kit/STK_ENV_Street_Wall_1p2_A_Production_v13_STK_Wall_Brick_Normal.png"
+dest_files=["res://.godot/imported/STK_ENV_Street_Wall_1p2_A_Production_v13_STK_Wall_Brick_Normal.png-9a34c891067c32df2d68ff853be277ff.s3tc.ctex"]
+
+[params]
+
+compress/mode=2
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/uastc_level=0
+compress/rdo_quality_loss=0.0
+compress/hdr_compression=1
+compress/normal_map=1
+compress/channel_pack=0
+mipmaps/generate=true
+mipmaps/limit=-1
+roughness/mode=1
+roughness/src_normal="res://assets/environment/live3d/models/street_kit/STK_ENV_Street_Wall_1p2_A_Production_v13_STK_Wall_Brick_Normal.png"
+process/channel_remap/red=0
+process/channel_remap/green=1
+process/channel_remap/blue=2
+process/channel_remap/alpha=3
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=0

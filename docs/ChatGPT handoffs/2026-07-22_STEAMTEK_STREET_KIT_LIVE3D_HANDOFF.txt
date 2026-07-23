@@ -1,0 +1,211 @@
+STEAMTEK STREET-KIT AND LIVE3D BUILDER HANDOFF
+Date: 2026-07-22
+Project: C:\My Game\Steamtek-RPG
+
+PURPOSE
+
+This handoff records the authoritative state of the Steamtek modular street walls, sidewalk/curb work, Live3D Builder integration, validation tools, and the paused STK_ENV_Street_Road_1p2_A request. It supersedes the street-kit status in 2026-07-21_STEAMTEK_ASSET_DEVELOPMENT_HANDOFF.txt, which incorrectly states that the 2.4 m wall has not been created.
+
+CURRENT USER PRIORITY
+
+The road-tile task is paused. The latest completed work is the sidewalk corner correction. If work resumes without a new instruction, open the corrected corner assembly in the Live3D Builder and visually confirm it with newly placed instances. Do not resume the road tile until the user asks.
+
+FINAL STREET WALL PAIR
+
+The 1.2 m and 2.4 m street walls are finalized as one modular family.
+
+Canonical Godot scenes:
+
+- res://assets/environment/street_kit/walls/STK_ENV_Street_Wall_1p2_A.tscn
+- res://assets/environment/street_kit/walls/STK_ENV_Street_Wall_2p4_A.tscn
+
+Production meshes:
+
+- res://assets/environment/live3d/models/street_kit/STK_ENV_Street_Wall_1p2_A_Production_v15.glb
+- res://assets/environment/live3d/models/street_kit/STK_ENV_Street_Wall_2p4_A_Production.glb
+
+The older wrapper at res://scenes/environment/live3d/kits/street/STK_ENV_Street_Wall_1p2_A.tscn is not the Builder's canonical wall entry. Do not accidentally edit or validate only that older wrapper. The Live3D Builder uses the two canonical scenes under assets/environment/street_kit/walls.
+
+STK_ENV_Street_Wall_1p2_A authoritative production state:
+
+- Dimensions: 1.2 m wide x 3.2 m high x 0.16 m deep.
+- Pivot: bottom-center.
+- Root scale: 1,1,1.
+- +Y up and visible face toward +Z.
+- One exact BoxShape3D collision: 1.2 x 3.2 x 0.16 m, centered at Y 1.6.
+- Production triangle count: 2,464.
+- Structural sockets: Snap_Left at X -0.6 and Snap_Right at X +0.6.
+- Structural socket role: facade_horizontal.
+- Front prop sockets: nine wall_prop_surface markers in a 3 x 3 layout.
+- Front socket X positions: -0.36, 0, +0.36 m.
+- Front socket Y positions: 1.05, 1.60, and 2.65 m.
+- Front socket Z position: +0.081 m.
+- Every front socket is in both steamtek_attachment_point and steamtek_live3d_snap and faces local +Z.
+
+STK_ENV_Street_Wall_2p4_A authoritative production state:
+
+- Dimensions: 2.4 m wide x 3.2 m high x 0.16 m deep.
+- Pivot: bottom-center.
+- Root scale: 1,1,1.
+- +Y up and visible face toward +Z.
+- One exact BoxShape3D collision: 2.4 x 3.2 x 0.16 m, centered at Y 1.6.
+- Production triangle count: 3,180.
+- Structural sockets: Snap_Left at X -1.2 and Snap_Right at X +1.2.
+- Snap_Center is a reference marker, not an edge snap.
+- Structural socket role: facade_horizontal.
+- Front prop sockets: nine wall_prop_surface markers in a 3 x 3 layout.
+- Front socket X positions: -0.6, 0, +0.6 m.
+- Front socket Y positions: 1.05, 1.60, and 2.65 m.
+- Front socket Z position: +0.081 m.
+- Every front socket is in both steamtek_attachment_point and steamtek_live3d_snap and faces local +Z.
+
+The 2.4 m materials were adjusted against the completed 1.2 m production wall without changing the texture scale, roughness maps, UV layout, or material identities. The material pass raised the wider wall's brick, steel, lower-panel, and vent midtones so it no longer reads as a dark featureless block under ordinary lighting. It was checked under neutral white, dim alley, and cyan/magenta lighting.
+
+The 2.4 m bottom frame was then corrected because the original lower panel visually swallowed its bottom run. Frame_BottomCap is now a continuous 2.10 m-wide member between the rails, 0.15 m high, centered at Y/Z equivalent Blender location Z 0.075. It remains inside the authoritative 2.4 x 3.2 x 0.16 m bounds. Triangle count, pivot, collision, hierarchy, materials, and snap points remain unchanged.
+
+2.4 m Blender production sources:
+
+- C:\My Game\Steamtek-RPG\blender\live3d\street\STK_ENV_Street_Wall_2p4_A.blend
+- C:\My Game\Steamtek-RPG\blender\live3d\street\Steamtek_Build_STK_ENV_Street_Wall_2p4_A.py
+- C:\My Game\Steamtek-RPG\blender\live3d\street\Steamtek_Match_STK_ENV_Street_Wall_2p4_A_Materials.py
+- C:\My Game\Steamtek-RPG\blender\live3d\street\Steamtek_Fix_STK_ENV_Street_Wall_2p4_A_BottomFrame.py
+
+Wall QA scenes and comparison renders:
+
+- res://assets/environment/street_kit/walls/qa/STK_ENV_Street_Wall_1p2_A_ThreeModuleValidation.tscn
+- res://assets/environment/street_kit/walls/qa/STK_ENV_Street_Wall_2p4_A_ModularityValidation.tscn
+- res://assets/environment/street_kit/walls/qa/STK_ENV_Street_Walls_1p2_2p4_SideBySide.tscn
+- C:\My Game\Steamtek-RPG\docs\reviews\street_kit\STK_ENV_Street_Walls_1p2_2p4_MaterialMatch_Neutral.png
+- C:\My Game\Steamtek-RPG\docs\reviews\street_kit\STK_ENV_Street_Walls_1p2_2p4_MaterialMatch_DimAlley.png
+- C:\My Game\Steamtek-RPG\docs\reviews\street_kit\STK_ENV_Street_Walls_1p2_2p4_MaterialMatch_CyanMagenta.png
+
+Wall validators:
+
+- res://tools/qa/validate_street_wall_2p4.gd
+- res://tools/qa/validate_street_wall_pair_final.gd
+
+Latest wall validation results:
+
+- Both wall scenes load successfully.
+- Both roots are scale 1,1,1 and use bottom-center pivots.
+- Both collisions exactly match their authoritative dimensions.
+- The 1.2 m wall has two structural snaps and nine front prop sockets.
+- The 2.4 m wall has two structural snaps, one center reference, and nine front prop sockets.
+- The 2.4 m mesh remains 3,180 triangles.
+- Side-by-side module rows have no positional gap or overlap.
+- Pair-level validator reported errors: none.
+
+LIVE3D BUILDER WALL REGISTRATION
+
+The active registry is in:
+
+C:\My Game\Steamtek-RPG\addons\steamtek_live3d_builder\steamtek_live3d_builder.gd
+
+The exterior-structure profile contains:
+
+- Street - Structural Wall 1.2m -> res://assets/environment/street_kit/walls/STK_ENV_Street_Wall_1p2_A.tscn
+- Street - Structural Wall 2.4m -> res://assets/environment/street_kit/walls/STK_ENV_Street_Wall_2p4_A.tscn
+
+The Builder's selected placement profile now filters the module dropdown. The wall front-prop markers use the recognized wall_prop_surface role and steamtek_live3d_snap group, so Add Chosen Object at Next Free Surface Socket can find them. Visual-only markers without that group/role are ignored by the Builder.
+
+SIDEWALK AND CURB CURRENT STATE
+
+Key scenes:
+
+- res://scenes/environment/live3d/kits/street/SteamtekSidewalkStraight2_4m3D.tscn
+- res://scenes/environment/live3d/kits/street/SteamtekSidewalkCorner2_4m3D.tscn
+- res://scenes/environment/live3d/kits/street/SteamtekSidewalkCurbRamp2_4m3D.tscn
+- res://scenes/environment/live3d/kits/street/SteamtekCurbStraight2_4m3D.tscn
+- res://scenes/environment/live3d/kits/street/SteamtekCurbCorner90_3D.tscn
+
+Sidewalk straight contract:
+
+- 2.4 m long x 1.2 m deep x 0.18 m slab depth.
+- Root is on the finished walking plane; slab extends downward.
+- Black gunmetal edge band is on local -Z.
+- Chain sockets are at local X -1.2 and +1.2 with opposite street_sidewalk_chain polarities.
+- Road edge is local -Z; building edge is local +Z.
+
+Corrected sidewalk corner contract:
+
+- The previous corner was an oversized 2.4 x 2.4 m L made from two complete sidewalk legs. That caused a duplicated leg whenever a straight sidewalk was attached.
+- The current corner is a compact 1.2 x 1.2 m square junction.
+- Scene path remains res://scenes/environment/live3d/kits/street/SteamtekSidewalkCorner2_4m3D.tscn for Builder compatibility, despite the corrected 1.2 m footprint.
+- Corner slab: 1.2 x 0.18 x 1.2 m.
+- Collision: one 1.2 x 0.04 x 1.2 m BoxShape3D at the walking surface.
+- Outside black bands run along local +X and +Z.
+- Sidewalk continuation sockets are SidewalkNegX at (-0.6, 0, 0) and SidewalkNegZ at (0, 0, -0.6).
+- The -X socket polarity is -1; the -Z socket polarity is +1. They mate with the corresponding rotated straight-sidewalk endpoints.
+- Rotation is yaw-only in 90-degree increments; do not negative-scale mirror it.
+- Two 2.4 m sidewalk straights attached at -X and -Z form the intended L.
+
+Corrected corner QA:
+
+- res://scenes/environment/live3d/qa/SteamtekSidewalkCornerLTest.tscn
+- res://tools/qa/validate_sidewalk_corner_l.gd
+- Latest result: shape true, bands true, normals true, collision true.
+- Largest measured socket error: approximately 0.00000013 m, effectively zero.
+
+Important editor note: old corner instances already placed in an open scene may retain the prior footprint or local overrides. Delete the old placed corner, refresh the Builder module list, and place a new instance before judging the correction.
+
+CURB RAMP CURRENT STATE
+
+The sidewalk curb-ramp/opening scene was previously corrected to represent curb plus opening depth rather than a ramp as wide as the entire sidewalk. Current metadata footprint is 2.4 x 1.4 m. The ramp mouth is centered, with two 0.5 m sidewalk/curb side sections and widened central access. It contains sidewalk chain, curb chain, road-edge, and building-edge sockets. Continue to test it only in the Live3D Builder, because the user explicitly prefers assembled Builder testing over isolated scenes.
+
+PAUSED ROAD TILE REQUEST
+
+The user supplied a new brief for STK_ENV_Street_Road_1p2_A and then explicitly paused it before implementation. No road model, texture, Godot production scene, QA scene, Builder registration, or build script was created during that request.
+
+Pending authoritative road requirements when resumed:
+
+- Asset: STK_ENV_Street_Road_1p2_A.
+- Save path: res://assets/environment/street_kit/ground/STK_ENV_Street_Road_1p2_A.tscn.
+- Exact size: 1.2 m wide x 1.2 m deep x 0.16 m thick.
+- Architecture grid: 1.2 m.
+- Pivot: center-bottom.
+- +Y up and root scale 1,1,1.
+- Neutral, seamless dark industrial small-stone/compact-cobbled paving.
+- Heavier and darker than the wall brick, but not the same brick texture.
+- Texture-driven detail; do not model each stone individually.
+- Preferred 150-600 triangles; stop and report before exceeding 1,200.
+- One simple 1.2 x 1.2 x 0.16 m box collision.
+- Required structural sockets: Snap_North, Snap_South, Snap_East, and Snap_West.
+- Required overlay markers: Overlay_Center, Overlay_North, Overlay_South, Overlay_East, and Overlay_West.
+- Must tile cleanly when rotated 0, 90, 180, and 270 degrees.
+- Must not include curbs, sidewalks, drains, manholes, puddles, graffiti, trash, debris, markings, neon reflections, oil spills, large cracks, raised borders, or unique central decoration.
+- The supplied technical sheet is a visual target, but this neutral-base brief is authoritative where the sheet shows puddles, perimeter blocks, or unique detailing.
+- Required QA is a 3 x 3 tile scene with rotated neighbors and neutral, dim, cyan/magenta, and low-angle lighting checks.
+
+FULL LIVE3D AUDIT
+
+Latest audit command uses:
+
+res://tools/qa/audit_live3d_modularity.gd
+
+Latest result:
+
+- Modules scanned: 50.
+- Issues: 0.
+- Seam warnings: 3.
+
+The three warnings are pre-existing and unrelated to the finalized walls or corrected sidewalk corner:
+
+- SteamtekParapetStraight3D.tscn visual X span 2.5 m versus 2.4 m socket span.
+- APT_Pipe_Run_240_A.tscn visual X span 2.18 m versus 2.4 m socket span.
+- SteamtekDrainBay2_4m3D.tscn visual X span 2.1 m versus 2.4 m socket span.
+
+Do not silently alter those assets as part of street-wall, sidewalk-corner, or road-tile work.
+
+WORKTREE AND SAFETY
+
+The project worktree contains many unrelated modified and untracked files from the user's broader development work. Do not reset, clean, delete, revert, or overwrite unrelated changes. No commit was created during this work. Use targeted edits only.
+
+Godot headless QA emits renderer RID/object leak warnings when the short-lived editor process exits. The actual validators returned exit code 0 and explicit passed=true results; the shutdown warnings are not asset-validation failures.
+
+RECOMMENDED NEXT STEPS
+
+1. In the user's currently open Live3D Builder scene, delete any old placed sidewalk-corner instance.
+2. Refresh the Exterior Structure module list and place Street - Sidewalk Corner again.
+3. Attach one sidewalk straight to each continuation socket and confirm the compact L visually.
+4. Rotate the new corner by 90 degrees and repeat to confirm the intended handed orientation.
+5. Only after user approval, resume STK_ENV_Street_Road_1p2_A from the paused specification above.

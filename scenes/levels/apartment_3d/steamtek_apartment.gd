@@ -10,12 +10,9 @@ const TAKE_ALL_HOLD_SECONDS := 0.6
 @onready var storage_window: Control = $TransitionUI/StorageWindow
 @onready var storage_panel: SteamtekItemGridPanel = $TransitionUI/StorageWindow/Panel
 @onready var your_items_panel: SteamtekItemGridPanel = $TransitionUI/StorageWindow/YourItemsPanel
-@onready var inventory_window: SteamtekInventoryWindow = $TransitionUI/InventoryWindow
 @onready var note_marker: Node3D = $QuestNoteInteractable/NoteQuestMarker
 @onready var storage_marker: Node3D = $StarterStorageInteractable/StorageQuestMarker
 @onready var door_outline: Node3D = $ExitDoor/DoorOutline
-@onready var hud: SteamtekLive3DHud = $Live3DHud
-@onready var dialogue_box: SteamtekDialogueBox = $TransitionUI/DialogueBox
 
 var progress: Dictionary = {}
 var message_serial := 0
@@ -27,15 +24,38 @@ var _dialogue_speaker := ""
 
 func _ready() -> void:
 	super._ready()
-	progress = _load_progress()
-	hud.bind(progress, _save_progress)
-	inventory_window.close_requested.connect(func(): _set_inventory_open(false))
-	inventory_window.slot_double_clicked.connect(_on_inventory_slot_double_clicked)
-	hud.panel_opened.connect(func(): _set_quest_log_visible(false))
-	hud.panel_closed.connect(func(): _set_quest_log_visible(true))
 	_connect_interactables()
 	_apply_progress_to_scene()
 	_update_objective()
+
+
+func _get_progress() -> Dictionary:
+	var stored: Variant = get_tree().root.get_meta(PROGRESS_STATE_META, {})
+	if stored is Dictionary:
+		progress = (stored as Dictionary).duplicate(true)
+	else:
+		progress = {}
+	return progress
+
+
+func _save_progress() -> void:
+	get_tree().root.set_meta(PROGRESS_STATE_META, progress.duplicate(true))
+
+
+func _on_hud_panel_opened() -> void:
+	_set_quest_log_visible(false)
+
+
+func _on_hud_panel_closed() -> void:
+	_set_quest_log_visible(true)
+
+
+func _on_inventory_slot_double_clicked(key: String) -> void:
+	var weapons_owned: Dictionary = progress.get("weapons_owned", {})
+	if weapons_owned.has(key):
+		_equip_starter_weapon(key)
+	else:
+		_show_message("Nothing to do with this yet.")
 
 
 func _process(delta: float) -> void:
@@ -52,33 +72,12 @@ func _process(delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	super._unhandled_input(event)
 	if storage_window.visible and event.is_action_pressed("interact"):
 		_set_storage_open(false)
-		# The character's own interaction polling (see
-		# steamtek_humanoid_character_3d.gd's _physics_process) checks the
-		# SAME "interact" action independently of this handler, and can
-		# still read this exact keypress as fresh on the next physics tick
-		# once player_controlled flips back on, instantly reopening the
-		# crate. Block re-opens until the key is physically released.
 		_suppress_storage_reopen = true
 		get_viewport().set_input_as_handled()
 		return
-	if not bool(progress.get("note_found", false)):
-		return
-	if event.is_action_pressed("equip_menu"):
-		_set_inventory_open(not inventory_window.visible)
-		get_viewport().set_input_as_handled()
-
-
-func _load_progress() -> Dictionary:
-	var stored: Variant = get_tree().root.get_meta(PROGRESS_STATE_META, {})
-	if stored is Dictionary:
-		return (stored as Dictionary).duplicate(true)
-	return {}
-
-
-func _save_progress() -> void:
-	get_tree().root.set_meta(PROGRESS_STATE_META, progress.duplicate(true))
 
 
 func _connect_interactables() -> void:
@@ -97,7 +96,8 @@ func _apply_progress_to_scene() -> void:
 		note.mark_used()
 	note_marker.visible = not note_found
 	storage_marker.visible = note_found and not equipped
-	door_outline.visible = false # disabled for now
+	door_outline.visible = false
+	hud.set_inventory_enabled(note_found)
 
 
 func _on_interactable_action_requested(action_id: String, _actor: Node, _source: Node) -> void:
@@ -132,7 +132,7 @@ func _show_dialogue_sequence(speaker: String, lines: Array) -> void:
 
 func _advance_dialogue() -> void:
 	if _dialogue_queue.is_empty():
-		dialogue_box.close()
+		hud.dialogue_box.close()
 		character.call_deferred("set_player_controlled", true)
 		return
 	var line: String = _dialogue_queue.pop_front()
@@ -141,7 +141,7 @@ func _advance_dialogue() -> void:
 		options = [{"label": "Close", "callback": _advance_dialogue}]
 	else:
 		options = [{"label": "Continue", "callback": _advance_dialogue}]
-	dialogue_box.show_dialogue(_dialogue_speaker, line, options)
+	hud.dialogue_box.show_dialogue(_dialogue_speaker, line, options)
 
 
 func _set_quest_log_visible(is_visible: bool) -> void:
@@ -160,10 +160,6 @@ func _update_objective() -> void:
 
 func _open_starter_storage() -> void:
 	if not progress.has("crate_items") and not progress.has("crate_weapons"):
-		# Matches the real starting kit every character gets
-		# (main.gd:_grant_profession_starting_kit / _grant_starting_bandages)
-		# so what the player finds here is the same gear the full game
-		# actually starts them with, not placeholder flavor items.
 		progress["crate_items"] = {
 			"Crate of Bandages (5 charges)": 2,
 			"Mineral Survey Tool": 1,
@@ -178,15 +174,11 @@ func _open_starter_storage() -> void:
 
 func _set_storage_open(open: bool) -> void:
 	storage_window.visible = open
+	set_prompt_suppressed(open)
 	if open:
 		character.set_player_controlled(false)
 		_refresh_storage_window()
 	else:
-		# Deferred, not immediate: the character's own _physics_process polls
-		# Input.is_action_just_pressed("interact") independently of this
-		# script's _unhandled_input. Re-enabling control in the same frame
-		# the close came from lets that same keypress still read as "just
-		# pressed" on the next physics tick, instantly reopening the crate.
 		character.call_deferred("set_player_controlled", true)
 
 
@@ -310,12 +302,6 @@ func _store_weapon(weapon_name: String) -> void:
 	_show_message("Stored %s." % weapon_name)
 
 
-func _set_inventory_open(open: bool) -> void:
-	inventory_window.visible = open
-	if open:
-		_refresh_inventory_window()
-
-
 func _refresh_inventory_window() -> void:
 	var entries: Array = []
 	var items: Dictionary = progress.get("items", {})
@@ -328,16 +314,8 @@ func _refresh_inventory_window() -> void:
 		if weapon_name == equipped:
 			label += " (equipped)"
 		entries.append({"key": weapon_name, "label": label, "icon_name": weapon_name, "count": 1})
-	inventory_window.configure(entries, [], int(progress.get("cogs", 0)))
-	inventory_window.set_status_text("EQUIPPED WEAPON: %s" % (equipped if not equipped.is_empty() else "None"))
-
-
-func _on_inventory_slot_double_clicked(key: String) -> void:
-	var weapons_owned: Dictionary = progress.get("weapons_owned", {})
-	if weapons_owned.has(key):
-		_equip_starter_weapon(key)
-	else:
-		_show_message("Nothing to do with this yet.")
+	var status := "EQUIPPED WEAPON: %s" % (equipped if not equipped.is_empty() else "None")
+	hud.refresh_inventory(entries, [], int(progress.get("cogs", 0)), status)
 
 
 func _equip_starter_weapon(weapon_name: String) -> void:
@@ -356,18 +334,5 @@ func _show_message(text: String) -> void:
 	message_label.text = text
 	message_label.visible = true
 	await get_tree().create_timer(3.2).timeout
-	if serial == message_serial:
-		message_label.visible = false
-
-
-func _show_message_sequence(messages: Array) -> void:
-	message_serial += 1
-	var serial := message_serial
-	for i in messages.size():
-		if serial != message_serial:
-			return
-		message_label.text = messages[i]
-		message_label.visible = true
-		await get_tree().create_timer(3.5).timeout
 	if serial == message_serial:
 		message_label.visible = false

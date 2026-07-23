@@ -5,7 +5,6 @@ signal tutorial_action_requested(action_id: String, actor: Node, source: Node)
 
 @export var action_id := ""
 @export var single_use := false
-@export var completed_prompt := "Completed"
 
 var was_used := false
 
@@ -21,7 +20,7 @@ func interact(actor: Node) -> void:
 	tutorial_action_requested.emit(action_id, actor, self)
 	if single_use:
 		was_used = true
-		interaction_prompt = completed_prompt
+		interaction_enabled = false
 
 
 func mark_available(available: bool) -> void:
@@ -30,4 +29,4 @@ func mark_available(available: bool) -> void:
 
 func mark_used() -> void:
 	was_used = true
-	interaction_prompt = completed_prompt
+	interaction_enabled = false

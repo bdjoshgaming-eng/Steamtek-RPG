@@ -1145,8 +1145,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	if event is InputEventKey and event.pressed and event.keycode == KEY_F3:
 		_debug_grant_core_mods()
-	if event is InputEventKey and event.pressed and event.keycode == KEY_F8:
-		get_tree().quit()
+	pass
 
 func _generate_unique_resource_name() -> String:
 	var new_name = ""

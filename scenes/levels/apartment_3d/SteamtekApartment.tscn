@@ -10,11 +10,8 @@
 [ext_resource type="PackedScene" path="res://scenes/effects/live3d/SteamtekStormAtmosphere3D.tscn" id="8_storm"]
 [ext_resource type="PackedScene" path="res://scenes/effects/live3d/SteamtekWindowRainOverlay3D.tscn" id="9_window_rain"]
 [ext_resource type="PackedScene" path="res://scenes/gameplay/live3d/SteamtekDoorOutline3D.tscn" id="10_door_outline"]
-[ext_resource type="PackedScene" path="res://scenes/gameplay/live3d/SteamtekLive3DHud.tscn" id="12_hud"]
 [ext_resource type="PackedScene" path="res://scenes/gameplay/live3d/SteamtekItemGridPanel.tscn" id="13_item_grid"]
 [ext_resource type="PackedScene" path="res://scenes/gameplay/live3d/SteamtekQuestBubble3D.tscn" id="14_quest_bubble"]
-[ext_resource type="PackedScene" path="res://scenes/gameplay/live3d/SteamtekInventoryWindow.tscn" id="15_inventory_window"]
-[ext_resource type="PackedScene" path="res://scenes/gameplay/live3d/SteamtekDialogueBox.tscn" id="16_dialogue_box"]
 
 [sub_resource type="Environment" id="Environment"]
 background_mode = 1
@@ -107,7 +104,7 @@ shape = SubResource("BoundaryZShape")
 [node name="QuestNoteInteractable" parent="." unique_id=1716475157 instance=ExtResource("4_interactable")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 0.9, 0.9)
 action_id = "opening_note"
-interaction_prompt = "Read the note"
+interaction_prompt = "A Note"
 
 [node name="NoteQuestMarker" parent="QuestNoteInteractable" unique_id=571757893 instance=ExtResource("6_quest_marker")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
@@ -123,7 +120,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 3)
 [node name="StarterStorageInteractable" parent="." unique_id=141306867 instance=ExtResource("4_interactable")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.9, 3)
 action_id = "starter_storage"
-interaction_prompt = "Open your storage crate"
+interaction_prompt = "Open"
 
 [node name="StorageQuestMarker" parent="StarterStorageInteractable" unique_id=677313047 instance=ExtResource("6_quest_marker")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0)
@@ -134,7 +131,7 @@ marker_type = 3
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1.1, -4.28)
 target_scene_path = "res://scenes/levels/surface_3d/SteamtekSurfaceBlank3D.tscn"
 target_spawn_id = "SurfaceEntryWest"
-interaction_prompt = "Exit the apartment"
+interaction_prompt = "Open"
 
 [node name="DoorOutline" parent="ExitDoor" unique_id=376383750 instance=ExtResource("10_door_outline")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0.75)
@@ -156,8 +153,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.142, 15.004, 14.142)
 projection = 1
 current = true
 size = 9.14
-
-[node name="Live3DHud" parent="." unique_id=734401985 instance=ExtResource("12_hud")]
 
 [node name="TransitionUI" type="CanvasLayer" parent="." unique_id=924406731]
 
@@ -257,22 +252,6 @@ grow_vertical = 0
 text = "[ E ]  Close"
 label_settings = SubResource("LabelSettings")
 horizontal_alignment = 1
-
-[node name="InventoryWindow" parent="TransitionUI" unique_id=55157741 instance=ExtResource("15_inventory_window")]
-visible = false
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -350.0
-offset_top = -323.0
-offset_right = 350.0
-offset_bottom = 323.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="DialogueBox" parent="TransitionUI" instance=ExtResource("16_dialogue_box")]
 
 [node name="Fade" type="ColorRect" parent="TransitionUI" unique_id=1470030698]
 anchors_preset = 15

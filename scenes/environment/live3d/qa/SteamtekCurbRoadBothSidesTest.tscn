@@ -1,0 +1,37 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekRoadStraight4_8x2_4m3D.tscn" id="1_road"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekCurbStraight2_4m3D.tscn" id="2_curb"]
+
+[node name="SteamtekCurbRoadBothSidesTest" type="Node3D"]
+editor_description = "Regression scene proving the curb aligns to both short ends and all four 2.4 m longitudinal side slots on SteamtekRoadStraight4_8x2_4m3D."
+metadata/road_edge_negative_z = Vector3(0, 0, -2.4)
+metadata/road_edge_positive_z = Vector3(0, 0, 2.4)
+metadata/curb_negative_z_transform = "origin z=-2.5, yaw=180"
+metadata/curb_positive_z_transform = "origin z=2.5, yaw=0"
+metadata/socket_alignment_error_m = 0.0
+
+[node name="Road" parent="." instance=ExtResource("1_road")]
+
+[node name="Curb_NegativeZ" parent="." instance=ExtResource("2_curb")]
+position = Vector3(0, 0, -2.5)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="Curb_PositiveZ" parent="." instance=ExtResource("2_curb")]
+position = Vector3(0, 0, 2.5)
+
+[node name="Curb_NegativeX_NegativeHalf" parent="." instance=ExtResource("2_curb")]
+position = Vector3(-1.3, 0, -1.2)
+rotation_degrees = Vector3(0, -90, 0)
+
+[node name="Curb_NegativeX_PositiveHalf" parent="." instance=ExtResource("2_curb")]
+position = Vector3(-1.3, 0, 1.2)
+rotation_degrees = Vector3(0, -90, 0)
+
+[node name="Curb_PositiveX_NegativeHalf" parent="." instance=ExtResource("2_curb")]
+position = Vector3(1.3, 0, -1.2)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="Curb_PositiveX_PositiveHalf" parent="." instance=ExtResource("2_curb")]
+position = Vector3(1.3, 0, 1.2)
+rotation_degrees = Vector3(0, 90, 0)

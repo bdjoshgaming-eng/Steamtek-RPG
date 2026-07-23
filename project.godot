@@ -180,3 +180,4 @@ renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/compress_with_gpu=false
 textures/vram_compression/cache_gpu_compressor=false
+environment/defaults/default_clear_color=Color(0, 0, 0, 1)

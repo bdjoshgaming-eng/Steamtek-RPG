@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekCurbStraight2_4m3D.tscn" id="1_curb"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekSidewalkStraight2_4m3D.tscn" id="2_sidewalk"]
+
+[node name="SteamtekSidewalkCurbChainTest" type="Node3D"]
+editor_description = "Regression scene proving three chained sidewalks preserve one curb-facing direction."
+
+[node name="Curb" parent="." instance=ExtResource("1_curb")]
+
+[node name="SidewalkCenter" parent="." instance=ExtResource("2_sidewalk")]
+position = Vector3(0, 0.18, 0.7)
+
+[node name="SidewalkLeft" parent="." instance=ExtResource("2_sidewalk")]
+position = Vector3(-2.4, 0.18, 0.7)
+
+[node name="SidewalkRight" parent="." instance=ExtResource("2_sidewalk")]
+position = Vector3(2.4, 0.18, 0.7)

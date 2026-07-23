@@ -20,6 +20,7 @@ signal interaction_performed(target: Node)
 @export var turn_snap_threshold_degrees := 0.75
 @export var locomotion_blend_seconds := 0.1
 @export var gravity_strength := 18.0
+@export var step_height := 0.25
 @export var model_forward_yaw_offset_degrees := 40.0
 @export var idle_animation_key := "STK_IDLE"
 @export var walk_animation_key := "STK_WALK"
@@ -84,11 +85,31 @@ func _physics_process(delta: float) -> void:
 			velocity.z = move_toward(velocity.z, 0.0, movement_deceleration * delta)
 		_play_animation(idle_animation)
 
-	if not is_on_floor():
+	var was_on_floor := is_on_floor()
+	if not was_on_floor:
 		velocity.y -= gravity_strength * delta
 	else:
 		velocity.y = -0.2
+	var saved_velocity := velocity
 	move_and_slide()
+	if is_on_wall() and was_on_floor:
+		_try_step_up(saved_velocity, delta)
+
+
+func _try_step_up(saved_velocity: Vector3, _delta: float) -> void:
+	var h_vel := Vector3(saved_velocity.x, 0, saved_velocity.z)
+	if h_vel.length_squared() < 0.01:
+		return
+	var step_up_xform := global_transform
+	step_up_xform.origin.y += step_height
+	if test_move(step_up_xform, h_vel.normalized() * 0.15):
+		return
+	var forward_xform := step_up_xform
+	forward_xform.origin += h_vel.normalized() * 0.15
+	if not test_move(forward_xform, Vector3(0, -step_height * 1.5, 0)):
+		return
+	global_position.y += step_height
+	velocity = Vector3(h_vel.x, -0.2, h_vel.z)
 
 
 func set_player_controlled(enabled: bool) -> void:

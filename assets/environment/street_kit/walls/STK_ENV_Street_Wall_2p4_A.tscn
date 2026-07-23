@@ -1,0 +1,113 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/environment/live3d/models/street_kit/STK_ENV_Street_Wall_2p4_A_Production.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="WallCollision"]
+size = Vector3(2.4, 3.2, 0.16)
+
+[node name="STK_ENV_Street_Wall_2p4_A" type="StaticBody3D" groups=["steamtek_live3d_modular"]]
+editor_description = "Final bare Steamtek 2.4 m modular structural wall. Bottom-center pivot, +Y up, visible exterior face toward +Z. Includes permanent centered maintenance hatch but no detachable decoration."
+collision_layer = 1
+collision_mask = 0
+metadata/module_type = "structural_wall"
+metadata/module_system = "live3d_meter_v1"
+metadata/module_family = "street_structural_wall"
+metadata/module_variant = "STK_ENV_Street_Wall_2p4_A"
+metadata/architecture_grid_m = 1.2
+metadata/grid_step_m = 1.2
+metadata/dimensions_m = Vector3(2.4, 3.2, 0.16)
+metadata/pivot = "bottom_center"
+metadata/front_axis = "+Z"
+metadata/horizontal_snap_role = "facade_horizontal"
+metadata/rotation_contract = "Yaw only: 0, 90, 180, or 270 degrees"
+metadata/snap_contract = "2.4m facade edge sockets with 1.2m center reference"
+metadata/source_mesh = "STK_ENV_Street_Wall_2p4_A_Production.glb"
+metadata/triangle_count = 3180
+metadata/materials = ["MAT_STK_Wall_Brick_PBR", "MAT_STK_Wall_BlackenedSteel_PBR", "MAT_STK_Wall_MaintenancePanel_PBR", "MAT_STK_Wall_VentSteel_PBR", "MAT_STK_Wall_VentInterior"]
+
+[node name="Visuals" type="Node3D" parent="."]
+
+[node name="ImportedMesh" parent="Visuals" instance=ExtResource("1_visual")]
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.6, 0)
+shape = SubResource("WallCollision")
+
+[node name="SnapPoints" type="Node3D" parent="."]
+
+[node name="Snap_Left" type="Marker3D" parent="SnapPoints" groups=["steamtek_live3d_snap"]]
+position = Vector3(-1.2, 0, 0)
+metadata/socket_role = "facade_horizontal"
+
+[node name="Snap_Center" type="Marker3D" parent="SnapPoints" groups=["steamtek_live3d_reference"]]
+metadata/socket_role = "facade_center_reference"
+metadata/grid_offset_m = 1.2
+
+[node name="Snap_Right" type="Marker3D" parent="SnapPoints" groups=["steamtek_live3d_snap"]]
+position = Vector3(1.2, 0, 0)
+metadata/socket_role = "facade_horizontal"
+
+[node name="AttachmentPoints" type="Node3D" parent="."]
+
+[node name="Attach_Front_Left_Upper" type="Marker3D" parent="AttachmentPoints" groups=["steamtek_attachment_point", "steamtek_live3d_snap"]]
+position = Vector3(-0.6, 2.65, 0.081)
+metadata/attachment_normal = Vector3(0, 0, 1)
+metadata/socket_normal_local = Vector3(0, 0, 1)
+metadata/socket_role = "wall_prop_surface"
+metadata/attachment_use = "upper_light_sign_or_utility_prop"
+
+[node name="Attach_Front_Left_Center" type="Marker3D" parent="AttachmentPoints" groups=["steamtek_attachment_point", "steamtek_live3d_snap"]]
+position = Vector3(-0.6, 1.6, 0.081)
+metadata/attachment_normal = Vector3(0, 0, 1)
+metadata/socket_normal_local = Vector3(0, 0, 1)
+metadata/socket_role = "wall_prop_surface"
+metadata/attachment_use = "general_front_prop"
+
+[node name="Attach_Front_Left_Lower" type="Marker3D" parent="AttachmentPoints" groups=["steamtek_attachment_point", "steamtek_live3d_snap"]]
+position = Vector3(-0.6, 1.05, 0.081)
+metadata/attachment_normal = Vector3(0, 0, 1)
+metadata/socket_normal_local = Vector3(0, 0, 1)
+metadata/socket_role = "wall_prop_surface"
+metadata/attachment_use = "lower_utility_prop"
+
+[node name="Attach_Front_Right_Upper" type="Marker3D" parent="AttachmentPoints" groups=["steamtek_attachment_point", "steamtek_live3d_snap"]]
+position = Vector3(0.6, 2.65, 0.081)
+metadata/attachment_normal = Vector3(0, 0, 1)
+metadata/socket_normal_local = Vector3(0, 0, 1)
+metadata/socket_role = "wall_prop_surface"
+metadata/attachment_use = "upper_light_sign_or_utility_prop"
+
+[node name="Attach_Front_Right_Center" type="Marker3D" parent="AttachmentPoints" groups=["steamtek_attachment_point", "steamtek_live3d_snap"]]
+position = Vector3(0.6, 1.6, 0.081)
+metadata/attachment_normal = Vector3(0, 0, 1)
+metadata/socket_normal_local = Vector3(0, 0, 1)
+metadata/socket_role = "wall_prop_surface"
+metadata/attachment_use = "general_front_prop"
+
+[node name="Attach_Front_Right_Lower" type="Marker3D" parent="AttachmentPoints" groups=["steamtek_attachment_point", "steamtek_live3d_snap"]]
+position = Vector3(0.6, 1.05, 0.081)
+metadata/attachment_normal = Vector3(0, 0, 1)
+metadata/socket_normal_local = Vector3(0, 0, 1)
+metadata/socket_role = "wall_prop_surface"
+metadata/attachment_use = "lower_utility_prop"
+
+[node name="Attach_Front_Center" type="Marker3D" parent="AttachmentPoints" groups=["steamtek_attachment_point", "steamtek_live3d_snap"]]
+position = Vector3(0, 1.6, 0.081)
+metadata/attachment_normal = Vector3(0, 0, 1)
+metadata/socket_normal_local = Vector3(0, 0, 1)
+metadata/socket_role = "wall_prop_surface"
+metadata/attachment_use = "general_front_prop"
+
+[node name="Attach_Front_Upper" type="Marker3D" parent="AttachmentPoints" groups=["steamtek_attachment_point", "steamtek_live3d_snap"]]
+position = Vector3(0, 2.65, 0.081)
+metadata/attachment_normal = Vector3(0, 0, 1)
+metadata/socket_normal_local = Vector3(0, 0, 1)
+metadata/socket_role = "wall_prop_surface"
+metadata/attachment_use = "upper_light_sign_or_utility_prop"
+
+[node name="Attach_Front_Lower" type="Marker3D" parent="AttachmentPoints" groups=["steamtek_attachment_point", "steamtek_live3d_snap"]]
+position = Vector3(0, 1.05, 0.081)
+metadata/attachment_normal = Vector3(0, 0, 1)
+metadata/socket_normal_local = Vector3(0, 0, 1)
+metadata/socket_role = "wall_prop_surface"
+metadata/attachment_use = "lower_utility_prop"

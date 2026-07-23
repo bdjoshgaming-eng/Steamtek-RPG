@@ -17,7 +17,16 @@ var message_serial := 0
 
 func _ready() -> void:
 	super._ready()
-	tutorial_state = _load_state()
+	_connect_tutorial_interactables()
+	_update_scene_state()
+
+
+func _get_progress() -> Dictionary:
+	var stored: Variant = get_tree().root.get_meta(TUTORIAL_STATE_META, {})
+	if stored is Dictionary:
+		tutorial_state = (stored as Dictionary).duplicate(true)
+	else:
+		tutorial_state = {}
 	if tutorial_state.is_empty():
 		tutorial_state = {
 			"note_found": true,
@@ -29,12 +38,16 @@ func _ready() -> void:
 			"cogs": 10,
 			"items": {},
 		}
-		_save_state()
-	_connect_tutorial_interactables()
-	_update_scene_state()
+		_save_progress()
+	return tutorial_state
+
+
+func _save_progress() -> void:
+	get_tree().root.set_meta(TUTORIAL_STATE_META, tutorial_state.duplicate(true))
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	super._unhandled_input(event)
 	if not vendor_panel.visible:
 		return
 	if event.is_action_pressed("equip_menu") or (event is InputEventKey and event.pressed and event.physical_keycode == KEY_ESCAPE):
@@ -46,17 +59,6 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_2:
 		_buy_vendor_item("Water Flask", 2)
 		get_viewport().set_input_as_handled()
-
-
-func _load_state() -> Dictionary:
-	var stored: Variant = get_tree().root.get_meta(TUTORIAL_STATE_META, {})
-	if stored is Dictionary:
-		return (stored as Dictionary).duplicate(true)
-	return {}
-
-
-func _save_state() -> void:
-	get_tree().root.set_meta(TUTORIAL_STATE_META, tutorial_state.duplicate(true))
 
 
 func _items() -> Dictionary:
@@ -98,9 +100,9 @@ func _attempt_quest_handoff() -> void:
 		return
 	tutorial_state["quest_stage"] = 2
 	tutorial_state["quest_title"] = "Below the Surface"
-	_save_state()
+	_save_progress()
 	_update_scene_state()
-	_show_message("QUEST COMPLETE — A Light in the Rain\nNEW QUEST — Descend to Undertown through the Maintenance Lift.")
+	_show_message("QUEST COMPLETE -- A Light in the Rain\nNEW QUEST -- Descend to Undertown through the Maintenance Lift.")
 
 
 func _set_vendor_open(open: bool) -> void:
@@ -118,10 +120,10 @@ func _buy_vendor_item(item_name: String, cost: int) -> void:
 	items[item_name] = int(items.get(item_name, 0)) + 1
 	tutorial_state["cogs"] = cogs - cost
 	tutorial_state["vendor_tutorial_complete"] = true
-	_save_state()
+	_save_progress()
 	_update_vendor_panel()
 	_update_scene_state()
-	_show_message("PURCHASED — %s for %d Cogs." % [item_name, cost])
+	_show_message("PURCHASED -- %s for %d Cogs." % [item_name, cost])
 
 
 func _update_vendor_panel() -> void:
@@ -129,7 +131,7 @@ func _update_vendor_panel() -> void:
 		return
 	var items := _items()
 	vendor_status_label.text = (
-		"COGS: %d\n\n[1] FIELD RATION — 4 Cogs   Owned: %d\n[2] WATER FLASK — 2 Cogs   Owned: %d\n\nPurchase either item to complete the vendor tutorial.\n\n[I] Close vendor"
+		"COGS: %d\n\n[1] FIELD RATION --4 Cogs   Owned: %d\n[2] WATER FLASK --2 Cogs   Owned: %d\n\nPurchase either item to complete the vendor tutorial.\n\n[I] Close vendor"
 		% [
 			int(tutorial_state.get("cogs", 0)),
 			int(items.get("Field Ration", 0)),
@@ -146,11 +148,11 @@ func _update_scene_state() -> void:
 	exit_waypoint.call("set_active", handoff_complete and vendor_complete)
 	exit_door.interaction_enabled = not handoff_complete or vendor_complete
 	if not handoff_complete:
-		objective_label.text = "OBJECTIVE  •  Speak with the contact behind The Lantern bar"
+		objective_label.text = "OBJECTIVE  |  Speak with the contact behind The Lantern bar"
 	elif not vendor_complete:
-		objective_label.text = "OBJECTIVE  •  Buy food or water from the bartender"
+		objective_label.text = "OBJECTIVE  |  Buy food or water from the bartender"
 	else:
-		objective_label.text = "OBJECTIVE  •  Return outside and continue east to the Maintenance Lift"
+		objective_label.text = "OBJECTIVE  |  Return outside and continue east to the Maintenance Lift"
 
 
 func _show_message(text: String) -> void:

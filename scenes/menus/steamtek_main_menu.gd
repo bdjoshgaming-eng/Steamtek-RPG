@@ -17,6 +17,11 @@ func _ready() -> void:
 	tween.tween_property(fade_rect, "color:a", 0.0, FADE_SECONDS)
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_F8:
+		get_tree().quit()
+
+
 func _on_play_pressed() -> void:
 	if _transitioning:
 		return

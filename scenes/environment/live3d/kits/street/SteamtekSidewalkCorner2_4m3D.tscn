@@ -1,48 +1,63 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_WetConcrete_Neutral_v01.tres" id="1_concrete"]
 [ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_Gunmetal_Base_v01.tres" id="2_gunmetal"]
 
-[sub_resource type="BoxMesh" id="CornerMesh"]
-size = Vector3(2.4, 0.18, 2.4)
+[sub_resource type="BoxMesh" id="CornerSlabMesh"]
+size = Vector3(1.2, 0.18, 1.2)
 
-[sub_resource type="BoxMesh" id="CornerInsetMesh"]
-size = Vector3(0.28, 0.025, 0.28)
+[sub_resource type="BoxMesh" id="StreetEdgeBandMesh"]
+size = Vector3(1.12, 0.025, 0.08)
+
+[sub_resource type="BoxShape3D" id="CornerCollision"]
+size = Vector3(1.2, 0.04, 1.2)
 
 [node name="SteamtekSidewalkCorner2_4m3D" type="Node3D" groups=["steamtek_live3d_modular"]]
-editor_description = "Square 2.4 m raised sidewalk landing for street corners and intersection quadrants."
+editor_description = "Compact 1.2 m square sidewalk corner junction. Attach one 2.4 m straight at local -X and another at local -Z to form the L. Black street-edge bands follow the outside +X and +Z perimeter."
 metadata/module_system = "live3d_meter_v1"
-metadata/module_type = "street_sidewalk_corner_landing"
-metadata/status = "blockout_geometry_production_snap_contract"
+metadata/module_type = "street_sidewalk_corner_junction"
+metadata/status = "production_snap_contract"
 metadata/unit_contract = "1_godot_unit_equals_1_meter"
-metadata/footprint_m = Vector2(2.4, 2.4)
-metadata/root_contract = "Root is tile center on finished sidewalk plane; slab extends downward"
+metadata/footprint_m = Vector2(1.2, 1.2)
+metadata/root_contract = "Root is at the center of the 1.2 m corner junction on the finished sidewalk plane"
+metadata/street_edge_axes = "+X,+Z"
+metadata/continuation_axes = "-X,-Z"
 metadata/rotation_contract = "Yaw only: 0, 90, 180, or 270 degrees; never negative-scale mirror"
 
 [node name="CornerSlab" type="MeshInstance3D" parent="."]
 position = Vector3(0, -0.09, 0)
-mesh = SubResource("CornerMesh")
+mesh = SubResource("CornerSlabMesh")
 material_override = ExtResource("1_concrete")
 
-[node name="ServiceInset" type="MeshInstance3D" parent="."]
-position = Vector3(0.72, 0.0125, 0.72)
-mesh = SubResource("CornerInsetMesh")
+[node name="HorizontalStreetEdgeBand" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.0125, 0.55)
+mesh = SubResource("StreetEdgeBandMesh")
 material_override = ExtResource("2_gunmetal")
+
+[node name="VerticalStreetEdgeBand" type="MeshInstance3D" parent="."]
+position = Vector3(0.55, 0.0125, 0)
+rotation_degrees = Vector3(0, 90, 0)
+mesh = SubResource("StreetEdgeBandMesh")
+material_override = ExtResource("2_gunmetal")
+
+[node name="CollisionBody" type="StaticBody3D" parent="."]
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(0, -0.02, 0)
+shape = SubResource("CornerCollision")
 
 [node name="Sockets" type="Node3D" parent="."]
 
 [node name="SidewalkNegX" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
-position = Vector3(-1.2, 0, 0)
+position = Vector3(-0.6, 0, 0)
 metadata/socket_role = "street_sidewalk_chain"
-
-[node name="SidewalkPosX" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
-position = Vector3(1.2, 0, 0)
-metadata/socket_role = "street_sidewalk_chain"
+metadata/socket_polarity = -1
+metadata/socket_normal_local = Vector3(-1, 0, 0)
 
 [node name="SidewalkNegZ" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
-position = Vector3(0, 0, -1.2)
+position = Vector3(0, 0, -0.6)
+rotation_degrees = Vector3(0, 90, 0)
 metadata/socket_role = "street_sidewalk_chain"
-
-[node name="SidewalkPosZ" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
-position = Vector3(0, 0, 1.2)
-metadata/socket_role = "street_sidewalk_chain"
+metadata/socket_polarity = 1
+metadata/socket_normal_local = Vector3(0, 0, -1)

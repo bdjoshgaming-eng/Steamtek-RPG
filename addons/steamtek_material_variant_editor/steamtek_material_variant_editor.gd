@@ -82,6 +82,7 @@ func _exit_tree() -> void:
 	if is_instance_valid(dock):
 		remove_control_from_docks(dock)
 		dock.queue_free()
+	_write_preferred_dock_layout()
 
 
 func _create_dock() -> void:
@@ -193,6 +194,42 @@ func _create_dock() -> void:
 	# unique dock name prevents restored layouts from crossing tab identity and
 	# content when the two editor plugins reload in a different order.
 	add_control_to_dock(DOCK_SLOT_RIGHT_BL, dock)
+	call_deferred("_enforce_live3d_builder_tab_order")
+
+
+func _enforce_live3d_builder_tab_order() -> void:
+	# Godot restores dock layout asynchronously after plugins enter the tree.
+	# Recheck for several frames from the later-loading Variants plugin so the
+	# Builder remains the first tab even when an older layout is restored.
+	for _frame in range(600):
+		await get_tree().process_frame
+		if not is_instance_valid(dock):
+			return
+		var variant_editor_dock := dock.get_parent()
+		var tab_container := variant_editor_dock.get_parent() if variant_editor_dock != null else null
+		if tab_container == null:
+			continue
+		for editor_dock in tab_container.get_children():
+			for content in editor_dock.get_children():
+				if content.name != "Steamtek Live3D Builder":
+					continue
+				if editor_dock.get_index() != 0:
+					(tab_container as TabContainer).get_tab_bar().move_tab(editor_dock.get_index(), 0)
+					tab_container.emit_signal("active_tab_rearranged", 0)
+					if tab_container is TabContainer:
+						(tab_container as TabContainer).current_tab = 0
+				break
+	_write_preferred_dock_layout()
+
+
+func _write_preferred_dock_layout() -> void:
+	var layout_path := ProjectSettings.globalize_path("res://.godot/editor/editor_layout.cfg")
+	var layout := ConfigFile.new()
+	if layout.load(layout_path) != OK:
+		return
+	layout.set_value("docks", "dock_6", "Steamtek Live3D Builder,STK Variants")
+	layout.set_value("docks", "dock_6_selected_tab_idx", 0)
+	layout.save(layout_path)
 
 
 func _add_number_control(label_text: String, minimum: float, maximum: float, step: float, value: float, tooltip: String) -> SpinBox:

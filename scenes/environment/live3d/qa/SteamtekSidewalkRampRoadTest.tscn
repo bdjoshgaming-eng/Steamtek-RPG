@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekRoadStraight4_8x2_4m3D.tscn" id="1_road"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekSidewalkCurbRamp2_4m3D.tscn" id="2_ramp"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekSidewalkStraight2_4m3D.tscn" id="3_sidewalk"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekCurbStraight2_4m3D.tscn" id="4_curb"]
+
+[node name="SteamtekSidewalkRampRoadTest" type="Node3D"]
+editor_description = "Regression layout proving the ramp meets the road vertically and chains cleanly to straight sidewalks on both sides."
+
+[node name="Road" parent="." instance=ExtResource("1_road")]
+
+[node name="Ramp" parent="." instance=ExtResource("2_ramp")]
+position = Vector3(0, 0.18, 3.2)
+
+[node name="SidewalkLeft" parent="." instance=ExtResource("3_sidewalk")]
+position = Vector3(-2.4, 0.18, 3.2)
+
+[node name="SidewalkRight" parent="." instance=ExtResource("3_sidewalk")]
+position = Vector3(2.4, 0.18, 3.2)
+
+[node name="CurbLeft" parent="." instance=ExtResource("4_curb")]
+position = Vector3(-2.4, 0, 2.5)
+
+[node name="CurbRight" parent="." instance=ExtResource("4_curb")]
+position = Vector3(2.4, 0, 2.5)

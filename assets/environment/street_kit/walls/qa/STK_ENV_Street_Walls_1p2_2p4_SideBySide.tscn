@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/environment/street_kit/walls/STK_ENV_Street_Wall_1p2_A.tscn" id="1_wall_1p2"]
+[ext_resource type="PackedScene" path="res://assets/environment/street_kit/walls/STK_ENV_Street_Wall_2p4_A.tscn" id="2_wall_2p4"]
+
+[node name="STK_ENV_Street_Walls_1p2_2p4_SideBySide" type="Node3D"]
+editor_description = "Clean side-by-side comparison: 1.2 m wall on the left and 2.4 m wall on the right, centered as a 3.6 m assembly with an exact shared seam at X=-0.6 m."
+
+[node name="Wall_1p2_Left" parent="." instance=ExtResource("1_wall_1p2")]
+position = Vector3(-1.2, 0, 0)
+
+[node name="Wall_2p4_Right" parent="." instance=ExtResource("2_wall_2p4")]
+position = Vector3(0.6, 0, 0)

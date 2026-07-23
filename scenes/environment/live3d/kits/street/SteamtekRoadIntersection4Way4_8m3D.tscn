@@ -1,8 +1,11 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_RainPolishedStreet_Candidate_v01.tres" id="1_street"]
 
 [sub_resource type="BoxMesh" id="IntersectionMesh"]
+size = Vector3(4.8, 0.16, 4.8)
+
+[sub_resource type="BoxShape3D" id="IntersectionCollisionShape"]
 size = Vector3(4.8, 0.16, 4.8)
 
 [node name="SteamtekRoadIntersection4Way4_8m3D" type="Node3D" groups=["steamtek_live3d_modular"]]
@@ -19,6 +22,13 @@ metadata/rotation_contract = "Yaw only: 0, 90, 180, or 270 degrees; never negati
 position = Vector3(0, -0.08, 0)
 mesh = SubResource("IntersectionMesh")
 material_override = ExtResource("1_street")
+
+[node name="CollisionBody" type="StaticBody3D" parent="."]
+position = Vector3(0, -0.08, 0)
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="CollisionBody"]
+shape = SubResource("IntersectionCollisionShape")
 
 [node name="Sockets" type="Node3D" parent="."]
 

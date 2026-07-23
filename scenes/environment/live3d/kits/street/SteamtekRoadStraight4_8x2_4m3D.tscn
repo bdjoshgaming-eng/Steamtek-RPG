@@ -1,8 +1,11 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Material" path="res://assets/environment/live3d/materials/library/STK_MAT_RainPolishedStreet_Candidate_v01.tres" id="1_street"]
 
 [sub_resource type="BoxMesh" id="RoadMesh"]
+size = Vector3(2.4, 0.16, 4.8)
+
+[sub_resource type="BoxShape3D" id="RoadCollisionShape"]
 size = Vector3(2.4, 0.16, 4.8)
 
 [node name="SteamtekRoadStraight4_8x2_4m3D" type="Node3D" groups=["steamtek_live3d_modular"]]
@@ -21,6 +24,13 @@ position = Vector3(0, -0.08, 0)
 mesh = SubResource("RoadMesh")
 material_override = ExtResource("1_street")
 
+[node name="CollisionBody" type="StaticBody3D" parent="."]
+position = Vector3(0, -0.08, 0)
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="CollisionBody"]
+shape = SubResource("RoadCollisionShape")
+
 [node name="Sockets" type="Node3D" parent="."]
 
 [node name="ChainNegX" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
@@ -34,7 +44,29 @@ metadata/socket_role = "street_road_chain"
 [node name="EdgeNegZ" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
 position = Vector3(0, 0, -2.4)
 metadata/socket_role = "street_road_edge"
+metadata/socket_normal_local = Vector3(0, 0, -1)
 
 [node name="EdgePosZ" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
 position = Vector3(0, 0, 2.4)
 metadata/socket_role = "street_road_edge"
+metadata/socket_normal_local = Vector3(0, 0, 1)
+
+[node name="SideNegXNegZHalf" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-1.2, 0, -1.2)
+metadata/socket_role = "street_road_edge"
+metadata/socket_normal_local = Vector3(-1, 0, 0)
+
+[node name="SideNegXPosZHalf" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-1.2, 0, 1.2)
+metadata/socket_role = "street_road_edge"
+metadata/socket_normal_local = Vector3(-1, 0, 0)
+
+[node name="SidePosXNegZHalf" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(1.2, 0, -1.2)
+metadata/socket_role = "street_road_edge"
+metadata/socket_normal_local = Vector3(1, 0, 0)
+
+[node name="SidePosXPosZHalf" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(1.2, 0, 1.2)
+metadata/socket_role = "street_road_edge"
+metadata/socket_normal_local = Vector3(1, 0, 0)

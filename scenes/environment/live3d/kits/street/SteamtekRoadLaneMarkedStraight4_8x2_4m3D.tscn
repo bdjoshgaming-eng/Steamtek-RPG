@@ -37,7 +37,29 @@ metadata/socket_role = "street_road_chain"
 [node name="EdgeNegZ" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
 position = Vector3(0, 0, -2.4)
 metadata/socket_role = "street_road_edge"
+metadata/socket_normal_local = Vector3(0, 0, -1)
 
 [node name="EdgePosZ" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
 position = Vector3(0, 0, 2.4)
 metadata/socket_role = "street_road_edge"
+metadata/socket_normal_local = Vector3(0, 0, 1)
+
+[node name="SideNegXNegZHalf" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-1.2, 0, -1.2)
+metadata/socket_role = "street_road_edge"
+metadata/socket_normal_local = Vector3(-1, 0, 0)
+
+[node name="SideNegXPosZHalf" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(-1.2, 0, 1.2)
+metadata/socket_role = "street_road_edge"
+metadata/socket_normal_local = Vector3(-1, 0, 0)
+
+[node name="SidePosXNegZHalf" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(1.2, 0, -1.2)
+metadata/socket_role = "street_road_edge"
+metadata/socket_normal_local = Vector3(1, 0, 0)
+
+[node name="SidePosXPosZHalf" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
+position = Vector3(1.2, 0, 1.2)
+metadata/socket_role = "street_road_edge"
+metadata/socket_normal_local = Vector3(1, 0, 0)

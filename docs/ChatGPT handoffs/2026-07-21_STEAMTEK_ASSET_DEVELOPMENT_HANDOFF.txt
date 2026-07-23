@@ -26,3 +26,9 @@ Five Meshy reference PNGs for STK_ENV_Street_Wall_1p2_A were generated and saved
 The requested STK_ENV_Street_Wall_2p4_A production scene is paused before implementation. Its locked requirements are 2.4 m wide x 3.2 m high x 0.16 m structural thickness, bottom-center pivot, +Z visible face, Node3D root at scale 1,1,1, simple structural box collision, dark industrial brick and blackened steel, contained optional pipe/screen decoration, the same facade_horizontal edge socket contract, and the same wall_prop_surface front attachment approach. The required save path is res://assets/environment/street_kit/walls/STK_ENV_Street_Wall_2p4_A.tscn. Validation must compare two 2.4 m modules and one 2.4 m module beside two 1.2 m modules. No 2.4 m scene has been created yet.
 
 All newly created 1.2 m wall scenes, the five Meshy PNGs, and the supplied crate GLB are currently untracked in Git; they have not been staged or committed. Preserve unrelated worktree changes. The next action is to review the five 1.2 m Meshy PNGs as a set, then either resume the 2.4 m wall build or return to the pending crate intake according to the user's priority.
+
+SUPERSEDED STATUS NOTICE - 2026-07-22
+
+The two paragraphs immediately above are no longer current. The 2.4 m wall has been completed, matched, validated, registered in the Live3D Builder, and finalized beside the 1.2 m wall. The sidewalk corner was also rebuilt as a compact 1.2 m junction. Use the current handoff below for authoritative continuation state:
+
+C:\My Game\Steamtek-RPG\docs\ChatGPT handoffs\2026-07-22_STEAMTEK_STREET_KIT_LIVE3D_HANDOFF.txt

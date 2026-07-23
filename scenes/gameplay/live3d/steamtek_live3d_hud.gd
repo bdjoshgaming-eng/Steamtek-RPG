@@ -7,16 +7,20 @@ class_name SteamtekLive3DHud
 ## simplified local Crafting panel (real CraftingData.BLUEPRINTS recipes,
 ## checked against this scene's own local `progress["items"]`).
 ##
-## Health/action bars are cosmetic-only here — these placeholder scenes
-## have no combat loop yet, so they always read full.
+## Also owns the Inventory window and DialogueBox -- these are game-wide UI
+## elements that every Live3D scene needs, instanced here so the base
+## transition script provides them automatically.
 
 signal panel_opened
 signal panel_closed
+signal inventory_slot_double_clicked(item_key: String)
 
 const KEYSTONE_VIEWER_SCRIPT := preload("res://scenes/KeystoneViewer.gd")
 const TALENT_BRIDGE_SCRIPT := preload("res://scenes/gameplay/live3d/steamtek_local_talent_bridge.gd")
 const ITEM_SLOT_SCENE := preload("res://scenes/gameplay/live3d/SteamtekItemSlot.tscn")
 const ITEM_ICON_SCENE := preload("res://scenes/gameplay/live3d/SteamtekItemIcon.tscn")
+const INVENTORY_WINDOW_SCENE := preload("res://scenes/gameplay/live3d/SteamtekInventoryWindow.tscn")
+const DIALOGUE_BOX_SCENE := preload("res://scenes/gameplay/live3d/SteamtekDialogueBox.tscn")
 
 @onready var health_bar: ProgressBar = $Bars/HealthBar
 @onready var action_bar: ProgressBar = $Bars/ActionBar
@@ -36,6 +40,9 @@ var save_callback: Callable
 var talent_bridge: SteamtekLocalTalentBridge
 var keystone_viewer_node: Node
 var selected_blueprint_id: String = ""
+var inventory_window: SteamtekInventoryWindow
+var dialogue_box: SteamtekDialogueBox
+var _inventory_enabled := false
 
 
 func _ready() -> void:
@@ -62,11 +69,29 @@ func _ready() -> void:
 	craft_button.pressed.connect(_on_craft_pressed)
 	crafting_close.pressed.connect(func(): crafting_panel.visible = false)
 
-	# Catches every way a panel can close, including KeystoneViewer's own
-	# internal close button (its "X" sets talents_panel.visible directly,
-	# bypassing this script entirely) — so the signal below always fires.
 	talents_panel.visibility_changed.connect(_emit_panel_state)
 	crafting_panel.visibility_changed.connect(_emit_panel_state)
+
+	inventory_window = INVENTORY_WINDOW_SCENE.instantiate()
+	inventory_window.visible = false
+	inventory_window.anchors_preset = Control.PRESET_CENTER
+	inventory_window.anchor_left = 0.5
+	inventory_window.anchor_top = 0.5
+	inventory_window.anchor_right = 0.5
+	inventory_window.anchor_bottom = 0.5
+	inventory_window.offset_left = -350.0
+	inventory_window.offset_top = -323.0
+	inventory_window.offset_right = 350.0
+	inventory_window.offset_bottom = 323.0
+	inventory_window.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	inventory_window.grow_vertical = Control.GROW_DIRECTION_BOTH
+	add_child(inventory_window)
+	inventory_window.close_requested.connect(func(): set_inventory_open(false))
+	inventory_window.slot_double_clicked.connect(func(key: String): inventory_slot_double_clicked.emit(key))
+	inventory_window.visibility_changed.connect(_emit_panel_state)
+
+	dialogue_box = DIALOGUE_BOX_SCENE.instantiate()
+	add_child(dialogue_box)
 
 
 func _bar_fill_style(color: Color) -> StyleBoxFlat:
@@ -85,6 +110,23 @@ func bind(progress: Dictionary, save_fn: Callable) -> void:
 	_refresh_cogs()
 
 
+func set_inventory_enabled(enabled: bool) -> void:
+	_inventory_enabled = enabled
+
+
+func set_inventory_open(open: bool) -> void:
+	inventory_window.visible = open
+
+
+func is_inventory_open() -> bool:
+	return inventory_window.visible
+
+
+func refresh_inventory(entries: Array, mission_entries: Array, cogs: int, status_text: String) -> void:
+	inventory_window.configure(entries, mission_entries, cogs)
+	inventory_window.set_status_text(status_text)
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("talent_view"):
 		talents_panel.visible = not talents_panel.visible
@@ -97,6 +139,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		if crafting_panel.visible:
 			_refresh_crafting_panel()
 		get_viewport().set_input_as_handled()
+	elif event.is_action_pressed("equip_menu") and _inventory_enabled:
+		set_inventory_open(not inventory_window.visible)
+		get_viewport().set_input_as_handled()
 	elif event.is_action_pressed("ui_cancel"):
 		if talents_panel.visible:
 			talents_panel.visible = false
@@ -104,10 +149,13 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif crafting_panel.visible:
 			crafting_panel.visible = false
 			get_viewport().set_input_as_handled()
+		elif inventory_window.visible:
+			set_inventory_open(false)
+			get_viewport().set_input_as_handled()
 
 
 func _emit_panel_state() -> void:
-	if talents_panel.visible or crafting_panel.visible:
+	if talents_panel.visible or crafting_panel.visible or inventory_window.visible:
 		panel_opened.emit()
 	else:
 		panel_closed.emit()

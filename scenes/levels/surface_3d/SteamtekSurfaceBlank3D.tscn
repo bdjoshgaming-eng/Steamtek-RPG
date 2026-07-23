@@ -3,12 +3,23 @@
 [ext_resource type="Script" uid="uid://bb15yjfvqnx1l" path="res://scenes/levels/transition_tests/steamtek_transition_level_3d.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://scenes/characters/player/VesperKane_PlayerCharacter_v01.tscn" id="2_character"]
 [ext_resource type="PackedScene" path="res://scenes/interactions/SteamtekZoneDoor3D.tscn" id="3_zone_door"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekRoadStraight4_8x2_4m3D.tscn" id="4_7o8uq"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekCurbStraight2_4m3D.tscn" id="5_jd8lo"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekSidewalkStraight2_4m3D.tscn" id="6_y2s5v"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekDrainBay2_4m3D.tscn" id="7_elpyx"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekRoadIntersection4Way4_8m3D.tscn" id="8_p5vwt"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekSidewalkCurbRamp2_4m3D.tscn" id="9_p5vwt"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekSidewalkCorner2_4m3D.tscn" id="10_swx0i"]
+[ext_resource type="PackedScene" path="res://scenes/effects/live3d/SteamtekRainVolume3D.tscn" id="11_rain"]
+[ext_resource type="PackedScene" path="res://scenes/effects/live3d/SteamtekStormAtmosphere3D.tscn" id="12_storm"]
+[ext_resource type="Script" path="res://scenes/effects/live3d/steamtek_surface_weather_3d.gd" id="13_weather"]
 
 [sub_resource type="Environment" id="Environment"]
 background_mode = 1
-background_color = Color(0.05, 0.055, 0.065, 1)
+background_color = Color(0.02, 0.025, 0.03, 1)
 ambient_light_source = 3
-ambient_light_color = Color(0.55, 0.58, 0.62, 1)
+ambient_light_color = Color(0.35, 0.38, 0.42, 1)
+ambient_light_energy = 0.6
 tonemap_mode = 2
 
 [sub_resource type="BoxMesh" id="GroundMesh"]
@@ -34,26 +45,28 @@ environment = SubResource("Environment")
 
 [node name="KeyLight" type="DirectionalLight3D" parent="." unique_id=2138884664]
 transform = Transform3D(0.7880108, 0.48514786, -0.37903908, 0, 0.6156615, 0.7880107, 0.6156615, -0.62096095, 0.4851479, 0, 0, 0)
+light_energy = 0.6
 shadow_enabled = true
 
 [node name="Ground" type="StaticBody3D" parent="." unique_id=1839224913]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
 collision_mask = 0
 
 [node name="Mesh" type="MeshInstance3D" parent="Ground" unique_id=1618475682]
+visible = false
 mesh = SubResource("GroundMesh")
 
 [node name="Collision" type="CollisionShape3D" parent="Ground" unique_id=337560963]
 shape = SubResource("GroundShape")
 
 [node name="ApartmentReturnDoor" parent="." unique_id=468517604 instance=ExtResource("3_zone_door")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.9058676, 0.3715062, 5.6050916)
 target_scene_path = "res://scenes/levels/apartment_3d/SteamtekApartment.tscn"
 target_spawn_id = "ApartmentReturnFromSurface"
-interaction_prompt = "Return to apartment"
+interaction_prompt = "Open"
 
 [node name="SurfaceEntryWest" type="Marker3D" parent="." unique_id=278342672]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0.18, 0)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -4.9202714, 0.1709598, 5.6004868)
 
 [node name="VesperKane_PlayerCharacter_v01" parent="." unique_id=1777520219 instance=ExtResource("2_character")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0.18, 0)
@@ -91,3 +104,87 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
+
+[node name="Streets" type="Node3D" parent="." unique_id=1048256374]
+
+[node name="SteamtekRoadStraight4_8x2_4m3D" parent="Streets" unique_id=744734542 instance=ExtResource("4_7o8uq")]
+
+[node name="SteamtekRoadStraight4_8x2_4m3D2" parent="Streets" unique_id=38686605 instance=ExtResource("4_7o8uq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4.8)
+
+[node name="SteamtekRoadStraight4_8x2_4m3D4" parent="Streets" unique_id=93580860 instance=ExtResource("4_7o8uq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0, 4.8)
+
+[node name="SteamtekRoadStraight4_8x2_4m3D3" parent="Streets" unique_id=1760590415 instance=ExtResource("4_7o8uq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0, 0)
+
+[node name="SteamtekDrainBay2_4m3D" parent="Streets" unique_id=1329075099 instance=ExtResource("7_elpyx")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -3.3077407, 0, -1.0901635)
+
+[node name="SteamtekCurbStraight2_4m3D" parent="Streets" unique_id=590298165 instance=ExtResource("5_jd8lo")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -3.7, 0, 6)
+
+[node name="SteamtekCurbStraight2_4m3D3" parent="Streets" unique_id=1508409730 instance=ExtResource("5_jd8lo")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -3.7000003, 0, 1.2)
+
+[node name="SteamtekSidewalkStraight2_4m3D2" parent="Streets" unique_id=1107643732 instance=ExtResource("6_y2s5v")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -4.3999996, 0.18, 6)
+
+[node name="SteamtekSidewalkStraight2_4m3D3" parent="Streets" unique_id=1882372536 instance=ExtResource("6_y2s5v")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -4.4, 0.18, 1.1999998)
+
+[node name="SteamtekRoadIntersection4Way4_8m3D" parent="Streets" unique_id=67110807 instance=ExtResource("8_p5vwt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1999999, 0, 0)
+
+[node name="SteamtekSidewalkCurbRamp2_4m3D" parent="Streets" unique_id=1989476348 instance=ExtResource("9_p5vwt")]
+transform = Transform3D(1.1924875e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924875e-08, -4.4, 0.18, 3.6000001)
+
+[node name="SteamtekCurbStraight2_4m3D2" parent="Streets" unique_id=1167672835 instance=ExtResource("5_jd8lo")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -3.7, 0, -1.2)
+
+[node name="SteamtekCurbStraight2_4m3D4" type="Node3D" parent="Streets" unique_id=141272986 groups=["steamtek_live3d_modular"] instance=ExtResource("5_jd8lo")]
+editor_description = "Straight 2.4 m curb segment. Root is the road plane at curb center; curb rises 0.18 m."
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -4.9, 0, -2.4)
+metadata/module_system = "live3d_meter_v1"
+metadata/module_type = "street_curb_straight"
+metadata/status = "blockout_geometry_production_snap_contract"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/nominal_size_m = Vector3(2.4, 0.18, 0.2)
+metadata/primary_axis = "local_x"
+metadata/root_contract = "Root is curb center on road plane; curb rises upward"
+metadata/rotation_contract = "Yaw only: 0, 90, 180, or 270 degrees; never negative-scale mirror"
+
+[node name="SteamtekSidewalkCorner2_4m3D" type="Node3D" parent="Streets" unique_id=766408764 groups=["steamtek_live3d_modular"] instance=ExtResource("10_swx0i")]
+editor_description = "L-shaped raised sidewalk corner formed from two 2.4 m by 1.2 m straight sidewalk legs. Local -X and -Z are the exposed continuation ends; the black street-edge bands follow the outer +X and +Z perimeter."
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5.024675, 0.10475373, -1.0332081)
+metadata/module_system = "live3d_meter_v1"
+metadata/module_type = "street_sidewalk_corner_landing"
+metadata/status = "blockout_geometry_production_snap_contract"
+metadata/unit_contract = "1_godot_unit_equals_1_meter"
+metadata/footprint_m = Vector2(2.4, 2.4)
+metadata/root_contract = "Root is at the center of the 2.4 m corner footprint on the finished sidewalk plane; L legs occupy local +Z and +X"
+metadata/street_edge_axes = "+X,+Z"
+metadata/rotation_contract = "Yaw only: 0, 90, 180, or 270 degrees; never negative-scale mirror"
+
+[node name="Buildings" type="Node3D" parent="." unique_id=301781188]
+
+[node name="Props" type="Node3D" parent="." unique_id=196012570]
+
+[node name="Lighting" type="Node3D" parent="." unique_id=999445586]
+
+[node name="Weather" type="Node3D" parent="."]
+script = ExtResource("13_weather")
+
+[node name="RainVolume" parent="Weather" instance=ExtResource("11_rain")]
+
+[node name="StormAtmosphere" parent="Weather" instance=ExtResource("12_storm")]
+ambient_rain_volume_db = -40.0
+thunder_volume_db = -34.0
+
+[node name="LightningWindowBack" parent="Weather/StormAtmosphere" index="0"]
+position = Vector3(-8, 12, -10)
+omni_range = 20.0
+
+[node name="LightningWindowWest" parent="Weather/StormAtmosphere" index="1"]
+position = Vector3(10, 12, 6)
+omni_range = 20.0

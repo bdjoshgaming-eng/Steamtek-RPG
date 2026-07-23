@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekSidewalkCorner2_4m3D.tscn" id="1_corner"]
+[ext_resource type="PackedScene" path="res://scenes/environment/live3d/kits/street/SteamtekSidewalkStraight2_4m3D.tscn" id="2_straight"]
+
+[node name="SteamtekSidewalkCornerLTest" type="Node3D"]
+editor_description = "Regression layout proving the L corner joins one straight on each exposed leg."
+
+[node name="Corner" parent="." instance=ExtResource("1_corner")]
+
+[node name="StraightNegX" parent="." instance=ExtResource("2_straight")]
+position = Vector3(-1.8, 0, 0)
+
+[node name="StraightNegZ" parent="." instance=ExtResource("2_straight")]
+position = Vector3(0, 0, -1.8)
+rotation_degrees = Vector3(0, 90, 0)

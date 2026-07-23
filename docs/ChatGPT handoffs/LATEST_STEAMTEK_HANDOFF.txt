@@ -1,0 +1,14 @@
+LATEST AUTHORITATIVE STEAMTEK HANDOFF
+Updated: 2026-07-22
+
+Use:
+
+C:\My Game\Steamtek-RPG\docs\ChatGPT handoffs\2026-07-22_STEAMTEK_STREET_KIT_LIVE3D_HANDOFF.txt
+
+Current continuation state:
+
+- The 1.2 m and 2.4 m street walls are finalized and Builder-ready.
+- Both walls have structural snaps and nine functional front prop sockets.
+- The sidewalk corner is now a compact 1.2 m junction with corrected snapping.
+- STK_ENV_Street_Road_1p2_A is paused before implementation.
+- Preserve the dirty worktree and do not modify unrelated assets.

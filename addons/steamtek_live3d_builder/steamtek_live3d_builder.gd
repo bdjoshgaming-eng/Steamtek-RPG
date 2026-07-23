@@ -6,10 +6,16 @@ const INTERIOR_GRID_STEP_M := 1.2
 const FURNITURE_GRID_STEP_M := 0.3
 const PROP_GRID_STEP_M := 0.1
 const STOREY_STEP_M := 3.2
-const MAX_SOCKET_SNAP_DISTANCE_M := 1.0
+const MAX_SOCKET_SNAP_DISTANCE_M := 1.5
+const MAX_SIDE_SOCKET_SNAP_DISTANCE_M := 2.6
+const SOCKET_OCCUPANCY_TOLERANCE_M := 0.025
 const MODULE_GROUP := "steamtek_live3d_modular"
 const SOCKET_GROUP := "steamtek_live3d_snap"
 const MODULE_SYSTEM := "live3d_meter_v1"
+const PROFILE_EXTERIOR_STRUCTURE := "exterior_structure"
+const PROFILE_INTERIOR_STRUCTURE := "interior_structure"
+const PROFILE_FURNITURE := "furniture"
+const PROFILE_SMALL_PROPS := "small_props"
 const GENERATED_MATERIAL_VARIANT_DIR := "res://scenes/environment/live3d/props/apartment_interior/generated_variants"
 
 var dock: VBoxContainer
@@ -172,6 +178,18 @@ func _module_library() -> Array:
 			"path": "res://scenes/environment/live3d/kits/apartment_exterior/SteamtekBalconyModule3D.tscn",
 		},
 		{
+			"label": "Street - Structural Wall 1.2m",
+			"path": "res://assets/environment/street_kit/walls/STK_ENV_Street_Wall_1p2_A.tscn",
+			"parent": "Architecture",
+			"profile": PROFILE_EXTERIOR_STRUCTURE,
+		},
+		{
+			"label": "Street - Structural Wall 2.4m",
+			"path": "res://assets/environment/street_kit/walls/STK_ENV_Street_Wall_2p4_A.tscn",
+			"parent": "Architecture",
+			"profile": PROFILE_EXTERIOR_STRUCTURE,
+		},
+		{
 			"label": "Street - Road Straight",
 			"path": "res://scenes/environment/live3d/kits/street/SteamtekRoadStraight4_8x2_4m3D.tscn",
 		},
@@ -188,8 +206,10 @@ func _module_library() -> Array:
 			"path": "res://scenes/environment/live3d/kits/street/SteamtekSidewalkCorner2_4m3D.tscn",
 		},
 		{
-			"label": "Street - Curb Ramp",
+			"label": "Street - Sidewalk + Curb Opening",
 			"path": "res://scenes/environment/live3d/kits/street/SteamtekSidewalkCurbRamp2_4m3D.tscn",
+			"parent": "Architecture",
+			"profile": PROFILE_EXTERIOR_STRUCTURE,
 		},
 		{
 			"label": "Street - Curb Straight",
@@ -367,29 +387,30 @@ func _create_dock() -> void:
 
 	profile_picker = OptionButton.new()
 	profile_picker.add_item("Exterior Structure — 2.4 m")
-	profile_picker.set_item_metadata(0, EXTERIOR_GRID_STEP_M)
+	profile_picker.set_item_metadata(0, {"id": PROFILE_EXTERIOR_STRUCTURE, "grid_step": EXTERIOR_GRID_STEP_M})
 	profile_picker.add_item("Interior Structure — 1.2 m")
-	profile_picker.set_item_metadata(1, INTERIOR_GRID_STEP_M)
+	profile_picker.set_item_metadata(1, {"id": PROFILE_INTERIOR_STRUCTURE, "grid_step": INTERIOR_GRID_STEP_M})
 	profile_picker.add_item("Furniture — 0.3 m")
-	profile_picker.set_item_metadata(2, FURNITURE_GRID_STEP_M)
+	profile_picker.set_item_metadata(2, {"id": PROFILE_FURNITURE, "grid_step": FURNITURE_GRID_STEP_M})
 	profile_picker.add_item("Small Props — 0.1 m")
-	profile_picker.set_item_metadata(3, PROP_GRID_STEP_M)
+	profile_picker.set_item_metadata(3, {"id": PROFILE_SMALL_PROPS, "grid_step": PROP_GRID_STEP_M})
 	profile_picker.selected = 1
+	profile_picker.item_selected.connect(_on_profile_selected)
 	dock.add_child(profile_picker)
 
 	var picker_label := Label.new()
-	picker_label.text = "Module to place"
+	picker_label.text = "Module to place (current profile only)"
 	dock.add_child(picker_label)
 
 	module_search = LineEdit.new()
-	module_search.placeholder_text = "Filter modules: wall, floor, couch, cup..."
+	module_search.placeholder_text = "Search within the selected profile..."
 	module_search.clear_button_enabled = true
 	module_search.text_changed.connect(_refresh_module_picker)
 	dock.add_child(module_search)
 
 	var refresh_button := _make_button(
 		"Refresh module list",
-		"Reloads generated material variants created by the Steamtek Material Variant Editor.",
+		"Reapplies the selected placement profile and reloads generated material variants.",
 		_refresh_module_picker
 	)
 	dock.add_child(refresh_button)
@@ -418,14 +439,14 @@ func _create_dock() -> void:
 	dock.add_child(placement_label)
 
 	var x_row := HBoxContainer.new()
-	x_row.add_child(_make_button("-X", "Place one active-profile step left.", _place_on_axis.bind(Vector3.LEFT)))
-	x_row.add_child(_make_button("+X", "Place one active-profile step right.", _place_on_axis.bind(Vector3.RIGHT)))
+	x_row.add_child(_make_button("-X", "Join the chosen module to the nearest compatible socket on the left; use the profile grid only when no socket pair exists.", _place_on_axis.bind(Vector3.LEFT)))
+	x_row.add_child(_make_button("+X", "Join the chosen module to the nearest compatible socket on the right; use the profile grid only when no socket pair exists.", _place_on_axis.bind(Vector3.RIGHT)))
 	x_row.add_child(_make_button("+ Storey", "Place one 3.2 m storey above.", _place_chosen.bind(Vector3(0, STOREY_STEP_M, 0))))
 	dock.add_child(x_row)
 
 	var z_row := HBoxContainer.new()
-	z_row.add_child(_make_button("-Z", "Place one active-profile step backward.", _place_on_axis.bind(Vector3.FORWARD)))
-	z_row.add_child(_make_button("+Z", "Place one active-profile step forward.", _place_on_axis.bind(Vector3.BACK)))
+	z_row.add_child(_make_button("-Z", "Join the chosen module to the nearest compatible socket toward -Z; use the profile grid only when no socket pair exists.", _place_on_axis.bind(Vector3.FORWARD)))
+	z_row.add_child(_make_button("+Z", "Join the chosen module to the nearest compatible socket toward +Z; use the profile grid only when no socket pair exists.", _place_on_axis.bind(Vector3.BACK)))
 	z_row.add_child(_make_button("- Storey", "Place one 3.2 m storey below.", _place_chosen.bind(Vector3(0, -STOREY_STEP_M, 0))))
 	dock.add_child(z_row)
 
@@ -454,6 +475,20 @@ func _create_dock() -> void:
 	dock.add_child(status_label)
 
 	add_control_to_dock(DOCK_SLOT_RIGHT_BL, dock)
+	call_deferred("_keep_builder_tab_first")
+
+
+func _keep_builder_tab_first() -> void:
+	await get_tree().process_frame
+	if not is_instance_valid(dock):
+		return
+	var editor_dock := dock.get_parent()
+	var tab_container := editor_dock.get_parent() if editor_dock != null else null
+	if tab_container != null and editor_dock.get_index() != 0:
+		(tab_container as TabContainer).get_tab_bar().move_tab(editor_dock.get_index(), 0)
+		tab_container.emit_signal("active_tab_rearranged", 0)
+	if tab_container is TabContainer:
+		(tab_container as TabContainer).current_tab = 0
 
 
 func _make_button(text: String, tooltip: String, callback: Callable) -> Button:
@@ -521,6 +556,8 @@ func _refresh_module_picker(_unused_text := "") -> void:
 	if is_instance_valid(module_search):
 		query = module_search.text.strip_edges().to_lower()
 	for entry in _module_library():
+		if not _module_matches_active_profile(entry):
+			continue
 		var label := str(entry.get("label", ""))
 		if not query.is_empty() and query not in label.to_lower():
 			continue
@@ -528,7 +565,59 @@ func _refresh_module_picker(_unused_text := "") -> void:
 		module_picker.add_item(label)
 		module_picker.set_item_metadata(index, entry)
 	if module_picker.item_count == 0:
-		_set_status("No modules match the current filter.")
+		_set_status("No modules match the selected profile and search text.")
+	else:
+		_set_status("Showing %d %s modules." % [module_picker.item_count, _active_profile_display_name()])
+
+
+func _on_profile_selected(_index: int) -> void:
+	_refresh_module_picker()
+
+
+func _active_profile_id() -> String:
+	if not is_instance_valid(profile_picker):
+		return PROFILE_INTERIOR_STRUCTURE
+	var metadata: Variant = profile_picker.get_item_metadata(profile_picker.selected)
+	if metadata is Dictionary:
+		return str((metadata as Dictionary).get("id", PROFILE_INTERIOR_STRUCTURE))
+	return PROFILE_INTERIOR_STRUCTURE
+
+
+func _active_profile_display_name() -> String:
+	match _active_profile_id():
+		PROFILE_EXTERIOR_STRUCTURE:
+			return "exterior structure"
+		PROFILE_FURNITURE:
+			return "furniture"
+		PROFILE_SMALL_PROPS:
+			return "small prop"
+		_:
+			return "interior structure"
+
+
+func _module_matches_active_profile(entry: Dictionary) -> bool:
+	return _module_profile_id(entry) == _active_profile_id()
+
+
+func _module_profile_id(entry: Dictionary) -> String:
+	var explicit_profile := str(entry.get("profile", ""))
+	if not explicit_profile.is_empty():
+		return explicit_profile
+
+	var parent_name := str(entry.get("parent", "Architecture")).to_lower()
+	if parent_name == "furniture":
+		return PROFILE_FURNITURE
+	if parent_name in ["props", "smallprops", "small_props"]:
+		return PROFILE_SMALL_PROPS
+
+	var scene_path := str(entry.get("path", "")).to_lower()
+	if "/kits/apartment_exterior/" in scene_path or "/kits/street/" in scene_path or "/assets/environment/street_kit/" in scene_path:
+		return PROFILE_EXTERIOR_STRUCTURE
+	if "/kits/apartment_interior/" in scene_path:
+		return PROFILE_INTERIOR_STRUCTURE
+	if "/props/" in scene_path:
+		return PROFILE_SMALL_PROPS
+	return PROFILE_INTERIOR_STRUCTURE
 
 
 func _chosen_scene_path() -> String:
@@ -538,6 +627,15 @@ func _chosen_scene_path() -> String:
 	if metadata is Dictionary:
 		return str((metadata as Dictionary).get("path", ""))
 	return str(metadata)
+
+
+func _load_chosen_scene_fresh(scene_path: String) -> PackedScene:
+	if scene_path.is_empty():
+		return null
+	# Builder placement is an asset-authoring workflow. Always replace the
+	# ResourceLoader cache so a refreshed module scene is what gets tested,
+	# rather than a PackedScene cached before the source file was updated.
+	return ResourceLoader.load(scene_path, "", ResourceLoader.CACHE_MODE_REPLACE) as PackedScene
 
 
 func _chosen_parent_name() -> String:
@@ -552,7 +650,10 @@ func _chosen_parent_name() -> String:
 func _active_grid_step() -> float:
 	if not is_instance_valid(profile_picker):
 		return INTERIOR_GRID_STEP_M
-	return float(profile_picker.get_item_metadata(profile_picker.selected))
+	var metadata: Variant = profile_picker.get_item_metadata(profile_picker.selected)
+	if metadata is Dictionary:
+		return float((metadata as Dictionary).get("grid_step", INTERIOR_GRID_STEP_M))
+	return float(metadata)
 
 
 func _edited_root_3d() -> Node3D:
@@ -646,7 +747,122 @@ func _surface_socket_is_occupied(marker: Marker3D, edited_root: Node3D) -> bool:
 
 
 func _place_on_axis(axis: Vector3) -> void:
+	if _place_chosen_at_directional_socket(axis):
+		return
 	_place_chosen(axis * _active_grid_step())
+	_set_status("No compatible directional socket pair was available; placed on the active profile grid instead.")
+
+
+func _place_chosen_at_directional_socket(axis: Vector3) -> bool:
+	var edited_root := _edited_root_3d()
+	if edited_root == null:
+		return false
+	var selected := _selected_module()
+	if selected == null:
+		return false
+	var parent := selected.get_parent() as Node3D
+	if parent == null:
+		return false
+
+	var scene_path := _chosen_scene_path()
+	var packed := _load_chosen_scene_fresh(scene_path)
+	if packed == null:
+		return false
+	var preview := packed.instantiate() as Node3D
+	if preview == null:
+		return false
+
+	var target_markers: Array[Marker3D] = []
+	var source_markers: Array[Marker3D] = []
+	var existing_modules: Array[Node3D] = []
+	_collect_markers(selected, target_markers)
+	_collect_markers(preview, source_markers)
+	_collect_modules(edited_root, existing_modules)
+	var direction := axis.normalized()
+	var best_target_position := Vector3.ZERO
+	var best_source_position := Vector3.ZERO
+	var best_yaw := 0.0
+	var best_direct_global := Transform3D.IDENTITY
+	var best_uses_direct_transform := false
+	var best_score := -INF
+	var found_pair := false
+
+	for target in target_markers:
+		if _socket_is_occupied_by_other(target, null, selected, existing_modules):
+			continue
+		var target_relative := selected.global_transform.affine_inverse() * target.global_transform
+		var target_position := target_relative.origin
+		var target_direction_score := target_position.dot(direction)
+		if target_direction_score <= 0.0001:
+			continue
+		for source in source_markers:
+			if not _socket_roles_compatible(source, target):
+				continue
+			var source_relative := _node_transform_relative_to_root(preview, source)
+			var source_position := source_relative.origin
+			if _socket_pair_uses_orientation(source, target):
+				var direct_global := selected.global_transform * target_relative * source_relative.affine_inverse()
+				if target_direction_score > best_score:
+					best_score = target_direction_score
+					best_direct_global = direct_global
+					best_uses_direct_transform = true
+					found_pair = true
+				continue
+			var source_horizontal := Vector3(source_position.x, 0.0, source_position.z)
+			if source_horizontal.length_squared() <= 0.000001:
+				continue
+			var yaw := source_horizontal.normalized().signed_angle_to(-direction, Vector3.UP)
+			var rotated_source := Basis(Vector3.UP, yaw) * source_position
+			var source_edge_score := -rotated_source.dot(direction)
+			if source_edge_score <= 0.0001:
+				continue
+			var score := target_direction_score + source_edge_score
+			if score > best_score:
+				best_score = score
+				best_target_position = target_position
+				best_source_position = source_position
+				best_yaw = yaw
+				best_uses_direct_transform = false
+				found_pair = true
+
+	preview.free()
+	if not found_pair:
+		return false
+
+	var chosen_global := best_direct_global
+	if not best_uses_direct_transform:
+		var selected_basis := selected.global_basis.orthonormalized()
+		var chosen_basis := selected_basis * Basis(Vector3.UP, best_yaw)
+		var target_global_position := selected.global_transform * best_target_position
+		var chosen_global_origin := target_global_position - chosen_basis * best_source_position
+		chosen_global = Transform3D(chosen_basis, chosen_global_origin)
+	var chosen_local := parent.global_transform.affine_inverse() * chosen_global
+	_instantiate_chosen(parent, chosen_local, edited_root)
+	_set_status("Placed at an exact compatible socket with no grid gap.")
+	return true
+
+
+func _node_transform_relative_to_root(root: Node3D, descendant: Node3D) -> Transform3D:
+	var chain: Array[Node3D] = []
+	var current: Node = descendant
+	while current != null and current != root:
+		if current is Node3D:
+			chain.push_front(current as Node3D)
+		current = current.get_parent()
+	var relative := Transform3D.IDENTITY
+	for node in chain:
+		relative *= node.transform
+	return relative
+
+
+func _socket_pair_uses_orientation(source: Marker3D, target: Marker3D) -> bool:
+	var source_role := str(source.get_meta("socket_role", ""))
+	var target_role := str(target.get_meta("socket_role", ""))
+	return (
+		(source_role == "interior_wall_base" and target_role == "interior_wall_floor_edge")
+		or (source_role == "interior_wall_floor_edge" and target_role == "interior_wall_base")
+		or (source_role == "street_sidewalk_chain" and target_role == "street_sidewalk_chain")
+	)
 
 
 func _place_chosen(local_offset: Vector3) -> void:
@@ -673,7 +889,7 @@ func _instantiate_chosen(parent: Node3D, local_transform: Transform3D, edited_ro
 	if scene_path.is_empty():
 		_set_status("Choose a module first.")
 		return
-	var packed := load(scene_path) as PackedScene
+	var packed := _load_chosen_scene_fresh(scene_path)
 	if packed == null:
 		_set_status("Could not load: " + scene_path)
 		push_error("Steamtek Live3D Builder could not load: " + scene_path)
@@ -710,6 +926,15 @@ func _rotate_selected_90() -> void:
 	undo_redo.add_do_property(module, "rotation_degrees", new_rotation)
 	undo_redo.add_undo_property(module, "rotation_degrees", old_rotation)
 	undo_redo.commit_action()
+	# A deliberate button rotation must not be interpreted as a finished
+	# viewport drag and immediately snapped back to its previous orientation.
+	# The next actual transform change re-arms automatic snapping in _process().
+	watched_module_id = module.get_instance_id()
+	watched_transform = module.transform
+	watched_transform_valid = true
+	stable_transform_frames = 0
+	snap_attempted_for_transform = true
+	auto_snap_pending = false
 	_set_status("Rotated %s to %d degrees Y." % [module.name, int(new_rotation.y)])
 
 
@@ -737,6 +962,7 @@ func _snap_module_to_nearest_socket(module: Node3D, show_failures: bool) -> bool
 	_collect_modules(edited_root, modules)
 	var best_source: Marker3D
 	var best_target: Marker3D
+	var best_target_host: Node3D
 	var best_distance := INF
 
 	for other_module in modules:
@@ -748,19 +974,20 @@ func _snap_module_to_nearest_socket(module: Node3D, show_failures: bool) -> bool
 			for target in other_markers:
 				if not _socket_roles_compatible(source, target):
 					continue
+				if _socket_is_occupied_by_other(target, module, other_module, modules):
+					continue
 				var distance := source.global_position.distance_to(target.global_position)
+				if distance > _socket_pair_snap_distance(source, target):
+					continue
 				if distance < best_distance:
 					best_distance = distance
 					best_source = source
 					best_target = target
+					best_target_host = other_module
 
 	if best_source == null or best_target == null:
 		if show_failures:
-			_set_status("No compatible Marker3D socket was found.")
-		return false
-	if best_distance > MAX_SOCKET_SNAP_DISTANCE_M:
-		if show_failures:
-			_set_status("Move the module within 1 meter of its target socket, then try again.")
+			_set_status("No free compatible socket is close enough. Side attachments capture across a full 2.4 m module.")
 		return false
 
 	var parent := module.get_parent() as Node3D
@@ -769,8 +996,14 @@ func _snap_module_to_nearest_socket(module: Node3D, show_failures: bool) -> bool
 			_set_status("The selected module needs a Node3D parent.")
 		return false
 	var old_transform := module.transform
-	var source_relative := module.global_transform.affine_inverse() * best_source.global_transform
-	var new_global := best_target.global_transform * source_relative.affine_inverse()
+	var new_global := module.global_transform
+	if _socket_pair_uses_inferred_yaw(best_source, best_target):
+		new_global = _socket_transform_with_inferred_yaw(module, best_source, best_target_host, best_target)
+	elif _socket_pair_uses_orientation(best_source, best_target):
+		var source_relative := module.global_transform.affine_inverse() * best_source.global_transform
+		new_global = best_target.global_transform * source_relative.affine_inverse()
+	else:
+		new_global.origin += best_target.global_position - best_source.global_position
 	var new_transform := parent.global_transform.affine_inverse() * new_global
 	if old_transform.is_equal_approx(new_transform):
 		if show_failures:
@@ -784,6 +1017,71 @@ func _snap_module_to_nearest_socket(module: Node3D, show_failures: bool) -> bool
 	undo_redo.commit_action()
 	_set_status("Snapped %s to %s." % [best_source.name, best_target.name])
 	return true
+
+
+func _socket_pair_snap_distance(source: Marker3D, target: Marker3D) -> float:
+	if _socket_pair_uses_inferred_yaw(source, target):
+		return MAX_SIDE_SOCKET_SNAP_DISTANCE_M
+	return MAX_SOCKET_SNAP_DISTANCE_M
+
+
+func _socket_pair_uses_inferred_yaw(source: Marker3D, target: Marker3D) -> bool:
+	var source_role := str(source.get_meta("socket_role", ""))
+	var target_role := str(target.get_meta("socket_role", ""))
+	return (
+		(source_role == "street_curb_road_edge" and target_role == "street_road_edge")
+		or (source_role == "street_road_edge" and target_role == "street_curb_road_edge")
+		or (source_role == "street_curb_sidewalk_edge" and target_role == "street_sidewalk_road_edge")
+		or (source_role == "street_sidewalk_road_edge" and target_role == "street_curb_sidewalk_edge")
+		or (source_role == "street_curb_ramp_road_edge" and target_role == "street_road_edge")
+		or (source_role == "street_road_edge" and target_role == "street_curb_ramp_road_edge")
+	)
+
+
+func _socket_transform_with_inferred_yaw(
+	moving_module: Node3D,
+	source: Marker3D,
+	target_host: Node3D,
+	target: Marker3D
+) -> Transform3D:
+	var source_position := moving_module.to_local(source.global_position)
+	var target_position := target_host.to_local(target.global_position)
+	var source_normal: Vector3 = source.get_meta("socket_normal_local", source_position)
+	var target_normal: Vector3 = target.get_meta("socket_normal_local", target_position)
+	var source_horizontal := Vector3(source_normal.x, 0.0, source_normal.z)
+	var target_horizontal := Vector3(target_normal.x, 0.0, target_normal.z)
+	if source_horizontal.length_squared() <= 0.000001 or target_horizontal.length_squared() <= 0.000001:
+		var translated := moving_module.global_transform
+		translated.origin += target.global_position - source.global_position
+		return translated
+
+	var clean_basis := moving_module.global_basis.orthonormalized()
+	var target_basis := target_host.global_basis.orthonormalized()
+	var current_direction := (clean_basis * source_horizontal).normalized()
+	var desired_direction := -(target_basis * target_horizontal).normalized()
+	var yaw := current_direction.signed_angle_to(desired_direction, Vector3.UP)
+	var rotated_basis := Basis(Vector3.UP, yaw) * clean_basis
+	var rotated_source_offset := rotated_basis * source_position
+	return Transform3D(rotated_basis, target.global_position - rotated_source_offset)
+
+
+func _socket_is_occupied_by_other(
+	target: Marker3D,
+	moving_module: Node3D,
+	host_module: Node3D,
+	modules: Array[Node3D]
+) -> bool:
+	for candidate_module in modules:
+		if candidate_module == moving_module or candidate_module == host_module:
+			continue
+		var candidate_markers: Array[Marker3D] = []
+		_collect_markers(candidate_module, candidate_markers)
+		for candidate in candidate_markers:
+			if not _socket_roles_compatible(candidate, target):
+				continue
+			if candidate.global_position.distance_to(target.global_position) <= SOCKET_OCCUPANCY_TOLERANCE_M:
+				return true
+	return false
 
 
 func _collect_modules(node: Node, output: Array[Node3D]) -> void:
@@ -812,6 +1110,10 @@ func _socket_roles_compatible(source: Marker3D, target: Marker3D) -> bool:
 	if source_role.is_empty() or target_role.is_empty():
 		return false
 	if source_role == target_role:
+		if source_role == "street_sidewalk_chain":
+			var source_polarity := int(source.get_meta("socket_polarity", 0))
+			var target_polarity := int(target.get_meta("socket_polarity", 0))
+			return source_polarity != 0 and target_polarity != 0 and source_polarity == -target_polarity
 		return source_role in [
 			"facade_horizontal",
 			"storey_vertical",
@@ -848,6 +1150,10 @@ func _socket_roles_compatible(source: Marker3D, target: Marker3D) -> bool:
 	if source_role == "street_sidewalk_road_edge" and target_role == "street_curb_sidewalk_edge":
 		return true
 	if source_role == "street_curb_sidewalk_edge" and target_role == "street_sidewalk_road_edge":
+		return true
+	if source_role == "street_curb_ramp_road_edge" and target_role == "street_road_edge":
+		return true
+	if source_role == "street_road_edge" and target_role == "street_curb_ramp_road_edge":
 		return true
 	if source_role == "prop_anchor" and target_role in ["prop_surface", "wall_prop_surface", "floor_prop_surface"]:
 		return true

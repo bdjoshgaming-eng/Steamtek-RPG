@@ -49,14 +49,17 @@ material_override = ExtResource("2_gunmetal")
 [node name="ChainNegX" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
 position = Vector3(-1.2, 0, 0)
 metadata/socket_role = "street_sidewalk_chain"
+metadata/socket_polarity = -1
 
 [node name="ChainPosX" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
 position = Vector3(1.2, 0, 0)
 metadata/socket_role = "street_sidewalk_chain"
+metadata/socket_polarity = 1
 
 [node name="RoadEdge" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
 position = Vector3(0, -0.18, -0.6)
 metadata/socket_role = "street_sidewalk_road_edge"
+metadata/socket_normal_local = Vector3(0, 0, -1)
 
 [node name="AlleyEdge" type="Marker3D" parent="Sockets" groups=["steamtek_live3d_snap"]]
 position = Vector3(0, 0, 0.6)
