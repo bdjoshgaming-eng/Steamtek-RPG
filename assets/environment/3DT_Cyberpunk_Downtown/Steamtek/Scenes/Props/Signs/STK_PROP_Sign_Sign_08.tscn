@@ -1,0 +1,49 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Signs/SM_3DT_Sign_08.fbx" id="1_source"]
+[ext_resource type="Script" path="res://tools/steamtek-environment-intake/godot/steamtek_material_binding.gd" id="2_binder"]
+[ext_resource type="Material" path="res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Materials/Source_Reconstructed/STK_MAT_Signs_B.tres" id="3_mat"]
+
+[node name="STK_PROP_Sign_Sign_08" type="Node3D" groups=["steamtek_live3d_modular"]]
+editor_description = "Generated Steamtek environment intake wrapper. Source geometry remains immutable; materials are shared external resources."
+script = ExtResource("2_binder")
+material_bindings = {"Signs B": ExtResource("3_mat")}
+metadata/module_system = "live3d_meter_v1"
+metadata/module_type = "signs"
+metadata/module_family = "3DT_Cyberpunk_Downtown"
+metadata/module_variant = "STK_PROP_Sign_Sign_08"
+metadata/source_asset = "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Signs/SM_3DT_Sign_08.fbx"
+metadata/source_format = "FBX_provisional_geometry_authority"
+metadata/source_protection = "immutable_vendor_source"
+metadata/source_sha256 = "afb686116261d85bb18f58d608c8391feb0e2be826c7d1db64b1cb8106d66b74"
+metadata/dimensions_m = Vector3(0.89241, 1.361363, 0.092253)
+metadata/pivot_offset_m = Vector3(0, 1.139903, 0.022199)
+metadata/pivot = "bottom_center"
+metadata/front_axis = "+Z"
+metadata/front_axis_status = "requires_normal_editor_confirmation"
+metadata/rotation_contract = "Yaw only: 0, 90, 180, or 270 degrees"
+metadata/collision_policy = "none"
+metadata/triangle_count = 228
+metadata/material_families = PackedStringArray("Signs B")
+metadata/production_status = "full_generated_pending_category_visual_review"
+metadata/modular_classification = "attachment_compatible"
+metadata/primary_socket_role = "prop_anchor"
+metadata/snap_axis = ""
+metadata/snap_point_count = 1
+metadata/rejected_modular_candidate = false
+metadata/rejection_reason = ""
+metadata/builder_candidate = true
+metadata/builder_registration_enabled = false
+metadata/builder_parent = "Props"
+metadata/builder_profile = "small_props"
+
+[node name="Visuals" type="Node3D" parent="."]
+position = Vector3(0, 1.139903, 0.022199)
+
+[node name="ImportedSource" parent="Visuals" instance=ExtResource("1_source")]
+
+[node name="SnapPoints" type="Node3D" parent="."]
+
+[node name="PropAnchor" type="Marker3D" parent="SnapPoints" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, 0)
+metadata/socket_role = "prop_anchor"

@@ -1,0 +1,49 @@
+{
+  "assets": [
+    {
+      "collision": "box",
+      "dimensions_m": [
+        0.524496,
+        0.651435,
+        0.50954
+      ],
+      "expected_socket_count": 1,
+      "material_bindings": {
+        "Bins": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Materials/Source_Reconstructed/STK_MAT_Bins.tres"
+      },
+      "materials": [
+        "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Materials/Source_Reconstructed/STK_MAT_Bins.tres"
+      ],
+      "production_name": "STK_PROP_Crate_01",
+      "scene": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Scenes/Props/Street/STK_PROP_Crate_01.tscn",
+      "socket_role": "prop_anchor",
+      "source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Props/SM_3DT_Crate.fbx",
+      "source_bounds_max_m": [
+        0.262248,
+        0.388611,
+        0.145918
+      ],
+      "source_bounds_min_m": [
+        -0.262248,
+        -0.262824,
+        -0.363622
+      ],
+      "source_sha256": "9bcdaffc46d804a85951e453c0e7c74c3a93bacbc21cbc1e30cf235849d3868f",
+      "status": "pilot_pending_normal_editor_approval",
+      "triangles": 436,
+      "vertices": 222,
+      "visual_offset_m": [
+        -0.0,
+        0.262824,
+        0.108852
+      ]
+    }
+  ],
+  "generated_utc": "2026-07-24T02:44:41.776439+00:00",
+  "global_catalog_and_mapping_preserved": true,
+  "pipeline_version": "1.0.1",
+  "schema": "SteamtekEnvironmentSelectiveManifest-1",
+  "scope": "pilot",
+  "selected_catalog_and_mapping_rows_refreshed": true,
+  "selection": "SM_3DT_Crate.fbx"
+}

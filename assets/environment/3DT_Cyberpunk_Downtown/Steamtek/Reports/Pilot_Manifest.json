@@ -1,0 +1,420 @@
+{
+  "approval_boundary": "technical_validation_then_normal_editor_f6_visual_approval",
+  "assets": [
+    {
+      "builder_candidate": true,
+      "builder_registration_enabled": false,
+      "collision": "box",
+      "dimensions_m": [
+        2.190474,
+        0.789717,
+        0.233581
+      ],
+      "expected_socket_count": 2,
+      "material_bindings": {
+        "Apartment Walls A": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Materials/Source_Reconstructed/STK_MAT_Apartment_Walls_A.tres"
+      },
+      "materials": [
+        "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Materials/Source_Reconstructed/STK_MAT_Apartment_Walls_A.tres"
+      ],
+      "modular_contract": {
+        "builder_profile": "exterior_structure",
+        "classification": "structural_modular",
+        "primary_socket_role": "facade_horizontal",
+        "rejected_modular_candidate": false,
+        "rejection_reason": "",
+        "snap_axis": "x"
+      },
+      "production_name": "STK_ARCH_Wall_Apartment_A_01",
+      "scene": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Scenes/Architecture/Walls/STK_ARCH_Wall_Apartment_A_01.tscn",
+      "snap_point_count": 4,
+      "socket_role": "facade_horizontal",
+      "source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Walls/SM_3DT_Apartment_Wall_Piece_A_01.fbx",
+      "source_bounds_max_m": [
+        1.095237,
+        0.306205,
+        0.101935
+      ],
+      "source_bounds_min_m": [
+        -1.095237,
+        -0.483512,
+        -0.131646
+      ],
+      "source_sha256": "38700aee55ec0dbdd8fa0561d10eb1d9a21225bce4c8af35e464f604910ca3be",
+      "status": "pilot_pending_normal_editor_approval",
+      "triangles": 80,
+      "vertices": 42,
+      "visual_offset_m": [
+        -0.0,
+        0.483512,
+        0.014855500000000008
+      ]
+    },
+    {
+      "builder_candidate": true,
+      "builder_registration_enabled": false,
+      "collision": "box",
+      "dimensions_m": [
+        4.464783,
+        0.123232,
+        14.866685
+      ],
+      "expected_socket_count": 2,
+      "material_bindings": {
+        "Seamless Concrete C.001": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Materials/Source_Reconstructed/STK_MAT_Seamless_Concrete_C.tres",
+        "Seamless Road.001": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Materials/Source_Reconstructed/STK_MAT_Seamless_Road.tres"
+      },
+      "materials": [
+        "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Materials/Source_Reconstructed/STK_MAT_Seamless_Concrete_C.tres",
+        "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Materials/Source_Reconstructed/STK_MAT_Seamless_Road.tres"
+      ],
+      "modular_contract": {
+        "builder_profile": "exterior_structure",
+        "classification": "structural_modular",
+        "primary_socket_role": "street_road_chain",
+        "rejected_modular_candidate": false,
+        "rejection_reason": "",
+        "snap_axis": "z"
+      },
+      "production_name": "STK_ARCH_Road_01",
+      "scene": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Scenes/Architecture/Roads/STK_ARCH_Road_01.tscn",
+      "snap_point_count": 5,
+      "socket_role": "street_road_chain",
+      "source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Road/SM_3DT_Road_01.fbx",
+      "source_bounds_max_m": [
+        2.232392,
+        0.062116,
+        7.433343
+      ],
+      "source_bounds_min_m": [
+        -2.232391,
+        -0.061116,
+        -7.433342
+      ],
+      "source_sha256": "3f8cec35f0be4eb2293b064eaafcb069d7625d22e7e8997f1ef5efa1f6118db9",
+      "status": "pilot_pending_normal_editor_approval",
+      "triangles": 12,
+      "vertices": 8,
+      "visual_offset_m": [
+        -5.00000000069889e-07,
+        0.061116,
+        -5.00000000069889e-07
+      ]
+    },
+    {
+      "builder_candidate": true,
+      "builder_registration_enabled": false,
+      "collision": "box",
+      "dimensions_m": [
+        4.693586,
+        1.624604,
+        0.249189
+      ],
+      "expected_socket_count": 1,
+      "material_bindings": {
+        "Window A": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Materials/Source_Reconstructed/STK_MAT_Window_A.tres"
+      },
+      "materials": [
+        "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Materials/Source_Reconstructed/STK_MAT_Window_A.tres"
+      ],
+      "modular_contract": {
+        "builder_profile": "small_props",
+        "classification": "attachment_compatible",
+        "primary_socket_role": "prop_anchor",
+        "rejected_modular_candidate": false,
+        "rejection_reason": "",
+        "snap_axis": ""
+      },
+      "production_name": "STK_ARCH_Window_A_01",
+      "scene": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Scenes/Architecture/Windows/STK_ARCH_Window_A_01.tscn",
+      "snap_point_count": 1,
+      "socket_role": "prop_anchor",
+      "source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Windows/SM_3DT_Window_A_01.fbx",
+      "source_bounds_max_m": [
+        2.343927,
+        0.810868,
+        0.024261
+      ],
+      "source_bounds_min_m": [
+        -2.349659,
+        -0.813736,
+        -0.224928
+      ],
+      "source_sha256": "df38a098c4aa84d439bd60df85acf6ce964dcdb20cb7109a26ec05c7c2445429",
+      "status": "pilot_pending_normal_editor_approval",
+      "triangles": 728,
+      "vertices": 444,
+      "visual_offset_m": [
+        0.002866000000000035,
+        0.813736,
+        0.10033349999999999
+      ]
+    },
+    {
+      "builder_candidate": true,
+      "builder_registration_enabled": false,
+      "collision": "none",
+      "dimensions_m": [
+        0.064857,
+        4.607897,
+        0.064857
+      ],
+      "expected_socket_count": 2,
+      "material_bindings": {
+        "Pipes": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Materials/Source_Reconstructed/STK_MAT_Pipes.tres"
+      },
+      "materials": [
+        "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Materials/Source_Reconstructed/STK_MAT_Pipes.tres"
+      ],
+      "modular_contract": {
+        "builder_profile": "exterior_structure",
+        "classification": "structural_modular",
+        "primary_socket_role": "wall_service_chain",
+        "rejected_modular_candidate": false,
+        "rejection_reason": "",
+        "snap_axis": "y"
+      },
+      "production_name": "STK_INFRA_Pipe_01",
+      "scene": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Scenes/Infrastructure/Pipes/STK_INFRA_Pipe_01.tscn",
+      "snap_point_count": 2,
+      "socket_role": "wall_service_chain",
+      "source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_01.fbx",
+      "source_bounds_max_m": [
+        0.032429,
+        2.303951,
+        0.032428
+      ],
+      "source_bounds_min_m": [
+        -0.032428,
+        -2.303946,
+        -0.032429
+      ],
+      "source_sha256": "53c823dc8249aeaa8a623cde229f41dc39e45c66099a339b37908f379e7f9c7e",
+      "status": "pilot_pending_normal_editor_approval",
+      "triangles": 1984,
+      "vertices": 1000,
+      "visual_offset_m": [
+        -5.000000000005e-07,
+        2.303946,
+        5.000000000005e-07
+      ]
+    },
+    {
+      "builder_candidate": true,
+      "builder_registration_enabled": false,
+      "collision": "box",
+      "dimensions_m": [
+        0.524496,
+        0.651435,
+        0.50954
+      ],
+      "expected_socket_count": 1,
+      "material_bindings": {
+        "Bins": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Materials/Source_Reconstructed/STK_MAT_Bins.tres"
+      },
+      "materials": [
+        "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Materials/Source_Reconstructed/STK_MAT_Bins.tres"
+      ],
+      "modular_contract": {
+        "builder_profile": "small_props",
+        "classification": "attachment_compatible",
+        "primary_socket_role": "prop_anchor",
+        "rejected_modular_candidate": false,
+        "rejection_reason": "",
+        "snap_axis": ""
+      },
+      "production_name": "STK_PROP_Crate_01",
+      "scene": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Scenes/Props/Street/STK_PROP_Crate_01.tscn",
+      "snap_point_count": 1,
+      "socket_role": "prop_anchor",
+      "source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Props/SM_3DT_Crate.fbx",
+      "source_bounds_max_m": [
+        0.262248,
+        0.388611,
+        0.145918
+      ],
+      "source_bounds_min_m": [
+        -0.262248,
+        -0.262824,
+        -0.363622
+      ],
+      "source_sha256": "9bcdaffc46d804a85951e453c0e7c74c3a93bacbc21cbc1e30cf235849d3868f",
+      "status": "pilot_pending_normal_editor_approval",
+      "triangles": 436,
+      "vertices": 222,
+      "visual_offset_m": [
+        -0.0,
+        0.262824,
+        0.108852
+      ]
+    },
+    {
+      "builder_candidate": true,
+      "builder_registration_enabled": false,
+      "collision": "none",
+      "dimensions_m": [
+        1.599921,
+        1.088375,
+        0.332493
+      ],
+      "expected_socket_count": 1,
+      "material_bindings": {
+        "Signs C": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Materials/Source_Reconstructed/STK_MAT_Signs_C.tres"
+      },
+      "materials": [
+        "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Materials/Source_Reconstructed/STK_MAT_Signs_C.tres"
+      ],
+      "modular_contract": {
+        "builder_profile": "small_props",
+        "classification": "attachment_compatible",
+        "primary_socket_role": "prop_anchor",
+        "rejected_modular_candidate": false,
+        "rejection_reason": "",
+        "snap_axis": ""
+      },
+      "production_name": "STK_PROP_Sign_Emissive_013",
+      "scene": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Scenes/Props/Signs/STK_PROP_Sign_Emissive_013.tscn",
+      "snap_point_count": 1,
+      "socket_role": "prop_anchor",
+      "source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Signs/SM_3DT_Sign_013.fbx",
+      "source_bounds_max_m": [
+        0.898426,
+        0.553055,
+        0.168345
+      ],
+      "source_bounds_min_m": [
+        -0.701495,
+        -0.53532,
+        -0.164148
+      ],
+      "source_sha256": "d4206a4612f00d04939bca7e9bbeaa1e3598b5e53ac9df11074ad56abc88757b",
+      "status": "pilot_pending_normal_editor_approval",
+      "triangles": 3276,
+      "vertices": 1680,
+      "visual_offset_m": [
+        -0.09846549999999998,
+        0.53532,
+        -0.002098500000000003
+      ]
+    }
+  ],
+  "attachment_demonstrations": [
+    {
+      "attachment_marker": "SnapPoints/PropAnchor",
+      "attachment_node": "STK_PROP_Sign_Emissive_013_Attachment_Test",
+      "attachment_role": "prop_anchor",
+      "host_marker": "AttachmentPoints/Attach_Front_Center",
+      "host_node": "STK_ARCH_Wall_Apartment_A_01",
+      "host_role": "wall_prop_surface",
+      "validation": "existing_live3d_builder_role_compatibility_and_marker_coincidence"
+    }
+  ],
+  "generated_utc": "2026-07-24T05:18:49.044997+00:00",
+  "material_qa": {
+    "environment": {
+      "ambient_light_energy": 0.3,
+      "auto_exposure_enabled": false,
+      "background_color": [
+        0.18,
+        0.18,
+        0.18,
+        1.0
+      ],
+      "directional_light_energy": 0.7,
+      "glow_enabled": false,
+      "tonemap": "agx",
+      "tonemap_exposure": 0.9,
+      "visual_approval": "pending"
+    },
+    "profiles": {
+      "Apartment Walls A": {
+        "material": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Materials/Source_Reconstructed/STK_MAT_Apartment_Walls_A.tres"
+      },
+      "Bins": {
+        "material": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Materials/Source_Reconstructed/STK_MAT_Bins.tres"
+      },
+      "Pipes": {
+        "material": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Materials/Source_Reconstructed/STK_MAT_Pipes.tres"
+      },
+      "Seamless/Concrete C": {
+        "material": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Materials/Source_Reconstructed/STK_MAT_Seamless_Concrete_C.tres"
+      },
+      "Seamless/Road": {
+        "material": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Materials/Source_Reconstructed/STK_MAT_Seamless_Road.tres"
+      },
+      "Signs C": {
+        "emission_energy_multiplier": 0.45,
+        "emission_operator": "multiply",
+        "material": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Materials/Source_Reconstructed/STK_MAT_Signs_C.tres"
+      },
+      "Window A": {
+        "alpha_remap": {
+          "curve": "smoothstep",
+          "source_max": 255,
+          "source_min": 250,
+          "source_preservation": "derived_only",
+          "target_max": 255,
+          "target_min": 46
+        },
+        "material": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Materials/Source_Reconstructed/STK_MAT_Window_A.tres",
+        "sorting_use_aabb_center": true,
+        "transparency": "alpha_depth_prepass",
+        "two_sided": true
+      }
+    },
+    "review_presets": [
+      "overview",
+      "wall_seam",
+      "road_seam",
+      "crate",
+      "window_front",
+      "window_rear",
+      "emissive_sign"
+    ]
+  },
+  "pilot_scene": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Scenes/Tests/STK_SCN_3DT_Cyberpunk_Downtown_IntakePilot.tscn",
+  "pipeline_version": "1.0.3",
+  "schema": "SteamtekEnvironmentPilotManifest-2",
+  "snap_demonstrations": [
+    {
+      "axis": "x",
+      "expected_separation_m": 2.190474,
+      "first_node": "STK_ARCH_Wall_Apartment_A_01",
+      "production_name": "STK_ARCH_Wall_Apartment_A_01",
+      "second_node": "STK_ARCH_Wall_Apartment_A_01_Snap_Duplicate_2",
+      "socket_role": "facade_horizontal",
+      "source_scene": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Scenes/Architecture/Walls/STK_ARCH_Wall_Apartment_A_01.tscn",
+      "validation": "exact_endpoint_pair_and_visual_aabb_seam"
+    },
+    {
+      "axis": "x",
+      "expected_separation_m": 2.190474,
+      "first_node": "STK_ARCH_Wall_Apartment_A_01_Snap_Duplicate_2",
+      "production_name": "STK_ARCH_Wall_Apartment_A_01",
+      "second_node": "STK_ARCH_Wall_Apartment_A_01_Snap_Duplicate_3",
+      "socket_role": "facade_horizontal",
+      "source_scene": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Scenes/Architecture/Walls/STK_ARCH_Wall_Apartment_A_01.tscn",
+      "validation": "exact_endpoint_pair_and_visual_aabb_seam"
+    },
+    {
+      "axis": "z",
+      "expected_separation_m": 14.866685,
+      "first_node": "STK_ARCH_Road_01",
+      "production_name": "STK_ARCH_Road_01",
+      "second_node": "STK_ARCH_Road_01_Snap_Duplicate_2",
+      "socket_role": "street_road_chain",
+      "source_scene": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Scenes/Architecture/Roads/STK_ARCH_Road_01.tscn",
+      "validation": "exact_endpoint_pair_and_visual_aabb_seam"
+    },
+    {
+      "axis": "z",
+      "expected_separation_m": 14.866685,
+      "first_node": "STK_ARCH_Road_01_Snap_Duplicate_2",
+      "production_name": "STK_ARCH_Road_01",
+      "second_node": "STK_ARCH_Road_01_Snap_Duplicate_3",
+      "socket_role": "street_road_chain",
+      "source_scene": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Scenes/Architecture/Roads/STK_ARCH_Road_01.tscn",
+      "validation": "exact_endpoint_pair_and_visual_aabb_seam"
+    }
+  ]
+}

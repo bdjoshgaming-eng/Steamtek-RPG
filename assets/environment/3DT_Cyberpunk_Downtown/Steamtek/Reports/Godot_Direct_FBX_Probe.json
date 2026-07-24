@@ -1,0 +1,348 @@
+{
+	"assets": [
+		{
+			"bounds_position": [
+				-1.095237,
+				-0.483512,
+				-0.131646
+			],
+			"bounds_size": [
+				2.190474,
+				0.789717,
+				0.233581
+			],
+			"mesh_count": 1,
+			"meshes": [
+				{
+					"bounds_position": [
+						-1.095237,
+						-0.483512,
+						-0.131646
+					],
+					"bounds_size": [
+						2.190474,
+						0.789717,
+						0.233581
+					],
+					"materials": [
+						"Apartment Walls A"
+					],
+					"name": "SM_3DT_Apartment_Wall_Piece_A_01",
+					"transform": [
+						[
+							100.0,
+							0.0,
+							0.0
+						],
+						[
+							0.0,
+							-0.000012,
+							-99.999992
+						],
+						[
+							0.0,
+							99.999992,
+							-0.000012
+						],
+						[
+							0.0,
+							0.0,
+							0.0
+						]
+					]
+				}
+			],
+			"root_name": "SM_3DT_Apartment_Wall_Piece_A_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Walls/SM_3DT_Apartment_Wall_Piece_A_01.fbx"
+		},
+		{
+			"bounds_position": [
+				-2.232391,
+				-0.061116,
+				-7.433342
+			],
+			"bounds_size": [
+				4.464783,
+				0.123232,
+				14.866685
+			],
+			"mesh_count": 1,
+			"meshes": [
+				{
+					"bounds_position": [
+						-2.232391,
+						-0.061116,
+						-7.433342
+					],
+					"bounds_size": [
+						4.464783,
+						0.123232,
+						14.866685
+					],
+					"materials": [
+						"Seamless Road.001",
+						"Seamless Concrete C.001"
+					],
+					"name": "SM_3DT_Road_01",
+					"transform": [
+						[
+							100.0,
+							0.0,
+							0.0
+						],
+						[
+							0.0,
+							-0.000012,
+							-99.999992
+						],
+						[
+							0.0,
+							99.999992,
+							-0.000012
+						],
+						[
+							0.0,
+							0.0,
+							0.0
+						]
+					]
+				}
+			],
+			"root_name": "SM_3DT_Road_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Road/SM_3DT_Road_01.fbx"
+		},
+		{
+			"bounds_position": [
+				-2.349659,
+				-0.813736,
+				-0.224928
+			],
+			"bounds_size": [
+				4.693586,
+				1.624604,
+				0.249189
+			],
+			"mesh_count": 1,
+			"meshes": [
+				{
+					"bounds_position": [
+						-2.349659,
+						-0.813736,
+						-0.224928
+					],
+					"bounds_size": [
+						4.693586,
+						1.624604,
+						0.249189
+					],
+					"materials": [
+						"Window A"
+					],
+					"name": "SM_3DT_Window_A_01",
+					"transform": [
+						[
+							100.0,
+							0.0,
+							0.0
+						],
+						[
+							0.0,
+							-0.000012,
+							-99.999992
+						],
+						[
+							0.0,
+							99.999992,
+							-0.000012
+						],
+						[
+							0.0,
+							0.0,
+							0.0
+						]
+					]
+				}
+			],
+			"root_name": "SM_3DT_Window_A_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Windows/SM_3DT_Window_A_01.fbx"
+		},
+		{
+			"bounds_position": [
+				-0.032428,
+				-2.303946,
+				-0.032429
+			],
+			"bounds_size": [
+				0.064857,
+				4.607897,
+				0.064857
+			],
+			"mesh_count": 1,
+			"meshes": [
+				{
+					"bounds_position": [
+						-0.032428,
+						-2.303946,
+						-0.032429
+					],
+					"bounds_size": [
+						0.064857,
+						4.607897,
+						0.064857
+					],
+					"materials": [
+						"Pipes"
+					],
+					"name": "SM_3DT_Pipe_01",
+					"transform": [
+						[
+							100.0,
+							0.0,
+							0.0
+						],
+						[
+							0.0,
+							-0.000012,
+							-99.999992
+						],
+						[
+							0.0,
+							99.999992,
+							-0.000012
+						],
+						[
+							0.0,
+							0.0,
+							0.0
+						]
+					]
+				}
+			],
+			"root_name": "SM_3DT_Pipe_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_01.fbx"
+		},
+		{
+			"bounds_position": [
+				-0.262248,
+				-0.262824,
+				-0.363622
+			],
+			"bounds_size": [
+				0.524496,
+				0.651435,
+				0.50954
+			],
+			"mesh_count": 1,
+			"meshes": [
+				{
+					"bounds_position": [
+						-0.262248,
+						-0.262824,
+						-0.363622
+					],
+					"bounds_size": [
+						0.524496,
+						0.651435,
+						0.50954
+					],
+					"materials": [
+						"Bins"
+					],
+					"name": "SM_3DT_Crate",
+					"transform": [
+						[
+							100.0,
+							0.0,
+							0.0
+						],
+						[
+							0.0,
+							-0.000012,
+							-99.999992
+						],
+						[
+							0.0,
+							99.999992,
+							-0.000012
+						],
+						[
+							0.0,
+							0.0,
+							0.0
+						]
+					]
+				}
+			],
+			"root_name": "SM_3DT_Crate",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Props/SM_3DT_Crate.fbx"
+		},
+		{
+			"bounds_position": [
+				-1.461141,
+				-0.016,
+				-0.354373
+			],
+			"bounds_size": [
+				3.180392,
+				0.032,
+				0.750253
+			],
+			"mesh_count": 1,
+			"meshes": [
+				{
+					"bounds_position": [
+						-1.461141,
+						-0.016,
+						-0.354373
+					],
+					"bounds_size": [
+						3.180392,
+						0.032,
+						0.750253
+					],
+					"materials": [
+						"Signs D"
+					],
+					"name": "SM_3DT_Sign_Hotel",
+					"transform": [
+						[
+							100.0,
+							0.0,
+							0.0
+						],
+						[
+							0.0,
+							-0.000012,
+							-99.999992
+						],
+						[
+							0.0,
+							99.999992,
+							-0.000012
+						],
+						[
+							0.0,
+							0.0,
+							0.0
+						]
+					]
+				}
+			],
+			"root_name": "SM_3DT_Sign_Hotel",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Signs/SM_3DT_Sign_Hotel.fbx"
+		}
+	],
+	"errors": [],
+	"godot_version": {
+		"build": "official",
+		"hash": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+		"hex": 263936,
+		"major": 4,
+		"minor": 7,
+		"patch": 0,
+		"status": "stable",
+		"string": "4.7-stable (official)",
+		"timestamp": 0
+	},
+	"schema": "SteamtekGodotDirectFBXProbe-1"
+}

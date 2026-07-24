@@ -8,6 +8,7 @@ const PROP_GRID_STEP_M := 0.1
 const STOREY_STEP_M := 3.2
 const MAX_SOCKET_SNAP_DISTANCE_M := 1.5
 const MAX_SIDE_SOCKET_SNAP_DISTANCE_M := 2.6
+const MAX_CHAIN_SOCKET_SNAP_DISTANCE_M := 4.0
 const SOCKET_OCCUPANCY_TOLERANCE_M := 0.025
 const MODULE_GROUP := "steamtek_live3d_modular"
 const SOCKET_GROUP := "steamtek_live3d_snap"
@@ -454,14 +455,14 @@ func _create_dock() -> void:
 
 	var auto_snap_toggle := CheckBox.new()
 	auto_snap_toggle.text = "Auto Snap FileSystem / Viewport Drag"
-	auto_snap_toggle.tooltip_text = "When a live-3D module is dropped or moved in the 3D viewport, align compatible Marker3D sockets within 1 meter."
+	auto_snap_toggle.tooltip_text = "When a live-3D module is dropped or moved in the 3D viewport, align compatible Marker3D sockets within the role-aware capture distance."
 	auto_snap_toggle.button_pressed = auto_snap_drag_enabled
 	auto_snap_toggle.toggled.connect(_on_auto_snap_drag_toggled)
 	dock.add_child(auto_snap_toggle)
 
 	var edit_row := HBoxContainer.new()
 	edit_row.add_child(_make_button("Rotate +90", "Rotate the selected module root by exactly 90 degrees around Y.", _rotate_selected_90))
-	edit_row.add_child(_make_button("Snap Nearest", "Align the nearest compatible Marker3D socket within 1 meter.", _snap_selected_to_nearest_socket))
+	edit_row.add_child(_make_button("Snap Nearest", "Align the nearest compatible Marker3D socket within the role-aware capture distance.", _snap_selected_to_nearest_socket))
 	dock.add_child(edit_row)
 
 	var help := Label.new()
@@ -686,19 +687,16 @@ func _selected_module() -> Node3D:
 	if edited_root == null:
 		return null
 	var selected := get_editor_interface().get_selection().get_selected_nodes()
-	if selected.is_empty():
-		return null
-	var current: Node = selected[0]
-	while current != null:
-		if current is Node3D and current.is_in_group(MODULE_GROUP):
-			if str(current.get_meta("module_system", "")) == MODULE_SYSTEM:
-				return current as Node3D
-		if current == edited_root:
-			break
-		current = current.get_parent()
+	for selected_node in selected:
+		var current: Node = selected_node
+		while current != null:
+			if current is Node3D and current.is_in_group(MODULE_GROUP):
+				if str(current.get_meta("module_system", "")) == MODULE_SYSTEM:
+					return current as Node3D
+			if current == edited_root:
+				break
+			current = current.get_parent()
 	return null
-
-
 func _add_at_origin() -> void:
 	var edited_root := _edited_root_3d()
 	if edited_root == null:
@@ -950,21 +948,51 @@ func _snap_module_to_nearest_socket(module: Node3D, show_failures: bool) -> bool
 	var edited_root := _edited_root_3d()
 	if edited_root == null:
 		return false
+	var candidate := _nearest_socket_candidate(module, edited_root)
+	if not bool(candidate.get("found", false)):
+		if show_failures:
+			var reason := str(candidate.get("reason", "no_compatible_socket"))
+			if reason == "no_markers":
+				_set_status("Selected module has no live-3D snap markers.")
+			elif is_finite(float(candidate.get("nearest_distance_m", INF))):
+				_set_status("Nearest free compatible sockets are %.3f m apart; move within %.3f m." % [float(candidate.get("nearest_distance_m", 0.0)), float(candidate.get("capture_distance_m", MAX_SOCKET_SNAP_DISTANCE_M))])
+			else:
+				_set_status("No free compatible socket exists for the selected module.")
+		return false
+	var parent := module.get_parent() as Node3D
+	if parent == null:
+		if show_failures:
+			_set_status("The selected module needs a Node3D parent.")
+		return false
+	var old_transform := module.transform
+	var new_global: Transform3D = candidate.get("new_global", module.global_transform)
+	var new_transform := parent.global_transform.affine_inverse() * new_global
+	if old_transform.is_equal_approx(new_transform):
+		if show_failures:
+			_set_status("The selected sockets are already aligned.")
+		return false
+	var undo_redo := get_undo_redo()
+	undo_redo.create_action("Snap Steamtek Live3D Marker Sockets")
+	undo_redo.add_do_property(module, "transform", new_transform)
+	undo_redo.add_undo_property(module, "transform", old_transform)
+	undo_redo.commit_action()
+	_set_status("Snapped %s to %s from %.3f m." % [candidate.get("source_name", "socket"), candidate.get("target_name", "socket"), float(candidate.get("distance_before_m", 0.0))])
+	return true
 
+
+func _nearest_socket_candidate(module: Node3D, edited_root: Node3D) -> Dictionary:
 	var own_markers: Array[Marker3D] = []
 	_collect_markers(module, own_markers)
 	if own_markers.is_empty():
-		if show_failures:
-			_set_status("Selected module has no live-3D snap markers.")
-		return false
-
+		return {"found": false, "reason": "no_markers"}
 	var modules: Array[Node3D] = []
 	_collect_modules(edited_root, modules)
 	var best_source: Marker3D
 	var best_target: Marker3D
 	var best_target_host: Node3D
 	var best_distance := INF
-
+	var nearest_free_distance := INF
+	var nearest_free_limit := MAX_SOCKET_SNAP_DISTANCE_M
 	for other_module in modules:
 		if other_module == module:
 			continue
@@ -977,25 +1005,18 @@ func _snap_module_to_nearest_socket(module: Node3D, show_failures: bool) -> bool
 				if _socket_is_occupied_by_other(target, module, other_module, modules):
 					continue
 				var distance := source.global_position.distance_to(target.global_position)
-				if distance > _socket_pair_snap_distance(source, target):
+				var capture_distance := _socket_pair_snap_distance(source, target)
+				if distance < nearest_free_distance:
+					nearest_free_distance = distance
+					nearest_free_limit = capture_distance
+				if distance > capture_distance or distance >= best_distance:
 					continue
-				if distance < best_distance:
-					best_distance = distance
-					best_source = source
-					best_target = target
-					best_target_host = other_module
-
+				best_distance = distance
+				best_source = source
+				best_target = target
+				best_target_host = other_module
 	if best_source == null or best_target == null:
-		if show_failures:
-			_set_status("No free compatible socket is close enough. Side attachments capture across a full 2.4 m module.")
-		return false
-
-	var parent := module.get_parent() as Node3D
-	if parent == null:
-		if show_failures:
-			_set_status("The selected module needs a Node3D parent.")
-		return false
-	var old_transform := module.transform
+		return {"found": false, "reason": "outside_capture_or_incompatible", "nearest_distance_m": nearest_free_distance, "capture_distance_m": nearest_free_limit}
 	var new_global := module.global_transform
 	if _socket_pair_uses_inferred_yaw(best_source, best_target):
 		new_global = _socket_transform_with_inferred_yaw(module, best_source, best_target_host, best_target)
@@ -1004,27 +1025,45 @@ func _snap_module_to_nearest_socket(module: Node3D, show_failures: bool) -> bool
 		new_global = best_target.global_transform * source_relative.affine_inverse()
 	else:
 		new_global.origin += best_target.global_position - best_source.global_position
-	var new_transform := parent.global_transform.affine_inverse() * new_global
-	if old_transform.is_equal_approx(new_transform):
-		if show_failures:
-			_set_status("The selected sockets are already aligned.")
-		return false
+	return {
+		"found": true,
+		"new_global": new_global,
+		"source": best_source,
+		"target": best_target,
+		"source_name": str(best_source.name),
+		"target_name": str(best_target.name),
+		"distance_before_m": best_distance,
+		"capture_distance_m": _socket_pair_snap_distance(best_source, best_target),
+	}
 
-	var undo_redo := get_undo_redo()
-	undo_redo.create_action("Snap Steamtek Live3D Marker Sockets")
-	undo_redo.add_do_property(module, "transform", new_transform)
-	undo_redo.add_undo_property(module, "transform", old_transform)
-	undo_redo.commit_action()
-	_set_status("Snapped %s to %s." % [best_source.name, best_target.name])
-	return true
+
+func snap_generated_module_for_qa(module: Node3D, edited_root: Node3D) -> Dictionary:
+	var candidate := _nearest_socket_candidate(module, edited_root)
+	if not bool(candidate.get("found", false)):
+		return candidate
+	module.global_transform = candidate.get("new_global", module.global_transform)
+	var source := candidate.get("source") as Marker3D
+	var target := candidate.get("target") as Marker3D
+	candidate["distance_after_m"] = source.global_position.distance_to(target.global_position) if source != null and target != null else INF
+	candidate.erase("source")
+	candidate.erase("target")
+	candidate.erase("new_global")
+	return candidate
 
 
 func _socket_pair_snap_distance(source: Marker3D, target: Marker3D) -> float:
 	if _socket_pair_uses_inferred_yaw(source, target):
 		return MAX_SIDE_SOCKET_SNAP_DISTANCE_M
+	var source_role := str(source.get_meta("socket_role", ""))
+	var target_role := str(target.get_meta("socket_role", ""))
+	if source_role == target_role and source_role in [
+		"facade_horizontal", "floor_horizontal", "street_road_chain",
+		"street_sidewalk_chain", "street_curb_chain", "street_fence_chain",
+		"wall_service_chain",
+	]:
+		var marker_extent := maxf(source.position.length(), target.position.length())
+		return clampf(marker_extent * 0.5, MAX_SOCKET_SNAP_DISTANCE_M, MAX_CHAIN_SOCKET_SNAP_DISTANCE_M)
 	return MAX_SOCKET_SNAP_DISTANCE_M
-
-
 func _socket_pair_uses_inferred_yaw(source: Marker3D, target: Marker3D) -> bool:
 	var source_role := str(source.get_meta("socket_role", ""))
 	var target_role := str(target.get_meta("socket_role", ""))
@@ -1169,3 +1208,20 @@ func _socket_roles_compatible(source: Marker3D, target: Marker3D) -> bool:
 func _set_status(message: String) -> void:
 	if is_instance_valid(status_label):
 		status_label.text = message
+
+# Public, read-only QA hooks used by generated-pack validation. They delegate to
+# the builder's canonical recognition and compatibility rules.
+func recognizes_generated_module(module: Node3D) -> bool:
+	var recognized: Array[Node3D] = []
+	_collect_modules(module, recognized)
+	return recognized.size() == 1 and recognized[0] == module
+
+
+func recognized_generated_markers(module: Node3D) -> Array[Marker3D]:
+	var markers: Array[Marker3D] = []
+	_collect_markers(module, markers)
+	return markers
+
+
+func generated_socket_roles_compatible(source: Marker3D, target: Marker3D) -> bool:
+	return _socket_roles_compatible(source, target)

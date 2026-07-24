@@ -1,0 +1,746 @@
+{
+  "schema": "SteamtekBlenderSourceProbe-1",
+  "blender_version": "4.5.11 LTS",
+  "assets": [
+    {
+      "source": "C:\\My Game\\Steamtek-RPG\\assets\\environment\\3DT_Cyberpunk_Downtown\\FBX\\Walls\\SM_3DT_Apartment_Wall_Piece_A_01.fbx",
+      "source_bytes": 1041340,
+      "objects_total": 1,
+      "mesh_objects": 1,
+      "meshes": [
+        {
+          "name": "SM_3DT_Apartment_Wall_Piece_A_01",
+          "mesh_name": "Cube.005",
+          "vertices": 42,
+          "triangles": 80,
+          "polygons": 44,
+          "material_slots": [
+            "Apartment Walls A"
+          ],
+          "uv_layers": [
+            "UVMap"
+          ],
+          "color_attributes": [],
+          "location": [
+            -13.102406,
+            0.0,
+            0.0
+          ],
+          "rotation_euler_degrees": [
+            60.000656,
+            -0.000102,
+            -22.829227
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "world_bounds_min": [
+            -14.234509,
+            -0.71632,
+            -0.330032
+          ],
+          "world_bounds_max": [
+            -11.904962,
+            0.871537,
+            0.267111
+          ],
+          "world_dimensions": [
+            2.329548,
+            1.587857,
+            0.597143
+          ]
+        }
+      ],
+      "material_names": [
+        "Apartment Walls A"
+      ],
+      "referenced_images": [
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Apartment Walls A\\T_3DT_Apartment Walls_A_Metallic.png",
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Apartment Walls A\\T_3DT_Apartment Walls_A_Normal.png",
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Apartment Walls A\\T_3DT_Apartment Walls_A_Roughness.png"
+      ],
+      "bounds_min": [
+        -14.234509,
+        -0.71632,
+        -0.330032
+      ],
+      "bounds_max": [
+        -11.904962,
+        0.871537,
+        0.267111
+      ],
+      "dimensions_m": [
+        2.329548,
+        1.587857,
+        0.597143
+      ],
+      "origin_to_bounds_min_m": [
+        14.234509,
+        0.71632,
+        0.330032
+      ],
+      "has_negative_scale": false
+    },
+    {
+      "source": "C:\\My Game\\Steamtek-RPG\\assets\\environment\\3DT_Cyberpunk_Downtown\\FBX\\Road\\SM_3DT_Road_01.fbx",
+      "source_bytes": 1034348,
+      "objects_total": 1,
+      "mesh_objects": 1,
+      "meshes": [
+        {
+          "name": "SM_3DT_Road_01",
+          "mesh_name": "Plane.029",
+          "vertices": 8,
+          "triangles": 12,
+          "polygons": 6,
+          "material_slots": [
+            "Seamless Road.001",
+            "Seamless Concrete C.001"
+          ],
+          "uv_layers": [
+            "UVMap"
+          ],
+          "color_attributes": [],
+          "location": [
+            -13.102406,
+            0.0,
+            0.0
+          ],
+          "rotation_euler_degrees": [
+            60.000656,
+            -0.000102,
+            -22.829227
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "world_bounds_min": [
+            -16.622435,
+            -4.340382,
+            -6.468068
+          ],
+          "world_bounds_max": [
+            -9.582376,
+            4.340382,
+            6.468068
+          ],
+          "world_dimensions": [
+            7.040059,
+            8.680763,
+            12.936135
+          ]
+        }
+      ],
+      "material_names": [
+        "Seamless Concrete C.001",
+        "Seamless Road.001"
+      ],
+      "referenced_images": [
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Seamless\\Concrete C\\T_3DT_Seamless_Concrete_C_BaseColor.png",
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Seamless\\Concrete C\\T_3DT_Seamless_Concrete_C_Metallic.png",
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Seamless\\Concrete C\\T_3DT_Seamless_Concrete_C_Normal.png",
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Seamless\\Concrete C\\T_3DT_Seamless_Concrete_C_Roughness.png",
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Seamless\\Road\\T_3DT_Seamless_Road_BaseColor.png",
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Seamless\\Road\\T_3DT_Seamless_Road_Metallic.png",
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Seamless\\Road\\T_3DT_Seamless_Road_Normal.png",
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Seamless\\Road\\T_3DT_Seamless_Road_Roughness.png"
+      ],
+      "bounds_min": [
+        -16.622435,
+        -4.340382,
+        -6.468068
+      ],
+      "bounds_max": [
+        -9.582376,
+        4.340382,
+        6.468068
+      ],
+      "dimensions_m": [
+        7.040059,
+        8.680763,
+        12.936135
+      ],
+      "origin_to_bounds_min_m": [
+        16.622435,
+        4.340382,
+        6.468068
+      ],
+      "has_negative_scale": false
+    },
+    {
+      "source": "C:\\My Game\\Steamtek-RPG\\assets\\environment\\3DT_Cyberpunk_Downtown\\FBX\\Windows\\SM_3DT_Apartment_Window_01.fbx",
+      "source_bytes": 31932,
+      "objects_total": 1,
+      "mesh_objects": 1,
+      "meshes": [
+        {
+          "name": "SM_3DT_Apartment_Window_01",
+          "mesh_name": "Cube.081",
+          "vertices": 154,
+          "triangles": 296,
+          "polygons": 168,
+          "material_slots": [
+            "Apartment Windows A"
+          ],
+          "uv_layers": [
+            "UVMap"
+          ],
+          "color_attributes": [],
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_euler_degrees": [
+            -9e-06,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "world_bounds_min": [
+            -1.25214,
+            -0.01232,
+            -0.850456
+          ],
+          "world_bounds_max": [
+            0.938334,
+            0.013963,
+            0.571244
+          ],
+          "world_dimensions": [
+            2.190474,
+            0.026283,
+            1.4217
+          ]
+        }
+      ],
+      "material_names": [
+        "Apartment Windows A"
+      ],
+      "referenced_images": [
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Apartment Windows\\T_3DT_Apartment_Windows_Alpha.png",
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Apartment Windows\\T_3DT_Apartment_Windows_Metallic.png",
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Apartment Windows\\T_3DT_Apartment_Windows_Normal.png",
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Apartment Windows\\T_3DT_Apartment_Windows_Roughness.png"
+      ],
+      "bounds_min": [
+        -1.25214,
+        -0.01232,
+        -0.850456
+      ],
+      "bounds_max": [
+        0.938334,
+        0.013963,
+        0.571244
+      ],
+      "dimensions_m": [
+        2.190474,
+        0.026283,
+        1.4217
+      ],
+      "origin_to_bounds_min_m": [
+        1.25214,
+        0.01232,
+        0.850456
+      ],
+      "has_negative_scale": false
+    },
+    {
+      "source": "C:\\My Game\\Steamtek-RPG\\assets\\environment\\3DT_Cyberpunk_Downtown\\FBX\\Pipes\\SM_3DT_Pipe_01.fbx",
+      "source_bytes": 70988,
+      "objects_total": 1,
+      "mesh_objects": 1,
+      "meshes": [
+        {
+          "name": "SM_3DT_Pipe_01",
+          "mesh_name": "Cylinder.008",
+          "vertices": 1000,
+          "triangles": 1984,
+          "polygons": 928,
+          "material_slots": [
+            "Pipes"
+          ],
+          "uv_layers": [
+            "UVMap"
+          ],
+          "color_attributes": [],
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_euler_degrees": [
+            -9e-06,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "world_bounds_min": [
+            -0.032428,
+            -0.032429,
+            -2.303946
+          ],
+          "world_bounds_max": [
+            0.032428,
+            0.032429,
+            2.303952
+          ],
+          "world_dimensions": [
+            0.064857,
+            0.064857,
+            4.607897
+          ]
+        }
+      ],
+      "material_names": [
+        "Pipes"
+      ],
+      "referenced_images": [
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Pipes\\T_3DT_Pipes_Metallic.png",
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Pipes\\T_3DT_Pipes_OpenGL_Normal.png",
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Pipes\\T_3DT_Pipes_Roughness.png"
+      ],
+      "bounds_min": [
+        -0.032428,
+        -0.032429,
+        -2.303946
+      ],
+      "bounds_max": [
+        0.032428,
+        0.032429,
+        2.303952
+      ],
+      "dimensions_m": [
+        0.064857,
+        0.064857,
+        4.607897
+      ],
+      "origin_to_bounds_min_m": [
+        0.032428,
+        0.032429,
+        2.303946
+      ],
+      "has_negative_scale": false
+    },
+    {
+      "source": "C:\\My Game\\Steamtek-RPG\\assets\\environment\\3DT_Cyberpunk_Downtown\\FBX\\Props\\SM_3DT_Crate.fbx",
+      "source_bytes": 38924,
+      "objects_total": 1,
+      "mesh_objects": 1,
+      "meshes": [
+        {
+          "name": "SM_3DT_Crate",
+          "mesh_name": "Cube.665",
+          "vertices": 222,
+          "triangles": 436,
+          "polygons": 247,
+          "material_slots": [
+            "Bins"
+          ],
+          "uv_layers": [
+            "UVMap"
+          ],
+          "color_attributes": [],
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_euler_degrees": [
+            -9e-06,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "world_bounds_min": [
+            -0.262248,
+            -0.145918,
+            -0.262824
+          ],
+          "world_bounds_max": [
+            0.262248,
+            0.363622,
+            0.388611
+          ],
+          "world_dimensions": [
+            0.524496,
+            0.50954,
+            0.651435
+          ]
+        }
+      ],
+      "material_names": [
+        "Bins"
+      ],
+      "referenced_images": [
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Bins\\T_3DT_Bins_Metallic.png",
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Bins\\T_3DT_Bins_OpenGL_Normal.png",
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Bins\\T_3DT_Bins_Roughness.png"
+      ],
+      "bounds_min": [
+        -0.262248,
+        -0.145918,
+        -0.262824
+      ],
+      "bounds_max": [
+        0.262248,
+        0.363622,
+        0.388611
+      ],
+      "dimensions_m": [
+        0.524496,
+        0.50954,
+        0.651435
+      ],
+      "origin_to_bounds_min_m": [
+        0.262248,
+        0.145918,
+        0.262824
+      ],
+      "has_negative_scale": false
+    },
+    {
+      "source": "C:\\My Game\\Steamtek-RPG\\assets\\environment\\3DT_Cyberpunk_Downtown\\FBX\\Signs\\SM_3DT_Sign_Hotel.fbx",
+      "source_bytes": 1049980,
+      "objects_total": 1,
+      "mesh_objects": 1,
+      "meshes": [
+        {
+          "name": "SM_3DT_Sign_Hotel",
+          "mesh_name": "Text.004",
+          "vertices": 366,
+          "triangles": 716,
+          "polygons": 459,
+          "material_slots": [
+            "Signs D"
+          ],
+          "uv_layers": [
+            "UVMap"
+          ],
+          "color_attributes": [],
+          "location": [
+            -13.102406,
+            0.0,
+            0.0
+          ],
+          "rotation_euler_degrees": [
+            60.000656,
+            -0.000102,
+            -22.829227
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "world_bounds_min": [
+            -14.53126,
+            -0.862247,
+            -0.350847
+          ],
+          "world_bounds_max": [
+            -11.443711,
+            0.742977,
+            0.314901
+          ],
+          "world_dimensions": [
+            3.087549,
+            1.605224,
+            0.665748
+          ]
+        }
+      ],
+      "material_names": [
+        "Signs D"
+      ],
+      "referenced_images": [
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Signs D\\T_3DT_Signs D_Emission.png",
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Signs D\\T_3DT_Signs D_Metallic.png",
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Signs D\\T_3DT_Signs D_OpenGL_Normal.png",
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Signs D\\T_3DT_Signs D_Roughness.png"
+      ],
+      "bounds_min": [
+        -14.53126,
+        -0.862247,
+        -0.350847
+      ],
+      "bounds_max": [
+        -11.443711,
+        0.742977,
+        0.314901
+      ],
+      "dimensions_m": [
+        3.087549,
+        1.605224,
+        0.665748
+      ],
+      "origin_to_bounds_min_m": [
+        14.53126,
+        0.862247,
+        0.350847
+      ],
+      "has_negative_scale": false
+    },
+    {
+      "source": "C:\\My Game\\Steamtek-RPG\\assets\\environment\\3DT_Cyberpunk_Downtown\\FBX\\Signs\\SM_3DT_Sign_Pharmacy.fbx",
+      "source_bytes": 1062620,
+      "objects_total": 1,
+      "mesh_objects": 1,
+      "meshes": [
+        {
+          "name": "SM_3DT_Sign_Pharmacy",
+          "mesh_name": "Text.003",
+          "vertices": 654,
+          "triangles": 1292,
+          "polygons": 965,
+          "material_slots": [
+            "Signs D"
+          ],
+          "uv_layers": [
+            "UVMap"
+          ],
+          "color_attributes": [],
+          "location": [
+            -13.102406,
+            0.0,
+            0.0
+          ],
+          "rotation_euler_degrees": [
+            60.000656,
+            -0.000102,
+            -22.829227
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "world_bounds_min": [
+            -14.833555,
+            -0.820207,
+            -0.20574
+          ],
+          "world_bounds_max": [
+            -11.379123,
+            0.838863,
+            0.230236
+          ],
+          "world_dimensions": [
+            3.454432,
+            1.65907,
+            0.435976
+          ]
+        }
+      ],
+      "material_names": [
+        "Signs D"
+      ],
+      "referenced_images": [
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Signs D\\T_3DT_Signs D_Emission.png",
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Signs D\\T_3DT_Signs D_Metallic.png",
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Signs D\\T_3DT_Signs D_OpenGL_Normal.png",
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Signs D\\T_3DT_Signs D_Roughness.png"
+      ],
+      "bounds_min": [
+        -14.833555,
+        -0.820207,
+        -0.20574
+      ],
+      "bounds_max": [
+        -11.379123,
+        0.838863,
+        0.230236
+      ],
+      "dimensions_m": [
+        3.454432,
+        1.65907,
+        0.435976
+      ],
+      "origin_to_bounds_min_m": [
+        14.833555,
+        0.820207,
+        0.20574
+      ],
+      "has_negative_scale": false
+    },
+    {
+      "source": "C:\\My Game\\Steamtek-RPG\\assets\\environment\\3DT_Cyberpunk_Downtown\\FBX\\Signs\\SM_3DT_Sign_01.fbx",
+      "source_bytes": 1028924,
+      "objects_total": 1,
+      "mesh_objects": 1,
+      "meshes": [
+        {
+          "name": "SM_3DT_Sign_01",
+          "mesh_name": "Cylinder.010",
+          "vertices": 84,
+          "triangles": 160,
+          "polygons": 74,
+          "material_slots": [
+            "Signs B"
+          ],
+          "uv_layers": [
+            "UVMap"
+          ],
+          "color_attributes": [],
+          "location": [
+            -13.102406,
+            0.0,
+            0.0
+          ],
+          "rotation_euler_degrees": [
+            60.000656,
+            -0.000102,
+            -22.829227
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "world_bounds_min": [
+            -13.915998,
+            -0.570096,
+            -0.312861
+          ],
+          "world_bounds_max": [
+            -12.046648,
+            0.516887,
+            0.286931
+          ],
+          "world_dimensions": [
+            1.86935,
+            1.086982,
+            0.599792
+          ]
+        }
+      ],
+      "material_names": [
+        "Signs B"
+      ],
+      "referenced_images": [
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Signs B\\T_3DT_Signs B_Metallic.png",
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Signs B\\T_3DT_Signs B_OpenGL_Normal.png",
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Signs B\\T_3DT_Signs B_Roughness.png"
+      ],
+      "bounds_min": [
+        -13.915998,
+        -0.570096,
+        -0.312861
+      ],
+      "bounds_max": [
+        -12.046648,
+        0.516887,
+        0.286931
+      ],
+      "dimensions_m": [
+        1.86935,
+        1.086982,
+        0.599792
+      ],
+      "origin_to_bounds_min_m": [
+        13.915998,
+        0.570096,
+        0.312861
+      ],
+      "has_negative_scale": false
+    },
+    {
+      "source": "C:\\My Game\\Steamtek-RPG\\assets\\environment\\3DT_Cyberpunk_Downtown\\FBX\\Shelters\\SM_3DT_Shelter_A.fbx",
+      "source_bytes": 1087628,
+      "objects_total": 1,
+      "mesh_objects": 1,
+      "meshes": [
+        {
+          "name": "SM_3DT_Shelter_A",
+          "mesh_name": "NurbsPath.025",
+          "vertices": 864,
+          "triangles": 1612,
+          "polygons": 826,
+          "material_slots": [
+            "Shelter A"
+          ],
+          "uv_layers": [
+            "UVMap"
+          ],
+          "color_attributes": [],
+          "location": [
+            -13.102406,
+            0.0,
+            0.0
+          ],
+          "rotation_euler_degrees": [
+            60.000656,
+            -0.000102,
+            -22.829227
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "world_bounds_min": [
+            -14.433022,
+            -1.751982,
+            -2.714885
+          ],
+          "world_bounds_max": [
+            -11.656015,
+            2.081604,
+            2.512193
+          ],
+          "world_dimensions": [
+            2.777006,
+            3.833587,
+            5.227078
+          ]
+        }
+      ],
+      "material_names": [
+        "Shelter A"
+      ],
+      "referenced_images": [
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Shelter A\\T_3DT_Shelter_A_Metallic.png",
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Shelter A\\T_3DT_Shelter_A_Normal.png",
+        "C:\\Users\\marcu\\Documents\\Blender\\Cyberpunk Street\\Cyberpunk Downtown Pack\\3DT_Cyberpunk_Downtown_Textures\\Shelter A\\T_3DT_Shelter_A_Roughness.png"
+      ],
+      "bounds_min": [
+        -14.433022,
+        -1.751982,
+        -2.714885
+      ],
+      "bounds_max": [
+        -11.656015,
+        2.081604,
+        2.512193
+      ],
+      "dimensions_m": [
+        2.777006,
+        3.833587,
+        5.227078
+      ],
+      "origin_to_bounds_min_m": [
+        14.433022,
+        1.751982,
+        2.714885
+      ],
+      "has_negative_scale": false
+    }
+  ],
+  "errors": []
+}

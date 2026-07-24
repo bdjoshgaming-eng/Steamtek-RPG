@@ -1,0 +1,55 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_E_03.fbx" id="1_source"]
+[ext_resource type="Script" path="res://tools/steamtek-environment-intake/godot/steamtek_material_binding.gd" id="2_binder"]
+[ext_resource type="Material" path="res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Materials/Source_Reconstructed/STK_MAT_Pipes.tres" id="3_mat"]
+
+[node name="STK_INFRA_Pipe_Pipe_Piece_E_03" type="Node3D" groups=["steamtek_live3d_modular"]]
+editor_description = "Generated Steamtek environment intake wrapper. Source geometry remains immutable; materials are shared external resources."
+script = ExtResource("2_binder")
+material_bindings = {"Pipes": ExtResource("3_mat")}
+metadata/module_system = "live3d_meter_v1"
+metadata/module_type = "pipes"
+metadata/module_family = "3DT_Cyberpunk_Downtown"
+metadata/module_variant = "STK_INFRA_Pipe_Pipe_Piece_E_03"
+metadata/source_asset = "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_E_03.fbx"
+metadata/source_format = "FBX_provisional_geometry_authority"
+metadata/source_protection = "immutable_vendor_source"
+metadata/source_sha256 = "9f3616e8304a374581ef8b3e92f1418436da4b97dd21c80c6d259dabd3763501"
+metadata/dimensions_m = Vector3(0.239324, 1.117509, 0.239324)
+metadata/pivot_offset_m = Vector3(0, 0.315567, 0)
+metadata/pivot = "bottom_center"
+metadata/front_axis = "+Z"
+metadata/front_axis_status = "requires_normal_editor_confirmation"
+metadata/rotation_contract = "Yaw only: 0, 90, 180, or 270 degrees"
+metadata/collision_policy = "none"
+metadata/triangle_count = 316
+metadata/material_families = PackedStringArray("Pipes")
+metadata/production_status = "full_generated_pending_category_visual_review"
+metadata/modular_classification = "structural_modular"
+metadata/primary_socket_role = "wall_service_chain"
+metadata/snap_axis = "y"
+metadata/snap_point_count = 2
+metadata/rejected_modular_candidate = false
+metadata/rejection_reason = ""
+metadata/builder_candidate = true
+metadata/builder_registration_enabled = false
+metadata/builder_parent = "Infrastructure"
+metadata/builder_profile = "exterior_structure"
+
+[node name="Visuals" type="Node3D" parent="."]
+position = Vector3(0, 0.315567, 0)
+
+[node name="ImportedSource" parent="Visuals" instance=ExtResource("1_source")]
+
+[node name="SnapPoints" type="Node3D" parent="."]
+
+[node name="Snap_Bottom" type="Marker3D" parent="SnapPoints" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 0, 0)
+metadata/socket_role = "wall_service_chain"
+metadata/socket_normal_local = Vector3(0, -1, 0)
+
+[node name="Snap_Top" type="Marker3D" parent="SnapPoints" groups=["steamtek_live3d_snap"]]
+position = Vector3(0, 1.117509, 0)
+metadata/socket_role = "wall_service_chain"
+metadata/socket_normal_local = Vector3(0, 1, 0)

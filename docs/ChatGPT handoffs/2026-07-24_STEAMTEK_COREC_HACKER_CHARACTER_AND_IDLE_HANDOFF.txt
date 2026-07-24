@@ -1,0 +1,206 @@
+STEAMTEK COREC HACKER CHARACTER AND MIXAMO IDLE HANDOFF
+Date: 2026-07-24
+Project: C:\My Game\Steamtek-RPG
+
+AUTHORITY
+
+This is the current continuation authority for the assembled male CoreC Hacker
+player-character derivative, its Hair C07 addition, its single retargeted
+Mixamo idle, and its Godot review scene. It does not replace the separate
+24-bone Meshy/Hazmat combat prototype authority or the July 22 street-kit
+authority.
+
+PURCHASED SOURCES PRESERVED
+
+Body, outfit, hair, and textures came from:
+
+C:\My Game\Steamtek-RPG\incoming\corec_male_character
+
+The requested animation folder name `corec_male_animations` did not exist. The
+actual supplied animation was resolved without moving or renaming it at:
+
+C:\My Game\Steamtek-RPG\incoming\corsec_male_animations\MX_Idle.fbx
+
+MX_Idle.fbx SHA-256:
+
+29cd60c5c8450929352bdbfab22c47a39e4e251717b651ce8a52b8db48b7e3e2
+
+All purchased FBX and PNG hashes matched after processing. No purchased source
+file was modified, moved, renamed, remeshed, decimated, re-rigged, or
+overwritten.
+
+CURRENT GENERATED CHARACTER
+
+Production derivative GLB:
+
+C:\My Game\Steamtek-RPG\output\corec_male_character\STK_CHAR_Player_M_CoreC_Hacker.glb
+
+GLB SHA-256:
+
+d5429d5c401117225297af490e3ae8872556d6d42c2e69658317c6d1f9aa06e0
+
+Validated contents:
+
+- Exactly one 88-bone CoreC skeleton and one skin.
+- Eleven separate modular meshes: eyes, face, feet, hands, legs, teeth, torso,
+  Hacker jacket, Hacker pants, Hacker shoes, and Hair C07.
+- 73,544 total triangles.
+- Seven materials.
+- No combined all-in-one character mesh.
+- Existing body, clothing, hair, materials, scale, rest pose, bone names, and
+  vertex weights retained.
+- Covered body meshes were conservatively retained rather than destructively
+  removed.
+- Techwear ColorMask preserved as a generated derivative texture for later
+  Steamtek recoloring.
+
+HAIR C07
+
+Source:
+
+C:\My Game\Steamtek-RPG\incoming\corec_male_character\SKM_CoreC_Male_HairC07.fbx
+
+The hair FBX contains the same 88 bone names and matching source bind matrices
+as the CoreC body. It was kept as a separate skinned mesh and assigned to the
+existing master skeleton without recalculating weights. Its duplicate armature
+was removed only after reassignment.
+
+Hair validation:
+
+- 31,752 triangles.
+- Two original material slots:
+  MI_CoreC_Comic_HairstyleC7_1 and MI_CoreC_Comic_HairstyleC7_Base.
+- Scale 1,1,1.
+- Rest-pose bounds overlap the face/scalp region and are finite.
+- No floating or disjoint bounds detected by automated placement QA.
+- Head/neck deformation sample passed.
+- No hair texture PNG was supplied beside the FBX. The original imported
+  material slots and references were retained; do not invent or silently
+  replace missing purchased hair textures.
+
+MIXAMO IDLE RETARGET
+
+Final animation name:
+
+STK_Idle_Mixamo_01
+
+The animation-only Mixamo rig contains 65 bones. Fifty-two humanoid bones were
+mapped to the existing CoreC skeleton, including torso, shoulders, arms,
+wrists, legs, feet, neck, head, and three segments for every finger and thumb.
+Thirteen unmapped Mixamo bones are terminal finger, toe, and head-end bones.
+Thirty-six unmapped CoreC bones are intentional helper, twist, IK, metacarpal,
+or intermediate spine/neck bones that inherit from mapped parents.
+
+Retarget contract:
+
+- CoreC skeleton was not replaced or re-rigged.
+- Local rest-orientation correction was calculated for all 52 mapped bones.
+- 156 source position curves / 16,656 position keys were removed.
+- 156 source scale curves / 16,656 scale keys were removed.
+- Armature-object and horizontal root motion were removed.
+- Only pelvis vertical translation was retained.
+- The final keyed pose exactly matches the first keyed pose for loop closure.
+- No walk, run, aiming, shooting, AnimationTree, or additional animation was
+  added.
+
+Animation timing:
+
+- Source action: frames 1-251 at 30 FPS, 251 frames.
+- Keyed motion span: 8.3333 seconds.
+- Godot imported length: 8.3667 seconds.
+- Godot loop mode: enabled.
+
+Motion validation:
+
+- Pelvis horizontal displacement: effectively zero; idle is in place.
+- Left foot maximum horizontal drift: 0.02120 m; vertical range 0.00450 m.
+- Right foot maximum horizontal drift: 0.02217 m; vertical range 0.00207 m.
+- Both automated foot-contact tests passed the 0.05 m tolerance.
+- Sampled mesh deformation at start, midpoint, and loop end stayed finite and
+  within stable character-sized bounds.
+- First and final sampled bounds match; loop closure passed.
+- GLB contains one animation, one skin, eleven mesh nodes, and one character
+  skeleton.
+
+GODOT REVIEW
+
+Review scene:
+
+C:\My Game\Steamtek-RPG\output\corec_male_character\corec_hacker_review.tscn
+
+Review script:
+
+C:\My Game\Steamtek-RPG\output\corec_male_character\corec_hacker_review.gd
+
+Godot successfully imported and loaded STK_Idle_Mixamo_01. The review scene
+auto-plays it as a loop and provides an on-screen Play/Stop button plus Space
+as a keyboard toggle. Camera presets remain:
+
+- 1 front
+- 2 side
+- 3 rear
+- 4 isometric
+- 5 head/hair close review
+- 6 lower-body/foot review
+- Arrow keys pan; mouse wheel zooms.
+
+Godot validation reported:
+
+- Animation list contains STK_Idle_Mixamo_01.
+- Imported duration 8.3666668 seconds.
+- Loop mode enabled.
+- Review scene and controls load without script errors.
+
+REPORTS AND PIPELINE
+
+Assembly and animation report:
+
+C:\My Game\Steamtek-RPG\output\corec_male_character\STK_CHAR_Player_M_CoreC_Hacker_assembly_report.md
+
+Detailed mapping and retarget metrics:
+
+C:\My Game\Steamtek-RPG\output\corec_male_character\mixamo_idle_retarget_metrics.json
+
+Assembly metrics:
+
+C:\My Game\Steamtek-RPG\output\corec_male_character\assembly_metrics.json
+
+Relevant local scripts:
+
+- tools\steamtek-corec-character\assemble_corec_hacker.py
+- tools\steamtek-corec-character\retarget_mixamo_idle.py
+- tools\steamtek-corec-character\validate_corec_idle.gd
+
+VISUAL-APPROVAL BOUNDARY
+
+Automated assembly, skeleton, bind-pose, hash, deformation-bound, foot-contact,
+GLB-structure, and Godot-load tests passed. This does not replace normal-editor
+visual approval. Before promoting this character beyond the generated output
+area, open the review scene in the normal Godot editor/F6 and inspect the full
+idle loop from front, side, rear, isometric, head, and lower-body views. Check
+shoulders, elbows, wrists, fingers, spine, hips, knees, ankles, neck, head,
+hair/scalp, clothing intersections, and foot contact.
+
+Do not add more animations or an AnimationTree until that visual review is
+accepted. If visual distortion appears, correct only the generated derivative
+and local retarget mapping; never modify the purchased sources or replace the
+CoreC skeleton.
+
+AUTHORITY BOUNDARIES
+
+- This file is authoritative only for the 88-bone CoreC Hacker player
+  character and STK_Idle_Mixamo_01.
+- The 24-bone Meshy hero/Hazmat combat prototype remains governed by:
+  C:\My Game\Steamtek-RPG\docs\ChatGPT handoffs\2026-07-23_STEAMTEK_HERO_COMBAT_AND_HAZMAT_SCENE_HANDOFF.txt
+- The street-kit and Live3D Builder remain governed by the July 22 street-kit
+  handoff.
+- Do not migrate animations, bone contracts, or wrappers between the 88-bone
+  CoreC character and the 24-bone Meshy/Hazmat character without an explicit,
+  separately validated retarget.
+
+WORKTREE SAFETY
+
+The repository contains unrelated modified and untracked files. Preserve them.
+Do not reset, clean, delete, revert, or overwrite unrelated work. No Git commit
+or push was performed for the CoreC assembly, hair integration, idle retarget,
+review scene, reports, scripts, or this handoff update.

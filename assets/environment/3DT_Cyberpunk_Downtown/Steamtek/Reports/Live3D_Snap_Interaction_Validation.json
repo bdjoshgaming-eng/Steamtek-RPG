@@ -1,0 +1,124 @@
+{
+	"cases": [
+		{
+			"capture_distance_m": 1.5,
+			"case": "wall_x",
+			"distance_after_m": 0.0,
+			"distance_before_m": 0.0,
+			"expected_position_m": [
+				2.190474,
+				0.0,
+				0.0
+			],
+			"final_position_m": [
+				0.0,
+				0.0,
+				0.0
+			],
+			"passed": false,
+			"root_scale_one": true,
+			"scene": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Scenes/Architecture/Walls/STK_ARCH_Wall_Apartment_A_01.tscn",
+			"source_marker": "Snap_Left",
+			"starting_position_m": [
+				2.0,
+				0.0,
+				0.0
+			],
+			"target_marker": "Snap_Left"
+		},
+		{
+			"capture_distance_m": 3.71667146682739,
+			"case": "road_z",
+			"distance_after_m": 0.0,
+			"distance_before_m": 0.0,
+			"expected_position_m": [
+				0.0,
+				0.0,
+				14.866686
+			],
+			"final_position_m": [
+				0.0,
+				0.0,
+				0.0
+			],
+			"passed": false,
+			"root_scale_one": true,
+			"scene": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Scenes/Architecture/Roads/STK_ARCH_Road_01.tscn",
+			"source_marker": "Snap_Back",
+			"starting_position_m": [
+				0.0,
+				0.0,
+				13.0
+			],
+			"target_marker": "Snap_Back"
+		},
+		{
+			"capture_distance_m": 1.5,
+			"case": "pipe_y",
+			"distance_after_m": 0.0,
+			"distance_before_m": 0.0,
+			"expected_position_m": [
+				0.0,
+				4.607897,
+				0.0
+			],
+			"final_position_m": [
+				0.0,
+				0.0,
+				0.0
+			],
+			"passed": false,
+			"root_scale_one": true,
+			"scene": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Scenes/Infrastructure/Pipes/STK_INFRA_Pipe_01.tscn",
+			"source_marker": "Snap_Bottom",
+			"starting_position_m": [
+				0.0,
+				3.0,
+				0.0
+			],
+			"target_marker": "Snap_Bottom"
+		},
+		{
+			"attachment_scene": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Scenes/Props/Signs/STK_PROP_Sign_Emissive_013.tscn",
+			"capture_distance_m": 1.5,
+			"case": "wall_sign_attachment",
+			"distance_after_m": 0.0,
+			"distance_before_m": 0.0,
+			"expected_position_m": [
+				0.0,
+				0.0,
+				0.0
+			],
+			"final_position_m": [
+				0.0,
+				0.0,
+				0.0
+			],
+			"host_scene": "res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Scenes/Architecture/Walls/STK_ARCH_Wall_Apartment_A_01.tscn",
+			"passed": true,
+			"root_scale_one": true,
+			"source_marker": "PropAnchor",
+			"starting_position_m": [
+				0.0,
+				0.0,
+				0.0
+			],
+			"target_marker": "Attach_Front_Center"
+		}
+	],
+	"failure_count": 3,
+	"godot_version": {
+		"build": "official",
+		"hash": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+		"hex": 263936,
+		"major": 4,
+		"minor": 7,
+		"patch": 0,
+		"status": "stable",
+		"string": "4.7-stable (official)",
+		"timestamp": 0
+	},
+	"passed": false,
+	"schema": "SteamtekLive3DSnapInteractionValidation-1",
+	"validation": "shared_live3d_builder_candidate_solver_applies_real_module_transform"
+}

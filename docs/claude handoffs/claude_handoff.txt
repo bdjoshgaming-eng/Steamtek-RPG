@@ -72,6 +72,15 @@ See the detail doc for exact numbers, file-by-file changes, and the
 full "tried and reverted" history (grenade burst-fire, grenade
 accuracy scatter) so you don't re-propose either.
 
+CORRECTION (later same day, separate memory-sync session): the detail
+doc's "STILL OPEN" list originally phrased "no telegraph for Corrosive
+Grasp or Buttstroke's swing" as one bullet implying both would be
+red/yellow. Josh flagged this: Buttstroke is the PLAYER's ability, not
+ScrapThief's -- it would be BLUE per the color convention, not
+red/yellow. Fixed at the source in the detail doc. These are two
+unrelated abilities on opposite sides of combat that simply both lack
+a telegraph right now; don't conflate them again.
+
 
 -------------------------------------------------------------
 SESSION 2026-07-23 -- 2D DELETED, 3D COMBAT + INVENTORY BUILT,

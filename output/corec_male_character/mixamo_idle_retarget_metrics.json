@@ -1,0 +1,446 @@
+{
+    "source_animation":  "C:\\My Game\\Steamtek-RPG\\incoming\\corsec_male_animations\\MX_Idle.fbx",
+    "source_frame_start":  1,
+    "source_frame_end":  251,
+    "source_frame_count":  251,
+    "source_fps":  30,
+    "source_duration_seconds":  8.333333333333334,
+    "final_animation_name":  "STK_Idle_Mixamo_01",
+    "final_duration_seconds":  8.333333333333334,
+    "mapped_bones":  {
+                         "mixamorig:Hips":  "pelvis",
+                         "mixamorig:Spine":  "spine_01",
+                         "mixamorig:Spine1":  "spine_03",
+                         "mixamorig:Spine2":  "spine_05",
+                         "mixamorig:Neck":  "neck_01",
+                         "mixamorig:Head":  "head",
+                         "mixamorig:LeftShoulder":  "clavicle_l",
+                         "mixamorig:LeftArm":  "upperarm_l",
+                         "mixamorig:LeftForeArm":  "lowerarm_l",
+                         "mixamorig:LeftHand":  "hand_l",
+                         "mixamorig:RightShoulder":  "clavicle_r",
+                         "mixamorig:RightArm":  "upperarm_r",
+                         "mixamorig:RightForeArm":  "lowerarm_r",
+                         "mixamorig:RightHand":  "hand_r",
+                         "mixamorig:LeftUpLeg":  "thigh_l",
+                         "mixamorig:LeftLeg":  "calf_l",
+                         "mixamorig:LeftFoot":  "foot_l",
+                         "mixamorig:LeftToeBase":  "ball_l",
+                         "mixamorig:RightUpLeg":  "thigh_r",
+                         "mixamorig:RightLeg":  "calf_r",
+                         "mixamorig:RightFoot":  "foot_r",
+                         "mixamorig:RightToeBase":  "ball_r",
+                         "mixamorig:LeftHandIndex1":  "index_01_l",
+                         "mixamorig:LeftHandIndex2":  "index_02_l",
+                         "mixamorig:LeftHandIndex3":  "index_03_l",
+                         "mixamorig:LeftHandMiddle1":  "middle_01_l",
+                         "mixamorig:LeftHandMiddle2":  "middle_02_l",
+                         "mixamorig:LeftHandMiddle3":  "middle_03_l",
+                         "mixamorig:LeftHandRing1":  "ring_01_l",
+                         "mixamorig:LeftHandRing2":  "ring_02_l",
+                         "mixamorig:LeftHandRing3":  "ring_03_l",
+                         "mixamorig:LeftHandPinky1":  "pinky_01_l",
+                         "mixamorig:LeftHandPinky2":  "pinky_02_l",
+                         "mixamorig:LeftHandPinky3":  "pinky_03_l",
+                         "mixamorig:LeftHandThumb1":  "thumb_01_l",
+                         "mixamorig:LeftHandThumb2":  "thumb_02_l",
+                         "mixamorig:LeftHandThumb3":  "thumb_03_l",
+                         "mixamorig:RightHandIndex1":  "index_01_r",
+                         "mixamorig:RightHandIndex2":  "index_02_r",
+                         "mixamorig:RightHandIndex3":  "index_03_r",
+                         "mixamorig:RightHandMiddle1":  "middle_01_r",
+                         "mixamorig:RightHandMiddle2":  "middle_02_r",
+                         "mixamorig:RightHandMiddle3":  "middle_03_r",
+                         "mixamorig:RightHandRing1":  "ring_01_r",
+                         "mixamorig:RightHandRing2":  "ring_02_r",
+                         "mixamorig:RightHandRing3":  "ring_03_r",
+                         "mixamorig:RightHandPinky1":  "pinky_01_r",
+                         "mixamorig:RightHandPinky2":  "pinky_02_r",
+                         "mixamorig:RightHandPinky3":  "pinky_03_r",
+                         "mixamorig:RightHandThumb1":  "thumb_01_r",
+                         "mixamorig:RightHandThumb2":  "thumb_02_r",
+                         "mixamorig:RightHandThumb3":  "thumb_03_r"
+                     },
+    "mapped_bone_count":  52,
+    "unmapped_mixamo_bones":  [
+                                  "mixamorig:HeadTop_End",
+                                  "mixamorig:LeftHandIndex4",
+                                  "mixamorig:LeftHandMiddle4",
+                                  "mixamorig:LeftHandPinky4",
+                                  "mixamorig:LeftHandRing4",
+                                  "mixamorig:LeftHandThumb4",
+                                  "mixamorig:LeftToe_End",
+                                  "mixamorig:RightHandIndex4",
+                                  "mixamorig:RightHandMiddle4",
+                                  "mixamorig:RightHandPinky4",
+                                  "mixamorig:RightHandRing4",
+                                  "mixamorig:RightHandThumb4",
+                                  "mixamorig:RightToe_End"
+                              ],
+    "unmapped_core_bones":  [
+                                "calf_twist_01_l",
+                                "calf_twist_01_r",
+                                "calf_twist_02_l",
+                                "calf_twist_02_r",
+                                "center_of_mass",
+                                "ik_foot_l",
+                                "ik_foot_r",
+                                "ik_foot_root",
+                                "ik_hand_gun",
+                                "ik_hand_l",
+                                "ik_hand_r",
+                                "ik_hand_root",
+                                "index_metacarpal_l",
+                                "index_metacarpal_r",
+                                "interaction",
+                                "lowerarm_twist_01_l",
+                                "lowerarm_twist_01_r",
+                                "lowerarm_twist_02_l",
+                                "lowerarm_twist_02_r",
+                                "middle_metacarpal_l",
+                                "middle_metacarpal_r",
+                                "neck_02",
+                                "pinky_metacarpal_l",
+                                "pinky_metacarpal_r",
+                                "ring_metacarpal_l",
+                                "ring_metacarpal_r",
+                                "spine_02",
+                                "spine_04",
+                                "thigh_twist_01_l",
+                                "thigh_twist_01_r",
+                                "thigh_twist_02_l",
+                                "thigh_twist_02_r",
+                                "upperarm_twist_01_l",
+                                "upperarm_twist_01_r",
+                                "upperarm_twist_02_l",
+                                "upperarm_twist_02_r"
+                            ],
+    "removed_position_fcurves":  156,
+    "removed_position_keys":  16656,
+    "removed_scale_fcurves":  156,
+    "removed_scale_keys":  16656,
+    "retained_translation_tracks":  [
+                                        "pelvis.location (vertical component only)"
+                                    ],
+    "rest_pose_corrections":  [
+                                  {
+                                      "source":  "mixamorig:Hips",
+                                      "target":  "pelvis",
+                                      "angle_degrees":  122.5563
+                                  },
+                                  {
+                                      "source":  "mixamorig:Spine",
+                                      "target":  "spine_01",
+                                      "angle_degrees":  109.5673
+                                  },
+                                  {
+                                      "source":  "mixamorig:Spine1",
+                                      "target":  "spine_03",
+                                      "angle_degrees":  117.2301
+                                  },
+                                  {
+                                      "source":  "mixamorig:Spine2",
+                                      "target":  "spine_05",
+                                      "angle_degrees":  121.8388
+                                  },
+                                  {
+                                      "source":  "mixamorig:Neck",
+                                      "target":  "neck_01",
+                                      "angle_degrees":  108.8246
+                                  },
+                                  {
+                                      "source":  "mixamorig:Head",
+                                      "target":  "head",
+                                      "angle_degrees":  116.0563
+                                  },
+                                  {
+                                      "source":  "mixamorig:LeftShoulder",
+                                      "target":  "clavicle_l",
+                                      "angle_degrees":  184.5771
+                                  },
+                                  {
+                                      "source":  "mixamorig:LeftArm",
+                                      "target":  "upperarm_l",
+                                      "angle_degrees":  215.4026
+                                  },
+                                  {
+                                      "source":  "mixamorig:LeftForeArm",
+                                      "target":  "lowerarm_l",
+                                      "angle_degrees":  160.3263
+                                  },
+                                  {
+                                      "source":  "mixamorig:LeftHand",
+                                      "target":  "hand_l",
+                                      "angle_degrees":  172.8425
+                                  },
+                                  {
+                                      "source":  "mixamorig:RightShoulder",
+                                      "target":  "clavicle_r",
+                                      "angle_degrees":  99.3751
+                                  },
+                                  {
+                                      "source":  "mixamorig:RightArm",
+                                      "target":  "upperarm_r",
+                                      "angle_degrees":  257.9763
+                                  },
+                                  {
+                                      "source":  "mixamorig:RightForeArm",
+                                      "target":  "lowerarm_r",
+                                      "angle_degrees":  225.2162
+                                  },
+                                  {
+                                      "source":  "mixamorig:RightHand",
+                                      "target":  "hand_r",
+                                      "angle_degrees":  129.0647
+                                  },
+                                  {
+                                      "source":  "mixamorig:LeftUpLeg",
+                                      "target":  "thigh_l",
+                                      "angle_degrees":  113.5191
+                                  },
+                                  {
+                                      "source":  "mixamorig:LeftLeg",
+                                      "target":  "calf_l",
+                                      "angle_degrees":  245.8224
+                                  },
+                                  {
+                                      "source":  "mixamorig:LeftFoot",
+                                      "target":  "foot_l",
+                                      "angle_degrees":  211.9356
+                                  },
+                                  {
+                                      "source":  "mixamorig:LeftToeBase",
+                                      "target":  "ball_l",
+                                      "angle_degrees":  236.0509
+                                  },
+                                  {
+                                      "source":  "mixamorig:RightUpLeg",
+                                      "target":  "thigh_r",
+                                      "angle_degrees":  123.1232
+                                  },
+                                  {
+                                      "source":  "mixamorig:RightLeg",
+                                      "target":  "calf_r",
+                                      "angle_degrees":  236.7118
+                                  },
+                                  {
+                                      "source":  "mixamorig:RightFoot",
+                                      "target":  "foot_r",
+                                      "angle_degrees":  261.0243
+                                  },
+                                  {
+                                      "source":  "mixamorig:RightToeBase",
+                                      "target":  "ball_r",
+                                      "angle_degrees":  126.1274
+                                  },
+                                  {
+                                      "source":  "mixamorig:LeftHandIndex1",
+                                      "target":  "index_01_l",
+                                      "angle_degrees":  195.6357
+                                  },
+                                  {
+                                      "source":  "mixamorig:LeftHandIndex2",
+                                      "target":  "index_02_l",
+                                      "angle_degrees":  207.8844
+                                  },
+                                  {
+                                      "source":  "mixamorig:LeftHandIndex3",
+                                      "target":  "index_03_l",
+                                      "angle_degrees":  218.0021
+                                  },
+                                  {
+                                      "source":  "mixamorig:LeftHandMiddle1",
+                                      "target":  "middle_01_l",
+                                      "angle_degrees":  194.6945
+                                  },
+                                  {
+                                      "source":  "mixamorig:LeftHandMiddle2",
+                                      "target":  "middle_02_l",
+                                      "angle_degrees":  210.9889
+                                  },
+                                  {
+                                      "source":  "mixamorig:LeftHandMiddle3",
+                                      "target":  "middle_03_l",
+                                      "angle_degrees":  219.6614
+                                  },
+                                  {
+                                      "source":  "mixamorig:LeftHandRing1",
+                                      "target":  "ring_01_l",
+                                      "angle_degrees":  187.0799
+                                  },
+                                  {
+                                      "source":  "mixamorig:LeftHandRing2",
+                                      "target":  "ring_02_l",
+                                      "angle_degrees":  202.5901
+                                  },
+                                  {
+                                      "source":  "mixamorig:LeftHandRing3",
+                                      "target":  "ring_03_l",
+                                      "angle_degrees":  210.7299
+                                  },
+                                  {
+                                      "source":  "mixamorig:LeftHandPinky1",
+                                      "target":  "pinky_01_l",
+                                      "angle_degrees":  176.7315
+                                  },
+                                  {
+                                      "source":  "mixamorig:LeftHandPinky2",
+                                      "target":  "pinky_02_l",
+                                      "angle_degrees":  193.8617
+                                  },
+                                  {
+                                      "source":  "mixamorig:LeftHandPinky3",
+                                      "target":  "pinky_03_l",
+                                      "angle_degrees":  197.0467
+                                  },
+                                  {
+                                      "source":  "mixamorig:LeftHandThumb1",
+                                      "target":  "thumb_01_l",
+                                      "angle_degrees":  198.8215
+                                  },
+                                  {
+                                      "source":  "mixamorig:LeftHandThumb2",
+                                      "target":  "thumb_02_l",
+                                      "angle_degrees":  208.9384
+                                  },
+                                  {
+                                      "source":  "mixamorig:LeftHandThumb3",
+                                      "target":  "thumb_03_l",
+                                      "angle_degrees":  210.7099
+                                  },
+                                  {
+                                      "source":  "mixamorig:RightHandIndex1",
+                                      "target":  "index_01_r",
+                                      "angle_degrees":  125.3123
+                                  },
+                                  {
+                                      "source":  "mixamorig:RightHandIndex2",
+                                      "target":  "index_02_r",
+                                      "angle_degrees":  117.8637
+                                  },
+                                  {
+                                      "source":  "mixamorig:RightHandIndex3",
+                                      "target":  "index_03_r",
+                                      "angle_degrees":  115.5889
+                                  },
+                                  {
+                                      "source":  "mixamorig:RightHandMiddle1",
+                                      "target":  "middle_01_r",
+                                      "angle_degrees":  118.5687
+                                  },
+                                  {
+                                      "source":  "mixamorig:RightHandMiddle2",
+                                      "target":  "middle_02_r",
+                                      "angle_degrees":  113.6034
+                                  },
+                                  {
+                                      "source":  "mixamorig:RightHandMiddle3",
+                                      "target":  "middle_03_r",
+                                      "angle_degrees":  111.628
+                                  },
+                                  {
+                                      "source":  "mixamorig:RightHandRing1",
+                                      "target":  "ring_01_r",
+                                      "angle_degrees":  113.0943
+                                  },
+                                  {
+                                      "source":  "mixamorig:RightHandRing2",
+                                      "target":  "ring_02_r",
+                                      "angle_degrees":  112.9789
+                                  },
+                                  {
+                                      "source":  "mixamorig:RightHandRing3",
+                                      "target":  "ring_03_r",
+                                      "angle_degrees":  109.4816
+                                  },
+                                  {
+                                      "source":  "mixamorig:RightHandPinky1",
+                                      "target":  "pinky_01_r",
+                                      "angle_degrees":  107.3772
+                                  },
+                                  {
+                                      "source":  "mixamorig:RightHandPinky2",
+                                      "target":  "pinky_02_r",
+                                      "angle_degrees":  105.5226
+                                  },
+                                  {
+                                      "source":  "mixamorig:RightHandPinky3",
+                                      "target":  "pinky_03_r",
+                                      "angle_degrees":  102.6521
+                                  },
+                                  {
+                                      "source":  "mixamorig:RightHandThumb1",
+                                      "target":  "thumb_01_r",
+                                      "angle_degrees":  216.7157
+                                  },
+                                  {
+                                      "source":  "mixamorig:RightHandThumb2",
+                                      "target":  "thumb_02_r",
+                                      "angle_degrees":  237.0829
+                                  },
+                                  {
+                                      "source":  "mixamorig:RightHandThumb3",
+                                      "target":  "thumb_03_r",
+                                      "angle_degrees":  246.8234
+                                  }
+                              ],
+    "translation_scale":  0.9255251359439391,
+    "root_motion":  {
+                        "in_place":  true,
+                        "pelvis_max_horizontal_displacement_m":  8.8817840848148811E-18,
+                        "armature_object_motion":  "removed"
+                    },
+    "foot_contact":  {
+                         "foot_l":  {
+                                        "max_horizontal_drift_m":  0.02120334569412426,
+                                        "vertical_range_m":  0.004500009119510651,
+                                        "pass":  true
+                                    },
+                         "foot_r":  {
+                                        "max_horizontal_drift_m":  0.022170569759275012,
+                                        "vertical_range_m":  0.0020708516240119934,
+                                        "pass":  true
+                                    }
+                     },
+    "deformation_test_pass":  true,
+    "deformation_samples":  [
+                                {
+                                    "frame":  1,
+                                    "finite":  true,
+                                    "bounds_size":  [
+                                                        0.7475412487983704,
+                                                        0.7351335883140564,
+                                                        1.8526784181594849
+                                                    ],
+                                    "pass":  true
+                                },
+                                {
+                                    "frame":  126,
+                                    "finite":  true,
+                                    "bounds_size":  [
+                                                        0.7458726167678833,
+                                                        0.7453469038009644,
+                                                        1.8399187326431274
+                                                    ],
+                                    "pass":  true
+                                },
+                                {
+                                    "frame":  251,
+                                    "finite":  true,
+                                    "bounds_size":  [
+                                                        0.7475412487983704,
+                                                        0.7351335883140564,
+                                                        1.8526784181594849
+                                                    ],
+                                    "pass":  true
+                                }
+                            ],
+    "final_skeleton_count":  1,
+    "source_files_changed":  [
+
+                             ],
+    "godot_load_result":  "PASS",
+    "godot_animation_name":  "STK_Idle_Mixamo_01",
+    "godot_animation_duration_seconds":  8.36666679382324,
+    "godot_loop_mode":  1
+}

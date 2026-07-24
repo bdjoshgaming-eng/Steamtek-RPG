@@ -263,3 +263,18 @@ work.
 
 The verbatim transcript and its SHA-256 verification file were intentionally
 left unchanged when these handoffs were updated.
+
+
+2026-07-24 SEPARATE COREC PLAYER-CHARACTER UPDATE
+
+The male CoreC Hacker character is now a separate current character-intake
+track. It has an 88-bone CoreC skeleton, eleven modular meshes including Hair
+C07, and one retargeted idle named STK_Idle_Mixamo_01. Its authority is:
+
+C:\My Game\Steamtek-RPG\docs\ChatGPT handoffs\2026-07-24_STEAMTEK_COREC_HACKER_CHARACTER_AND_IDLE_HANDOFF.txt
+
+This does not supersede the Hazmat combat prototype above. The Hazmat carrier
+remains the separate 24-bone Meshy rig with twelve combat animations. Do not
+merge the two skeleton contracts, animation libraries, wrappers, or intended
+roles. Normal Godot editor/F6 visual approval of the CoreC idle remains
+pending before more CoreC animations or an AnimationTree are added.

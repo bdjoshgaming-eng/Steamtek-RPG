@@ -1,0 +1,136 @@
+{
+  "source_root": "C:\\My Game\\Steamtek-RPG\\incoming\\corec_male_character",
+  "output_glb": "C:\\My Game\\Steamtek-RPG\\output\\corec_male_character\\STK_CHAR_Player_M_CoreC_Hacker.glb",
+  "included_meshes": [
+    "CoreC_M_Face_Eyes",
+    "CoreC_M_Base_Face",
+    "CoreC_M_Base_Feet",
+    "CoreC_M_Base_Hands",
+    "CoreC_M_Base_Legs",
+    "CoreC_M_Face_Teeth",
+    "CoreC_M_Base_Torso",
+    "SKM_Techwear_Hacker_M_Jacket",
+    "SKM_Techwear_Hacker_M_Pants",
+    "SKM_Techwear_Hacker_M_Shoes",
+    "SKM_CoreC_Male_HairC07.001"
+  ],
+  "omitted_body_meshes": [],
+  "triangles": 73544,
+  "bones": 88,
+  "materials": 7,
+  "hair_triangles": 31752,
+  "hair_materials": 2,
+  "hair_material_names": [
+    "MI_CoreC_Comic_HairstyleC7_1",
+    "MI_CoreC_Comic_HairstyleC7_Base"
+  ],
+  "hair_binding": "skinned to shared 88-bone CoreC skeleton",
+  "hair_placement": {
+    "skinned": true,
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "bbox_overlaps_face": true,
+    "floating_or_disjoint": false,
+    "finite_bounds": true
+  },
+  "duplicate_armatures_removed": 10,
+  "armatures_in_export": 1,
+  "skeleton_consistent": true,
+  "skeleton_differences": [],
+  "deformation_tests": {
+    "shoulders": {
+      "pass": true,
+      "moved_vertices": 5528,
+      "finite": true
+    },
+    "elbows": {
+      "pass": true,
+      "moved_vertices": 4396,
+      "finite": true
+    },
+    "wrists": {
+      "pass": true,
+      "moved_vertices": 2860,
+      "finite": true
+    },
+    "hips": {
+      "pass": true,
+      "moved_vertices": 5357,
+      "finite": true
+    },
+    "knees": {
+      "pass": true,
+      "moved_vertices": 3800,
+      "finite": true
+    },
+    "ankles": {
+      "pass": true,
+      "moved_vertices": 2390,
+      "finite": true
+    },
+    "head_neck": {
+      "pass": true,
+      "moved_vertices": 27438,
+      "finite": true
+    }
+  },
+  "temporary_animations_exported": false,
+  "source_hashes_before": {
+    "SKM_CoreC_M_Base_Eyes.fbx": "9636d17951faba4bc5468fbb0e22903ed694e00b648f4d5fe01ac43d67f59a87",
+    "SKM_CoreC_M_Base_Face.fbx": "7585de2b9ec27b3e2facf6d4d28fe9c3136ad2f8660d054665a33d321ed58b83",
+    "SKM_CoreC_M_Base_Feet.fbx": "5dde32a379f058074a6c405475d682d5fcfacddf06ba2092376a504109065dfe",
+    "SKM_CoreC_M_Base_Hands.fbx": "ccdc0be394d3b18b64911ae796cd3ed18857cb2f41775ffb23dc678426ef61d0",
+    "SKM_CoreC_M_Base_Legs.fbx": "6e78bacd7b334e1dc2322d44f442f5990114d2b26634dbe805b3704698b7dfc3",
+    "SKM_CoreC_M_Base_Teeth.fbx": "a608f63370918750d60a1af9aaae92a0ce451a1e1e6209832a5c3435eab8174e",
+    "SKM_CoreC_M_Base_Torso.fbx": "712ce4cd04396bfc6d964c8cf3b15ed041197e2c5a21407660c2f9a78d6d42f5",
+    "SKM_Techwear_Hacker_M_Upper.fbx": "55ab69fabf9eaad17479fdb49f7fa0d15d5d9a59ff15882709b765fec921bcb6",
+    "SKM_Techwear_Hacker_M_Lower.fbx": "6aba9b65e089fe41f61b8f73ada65aae2032ad607bd603f862cd01e72a10a3d3",
+    "SKM_Techwear_Hacker_M_Shoes.fbx": "908f29a7781c85f35904451ccc8c98a27944aed82bff30506bf2f075c15f9fbe",
+    "SKM_CoreC_Male_HairC07.fbx": "a910b04ade1a5b4e4921fd8859e73bedf3a256ec56e509d68b482ad51561c2cf",
+    "T_CoreC_M_Body_Mat_BaseColor.png": "62d432a3222911cc548b365ec746c3480e5f624ebc0c35b227d0aa6df507e9fc",
+    "T_CoreC_M_Body_Mat_N.png": "7d1ba799fcf2d4692ec99f5a7c5ab57e54d5d03c3fb7d8c7f81bca9364f99d18",
+    "T_CoreC_M_Body_Mat_ORM.png": "2c6816e15e3d26a2ef346e867ac5c3fc36fe8d33e59df7c716346ba7771a5860",
+    "T_CoreC_M_Eye_Left_Mat_BaseColor.png": "712453f13c6ab272255c07b13c7b7a878f003bff13faabded7c608724720f53f",
+    "T_CoreC_M_Eye_Left_Mat_ORM.png": "967da794f78dca96a5a192a4267728e6ebf3bf091dad3228152156fc5d7fbb8b",
+    "T_CoreC_M_Face_Mat_BaseColor.png": "996cb6cffe933120d769da0ff1a8926e09bf6b958027281d41aae2de757d4a48",
+    "T_CoreC_M_Face_Mat_N.png": "c3fa9de52047c28b3b6d88f60b2c4fa89bfce7f821c9097406787f4d9c53a0e7",
+    "T_CoreC_M_Face_Mat_ORM.png": "36aed6d6c300640cf7d83e8c9a874146bcfb63642ae16d6271e2961db94583a6",
+    "T_CoreC_M_Teeth_Mat_BaseColor.png": "f846b6222f931568e375659517937afd56b00b144d19746ecdeae53560889971",
+    "T_CoreC_M_Teeth_Mat_ORM.png": "b5163381906325b71fd25dd3bcb3a5d290d4a709b90eaf34b55892e077896ff7",
+    "T_CoreC_TechwearC_M_BaseColor.png": "1c0ebf3515e7ba074ebebbb7359004b018f3de064b5b8a17350aff85f97c9437",
+    "T_CoreC_TechwearC_M_ColorMask.png": "dd05aa363a3336ee0f2c75c478c04067deb06eb4711391023e3320644f653c7a",
+    "T_CoreC_TechwearC_M_N.png": "688e913c4ba7a5c476b9765b2e93511421b0efaa94b323a9c683ddb4ee18d5a0",
+    "T_CoreC_TechwearC_M_ORM.png": "481f6542ca5151b2d89d1872b5fd012c50e08866c584381f94a608e9e0e936d4"
+  },
+  "source_hashes_after": {
+    "SKM_CoreC_M_Base_Eyes.fbx": "9636d17951faba4bc5468fbb0e22903ed694e00b648f4d5fe01ac43d67f59a87",
+    "SKM_CoreC_M_Base_Face.fbx": "7585de2b9ec27b3e2facf6d4d28fe9c3136ad2f8660d054665a33d321ed58b83",
+    "SKM_CoreC_M_Base_Feet.fbx": "5dde32a379f058074a6c405475d682d5fcfacddf06ba2092376a504109065dfe",
+    "SKM_CoreC_M_Base_Hands.fbx": "ccdc0be394d3b18b64911ae796cd3ed18857cb2f41775ffb23dc678426ef61d0",
+    "SKM_CoreC_M_Base_Legs.fbx": "6e78bacd7b334e1dc2322d44f442f5990114d2b26634dbe805b3704698b7dfc3",
+    "SKM_CoreC_M_Base_Teeth.fbx": "a608f63370918750d60a1af9aaae92a0ce451a1e1e6209832a5c3435eab8174e",
+    "SKM_CoreC_M_Base_Torso.fbx": "712ce4cd04396bfc6d964c8cf3b15ed041197e2c5a21407660c2f9a78d6d42f5",
+    "SKM_Techwear_Hacker_M_Upper.fbx": "55ab69fabf9eaad17479fdb49f7fa0d15d5d9a59ff15882709b765fec921bcb6",
+    "SKM_Techwear_Hacker_M_Lower.fbx": "6aba9b65e089fe41f61b8f73ada65aae2032ad607bd603f862cd01e72a10a3d3",
+    "SKM_Techwear_Hacker_M_Shoes.fbx": "908f29a7781c85f35904451ccc8c98a27944aed82bff30506bf2f075c15f9fbe",
+    "SKM_CoreC_Male_HairC07.fbx": "a910b04ade1a5b4e4921fd8859e73bedf3a256ec56e509d68b482ad51561c2cf",
+    "T_CoreC_M_Body_Mat_BaseColor.png": "62d432a3222911cc548b365ec746c3480e5f624ebc0c35b227d0aa6df507e9fc",
+    "T_CoreC_M_Body_Mat_N.png": "7d1ba799fcf2d4692ec99f5a7c5ab57e54d5d03c3fb7d8c7f81bca9364f99d18",
+    "T_CoreC_M_Body_Mat_ORM.png": "2c6816e15e3d26a2ef346e867ac5c3fc36fe8d33e59df7c716346ba7771a5860",
+    "T_CoreC_M_Eye_Left_Mat_BaseColor.png": "712453f13c6ab272255c07b13c7b7a878f003bff13faabded7c608724720f53f",
+    "T_CoreC_M_Eye_Left_Mat_ORM.png": "967da794f78dca96a5a192a4267728e6ebf3bf091dad3228152156fc5d7fbb8b",
+    "T_CoreC_M_Face_Mat_BaseColor.png": "996cb6cffe933120d769da0ff1a8926e09bf6b958027281d41aae2de757d4a48",
+    "T_CoreC_M_Face_Mat_N.png": "c3fa9de52047c28b3b6d88f60b2c4fa89bfce7f821c9097406787f4d9c53a0e7",
+    "T_CoreC_M_Face_Mat_ORM.png": "36aed6d6c300640cf7d83e8c9a874146bcfb63642ae16d6271e2961db94583a6",
+    "T_CoreC_M_Teeth_Mat_BaseColor.png": "f846b6222f931568e375659517937afd56b00b144d19746ecdeae53560889971",
+    "T_CoreC_M_Teeth_Mat_ORM.png": "b5163381906325b71fd25dd3bcb3a5d290d4a709b90eaf34b55892e077896ff7",
+    "T_CoreC_TechwearC_M_BaseColor.png": "1c0ebf3515e7ba074ebebbb7359004b018f3de064b5b8a17350aff85f97c9437",
+    "T_CoreC_TechwearC_M_ColorMask.png": "dd05aa363a3336ee0f2c75c478c04067deb06eb4711391023e3320644f653c7a",
+    "T_CoreC_TechwearC_M_N.png": "688e913c4ba7a5c476b9765b2e93511421b0efaa94b323a9c683ddb4ee18d5a0",
+    "T_CoreC_TechwearC_M_ORM.png": "481f6542ca5151b2d89d1872b5fd012c50e08866c584381f94a608e9e0e936d4"
+  },
+  "source_files_changed": []
+}

@@ -1,36 +1,62 @@
 LATEST AUTHORITATIVE STEAMTEK HANDOFF
-Updated: 2026-07-23
+Updated: 2026-07-24
 
-Primary current continuation:
+PRIMARY CURRENT CHARACTER CONTINUATION
+
+C:\My Game\Steamtek-RPG\docs\ChatGPT handoffs\2026-07-24_STEAMTEK_COREC_HACKER_CHARACTER_AND_IDLE_HANDOFF.txt
+
+Current CoreC continuation state:
+
+- The generated male CoreC Hacker character is:
+  C:\My Game\Steamtek-RPG\output\corec_male_character\STK_CHAR_Player_M_CoreC_Hacker.glb
+- It contains eleven separate meshes, 73,544 triangles, seven materials, one
+  88-bone CoreC skeleton, and one retargeted animation.
+- Hair C07 is a separate skinned mesh on the shared skeleton with its original
+  two material slots retained.
+- The looping, in-place idle is named STK_Idle_Mixamo_01.
+- The Godot review scene is:
+  C:\My Game\Steamtek-RPG\output\corec_male_character\corec_hacker_review.tscn
+- The scene auto-plays the idle and provides Play/Stop, Space toggle, and
+  front/side/rear/isometric/head/lower-body review views.
+- Automated source-integrity, skeleton, deformation-bound, loop, foot-contact,
+  GLB-structure, and Godot-load checks passed.
+- Normal Godot editor/F6 visual approval of the full loop is still required
+  before promotion or additional animation work.
+- Do not add more animations or an AnimationTree yet.
+- Purchased CoreC and Mixamo source files remain unchanged.
+
+The requested animation path used `corec_male_animations`, but the supplied
+file exists under the unchanged folder name:
+
+C:\My Game\Steamtek-RPG\incoming\corsec_male_animations\MX_Idle.fbx
+
+SEPARATE CHARACTER/COMBAT AUTHORITY
+
+The 24-bone Meshy hero and Hazmat combat-prototype continuation remains:
 
 C:\My Game\Steamtek-RPG\docs\ChatGPT handoffs\2026-07-23_STEAMTEK_HERO_COMBAT_AND_HAZMAT_SCENE_HANDOFF.txt
 
-Earlier same-day character repair and Meshy preparation context:
+Do not confuse or merge the CoreC 88-bone player rig with the Meshy/Hazmat
+24-bone rig. Their skeletons, animations, wrappers, and intended uses are
+separate.
+
+EARLIER CHARACTER REPAIR HISTORY
 
 C:\My Game\Steamtek-RPG\docs\ChatGPT handoffs\2026-07-23_STEAMTEK_CHARACTER_ASSET_AND_MESHY_RIGGING_HANDOFF.txt
 
-Full visible current chat (July 22-23):
+FULL VISIBLE JULY 22-23 CHAT
 
 C:\My Game\Steamtek-RPG\docs\ChatGPT handoffs\2026-07-23_STEAMTEK_CHAT_TRANSCRIPT_VERBATIM.txt
 
-Current character continuation state:
-
-- The approved v04 Blender source and production GLB remain unchanged.
-- The combat-ready v05 GLB is:
-  C:\My Game\Steamtek-RPG\assets\characters\humanoid\base\STK_HERO_BaseBody_01\v01\rigged\STK_HERO_BaseBody_01_Rigged_Combat_v05.glb
-- It has one skinned body, a 24-bone rig, 31,138 triangles, and 12 validated animations.
-- The Godot Hazmat combat-prototype scene is:
-  C:\My Game\Steamtek-RPG\scenes\characters\enemies\STK_NPC_Hazmat_CombatPrototype_v01.tscn
-- The scene passed Godot runtime validation and creates a rifle mount from the RightHand bone.
-- The visible body is still a temporary base-body proxy. Hazmat clothing, the actual rifle visual,
-  muzzle setup, enemy AI, combat stats, and damage logic remain future work.
-- Claude Code should start from the Godot scene, not instantiate the GLB directly.
-
-Subsystem authority retained:
+STREET-KIT AND LIVE3D BUILDER AUTHORITY
 
 C:\My Game\Steamtek-RPG\docs\ChatGPT handoffs\2026-07-22_STEAMTEK_STREET_KIT_LIVE3D_HANDOFF.txt
 
-The July 22 file remains authoritative for the finalized street walls, corrected
-sidewalk corner, Live3D Builder integration, and paused road-tile request.
+The July 22 file remains authoritative for the finalized street walls,
+corrected sidewalk corner, Live3D Builder integration, and paused road-tile
+request.
 
-Preserve the dirty worktree and do not modify unrelated assets.
+WORKTREE SAFETY
+
+Preserve the dirty worktree and all unrelated changes. Do not reset, clean,
+delete, revert, commit, or push unless explicitly requested.

@@ -558,9 +558,12 @@ Modified (partial list, the ones that matter for a future session):
 - Enemy death feedback/loot drop still minimal (health hits 0,
   deactivates, nothing else).
 - Only one enemy archetype (ScrapThief) exists in 3D.
-- No visual telegraph for Corrosive Grasp (enemy DoT/CC) or Buttstroke's
-  swing -- would be red/yellow per the color convention (section 9)
-  once built.
+- No visual telegraph for ScrapThief's Corrosive Grasp (an ENEMY
+  ability -- would be red/yellow per the color convention, section 9)
+  or for the player's Buttstroke swing (a PLAYER ability -- would be
+  BLUE, not red/yellow -- do not conflate the two, they are unrelated
+  abilities on opposite sides of combat that just both lack a
+  telegraph right now).
 - Weapon certification (professions_unlocked is still always passed as
   {} everywhere -- any cert-gated weapon is silently always
   "uncertified" regardless of real profession/keystone state tracked

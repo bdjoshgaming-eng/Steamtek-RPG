@@ -1,0 +1,285 @@
+{
+    "schema":  "SteamtekEnvironmentIntakeConfig-1",
+    "pipeline_version":  "1.0.2",
+    "pack_id":  "3DT_Cyberpunk_Downtown",
+    "pack_root":  "assets/environment/3DT_Cyberpunk_Downtown",
+    "source_geometry_root":  "FBX",
+    "source_texture_root":  "Textures",
+    "output_root":  "Steamtek",
+    "source_format":  {
+                          "selected":  "FBX",
+                          "status":  "provisional_only_available_geometry_source",
+                          "material_authority":  "rejected_use_authoritative_texture_families",
+                          "missing_preferred_comparison_source":  "3DT_Cyberpunk_Downtown_Pack.blend"
+                      },
+    "tools":  {
+                  "blender_45":  "C:/Program Files/Blender Foundation/Blender 4.5/blender.exe",
+                  "blender_probe":  "Steamtek/Tools/blender/steamtek_blender_probe.py",
+                  "godot_47":  "C:/My Game/Godot_v4.7-stable_win64.exe",
+                  "full_probe_report":  "Steamtek/Reports/Full_Source_Probe.json"
+              },
+    "material_aliases":  {
+                             "Apartment Windows A":  "Apartment Windows",
+                             "Seamless Concrete C.001":  "Seamless/Concrete C",
+                             "Seamless Road.001":  "Seamless/Road",
+                             "Sidewalk":  "Sidewalk",
+                             "Steps_01":  "Steps 01",
+                             "Windows B":  "Window B",
+                             "Windows C":  "Window C",
+                             "Windows D":  "Window D",
+                             "Windows E":  "Window E"
+                         },
+    "category_defaults":  {
+                              "Doorways":  {
+                                               "output":  "Architecture/Doorways",
+                                               "scene_output":  "Scenes/Architecture/Doorways",
+                                               "prefix":  "STK_ARCH_Doorway",
+                                               "pivot":  "bottom_center",
+                                               "collision":  "manual_review_no_collision",
+                                               "socket":  "prop_anchor"
+                                           },
+                              "Floor":  {
+                                            "output":  "Architecture/Floors",
+                                            "scene_output":  "Scenes/Architecture/Floors",
+                                            "prefix":  "STK_ARCH_Floor",
+                                            "pivot":  "bottom_center",
+                                            "collision":  "box",
+                                            "socket":  "floor_horizontal"
+                                        },
+                              "Metal Panels":  {
+                                                   "output":  "Infrastructure/Metal_Panels",
+                                                   "scene_output":  "Scenes/Infrastructure/Metal_Panels",
+                                                   "prefix":  "STK_INFRA_MetalPanel",
+                                                   "pivot":  "bottom_center",
+                                                   "collision":  "none",
+                                                   "socket":  "prop_anchor"
+                                               },
+                              "Metal Sheets":  {
+                                                   "output":  "Infrastructure/Metal_Sheets",
+                                                   "scene_output":  "Scenes/Infrastructure/Metal_Sheets",
+                                                   "prefix":  "STK_INFRA_MetalSheet",
+                                                   "pivot":  "bottom_center",
+                                                   "collision":  "none",
+                                                   "socket":  "prop_anchor"
+                                               },
+                              "Pipes":  {
+                                            "output":  "Infrastructure/Pipes",
+                                            "scene_output":  "Scenes/Infrastructure/Pipes",
+                                            "prefix":  "STK_INFRA_Pipe",
+                                            "pivot":  "bottom_center",
+                                            "collision":  "none",
+                                            "socket":  "prop_anchor"
+                                        },
+                              "Platform":  {
+                                               "output":  "Architecture/Platforms",
+                                               "scene_output":  "Scenes/Architecture/Platforms",
+                                               "prefix":  "STK_ARCH_Platform",
+                                               "pivot":  "bottom_center",
+                                               "collision":  "box",
+                                               "socket":  "floor_horizontal"
+                                           },
+                              "Props":  {
+                                            "output":  "Props/Street",
+                                            "scene_output":  "Scenes/Props/Street",
+                                            "prefix":  "STK_PROP",
+                                            "pivot":  "bottom_center",
+                                            "collision":  "box",
+                                            "socket":  "prop_anchor"
+                                        },
+                              "Railings":  {
+                                               "output":  "Architecture/Railings",
+                                               "scene_output":  "Scenes/Architecture/Railings",
+                                               "prefix":  "STK_ARCH_Railing",
+                                               "pivot":  "bottom_center",
+                                               "collision":  "box",
+                                               "socket":  "street_fence_chain"
+                                           },
+                              "Road":  {
+                                           "output":  "Architecture/Roads",
+                                           "scene_output":  "Scenes/Architecture/Roads",
+                                           "prefix":  "STK_ARCH_Road",
+                                           "pivot":  "bottom_center",
+                                           "collision":  "box",
+                                           "socket":  "street_road_chain"
+                                       },
+                              "Shelters":  {
+                                               "output":  "Architecture/Shelters",
+                                               "scene_output":  "Scenes/Architecture/Shelters",
+                                               "prefix":  "STK_ARCH_Shelter",
+                                               "pivot":  "bottom_center",
+                                               "collision":  "manual_review_no_collision",
+                                               "socket":  "prop_anchor"
+                                           },
+                              "Signs":  {
+                                            "output":  "Props/Signs",
+                                            "scene_output":  "Scenes/Props/Signs",
+                                            "prefix":  "STK_PROP_Sign",
+                                            "pivot":  "bottom_center",
+                                            "collision":  "none",
+                                            "socket":  "prop_anchor"
+                                        },
+                              "Steps":  {
+                                            "output":  "Architecture/Steps",
+                                            "scene_output":  "Scenes/Architecture/Steps",
+                                            "prefix":  "STK_ARCH_Steps",
+                                            "pivot":  "bottom_center",
+                                            "collision":  "manual_review_no_collision",
+                                            "socket":  "floor_horizontal"
+                                        },
+                              "Trims":  {
+                                            "output":  "Architecture/Trims",
+                                            "scene_output":  "Scenes/Architecture/Trims",
+                                            "prefix":  "STK_ARCH_Trim",
+                                            "pivot":  "bottom_center",
+                                            "collision":  "none",
+                                            "socket":  "prop_anchor"
+                                        },
+                              "Wall Props":  {
+                                                 "output":  "Props/Street",
+                                                 "scene_output":  "Scenes/Props/Street",
+                                                 "prefix":  "STK_PROP_Wall",
+                                                 "pivot":  "bottom_center",
+                                                 "collision":  "none",
+                                                 "socket":  "prop_anchor"
+                                             },
+                              "Walls":  {
+                                            "output":  "Architecture/Walls",
+                                            "scene_output":  "Scenes/Architecture/Walls",
+                                            "prefix":  "STK_ARCH_Wall",
+                                            "pivot":  "bottom_center",
+                                            "collision":  "box",
+                                            "socket":  "facade_horizontal"
+                                        },
+                              "Windows":  {
+                                              "output":  "Architecture/Windows",
+                                              "scene_output":  "Scenes/Architecture/Windows",
+                                              "prefix":  "STK_ARCH_Window",
+                                              "pivot":  "bottom_center",
+                                              "collision":  "box",
+                                              "socket":  "prop_anchor"
+                                          }
+                          },
+    "pilot_assets":  [
+                         {
+                             "source":  "FBX/Walls/SM_3DT_Apartment_Wall_Piece_A_01.fbx",
+                             "production_name":  "STK_ARCH_Wall_Apartment_A_01",
+                             "material_overrides":  {
+                                                        "Apartment Walls A":  "Apartment Walls A"
+                                                    },
+                             "pilot_position":  [
+                                                    -4.5,
+                                                    0.0,
+                                                    -5.0
+                                                ]
+                         },
+                         {
+                             "source":  "FBX/Road/SM_3DT_Road_01.fbx",
+                             "production_name":  "STK_ARCH_Road_01",
+                             "material_overrides":  {
+                                                        "Seamless Road.001":  "Seamless/Road",
+                                                        "Seamless Concrete C.001":  "Seamless/Concrete C"
+                                                    },
+                             "pilot_position":  [
+                                                    0.0,
+                                                    0.0,
+                                                    0.0
+                                                ]
+                         },
+                         {
+                             "source":  "FBX/Windows/SM_3DT_Window_A_01.fbx",
+                             "production_name":  "STK_ARCH_Window_A_01",
+                             "material_overrides":  {
+                                                        "Window A":  "Window A"
+                                                    },
+                             "pilot_position":  [
+                                                    -4.5,
+                                                    0.0,
+                                                    -2.5
+                                                ]
+                         },
+                         {
+                             "source":  "FBX/Pipes/SM_3DT_Pipe_01.fbx",
+                             "production_name":  "STK_INFRA_Pipe_01",
+                             "material_overrides":  {
+                                                        "Pipes":  "Pipes"
+                                                    },
+                             "pilot_position":  [
+                                                    -4.5,
+                                                    0.0,
+                                                    1.5
+                                                ]
+                         },
+                         {
+                             "source":  "FBX/Props/SM_3DT_Crate.fbx",
+                             "production_name":  "STK_PROP_Crate_01",
+                             "material_overrides":  {
+                                                        "Bins":  "Bins"
+                                                    },
+                             "pilot_position":  [
+                                                    -4.5,
+                                                    0.0,
+                                                    5.0
+                                                ]
+                         },
+                         {
+                             "source":  "FBX/Signs/SM_3DT_Sign_013.fbx",
+                             "production_name":  "STK_PROP_Sign_Emissive_013",
+                             "material_overrides":  {
+                                                        "Signs C":  "Signs C"
+                                                    },
+                             "pilot_position":  [
+                                                    4.5,
+                                                    0.0,
+                                                    -5.0
+                                                ]
+                         }
+                     ],
+    "material_profiles":  {
+                              "Signs C":  {
+                                                "emission_operator":  "multiply",
+                                                "emission_energy_multiplier":  0.45
+                                            },
+                              "Window A":  {
+                                                 "alpha_remap":  {
+                                                                      "source_min":  250,
+                                                                      "source_max":  255,
+                                                                      "target_min":  46,
+                                                                      "target_max":  255,
+                                                                      "curve":  "smoothstep",
+                                                                      "source_preservation":  "derived_only"
+                                                                  },
+                                                 "transparency":  "alpha_depth_prepass",
+                                                 "two_sided":  true,
+                                                 "sorting_use_aabb_center":  true
+                                             }
+                          },
+    "pilot_qa":  {
+                       "background_color":  [0.18, 0.18, 0.18, 1.0],
+                       "ambient_light_energy":  0.3,
+                       "directional_light_energy":  0.7,
+                       "tonemap":  "agx",
+                       "tonemap_exposure":  0.9,
+                       "glow_enabled":  false,
+                       "auto_exposure_enabled":  false,
+                       "visual_approval":  "pending"
+                   },
+    "import_policy":  {
+                          "static_geometry":  true,
+                          "normal_map_invert_y":  false,
+                          "normal_orientation_status":  "OpenGL_for_explicit_maps_generic_names_pending_visual_review",
+                          "animation_contamination":  {
+                                                          "reason":  "static_pack_contains_shared_vendor_camera_animation",
+                                                          "asset_count":  79,
+                                                          "categories":  [
+                                                                             "Doorways",
+                                                                             "Metal Panels",
+                                                                             "Railings",
+                                                                             "Road",
+                                                                             "Shelters",
+                                                                             "Signs",
+                                                                             "Trims",
+                                                                             "Walls"
+                                                                         ]
+                                                      }
+                      }
+}

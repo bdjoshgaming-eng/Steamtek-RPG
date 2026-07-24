@@ -1,0 +1,219 @@
+[gd_scene format=3 uid="uid://dil0ivpjgpo0x"]
+
+[ext_resource type="Script" uid="uid://ebjxy5gc2pte" path="res://tools/steamtek-environment-intake/godot/steamtek_intake_pilot_review.gd" id="1_review"]
+[ext_resource type="PackedScene" path="res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Scenes/Architecture/Walls/STK_ARCH_Wall_Apartment_A_01.tscn" id="2_asset"]
+[ext_resource type="PackedScene" path="res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Scenes/Architecture/Roads/STK_ARCH_Road_01.tscn" id="3_asset"]
+[ext_resource type="PackedScene" path="res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Scenes/Architecture/Windows/STK_ARCH_Window_A_01.tscn" id="4_asset"]
+[ext_resource type="PackedScene" path="res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Scenes/Infrastructure/Pipes/STK_INFRA_Pipe_01.tscn" id="5_asset"]
+[ext_resource type="PackedScene" path="res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Scenes/Props/Street/STK_PROP_Crate_01.tscn" id="6_asset"]
+[ext_resource type="PackedScene" path="res://assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Scenes/Props/Signs/STK_PROP_Sign_Emissive_013.tscn" id="7_asset"]
+
+[sub_resource type="Environment" id="Environment_pilot"]
+background_mode = 1
+background_color = Color(0.18, 0.18, 0.18, 1)
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_sky_contribution = 0.0
+ambient_light_energy = 0.3
+tonemap_mode = 4
+tonemap_exposure = 0.9
+tonemap_agx_white = 8.0
+tonemap_agx_contrast = 1.0
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributes_pilot"]
+
+[sub_resource type="StandardMaterial3D" id="GroundMaterial"]
+albedo_color = Color(0.18, 0.18, 0.18, 1)
+
+[sub_resource type="PlaneMesh" id="GroundMesh"]
+material = SubResource("GroundMaterial")
+size = Vector2(48, 48)
+
+[sub_resource type="StandardMaterial3D" id="WitnessLightMaterial"]
+shading_mode = 0
+albedo_color = Color(0.72, 0.72, 0.72, 1)
+
+[sub_resource type="BoxMesh" id="WitnessTileMesh"]
+size = Vector3(2.22, 0.7, 0.02)
+
+[sub_resource type="StandardMaterial3D" id="WitnessDarkMaterial"]
+shading_mode = 0
+albedo_color = Color(0.06, 0.06, 0.06, 1)
+
+[node name="STK_SCN_3DT_Cyberpunk_Downtown_IntakePilot" type="Node3D" unique_id=631736725]
+editor_description = "Technical pilot for the permanent Steamtek environment intake pipeline. F6 visual approval is still required."
+script = ExtResource("1_review")
+metadata/production_status = "pilot_pending_normal_editor_approval"
+metadata/review_camera_target = Vector3(0.077605, 0.874598, -0.149413)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1151762921]
+environment = SubResource("Environment_pilot")
+camera_attributes = SubResource("CameraAttributes_pilot")
+
+[node name="KeyLight" type="DirectionalLight3D" parent="." unique_id=2000364166]
+transform = Transform3D(0.7880108, 0.4575257, -0.41195792, 0, 0.66913056, 0.74314487, 0.6156615, -0.58560616, 0.5272821, 0, 0, 0)
+light_energy = 0.7
+shadow_enabled = true
+
+[node name="QAReviewCamera" type="Camera3D" parent="." unique_id=1391434709]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 16, 18)
+projection = 1
+current = true
+size = 10.5
+
+[node name="ReviewGround" type="MeshInstance3D" parent="." unique_id=558183317]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.025, 0)
+mesh = SubResource("GroundMesh")
+
+[node name="WindowTransparencyWitness" type="Node3D" parent="." unique_id=1957780326]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0.812, -2.72)
+visible = false
+
+[node name="TopLeft" type="MeshInstance3D" parent="WindowTransparencyWitness" unique_id=1717797674]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.12, 0.36, 0)
+material_override = SubResource("WitnessLightMaterial")
+mesh = SubResource("WitnessTileMesh")
+
+[node name="TopRight" type="MeshInstance3D" parent="WindowTransparencyWitness" unique_id=1416545113]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.12, 0.36, 0)
+material_override = SubResource("WitnessDarkMaterial")
+mesh = SubResource("WitnessTileMesh")
+
+[node name="BottomLeft" type="MeshInstance3D" parent="WindowTransparencyWitness" unique_id=2100601883]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.12, -0.36, 0)
+material_override = SubResource("WitnessDarkMaterial")
+mesh = SubResource("WitnessTileMesh")
+
+[node name="BottomRight" type="MeshInstance3D" parent="WindowTransparencyWitness" unique_id=1138656670]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.12, -0.36, 0)
+material_override = SubResource("WitnessLightMaterial")
+mesh = SubResource("WitnessTileMesh")
+
+[node name="STK_ARCH_Wall_Apartment_A_01" parent="." unique_id=59906229 instance=ExtResource("2_asset")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.309526, 0, -5)
+
+[node name="Label_STK_ARCH_Wall_Apartment_A_01" type="Label3D" parent="." unique_id=1911894642]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 1.339717, -5)
+billboard = 1
+no_depth_test = true
+text = "STK_ARCH_Wall_Apartment_A_01"
+font_size = 24
+outline_size = 6
+
+[node name="STK_ARCH_Road_01" parent="." unique_id=792614082 instance=ExtResource("3_asset")]
+
+[node name="Label_STK_ARCH_Road_01" type="Label3D" parent="." unique_id=478983211]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.673232, 0)
+billboard = 1
+no_depth_test = true
+text = "STK_ARCH_Road_01"
+font_size = 24
+outline_size = 6
+
+[node name="STK_ARCH_Window_A_01" parent="." unique_id=1106806131 instance=ExtResource("4_asset")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.309526, 0.789717, -4.882209)
+
+[node name="Label_STK_ARCH_Window_A_01" type="Label3D" parent="." unique_id=1741857624]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 2.174604, -2.5)
+billboard = 1
+no_depth_test = true
+text = "STK_ARCH_Window_A_01"
+font_size = 24
+outline_size = 6
+
+[node name="STK_INFRA_Pipe_01" parent="." unique_id=670086579 instance=ExtResource("5_asset")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0, 1.5)
+
+[node name="Label_STK_INFRA_Pipe_01" type="Label3D" parent="." unique_id=887124133]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 5.157897, 1.5)
+billboard = 1
+no_depth_test = true
+text = "STK_INFRA_Pipe_01"
+font_size = 24
+outline_size = 6
+
+[node name="STK_PROP_Crate_01" parent="." unique_id=1370933582 instance=ExtResource("6_asset")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0, 5)
+
+[node name="Label_STK_PROP_Crate_01" type="Label3D" parent="." unique_id=2090497053]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 1.201435, 5)
+billboard = 1
+no_depth_test = true
+text = "STK_PROP_Crate_01"
+font_size = 24
+outline_size = 6
+
+[node name="STK_PROP_Sign_Emissive_013" parent="." unique_id=1153020481 instance=ExtResource("7_asset")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.119052, 0.394859, -4.882209)
+
+[node name="Label_STK_PROP_Sign_Emissive_013" type="Label3D" parent="." unique_id=1409382688]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 1.638375, -5)
+billboard = 1
+no_depth_test = true
+text = "STK_PROP_Sign_Emissive_013"
+font_size = 24
+outline_size = 6
+
+[node name="STK_ARCH_Wall_Apartment_A_01_Snap_Duplicate_2" parent="." unique_id=957166641 instance=ExtResource("2_asset")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.11905199, 0, -5)
+
+[node name="Label_STK_ARCH_Wall_Apartment_A_01_Snap_Duplicate_2" type="Label3D" parent="." unique_id=572676038]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.309526, 1.339717, -5)
+billboard = 1
+no_depth_test = true
+text = "STK_ARCH_Wall_Apartment_A_01 THREE-PIECE SNAP/SEAM"
+font_size = 22
+outline_size = 6
+
+[node name="STK_ARCH_Wall_Apartment_A_01_Snap_Duplicate_3" parent="." unique_id=1832762818 instance=ExtResource("2_asset")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0, -5)
+
+[node name="Label_STK_ARCH_Wall_Apartment_A_01_Snap_Duplicate_3" type="Label3D" parent="." unique_id=1787640776]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.119052, 1.339717, -5)
+billboard = 1
+no_depth_test = true
+text = "STK_ARCH_Wall_Apartment_A_01 THREE-PIECE SNAP/SEAM"
+font_size = 22
+outline_size = 6
+
+[node name="STK_ARCH_Road_01_Snap_Duplicate_2" parent="." unique_id=532390841 instance=ExtResource("3_asset")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 14.866685)
+
+[node name="Label_STK_ARCH_Road_01_Snap_Duplicate_2" type="Label3D" parent="." unique_id=11109105]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.673232, 14.866685)
+billboard = 1
+no_depth_test = true
+text = "STK_ARCH_Road_01 THREE-PIECE SNAP/SEAM"
+font_size = 22
+outline_size = 6
+
+[node name="STK_ARCH_Road_01_Snap_Duplicate_3" parent="." unique_id=1855639288 instance=ExtResource("3_asset")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 29.73337)
+
+[node name="Label_STK_ARCH_Road_01_Snap_Duplicate_3" type="Label3D" parent="." unique_id=812671999]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.673232, 29.73337)
+billboard = 1
+no_depth_test = true
+text = "STK_ARCH_Road_01 THREE-PIECE SNAP/SEAM"
+font_size = 22
+outline_size = 6
+
+[node name="STK_PROP_Sign_Emissive_013_Attachment_Test" parent="." unique_id=448212948 instance=ExtResource("7_asset")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.309526, 0.394859, -4.882209)
+
+[node name="Label_Attachment_Test" type="Label3D" parent="." unique_id=1098382417]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 2.033234, -4.88221)
+billboard = 1
+no_depth_test = true
+text = "COMPATIBLE SIGN ATTACHMENT TEST"
+font_size = 22
+outline_size = 6
+
+[node name="ReviewBoundary" type="Label3D" parent="." unique_id=958065089]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.8, 0)
+billboard = 1
+no_depth_test = true
+modulate = Color(1, 0.72, 0.28, 1)
+text = "TECHNICAL PILOT - NORMAL EDITOR / F6 VISUAL APPROVAL REQUIRED"
+font_size = 30
+outline_size = 8

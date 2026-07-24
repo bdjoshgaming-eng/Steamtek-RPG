@@ -1,0 +1,47 @@
+{
+  "assets": [
+    {
+      "production_name": "STK_PROP_Crate_01",
+      "scene": "assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Scenes/Props/Street/STK_PROP_Crate_01.tscn",
+      "source": "FBX/Props/SM_3DT_Crate.fbx",
+      "source_sha256": "9bcdaffc46d804a85951e453c0e7c74c3a93bacbc21cbc1e30cf235849d3868f",
+      "status": "pilot_pending_normal_editor_approval"
+    }
+  ],
+  "config_sha256": "7cc93e29d7ed42a8a4a574b63644122a97056e1415d5ef1a7ad6574d5d0627a4",
+  "generated_utc": "2026-07-24T02:44:41.779764+00:00",
+  "import_metadata_backup": "unchanged",
+  "import_metadata_states": {
+    "assets/environment/3DT_Cyberpunk_Downtown/FBX/Props/SM_3DT_Crate.fbx.import": "unchanged",
+    "assets/environment/3DT_Cyberpunk_Downtown/Textures/Bins/T_3DT_Bins_AmbientOcclusion.png.import": "unchanged",
+    "assets/environment/3DT_Cyberpunk_Downtown/Textures/Bins/T_3DT_Bins_BaseColor.png.import": "unchanged",
+    "assets/environment/3DT_Cyberpunk_Downtown/Textures/Bins/T_3DT_Bins_Metallic.png.import": "unchanged",
+    "assets/environment/3DT_Cyberpunk_Downtown/Textures/Bins/T_3DT_Bins_OpenGL_Normal.png.import": "unchanged",
+    "assets/environment/3DT_Cyberpunk_Downtown/Textures/Bins/T_3DT_Bins_Roughness.png.import": "unchanged"
+  },
+  "pipeline_version": "1.0.1",
+  "schema": "SteamtekEnvironmentIntakeState-2",
+  "scope": "pilot",
+  "selection": {
+    "asset": "SM_3DT_Crate.fbx",
+    "category": null
+  },
+  "vendor_source_verification": {
+    "added": [],
+    "changed": [],
+    "file_count": 483,
+    "passed": true,
+    "removed": [],
+    "report_write_state": "changed"
+  },
+  "write_states": {
+    "asset_inventory": "changed",
+    "assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Materials/Source_Reconstructed/STK_MAT_Bins.tres": "unchanged",
+    "assets/environment/3DT_Cyberpunk_Downtown/Steamtek/Scenes/Props/Street/STK_PROP_Crate_01.tscn": "unchanged",
+    "catalog_candidates": "unchanged",
+    "material_texture_map": "changed",
+    "selective_manifest": "changed",
+    "source_material_csv": "unchanged",
+    "source_to_production_mapping": "unchanged"
+  }
+}

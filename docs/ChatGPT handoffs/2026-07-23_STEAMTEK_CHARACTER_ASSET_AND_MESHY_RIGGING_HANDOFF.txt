@@ -97,3 +97,17 @@ The approved v04 sources remain unchanged. The new v05 derivative contains 12
 validated animations and is wrapped by a Godot Hazmat combat-prototype scene.
 The visible body is still a temporary base-body proxy; actual Hazmat clothing,
 the rifle visual, and enemy combat AI remain pending.
+
+
+2026-07-24 SEPARATE COREC PLAYER-CHARACTER UPDATE
+
+A separate purchased CoreC male character was assembled after this handoff.
+It uses one 88-bone CoreC skeleton, the Techwear Hacker outfit, Hair C07, and a
+single locally retargeted Mixamo idle. Its authority is:
+
+C:\My Game\Steamtek-RPG\docs\ChatGPT handoffs\2026-07-24_STEAMTEK_COREC_HACKER_CHARACTER_AND_IDLE_HANDOFF.txt
+
+Do not treat that CoreC character as a revision of STK_HERO_BaseBody_01 or the
+24-bone Meshy/Hazmat rig. Do not copy its skeleton, idle, mesh modules, or
+wrapper contracts into the Meshy/Hazmat track without a deliberate new
+retarget and validation pass.

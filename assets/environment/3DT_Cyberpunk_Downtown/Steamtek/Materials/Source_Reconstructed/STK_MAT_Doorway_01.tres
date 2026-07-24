@@ -1,0 +1,31 @@
+[gd_resource type="StandardMaterial3D" load_steps=7 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/environment/3DT_Cyberpunk_Downtown/Textures/Doorway 01/T_3DT_Doorway_01_BaseColor.png" id="1_albedo"]
+[ext_resource type="Texture2D" path="res://assets/environment/3DT_Cyberpunk_Downtown/Textures/Doorway 01/T_3DT_Doorway_01_Metallic.png" id="2_metallic"]
+[ext_resource type="Texture2D" path="res://assets/environment/3DT_Cyberpunk_Downtown/Textures/Doorway 01/T_3DT_Doorway_01_Roughness.png" id="3_roughness"]
+[ext_resource type="Texture2D" path="res://assets/environment/3DT_Cyberpunk_Downtown/Textures/Doorway 01/T_3DT_Doorway_01_Normal.png" id="4_normal"]
+[ext_resource type="Texture2D" path="res://assets/environment/3DT_Cyberpunk_Downtown/Textures/Doorway 01/T_3DT_Doorway_01_AmbientOcclusion.png" id="5_ao"]
+[ext_resource type="Texture2D" path="res://assets/environment/3DT_Cyberpunk_Downtown/Textures/Doorway 01/T_3DT_Doorway_01_Emission.png" id="6_emission"]
+
+[resource]
+resource_name = "STK_MAT_Doorway_01"
+albedo_color = Color(1, 1, 1, 1)
+albedo_texture = ExtResource("1_albedo")
+metallic = 1.0
+metallic_texture = ExtResource("2_metallic")
+metallic_texture_channel = 0
+roughness = 1.0
+roughness_texture = ExtResource("3_roughness")
+roughness_texture_channel = 0
+normal_enabled = true
+normal_texture = ExtResource("4_normal")
+normal_scale = 1.0
+ao_enabled = true
+ao_texture = ExtResource("5_ao")
+ao_texture_channel = 0
+ao_light_affect = 0.65
+emission_enabled = true
+emission_operator = 1
+emission = Color(1, 1, 1, 1)
+emission_texture = ExtResource("6_emission")
+emission_energy_multiplier = 0.8

@@ -1,0 +1,4005 @@
+{
+	"asset_count": 181,
+	"assets": [
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-1.249907,
+				-1.804044,
+				-0.315798
+			],
+			"bounds_size": [
+				2.258605,
+				3.216054,
+				0.55906
+			],
+			"materials": [
+				"Doorway 01"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Doorway_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Doorways/SM_3DT_Doorway_01.fbx",
+			"surface_count": 1,
+			"triangles": 1560,
+			"vertices": 2394
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.242349,
+				-1.544868,
+				-1.02037
+			],
+			"bounds_size": [
+				1.968335,
+				3.126346,
+				2.28618
+			],
+			"materials": [
+				"Doorway 02"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Doorway_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Doorways/SM_3DT_Doorway_02.fbx",
+			"surface_count": 1,
+			"triangles": 1595,
+			"vertices": 1953
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-1.225143,
+				-1.659163,
+				-0.0651
+			],
+			"bounds_size": [
+				2.402101,
+				2.766194,
+				0.096645
+			],
+			"materials": [
+				"Doorway 03"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Doorway_03",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Doorways/SM_3DT_Doorway_03.fbx",
+			"surface_count": 1,
+			"triangles": 882,
+			"vertices": 1189
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.139572,
+				-1.160986,
+				-1.428538
+			],
+			"bounds_size": [
+				0.275765,
+				2.298585,
+				2.849639
+			],
+			"materials": [
+				"Doorway 04"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Doorway_04",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Doorways/SM_3DT_Doorway_04.fbx",
+			"surface_count": 1,
+			"triangles": 940,
+			"vertices": 1888
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-1.717129,
+				-0.049785,
+				-1.08773
+			],
+			"bounds_size": [
+				2.803408,
+				0.139581,
+				2.391678
+			],
+			"materials": [
+				"Doorway 05"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Doorway_05",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Doorways/SM_3DT_Doorway_05.fbx",
+			"surface_count": 1,
+			"triangles": 858,
+			"vertices": 1806
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-1.477568,
+				-2.091033,
+				-0.35387
+			],
+			"bounds_size": [
+				2.990922,
+				3.189425,
+				0.605712
+			],
+			"materials": [
+				"Doorway Garage"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Doorway_Garage",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Doorways/SM_3DT_Doorway_Garage.fbx",
+			"surface_count": 1,
+			"triangles": 755,
+			"vertices": 1420
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-2.0,
+				0.000457,
+				-1.333332
+			],
+			"bounds_size": [
+				4.0,
+				0.056866,
+				2.666666
+			],
+			"materials": [
+				"Sidewalk"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Sidewalk",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Floor/SM_3DT_Sidewalk.fbx",
+			"surface_count": 1,
+			"triangles": 220,
+			"vertices": 442
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-2.0,
+				-0.018013,
+				-0.065102
+			],
+			"bounds_size": [
+				4.0,
+				0.094147,
+				0.130203
+			],
+			"materials": [
+				"Sidewalk"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Sidewalk_Curb",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Floor/SM_3DT_Sidewalk_Curb.fbx",
+			"surface_count": 1,
+			"triangles": 60,
+			"vertices": 120
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-3.446756,
+				0.00085,
+				-0.674858
+			],
+			"bounds_size": [
+				6.893514,
+				0.057629,
+				1.294594
+			],
+			"materials": [
+				"Metal Panels A"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Metal_Panel_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Metal Panels/SM_3DT_Metal_Panel_01.fbx",
+			"surface_count": 1,
+			"triangles": 2752,
+			"vertices": 5355
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-1.804902,
+				-0.028815,
+				-0.08515
+			],
+			"bounds_size": [
+				3.609803,
+				0.057629,
+				0.1703
+			],
+			"materials": [
+				"Metal Panels A"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Metal_Panel_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Metal Panels/SM_3DT_Metal_Panel_02.fbx",
+			"surface_count": 1,
+			"triangles": 120,
+			"vertices": 218
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-1.804902,
+				-0.028815,
+				-0.08515
+			],
+			"bounds_size": [
+				3.609803,
+				0.057629,
+				0.1703
+			],
+			"materials": [
+				"Metal Panels A"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Metal_Panel_03",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Metal Panels/SM_3DT_Metal_Panel_03.fbx",
+			"surface_count": 1,
+			"triangles": 120,
+			"vertices": 218
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-1.804902,
+				-0.028815,
+				-0.08515
+			],
+			"bounds_size": [
+				3.609803,
+				0.057629,
+				0.1703
+			],
+			"materials": [
+				"Metal Panels A"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Metal_Panel_04",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Metal Panels/SM_3DT_Metal_Panel_04.fbx",
+			"surface_count": 1,
+			"triangles": 120,
+			"vertices": 218
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-1.087774,
+				-0.028815,
+				-0.709532
+			],
+			"bounds_size": [
+				2.175548,
+				0.057629,
+				1.419064
+			],
+			"materials": [
+				"Metal Panels A"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Metal_Panel_05",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Metal Panels/SM_3DT_Metal_Panel_05.fbx",
+			"surface_count": 1,
+			"triangles": 976,
+			"vertices": 1843
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-1.743482,
+				-1.132561,
+				-0.035509
+			],
+			"bounds_size": [
+				3.470343,
+				2.265122,
+				0.052772
+			],
+			"materials": [
+				"Metal Panels B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Metal_Panel_06",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Metal Panels/SM_3DT_Metal_Panel_06.fbx",
+			"surface_count": 1,
+			"triangles": 722,
+			"vertices": 1405
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-1.743139,
+				-0.546434,
+				-0.035082
+			],
+			"bounds_size": [
+				3.470343,
+				1.132561,
+				0.052772
+			],
+			"materials": [
+				"Metal Panels B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Metal_Panel_07",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Metal Panels/SM_3DT_Metal_Panel_07.fbx",
+			"surface_count": 1,
+			"triangles": 380,
+			"vertices": 746
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.090868,
+				-0.644396,
+				-0.717242
+			],
+			"bounds_size": [
+				0.17247,
+				1.276647,
+				1.438481
+			],
+			"materials": [
+				"Metal Sheets"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_MetalSheet_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Metal Sheets/SM_3DT_MetalSheet_01.fbx",
+			"surface_count": 1,
+			"triangles": 92,
+			"vertices": 136
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.121774,
+				-0.728524,
+				-0.721371
+			],
+			"bounds_size": [
+				0.186032,
+				1.446376,
+				1.428508
+			],
+			"materials": [
+				"Metal Sheets"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_MetalSheet_010",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Metal Sheets/SM_3DT_MetalSheet_010.fbx",
+			"surface_count": 1,
+			"triangles": 104,
+			"vertices": 178
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.103668,
+				-0.594492,
+				-0.753552
+			],
+			"bounds_size": [
+				0.177463,
+				1.178685,
+				1.469465
+			],
+			"materials": [
+				"Metal Sheets"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_MetalSheet_011",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Metal Sheets/SM_3DT_MetalSheet_011.fbx",
+			"surface_count": 1,
+			"triangles": 104,
+			"vertices": 156
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.45266,
+				-0.071618,
+				-0.734262
+			],
+			"bounds_size": [
+				0.929241,
+				0.120222,
+				1.445455
+			],
+			"materials": [
+				"Metal Sheets"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_MetalSheet_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Metal Sheets/SM_3DT_MetalSheet_02.fbx",
+			"surface_count": 1,
+			"triangles": 104,
+			"vertices": 154
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.440539,
+				-0.645359,
+				-0.061519
+			],
+			"bounds_size": [
+				0.882742,
+				1.275547,
+				0.115746
+			],
+			"materials": [
+				"Metal Sheets"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_MetalSheet_03",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Metal Sheets/SM_3DT_MetalSheet_03.fbx",
+			"surface_count": 1,
+			"triangles": 92,
+			"vertices": 136
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.445537,
+				-0.049129,
+				-0.747283
+			],
+			"bounds_size": [
+				0.898973,
+				0.090464,
+				1.478697
+			],
+			"materials": [
+				"Metal Sheets"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_MetalSheet_04",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Metal Sheets/SM_3DT_MetalSheet_04.fbx",
+			"surface_count": 1,
+			"triangles": 92,
+			"vertices": 136
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.442626,
+				-0.744166,
+				-0.057793
+			],
+			"bounds_size": [
+				0.891365,
+				1.490294,
+				0.12175
+			],
+			"materials": [
+				"Metal Sheets"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_MetalSheet_05",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Metal Sheets/SM_3DT_MetalSheet_05.fbx",
+			"surface_count": 1,
+			"triangles": 92,
+			"vertices": 134
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.45031,
+				-0.636616,
+				-0.033157
+			],
+			"bounds_size": [
+				0.903377,
+				1.274522,
+				0.084503
+			],
+			"materials": [
+				"Metal Sheets"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_MetalSheet_06",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Metal Sheets/SM_3DT_MetalSheet_06.fbx",
+			"surface_count": 1,
+			"triangles": 68,
+			"vertices": 100
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.445968,
+				-0.539616,
+				-0.037401
+			],
+			"bounds_size": [
+				0.898804,
+				1.100436,
+				0.087135
+			],
+			"materials": [
+				"Metal Sheets"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_MetalSheet_07",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Metal Sheets/SM_3DT_MetalSheet_07.fbx",
+			"surface_count": 1,
+			"triangles": 80,
+			"vertices": 118
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.440849,
+				-0.730096,
+				-0.038639
+			],
+			"bounds_size": [
+				0.874202,
+				1.445611,
+				0.095039
+			],
+			"materials": [
+				"Metal Sheets"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_MetalSheet_08",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Metal Sheets/SM_3DT_MetalSheet_08.fbx",
+			"surface_count": 1,
+			"triangles": 104,
+			"vertices": 156
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.461761,
+				-0.599128,
+				-0.052932
+			],
+			"bounds_size": [
+				0.901359,
+				1.181875,
+				0.12171
+			],
+			"materials": [
+				"Metal Sheets"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_MetalSheet_09",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Metal Sheets/SM_3DT_MetalSheet_09.fbx",
+			"surface_count": 1,
+			"triangles": 104,
+			"vertices": 148
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.032428,
+				-2.303946,
+				-0.032429
+			],
+			"bounds_size": [
+				0.064857,
+				4.607897,
+				0.064857
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_01.fbx",
+			"surface_count": 1,
+			"triangles": 1984,
+			"vertices": 2177
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.082364,
+				-4.010199,
+				-1.094439
+			],
+			"bounds_size": [
+				0.164728,
+				4.955982,
+				3.900541
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_011",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_011.fbx",
+			"surface_count": 1,
+			"triangles": 1040,
+			"vertices": 1100
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.119662,
+				-2.304423,
+				-0.119662
+			],
+			"bounds_size": [
+				0.239324,
+				4.607896,
+				0.239324
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_02.fbx",
+			"surface_count": 1,
+			"triangles": 1504,
+			"vertices": 1731
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-2.290685,
+				-0.173586,
+				-0.044147
+			],
+			"bounds_size": [
+				5.330251,
+				0.335317,
+				0.088295
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_03",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_03.fbx",
+			"surface_count": 1,
+			"triangles": 1018,
+			"vertices": 1052
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-2.93426,
+				-0.060446,
+				-0.063557
+			],
+			"bounds_size": [
+				5.733583,
+				0.120893,
+				0.127114
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_04",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_04.fbx",
+			"surface_count": 1,
+			"triangles": 436,
+			"vertices": 456
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.175192,
+				-0.054876,
+				-1.92091
+			],
+			"bounds_size": [
+				0.285337,
+				0.109753,
+				3.748516
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_05",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_05.fbx",
+			"surface_count": 1,
+			"triangles": 912,
+			"vertices": 910
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.082364,
+				-2.306579,
+				-0.572897
+			],
+			"bounds_size": [
+				0.164728,
+				3.060844,
+				1.266898
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_06",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_06.fbx",
+			"surface_count": 1,
+			"triangles": 812,
+			"vertices": 835
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.069596,
+				-0.312257,
+				-0.376272
+			],
+			"bounds_size": [
+				0.139192,
+				0.587165,
+				0.914181
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_07",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_07.fbx",
+			"surface_count": 1,
+			"triangles": 812,
+			"vertices": 804
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-1.13623,
+				-0.3152,
+				-0.996563
+			],
+			"bounds_size": [
+				1.74861,
+				0.663532,
+				1.543948
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_08",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_08.fbx",
+			"surface_count": 1,
+			"triangles": 1196,
+			"vertices": 1168
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-4.034983,
+				-0.041751,
+				-2.944065
+			],
+			"bounds_size": [
+				5.251688,
+				0.083501,
+				3.992726
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_09",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_09.fbx",
+			"surface_count": 1,
+			"triangles": 992,
+			"vertices": 1062
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.032428,
+				-0.485912,
+				-0.032428
+			],
+			"bounds_size": [
+				0.064857,
+				1.165623,
+				0.064857
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_Piece_A_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_A_01.fbx",
+			"surface_count": 1,
+			"triangles": 516,
+			"vertices": 537
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.032428,
+				-0.569161,
+				-0.032428
+			],
+			"bounds_size": [
+				0.064857,
+				1.138322,
+				0.064857
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_Piece_A_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_A_02.fbx",
+			"surface_count": 1,
+			"triangles": 476,
+			"vertices": 536
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.032428,
+				-0.569161,
+				-0.032428
+			],
+			"bounds_size": [
+				0.064857,
+				1.138322,
+				0.064857
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_Piece_A_03",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_A_03.fbx",
+			"surface_count": 1,
+			"triangles": 476,
+			"vertices": 536
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.032428,
+				-0.679711,
+				-0.032428
+			],
+			"bounds_size": [
+				0.064857,
+				1.165623,
+				0.064857
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_Piece_A_04",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_A_04.fbx",
+			"surface_count": 1,
+			"triangles": 516,
+			"vertices": 537
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.068829,
+				-2.628804,
+				-0.10596
+			],
+			"bounds_size": [
+				0.137658,
+				4.27397,
+				0.216281
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_Piece_B_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_B_01.fbx",
+			"surface_count": 1,
+			"triangles": 332,
+			"vertices": 356
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.068829,
+				-0.126608,
+				-0.384461
+			],
+			"bounds_size": [
+				0.137658,
+				0.216029,
+				0.56658
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_Piece_B_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_B_02.fbx",
+			"surface_count": 1,
+			"triangles": 212,
+			"vertices": 206
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.068829,
+				-0.398677,
+				-0.127528
+			],
+			"bounds_size": [
+				0.137658,
+				0.587172,
+				0.217189
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_Piece_B_03",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_B_03.fbx",
+			"surface_count": 1,
+			"triangles": 212,
+			"vertices": 206
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.082364,
+				-0.082201,
+				-1.99662
+			],
+			"bounds_size": [
+				0.164728,
+				0.164728,
+				3.038102
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_Piece_B_04",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_B_04.fbx",
+			"surface_count": 1,
+			"triangles": 284,
+			"vertices": 332
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.172752,
+				-0.061294,
+				-0.027727
+			],
+			"bounds_size": [
+				0.698109,
+				0.122588,
+				0.077204
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_Piece_C_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_C_01.fbx",
+			"surface_count": 1,
+			"triangles": 274,
+			"vertices": 303
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.753456,
+				-0.039042,
+				-0.038841
+			],
+			"bounds_size": [
+				1.50482,
+				0.078083,
+				0.077639
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_Piece_C_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_C_02.fbx",
+			"surface_count": 1,
+			"triangles": 140,
+			"vertices": 154
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-1.066014,
+				-0.03583,
+				-0.035607
+			],
+			"bounds_size": [
+				3.225135,
+				0.071659,
+				0.071214
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_Piece_C_03",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_C_03.fbx",
+			"surface_count": 1,
+			"triangles": 188,
+			"vertices": 206
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.041755,
+				-0.041751,
+				-0.874454
+			],
+			"bounds_size": [
+				0.083501,
+				0.083501,
+				2.878472
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_Piece_C_04",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_C_04.fbx",
+			"surface_count": 1,
+			"triangles": 274,
+			"vertices": 320
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.393459,
+				-0.036506,
+				-0.739148
+			],
+			"bounds_size": [
+				0.522832,
+				0.073013,
+				1.111758
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_Piece_C_05",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_C_05.fbx",
+			"surface_count": 1,
+			"triangles": 380,
+			"vertices": 370
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.343775,
+				-0.060446,
+				-0.063557
+			],
+			"bounds_size": [
+				1.327582,
+				0.120893,
+				0.127114
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_Piece_D_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_D_01.fbx",
+			"surface_count": 1,
+			"triangles": 116,
+			"vertices": 118
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.772225,
+				-0.060446,
+				-0.063557
+			],
+			"bounds_size": [
+				2.162229,
+				0.120893,
+				0.127114
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_Piece_D_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_D_02.fbx",
+			"surface_count": 1,
+			"triangles": 136,
+			"vertices": 150
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-1.292902,
+				-0.060446,
+				-0.063557
+			],
+			"bounds_size": [
+				2.243773,
+				0.120893,
+				0.127114
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_Piece_D_03",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_D_03.fbx",
+			"surface_count": 1,
+			"triangles": 208,
+			"vertices": 218
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.119662,
+				-0.25798,
+				-0.119662
+			],
+			"bounds_size": [
+				0.239324,
+				1.150846,
+				0.239324
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_Piece_E_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_E_01.fbx",
+			"surface_count": 1,
+			"triangles": 356,
+			"vertices": 404
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.119662,
+				-0.315567,
+				-0.119662
+			],
+			"bounds_size": [
+				0.239324,
+				1.117509,
+				0.239324
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_Piece_E_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_E_02.fbx",
+			"surface_count": 1,
+			"triangles": 316,
+			"vertices": 394
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.119662,
+				-0.315567,
+				-0.119662
+			],
+			"bounds_size": [
+				0.239324,
+				1.117509,
+				0.239324
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_Piece_E_03",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_E_03.fbx",
+			"surface_count": 1,
+			"triangles": 316,
+			"vertices": 392
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.119662,
+				-0.699458,
+				-0.119662
+			],
+			"bounds_size": [
+				0.239324,
+				1.222027,
+				0.239324
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_Piece_E_04",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_E_04.fbx",
+			"surface_count": 1,
+			"triangles": 516,
+			"vertices": 539
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.214717,
+				-0.211338,
+				-0.061103
+			],
+			"bounds_size": [
+				0.654181,
+				0.691338,
+				0.122206
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_Piece_F_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_F_01.fbx",
+			"surface_count": 1,
+			"triangles": 404,
+			"vertices": 444
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.566731,
+				-0.058979,
+				-0.051077
+			],
+			"bounds_size": [
+				1.322772,
+				0.117957,
+				0.102154
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_Piece_F_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_F_02.fbx",
+			"surface_count": 1,
+			"triangles": 200,
+			"vertices": 228
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-1.274128,
+				-0.078467,
+				-0.067954
+			],
+			"bounds_size": [
+				2.693982,
+				0.156934,
+				0.135908
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_Piece_F_03",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_F_03.fbx",
+			"surface_count": 1,
+			"triangles": 152,
+			"vertices": 180
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.060494,
+				-0.404163,
+				-0.051639
+			],
+			"bounds_size": [
+				0.119271,
+				0.820635,
+				0.103278
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_Piece_F_04",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_F_04.fbx",
+			"surface_count": 1,
+			"triangles": 92,
+			"vertices": 120
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.540566,
+				-0.205344,
+				-0.04277
+			],
+			"bounds_size": [
+				1.421464,
+				0.335183,
+				0.08554
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_Piece_G_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_G_01.fbx",
+			"surface_count": 1,
+			"triangles": 322,
+			"vertices": 298
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.044147,
+				-0.072063,
+				-0.044147
+			],
+			"bounds_size": [
+				0.088295,
+				0.296969,
+				0.088295
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_Piece_G_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_G_02.fbx",
+			"surface_count": 1,
+			"triangles": 106,
+			"vertices": 104
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-1.128121,
+				-0.03968,
+				-0.03978
+			],
+			"bounds_size": [
+				1.556086,
+				0.07936,
+				0.07956
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_Piece_G_03",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_G_03.fbx",
+			"surface_count": 1,
+			"triangles": 164,
+			"vertices": 180
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-1.271067,
+				-0.039745,
+				-0.039781
+			],
+			"bounds_size": [
+				2.361517,
+				0.079491,
+				0.079561
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_Piece_G_04",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_G_04.fbx",
+			"surface_count": 1,
+			"triangles": 188,
+			"vertices": 194
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.175192,
+				-0.054873,
+				2.667216
+			],
+			"bounds_size": [
+				0.285337,
+				0.109752,
+				1.559726
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_Piece_H_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_H_01.fbx",
+			"surface_count": 1,
+			"triangles": 456,
+			"vertices": 455
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				0.041455,
+				-0.026997,
+				1.960094
+			],
+			"bounds_size": [
+				0.05374,
+				0.054,
+				0.632591
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_Piece_H_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_H_02.fbx",
+			"surface_count": 1,
+			"triangles": 24,
+			"vertices": 26
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.175192,
+				-0.054878,
+				-3.775599
+			],
+			"bounds_size": [
+				0.285337,
+				0.109752,
+				1.559726
+			],
+			"materials": [
+				"Pipes"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipe_Piece_H_03",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipe_Piece_H_03.fbx",
+			"surface_count": 1,
+			"triangles": 432,
+			"vertices": 429
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.881273,
+				-0.098509,
+				-0.224669
+			],
+			"bounds_size": [
+				1.765859,
+				0.202264,
+				0.466328
+			],
+			"materials": [
+				"Pipes Caged"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipes_Caged_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipes_Caged_01.fbx",
+			"surface_count": 1,
+			"triangles": 12304,
+			"vertices": 11185
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.881273,
+				-0.098509,
+				-0.224669
+			],
+			"bounds_size": [
+				1.765859,
+				0.202264,
+				0.466328
+			],
+			"materials": [
+				"Pipes Caged"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Pipes_Caged_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Pipes/SM_3DT_Pipes_Caged_02.fbx",
+			"surface_count": 1,
+			"triangles": 12304,
+			"vertices": 11185
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-1.822598,
+				-0.43246,
+				-0.94927
+			],
+			"bounds_size": [
+				3.645194,
+				0.772863,
+				2.566074
+			],
+			"materials": [
+				"Platform"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Platform",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Platform/SM_3DT_Platform.fbx",
+			"surface_count": 1,
+			"triangles": 1528,
+			"vertices": 2016
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.609558,
+				-0.725346,
+				-0.239332
+			],
+			"bounds_size": [
+				1.30504,
+				0.874464,
+				0.478664
+			],
+			"materials": [
+				"Props"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Aerial",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Props/SM_3DT_Aerial.fbx",
+			"surface_count": 1,
+			"triangles": 856,
+			"vertices": 1840
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.244446,
+				-0.000004,
+				-0.244446
+			],
+			"bounds_size": [
+				0.488892,
+				0.466666,
+				0.488892
+			],
+			"materials": [
+				"Bins"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Barrel",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Props/SM_3DT_Barrel.fbx",
+			"surface_count": 1,
+			"triangles": 1756,
+			"vertices": 2035
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.081311,
+				-0.486615,
+				-0.081312
+			],
+			"bounds_size": [
+				0.162623,
+				0.970566,
+				0.162623
+			],
+			"materials": [
+				"LampPostRails"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Bollard_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Props/SM_3DT_Bollard_01.fbx",
+			"surface_count": 1,
+			"triangles": 796,
+			"vertices": 960
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.081311,
+				0.002598,
+				-0.081312
+			],
+			"bounds_size": [
+				0.162623,
+				0.970566,
+				0.162623
+			],
+			"materials": [
+				"LampPostRails"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Bollard_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Props/SM_3DT_Bollard_02.fbx",
+			"surface_count": 1,
+			"triangles": 796,
+			"vertices": 960
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.659152,
+				0.000839,
+				-0.326786
+			],
+			"bounds_size": [
+				1.309811,
+				0.971197,
+				0.723931
+			],
+			"materials": [
+				"Containers"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Container_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Props/SM_3DT_Container_01.fbx",
+			"surface_count": 1,
+			"triangles": 396,
+			"vertices": 813
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.65402,
+				-0.000416,
+				-0.522398
+			],
+			"bounds_size": [
+				1.309811,
+				0.971197,
+				0.723931
+			],
+			"materials": [
+				"Containers"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Container_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Props/SM_3DT_Container_02.fbx",
+			"surface_count": 1,
+			"triangles": 396,
+			"vertices": 823
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.262248,
+				-0.262824,
+				-0.363622
+			],
+			"bounds_size": [
+				0.524496,
+				0.651435,
+				0.50954
+			],
+			"materials": [
+				"Bins"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Crate",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Props/SM_3DT_Crate.fbx",
+			"surface_count": 1,
+			"triangles": 436,
+			"vertices": 918
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.975588,
+				0.002161,
+				-0.567122
+			],
+			"bounds_size": [
+				1.951136,
+				1.242121,
+				1.13733
+			],
+			"materials": [
+				"Dumpster"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Dumpster",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Props/SM_3DT_Dumpster.fbx",
+			"surface_count": 1,
+			"triangles": 1258,
+			"vertices": 1766
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.791801,
+				-0.017481,
+				-0.145856
+			],
+			"bounds_size": [
+				1.583601,
+				0.050271,
+				0.291712
+			],
+			"materials": [
+				"LampPostRails"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Lamp_Ceiling",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Props/SM_3DT_Lamp_Ceiling.fbx",
+			"surface_count": 1,
+			"triangles": 92,
+			"vertices": 192
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.279135,
+				-0.121152,
+				-0.314223
+			],
+			"bounds_size": [
+				0.418715,
+				0.190772,
+				0.628445
+			],
+			"materials": [
+				"LampPostRails"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Lamp_Wall",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Props/SM_3DT_Lamp_Wall.fbx",
+			"surface_count": 1,
+			"triangles": 704,
+			"vertices": 874
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.118892,
+				-0.627037,
+				-3.75952
+			],
+			"bounds_size": [
+				0.237783,
+				0.828443,
+				3.75751
+			],
+			"materials": [
+				"LampPostRails"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Lampost",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Props/SM_3DT_Lampost.fbx",
+			"surface_count": 1,
+			"triangles": 1984,
+			"vertices": 2374
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.262838,
+				-0.322458,
+				-0.045062
+			],
+			"bounds_size": [
+				0.498444,
+				0.572938,
+				0.064771
+			],
+			"materials": [
+				"Props"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Power_Box_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Props/SM_3DT_Power_Box_01.fbx",
+			"surface_count": 1,
+			"triangles": 1908,
+			"vertices": 1574
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.530819,
+				-0.385032,
+				-0.367964
+			],
+			"bounds_size": [
+				1.083628,
+				0.93304,
+				0.736802
+			],
+			"materials": [
+				"Props"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Satellite",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Props/SM_3DT_Satellite.fbx",
+			"surface_count": 1,
+			"triangles": 1790,
+			"vertices": 2596
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.976592,
+				-0.434247,
+				-0.799472
+			],
+			"bounds_size": [
+				1.726337,
+				1.772486,
+				2.019293
+			],
+			"materials": [
+				"Props"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Solar_Panel",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Props/SM_3DT_Solar_Panel.fbx",
+			"surface_count": 1,
+			"triangles": 6494,
+			"vertices": 9158
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.444187,
+				0.004791,
+				-1.074599
+			],
+			"bounds_size": [
+				1.113603,
+				2.375317,
+				2.149197
+			],
+			"materials": [
+				"Terminal"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Terminal",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Props/SM_3DT_Terminal.fbx",
+			"surface_count": 1,
+			"triangles": 2310,
+			"vertices": 4266
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.423786,
+				-0.391426,
+				-0.318116
+			],
+			"bounds_size": [
+				0.943777,
+				0.622266,
+				0.636232
+			],
+			"materials": [
+				"Bins"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Trashcan_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Props/SM_3DT_Trashcan_01.fbx",
+			"surface_count": 1,
+			"triangles": 967,
+			"vertices": 1208
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.240086,
+				-0.061756,
+				-0.240086
+			],
+			"bounds_size": [
+				0.480171,
+				0.69633,
+				0.480171
+			],
+			"materials": [
+				"Bins"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Trashcan_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Props/SM_3DT_Trashcan_02.fbx",
+			"surface_count": 1,
+			"triangles": 1174,
+			"vertices": 1526
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-1.019979,
+				-0.000881,
+				-0.327311
+			],
+			"bounds_size": [
+				2.036119,
+				2.697363,
+				0.692208
+			],
+			"materials": [
+				"Vending Machine A"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Vending_Machine_A_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Props/SM_3DT_Vending_Machine_A_01.fbx",
+			"surface_count": 1,
+			"triangles": 1518,
+			"vertices": 2011
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.238275,
+				0.001029,
+				-0.330431
+			],
+			"bounds_size": [
+				0.53892,
+				1.294823,
+				0.661098
+			],
+			"materials": [
+				"Vending Machines B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Vending_Machine_B_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Props/SM_3DT_Vending_Machine_B_01.fbx",
+			"surface_count": 1,
+			"triangles": 2711,
+			"vertices": 3578
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.258378,
+				0.00148,
+				-0.409524
+			],
+			"bounds_size": [
+				0.454338,
+				1.933005,
+				0.819048
+			],
+			"materials": [
+				"Vending Machines B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Vending_Machine_B_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Props/SM_3DT_Vending_Machine_B_02.fbx",
+			"surface_count": 1,
+			"triangles": 2400,
+			"vertices": 4867
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-3.425704,
+				-0.472138,
+				-0.212591
+			],
+			"bounds_size": [
+				6.85147,
+				0.767644,
+				0.530862
+			],
+			"materials": [
+				"Railing"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Railing_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Railings/SM_3DT_Railing_01.fbx",
+			"surface_count": 1,
+			"triangles": 1696,
+			"vertices": 3646
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-1.019617,
+				-0.225581,
+				-0.030128
+			],
+			"bounds_size": [
+				2.065452,
+				0.518366,
+				0.060256
+			],
+			"materials": [
+				"LampPostRails"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Railing_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Railings/SM_3DT_Railing_02.fbx",
+			"surface_count": 1,
+			"triangles": 604,
+			"vertices": 901
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-1.019617,
+				-0.225581,
+				-0.030128
+			],
+			"bounds_size": [
+				2.065452,
+				0.518366,
+				0.060256
+			],
+			"materials": [
+				"LampPostRails"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Railing_03",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Railings/SM_3DT_Railing_03.fbx",
+			"surface_count": 1,
+			"triangles": 604,
+			"vertices": 900
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-2.232391,
+				-0.061116,
+				-7.433342
+			],
+			"bounds_size": [
+				4.464783,
+				0.123232,
+				14.866685
+			],
+			"materials": [
+				"Seamless Concrete C.001",
+				"Seamless Road.001"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Road_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Road/SM_3DT_Road_01.fbx",
+			"surface_count": 2,
+			"triangles": 12,
+			"vertices": 24
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-2.232391,
+				-0.061116,
+				-4.087056
+			],
+			"bounds_size": [
+				4.464783,
+				0.123232,
+				8.174111
+			],
+			"materials": [
+				"Seamless Concrete C.001",
+				"Seamless Road.001"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Road_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Road/SM_3DT_Road_02.fbx",
+			"surface_count": 2,
+			"triangles": 12,
+			"vertices": 24
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-2.232391,
+				-0.660332,
+				-9.44486
+			],
+			"bounds_size": [
+				4.464783,
+				1.91988,
+				18.709974
+			],
+			"materials": [
+				"Seamless Concrete C.001",
+				"Seamless Road.001"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Road_03",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Road/SM_3DT_Road_03.fbx",
+			"surface_count": 2,
+			"triangles": 20,
+			"vertices": 40
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-2.232399,
+				-0.959939,
+				-4.812303
+			],
+			"bounds_size": [
+				4.464783,
+				1.920879,
+				9.624606
+			],
+			"materials": [
+				"Seamless Concrete C.001",
+				"Seamless Road.001"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Road_04",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Road/SM_3DT_Road_04.fbx",
+			"surface_count": 2,
+			"triangles": 12,
+			"vertices": 24
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.777546,
+				-0.631138,
+				-2.769298
+			],
+			"bounds_size": [
+				1.533908,
+				0.85893,
+				5.539777
+			],
+			"materials": [
+				"Shelter A"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Shelter_A",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Shelters/SM_3DT_Shelter_A.fbx",
+			"surface_count": 1,
+			"triangles": 1612,
+			"vertices": 2384
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.742614,
+				-1.716053,
+				-1.429507
+			],
+			"bounds_size": [
+				1.035228,
+				2.198593,
+				2.859492
+			],
+			"materials": [
+				"Shelter B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Shelter_B1",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Shelters/SM_3DT_Shelter_B1.fbx",
+			"surface_count": 1,
+			"triangles": 232,
+			"vertices": 436
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.391534,
+				-0.31781,
+				-1.167155
+			],
+			"bounds_size": [
+				0.772401,
+				0.432515,
+				2.323962
+			],
+			"materials": [
+				"Shelter B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Shelter_B2",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Shelters/SM_3DT_Shelter_B2.fbx",
+			"surface_count": 1,
+			"triangles": 1612,
+			"vertices": 1957
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.391534,
+				-0.31781,
+				-0.775557
+			],
+			"bounds_size": [
+				0.772401,
+				0.432515,
+				1.663367
+			],
+			"materials": [
+				"Shelter B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Shelter_B3",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Shelters/SM_3DT_Shelter_B3.fbx",
+			"surface_count": 1,
+			"triangles": 1612,
+			"vertices": 1985
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.808914,
+				-0.06871,
+				-0.321588
+			],
+			"bounds_size": [
+				1.861667,
+				0.085557,
+				0.643176
+			],
+			"materials": [
+				"Signs B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Sign_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Signs/SM_3DT_Sign_01.fbx",
+			"surface_count": 1,
+			"triangles": 160,
+			"vertices": 224
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.446205,
+				-0.22146,
+				-0.068327
+			],
+			"bounds_size": [
+				0.89241,
+				0.442921,
+				0.092253
+			],
+			"materials": [
+				"Signs B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Sign_010",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Signs/SM_3DT_Sign_010.fbx",
+			"surface_count": 1,
+			"triangles": 188,
+			"vertices": 232
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.446205,
+				-0.22146,
+				-0.068327
+			],
+			"bounds_size": [
+				0.89241,
+				0.442921,
+				0.092253
+			],
+			"materials": [
+				"Signs B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Sign_011",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Signs/SM_3DT_Sign_011.fbx",
+			"surface_count": 1,
+			"triangles": 188,
+			"vertices": 232
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.446205,
+				-0.22146,
+				-0.068327
+			],
+			"bounds_size": [
+				0.89241,
+				0.442921,
+				0.092253
+			],
+			"materials": [
+				"Signs B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Sign_012",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Signs/SM_3DT_Sign_012.fbx",
+			"surface_count": 1,
+			"triangles": 188,
+			"vertices": 232
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.701495,
+				-0.53532,
+				-0.164148
+			],
+			"bounds_size": [
+				1.599921,
+				1.088375,
+				0.332493
+			],
+			"materials": [
+				"Signs C"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Sign_013",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Signs/SM_3DT_Sign_013.fbx",
+			"surface_count": 1,
+			"triangles": 3276,
+			"vertices": 5977
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.166184,
+				-0.785075,
+				-0.44264
+			],
+			"bounds_size": [
+				0.332493,
+				1.570149,
+				0.810215
+			],
+			"materials": [
+				"Signs C"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Sign_014",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Signs/SM_3DT_Sign_014.fbx",
+			"surface_count": 1,
+			"triangles": 2700,
+			"vertices": 5502
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.9824,
+				-1.170131,
+				-0.229857
+			],
+			"bounds_size": [
+				3.606158,
+				2.244736,
+				0.505738
+			],
+			"materials": [
+				"Signs C"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Sign_015",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Signs/SM_3DT_Sign_015.fbx",
+			"surface_count": 1,
+			"triangles": 3158,
+			"vertices": 5530
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.111943,
+				-0.326442,
+				-0.522456
+			],
+			"bounds_size": [
+				0.166857,
+				0.652885,
+				1.04491
+			],
+			"materials": [
+				"Signs A"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Sign_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Signs/SM_3DT_Sign_02.fbx",
+			"surface_count": 1,
+			"triangles": 220,
+			"vertices": 280
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.144524,
+				-0.283799,
+				-1.460852
+			],
+			"bounds_size": [
+				0.205813,
+				0.567598,
+				2.921704
+			],
+			"materials": [
+				"Signs A"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Sign_03",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Signs/SM_3DT_Sign_03.fbx",
+			"surface_count": 1,
+			"triangles": 60,
+			"vertices": 120
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.369928,
+				-1.694606,
+				-0.110249
+			],
+			"bounds_size": [
+				0.739853,
+				3.389207,
+				0.160827
+			],
+			"materials": [
+				"Signs A"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Sign_04",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Signs/SM_3DT_Sign_04.fbx",
+			"surface_count": 1,
+			"triangles": 248,
+			"vertices": 324
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.110042,
+				-0.751842,
+				-0.369926
+			],
+			"bounds_size": [
+				0.160826,
+				1.503681,
+				0.739853
+			],
+			"materials": [
+				"Signs A"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Sign_05",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Signs/SM_3DT_Sign_05.fbx",
+			"surface_count": 1,
+			"triangles": 220,
+			"vertices": 264
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.600913,
+				-0.952713,
+				-0.094755
+			],
+			"bounds_size": [
+				1.201827,
+				1.905427,
+				0.124239
+			],
+			"materials": [
+				"Signs B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Sign_06",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Signs/SM_3DT_Sign_06.fbx",
+			"surface_count": 1,
+			"triangles": 188,
+			"vertices": 236
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.446205,
+				-1.139903,
+				-0.068326
+			],
+			"bounds_size": [
+				0.89241,
+				1.361363,
+				0.092253
+			],
+			"materials": [
+				"Signs B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Sign_07",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Signs/SM_3DT_Sign_07.fbx",
+			"surface_count": 1,
+			"triangles": 228,
+			"vertices": 304
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.446205,
+				-1.139903,
+				-0.068326
+			],
+			"bounds_size": [
+				0.89241,
+				1.361363,
+				0.092253
+			],
+			"materials": [
+				"Signs B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Sign_08",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Signs/SM_3DT_Sign_08.fbx",
+			"surface_count": 1,
+			"triangles": 228,
+			"vertices": 304
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.446205,
+				-0.22146,
+				-0.068327
+			],
+			"bounds_size": [
+				0.89241,
+				0.442921,
+				0.092253
+			],
+			"materials": [
+				"Signs B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Sign_09",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Signs/SM_3DT_Sign_09.fbx",
+			"surface_count": 1,
+			"triangles": 188,
+			"vertices": 232
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-1.461141,
+				-0.016,
+				-0.354373
+			],
+			"bounds_size": [
+				3.180392,
+				0.032,
+				0.750253
+			],
+			"materials": [
+				"Signs D"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Sign_Hotel",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Signs/SM_3DT_Sign_Hotel.fbx",
+			"surface_count": 1,
+			"triangles": 716,
+			"vertices": 1111
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-1.824395,
+				-0.016,
+				-0.256611
+			],
+			"bounds_size": [
+				3.634301,
+				0.032,
+				0.484936
+			],
+			"materials": [
+				"Signs D"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Sign_Pharmacy",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Signs/SM_3DT_Sign_Pharmacy.fbx",
+			"surface_count": 1,
+			"triangles": 1292,
+			"vertices": 2148
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-2.315707,
+				-0.016,
+				-0.518948
+			],
+			"bounds_size": [
+				4.937255,
+				0.032,
+				0.92549
+			],
+			"materials": [
+				"Signs D"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Sign_Robotics",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Signs/SM_3DT_Sign_Robotics.fbx",
+			"surface_count": 1,
+			"triangles": 732,
+			"vertices": 1433
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.008125,
+				-0.435034,
+				-1.83059
+			],
+			"bounds_size": [
+				0.016249,
+				0.495636,
+				4.300435
+			],
+			"materials": [
+				"Signs D"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Sign_Stand_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Signs/SM_3DT_Sign_Stand_01.fbx",
+			"surface_count": 1,
+			"triangles": 288,
+			"vertices": 598
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.008125,
+				-0.435034,
+				-1.826651
+			],
+			"bounds_size": [
+				0.016249,
+				0.60942,
+				3.651842
+			],
+			"materials": [
+				"Signs D"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Sign_Stand_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Signs/SM_3DT_Sign_Stand_02.fbx",
+			"surface_count": 1,
+			"triangles": 288,
+			"vertices": 586
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.008125,
+				-0.444343,
+				-2.336923
+			],
+			"bounds_size": [
+				0.016249,
+				0.60942,
+				4.841989
+			],
+			"materials": [
+				"Signs D"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Sign_Stand_03",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Signs/SM_3DT_Sign_Stand_03.fbx",
+			"surface_count": 1,
+			"triangles": 288,
+			"vertices": 588
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.830802,
+				-0.983364,
+				-1.012
+			],
+			"bounds_size": [
+				1.58526,
+				1.951207,
+				2.024
+			],
+			"materials": [
+				"Steps_01"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Steps_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Steps/SM_3DT_Steps_01.fbx",
+			"surface_count": 1,
+			"triangles": 2244,
+			"vertices": 4444
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-2.009389,
+				-0.000202,
+				-1.1635
+			],
+			"bounds_size": [
+				3.012025,
+				2.617583,
+				2.327
+			],
+			"materials": [
+				"Steps 02"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Steps_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Steps/SM_3DT_Steps_02.fbx",
+			"surface_count": 1,
+			"triangles": 804,
+			"vertices": 1210
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.765392,
+				-0.000279,
+				-1.0
+			],
+			"bounds_size": [
+				1.318829,
+				0.82139,
+				2.0
+			],
+			"materials": [
+				"Steps 03"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Steps_03",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Steps/SM_3DT_Steps_03.fbx",
+			"surface_count": 1,
+			"triangles": 360,
+			"vertices": 710
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.765392,
+				-0.000279,
+				-1.0
+			],
+			"bounds_size": [
+				1.318829,
+				0.82139,
+				2.0
+			],
+			"materials": [
+				"Steps 04"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Steps_04",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Steps/SM_3DT_Steps_04.fbx",
+			"surface_count": 1,
+			"triangles": 360,
+			"vertices": 696
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.639177,
+				-0.087462,
+				-1.099221
+			],
+			"bounds_size": [
+				1.738399,
+				0.153058,
+				1.738399
+			],
+			"materials": [
+				"Trim A"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Trim_A_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Trims/SM_3DT_Trim_A_01.fbx",
+			"surface_count": 1,
+			"triangles": 114,
+			"vertices": 175
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-1.099221,
+				-0.087462,
+				-1.099221
+			],
+			"bounds_size": [
+				1.738399,
+				0.153058,
+				1.738399
+			],
+			"materials": [
+				"Trim A"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Trim_A_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Trims/SM_3DT_Trim_A_02.fbx",
+			"surface_count": 1,
+			"triangles": 114,
+			"vertices": 177
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.146818,
+				-0.087462,
+				-0.681383
+			],
+			"bounds_size": [
+				0.234405,
+				0.153058,
+				1.362765
+			],
+			"materials": [
+				"Trim A"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Trim_A_03",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Trims/SM_3DT_Trim_A_03.fbx",
+			"surface_count": 1,
+			"triangles": 76,
+			"vertices": 107
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-1.362765,
+				-0.087462,
+				-0.146818
+			],
+			"bounds_size": [
+				2.72553,
+				0.153058,
+				0.234405
+			],
+			"materials": [
+				"Trim A"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Trim_A_04",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Trims/SM_3DT_Trim_A_04.fbx",
+			"surface_count": 1,
+			"triangles": 76,
+			"vertices": 110
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.087587,
+				-0.087462,
+				-0.681383
+			],
+			"bounds_size": [
+				0.234405,
+				0.153058,
+				1.362765
+			],
+			"materials": [
+				"Trim A"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Trim_A_05",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Trims/SM_3DT_Trim_A_05.fbx",
+			"surface_count": 1,
+			"triangles": 76,
+			"vertices": 107
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.122668,
+				-1.583418,
+				-0.122313
+			],
+			"bounds_size": [
+				0.189096,
+				3.349387,
+				0.188287
+			],
+			"materials": [
+				"Trim A"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Trim_A_Corner",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Trims/SM_3DT_Trim_A_Corner.fbx",
+			"surface_count": 1,
+			"triangles": 1428,
+			"vertices": 3108
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.288572,
+				-0.06924,
+				-0.255724
+			],
+			"bounds_size": [
+				0.572692,
+				0.13848,
+				0.636039
+			],
+			"materials": [
+				"Trim B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Trim_B_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Trims/SM_3DT_Trim_B_01.fbx",
+			"surface_count": 1,
+			"triangles": 68,
+			"vertices": 148
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.222239,
+				-0.06924,
+				-0.172489
+			],
+			"bounds_size": [
+				0.444476,
+				0.138479,
+				0.344978
+			],
+			"materials": [
+				"Trim B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Trim_B_010",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Trims/SM_3DT_Trim_B_010.fbx",
+			"surface_count": 1,
+			"triangles": 44,
+			"vertices": 96
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.222239,
+				-0.06924,
+				-0.772687
+			],
+			"bounds_size": [
+				0.444477,
+				0.13848,
+				1.545375
+			],
+			"materials": [
+				"Trim B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Trim_B_011",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Trims/SM_3DT_Trim_B_011.fbx",
+			"surface_count": 1,
+			"triangles": 44,
+			"vertices": 96
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.222238,
+				-0.069239,
+				-0.174998
+			],
+			"bounds_size": [
+				0.444476,
+				0.138479,
+				0.349995
+			],
+			"materials": [
+				"Trim B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Trim_B_012",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Trims/SM_3DT_Trim_B_012.fbx",
+			"surface_count": 1,
+			"triangles": 44,
+			"vertices": 96
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.222238,
+				-0.06924,
+				-1.096372
+			],
+			"bounds_size": [
+				0.444476,
+				0.138479,
+				2.192744
+			],
+			"materials": [
+				"Trim B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Trim_B_013",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Trims/SM_3DT_Trim_B_013.fbx",
+			"surface_count": 1,
+			"triangles": 44,
+			"vertices": 96
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.222238,
+				-0.069239,
+				-0.171355
+			],
+			"bounds_size": [
+				0.444476,
+				0.138479,
+				0.342711
+			],
+			"materials": [
+				"Trim B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Trim_B_014",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Trims/SM_3DT_Trim_B_014.fbx",
+			"surface_count": 1,
+			"triangles": 44,
+			"vertices": 96
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.222238,
+				-0.06924,
+				-1.095238
+			],
+			"bounds_size": [
+				0.444476,
+				0.138479,
+				2.190475
+			],
+			"materials": [
+				"Trim B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Trim_B_015",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Trims/SM_3DT_Trim_B_015.fbx",
+			"surface_count": 1,
+			"triangles": 44,
+			"vertices": 96
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.699636,
+				-0.06924,
+				-0.699635
+			],
+			"bounds_size": [
+				1.399272,
+				0.13848,
+				1.399269
+			],
+			"materials": [
+				"Trim B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Trim_B_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Trims/SM_3DT_Trim_B_02.fbx",
+			"surface_count": 1,
+			"triangles": 44,
+			"vertices": 96
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.377248,
+				-0.06924,
+				-0.28256
+			],
+			"bounds_size": [
+				0.631444,
+				0.138479,
+				0.570403
+			],
+			"materials": [
+				"Trim B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Trim_B_03",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Trims/SM_3DT_Trim_B_03.fbx",
+			"surface_count": 1,
+			"triangles": 68,
+			"vertices": 148
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-1.095239,
+				-0.069239,
+				-0.222238
+			],
+			"bounds_size": [
+				2.190475,
+				0.138479,
+				0.444476
+			],
+			"materials": [
+				"Trim B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Trim_B_04",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Trims/SM_3DT_Trim_B_04.fbx",
+			"surface_count": 1,
+			"triangles": 44,
+			"vertices": 96
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.172489,
+				-0.069239,
+				-0.222238
+			],
+			"bounds_size": [
+				0.344978,
+				0.138479,
+				0.444476
+			],
+			"materials": [
+				"Trim B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Trim_B_05",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Trims/SM_3DT_Trim_B_05.fbx",
+			"surface_count": 1,
+			"triangles": 44,
+			"vertices": 96
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-1.095238,
+				-0.06924,
+				-0.222238
+			],
+			"bounds_size": [
+				2.190476,
+				0.13848,
+				0.444476
+			],
+			"materials": [
+				"Trim B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Trim_B_06",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Trims/SM_3DT_Trim_B_06.fbx",
+			"surface_count": 1,
+			"triangles": 44,
+			"vertices": 96
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.17249,
+				-0.06924,
+				-0.222238
+			],
+			"bounds_size": [
+				0.344979,
+				0.13848,
+				0.444476
+			],
+			"materials": [
+				"Trim B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Trim_B_07",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Trims/SM_3DT_Trim_B_07.fbx",
+			"surface_count": 1,
+			"triangles": 44,
+			"vertices": 96
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.775196,
+				-0.06924,
+				-0.222238
+			],
+			"bounds_size": [
+				1.550392,
+				0.13848,
+				0.444476
+			],
+			"materials": [
+				"Trim B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Trim_B_08",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Trims/SM_3DT_Trim_B_08.fbx",
+			"surface_count": 1,
+			"triangles": 44,
+			"vertices": 96
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.172489,
+				-0.069239,
+				-0.222238
+			],
+			"bounds_size": [
+				0.364736,
+				0.138479,
+				0.444476
+			],
+			"materials": [
+				"Trim B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Trim_B_09",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Trims/SM_3DT_Trim_B_09.fbx",
+			"surface_count": 1,
+			"triangles": 44,
+			"vertices": 96
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.137104,
+				-0.234394,
+				-0.273814
+			],
+			"bounds_size": [
+				0.268599,
+				0.4402,
+				0.482635
+			],
+			"materials": [
+				"Wall Props"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Wall_Prop_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Wall Props/SM_3DT_Wall_Prop_01.fbx",
+			"surface_count": 1,
+			"triangles": 456,
+			"vertices": 914
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.069338,
+				-0.194584,
+				-0.200779
+			],
+			"bounds_size": [
+				0.200584,
+				0.382136,
+				0.33079
+			],
+			"materials": [
+				"Wall Props"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Wall_Prop_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Wall Props/SM_3DT_Wall_Prop_02.fbx",
+			"surface_count": 1,
+			"triangles": 412,
+			"vertices": 812
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.074479,
+				-0.157904,
+				-0.126668
+			],
+			"bounds_size": [
+				0.153618,
+				0.29266,
+				0.253337
+			],
+			"materials": [
+				"Wall Props"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Wall_Prop_03",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Wall Props/SM_3DT_Wall_Prop_03.fbx",
+			"surface_count": 1,
+			"triangles": 416,
+			"vertices": 900
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.211459,
+				-0.441425,
+				-0.409524
+			],
+			"bounds_size": [
+				0.243698,
+				0.88506,
+				0.819048
+			],
+			"materials": [
+				"Wall Props"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Wall_Prop_04",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Wall Props/SM_3DT_Wall_Prop_04.fbx",
+			"surface_count": 1,
+			"triangles": 740,
+			"vertices": 1608
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.158488,
+				-0.213634,
+				-0.228202
+			],
+			"bounds_size": [
+				0.257063,
+				0.379017,
+				0.456404
+			],
+			"materials": [
+				"Wall Props"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Wall_Prop_05",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Wall Props/SM_3DT_Wall_Prop_05.fbx",
+			"surface_count": 1,
+			"triangles": 816,
+			"vertices": 1601
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.097249,
+				-0.206181,
+				-0.165395
+			],
+			"bounds_size": [
+				0.200584,
+				0.382136,
+				0.33079
+			],
+			"materials": [
+				"Wall Props"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Wall_Prop_06",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Wall Props/SM_3DT_Wall_Prop_06.fbx",
+			"surface_count": 1,
+			"triangles": 416,
+			"vertices": 900
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.153944,
+				-0.349599,
+				-0.300785
+			],
+			"bounds_size": [
+				0.296635,
+				0.630327,
+				0.601571
+			],
+			"materials": [
+				"Wall Props"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Wall_Prop_07",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Wall Props/SM_3DT_Wall_Prop_07.fbx",
+			"surface_count": 1,
+			"triangles": 332,
+			"vertices": 690
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.121578,
+				-0.455565,
+				-0.299446
+			],
+			"bounds_size": [
+				0.18521,
+				0.918993,
+				0.504178
+			],
+			"materials": [
+				"Wall Props"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Wall_Prop_08",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Wall Props/SM_3DT_Wall_Prop_08.fbx",
+			"surface_count": 1,
+			"triangles": 300,
+			"vertices": 634
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-1.095237,
+				-0.483512,
+				-0.131646
+			],
+			"bounds_size": [
+				2.190474,
+				0.789717,
+				0.233581
+			],
+			"materials": [
+				"Apartment Walls A"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Apartment_Wall_Piece_A_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Walls/SM_3DT_Apartment_Wall_Piece_A_01.fbx",
+			"surface_count": 1,
+			"triangles": 80,
+			"vertices": 168
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-1.095237,
+				-0.302262,
+				-0.130732
+			],
+			"bounds_size": [
+				2.190474,
+				0.789718,
+				0.233581
+			],
+			"materials": [
+				"Apartment Walls A"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Apartment_Wall_Piece_A_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Walls/SM_3DT_Apartment_Wall_Piece_A_02.fbx",
+			"surface_count": 1,
+			"triangles": 80,
+			"vertices": 168
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.775196,
+				-0.483512,
+				-0.131646
+			],
+			"bounds_size": [
+				1.550391,
+				0.789717,
+				0.233581
+			],
+			"materials": [
+				"Apartment Walls A"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Apartment_Wall_Piece_A_03",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Walls/SM_3DT_Apartment_Wall_Piece_A_03.fbx",
+			"surface_count": 1,
+			"triangles": 108,
+			"vertices": 218
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.775196,
+				-0.302262,
+				-0.130732
+			],
+			"bounds_size": [
+				1.550391,
+				0.789718,
+				0.233581
+			],
+			"materials": [
+				"Apartment Walls A"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Apartment_Wall_Piece_A_04",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Walls/SM_3DT_Apartment_Wall_Piece_A_04.fbx",
+			"surface_count": 1,
+			"triangles": 108,
+			"vertices": 218
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.137991,
+				-1.5,
+				-0.179242
+			],
+			"bounds_size": [
+				0.344978,
+				3.0,
+				0.331314
+			],
+			"materials": [
+				"Apartment Walls A"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Apartment_Wall_Piece_A_Pillar",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Walls/SM_3DT_Apartment_Wall_Piece_A_Pillar.fbx",
+			"surface_count": 1,
+			"triangles": 52,
+			"vertices": 108
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.686989,
+				-1.498466,
+				-0.116715
+			],
+			"bounds_size": [
+				1.373978,
+				3.0,
+				0.233582
+			],
+			"materials": [
+				"Apartment Walls B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Apartment_Wall_Piece_B",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Walls/SM_3DT_Apartment_Wall_Piece_B.fbx",
+			"surface_count": 1,
+			"triangles": 204,
+			"vertices": 432
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-1.371003,
+				-1.53619,
+				-0.117727
+			],
+			"bounds_size": [
+				2.742005,
+				3.0,
+				0.233582
+			],
+			"materials": [
+				"Apartment Walls C"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Apartment_Wall_Piece_C",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Walls/SM_3DT_Apartment_Wall_Piece_C.fbx",
+			"surface_count": 1,
+			"triangles": 324,
+			"vertices": 584
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.172281,
+				-1.999058,
+				-2.527528
+			],
+			"bounds_size": [
+				0.344561,
+				3.342925,
+				5.064958
+			],
+			"materials": [
+				"Wall Piece 01"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Wall_Piece_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Walls/SM_3DT_Wall_Piece_01.fbx",
+			"surface_count": 1,
+			"triangles": 328,
+			"vertices": 651
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.245684,
+				-1.383533,
+				-0.952009
+			],
+			"bounds_size": [
+				1.994877,
+				3.169261,
+				2.240941
+			],
+			"materials": [
+				"Wall Piece 02"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Wall_Piece_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Walls/SM_3DT_Wall_Piece_02.fbx",
+			"surface_count": 1,
+			"triangles": 510,
+			"vertices": 730
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.831526,
+				-2.17113,
+				-0.914079
+			],
+			"bounds_size": [
+				2.377172,
+				3.101516,
+				2.132851
+			],
+			"materials": [
+				"Wall Piece 02 Corner"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Wall_Piece_02_Corner",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Walls/SM_3DT_Wall_Piece_02_Corner.fbx",
+			"surface_count": 1,
+			"triangles": 204,
+			"vertices": 420
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-0.205223,
+				-1.383098,
+				-1.837325
+			],
+			"bounds_size": [
+				0.395,
+				2.766196,
+				3.674649
+			],
+			"materials": [
+				"Wall Piece 03"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Wall_Piece_03",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Walls/SM_3DT_Wall_Piece_03.fbx",
+			"surface_count": 1,
+			"triangles": 20,
+			"vertices": 36
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-1.512707,
+				-0.084947,
+				-1.607394
+			],
+			"bounds_size": [
+				3.51411,
+				0.240394,
+				3.275583
+			],
+			"materials": [
+				"Wall Piece 04"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Wall_Piece_04",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Walls/SM_3DT_Wall_Piece_04.fbx",
+			"surface_count": 1,
+			"triangles": 784,
+			"vertices": 1002
+		},
+		{
+			"animation_count": 191,
+			"bounds_position": [
+				-2.225183,
+				-0.063496,
+				-1.449474
+			],
+			"bounds_size": [
+				4.095979,
+				0.30862,
+				2.898948
+			],
+			"materials": [
+				"Wall Piece 05"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Wall_Piece_05",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Walls/SM_3DT_Wall_Piece_05.fbx",
+			"surface_count": 1,
+			"triangles": 432,
+			"vertices": 920
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-1.25214,
+				-0.850455,
+				-0.013963
+			],
+			"bounds_size": [
+				2.190474,
+				1.4217,
+				0.026283
+			],
+			"materials": [
+				"Apartment Windows A"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Apartment_Window_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Windows/SM_3DT_Apartment_Window_01.fbx",
+			"surface_count": 1,
+			"triangles": 296,
+			"vertices": 625
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.775196,
+				-0.85054,
+				-0.014371
+			],
+			"bounds_size": [
+				1.550391,
+				1.420565,
+				0.026283
+			],
+			"materials": [
+				"Apartment Windows A"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Apartment_Window_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Windows/SM_3DT_Apartment_Window_02.fbx",
+			"surface_count": 1,
+			"triangles": 296,
+			"vertices": 624
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-2.349659,
+				-0.813736,
+				-0.224928
+			],
+			"bounds_size": [
+				4.693586,
+				1.624604,
+				0.249189
+			],
+			"materials": [
+				"Window A"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Window_A_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Windows/SM_3DT_Window_A_01.fbx",
+			"surface_count": 1,
+			"triangles": 728,
+			"vertices": 1456
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.561279,
+				-0.704131,
+				-0.030561
+			],
+			"bounds_size": [
+				1.122309,
+				1.637892,
+				0.052159
+			],
+			"materials": [
+				"Windows B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Window_B_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Windows/SM_3DT_Window_B_01.fbx",
+			"surface_count": 1,
+			"triangles": 114,
+			"vertices": 188
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-1.439262,
+				-1.074999,
+				-0.021904
+			],
+			"bounds_size": [
+				2.878529,
+				2.370586,
+				0.042887
+			],
+			"materials": [
+				"Windows B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Window_B_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Windows/SM_3DT_Window_B_02.fbx",
+			"surface_count": 1,
+			"triangles": 340,
+			"vertices": 706
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-1.174614,
+				-0.539481,
+				-0.042226
+			],
+			"bounds_size": [
+				2.349506,
+				1.487312,
+				0.068103
+			],
+			"materials": [
+				"Windows B"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Window_B_03",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Windows/SM_3DT_Window_B_03.fbx",
+			"surface_count": 1,
+			"triangles": 96,
+			"vertices": 164
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-1.104276,
+				-0.605281,
+				-0.025699
+			],
+			"bounds_size": [
+				2.208552,
+				1.343505,
+				0.050922
+			],
+			"materials": [
+				"Windows C"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Window_C_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Windows/SM_3DT_Window_C_01.fbx",
+			"surface_count": 1,
+			"triangles": 1390,
+			"vertices": 2820
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-1.27204,
+				-0.701913,
+				-0.023108
+			],
+			"bounds_size": [
+				2.544081,
+				1.403826,
+				0.040689
+			],
+			"materials": [
+				"Windows C"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Window_C_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Windows/SM_3DT_Window_C_02.fbx",
+			"surface_count": 1,
+			"triangles": 744,
+			"vertices": 1582
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.33748,
+				-0.564521,
+				-0.02568
+			],
+			"bounds_size": [
+				0.674959,
+				1.343505,
+				0.050922
+			],
+			"materials": [
+				"Windows C"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Window_C_03",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Windows/SM_3DT_Window_C_03.fbx",
+			"surface_count": 1,
+			"triangles": 714,
+			"vertices": 1458
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-1.429559,
+				-0.684383,
+				-0.011686
+			],
+			"bounds_size": [
+				2.85912,
+				1.290934,
+				0.023886
+			],
+			"materials": [
+				"Windows D"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Window_D_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Windows/SM_3DT_Window_D_01.fbx",
+			"surface_count": 1,
+			"triangles": 1872,
+			"vertices": 3875
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.774153,
+				-0.68345,
+				-0.011658
+			],
+			"bounds_size": [
+				1.548307,
+				1.529907,
+				0.023886
+			],
+			"materials": [
+				"Windows D"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Window_D_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Windows/SM_3DT_Window_D_02.fbx",
+			"surface_count": 1,
+			"triangles": 2060,
+			"vertices": 4330
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-1.172212,
+				-0.988224,
+				-1.172212
+			],
+			"bounds_size": [
+				2.344424,
+				1.976448,
+				2.344424
+			],
+			"materials": [
+				"Windows E"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Window_E_01",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Windows/SM_3DT_Window_E_01.fbx",
+			"surface_count": 1,
+			"triangles": 120,
+			"vertices": 256
+		},
+		{
+			"animation_count": 0,
+			"bounds_position": [
+				-0.628357,
+				-0.994015,
+				-0.631271
+			],
+			"bounds_size": [
+				1.755244,
+				1.976447,
+				1.755244
+			],
+			"materials": [
+				"Windows E"
+			],
+			"mesh_count": 1,
+			"root_name": "SM_3DT_Window_E_02",
+			"source": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX/Windows/SM_3DT_Window_E_02.fbx",
+			"surface_count": 1,
+			"triangles": 1192,
+			"vertices": 2592
+		}
+	],
+	"errors": [],
+	"godot_version": {
+		"build": "official",
+		"hash": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+		"hex": 263936,
+		"major": 4,
+		"minor": 7,
+		"patch": 0,
+		"status": "stable",
+		"string": "4.7-stable (official)",
+		"timestamp": 0
+	},
+	"schema": "SteamtekGodotSourceProbe-1",
+	"source_root": "res://assets/environment/3DT_Cyberpunk_Downtown/FBX"
+}
